@@ -7,7 +7,7 @@ function Header() {
           <i class="fa-solid fa-gear"></i>
           <div className="log-in">
             <i class="fa-solid fa-user"></i>
-            <span>Log-Out</span>
+            <span className="log-in-text">Log-Out</span>
           </div>
         </div>
         <div className="flex-item"></div>
