@@ -8,6 +8,23 @@
   font-style: normal;
 }
 
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 600ms ease-in;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--after-close {
+  opacity: 0;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -16,7 +33,7 @@
 }
 
 :root {
-  --color-one: #3b0918;
+  --color-one: #600f0f;
   --color-two: #b8390e;
   --color-three: rgb(34, 34, 34);
   --color-four: rgb(116, 111, 111);
@@ -26,14 +43,32 @@
     var(--color-one) 80%
   );
   --color-sex: rgb(61, 61, 61);
+  --color-seven: linear-gradient(
+    55deg,
+    var(--color-one) 10%,
+    var(--color-two) 80%
+  );
+  --color-eight: rgb(61, 35, 35);
 }
 
 body {
   background-color: var(--color-three);
 }
 
+/* icons */
 .fa-solid {
   color: var(--color-four);
+}
+
+.fa-cart-arrow-down {
+  font-size: 2.5rem;
+}
+
+.fa-xmark {
+  color: var(--color-three);
+  font-size: 1rem;
+  width: 100%;
+  height: 100%;
 }
 
 input:focus,
@@ -57,8 +92,7 @@ button:focus {
   position: absolute;
   width: 85%;
   top: 4rem;
-  height: 100rem;
-  z-index: -1;
+  height: 90vh;
   background: var(--color-sex);
 }
 
@@ -212,8 +246,82 @@ button:focus {
 
 .button:hover {
   background-image: var(--color-five);
+  color: rgb(25, 25, 25);
 }
 
-/* Layout */
-.layout {
+/* Purchase */
+
+.purchase {
+  width: 100%;
+  height: 100%;
+}
+
+.purchase-box {
+  display: flex;
+  flex-direction: row;
+  gap: 0.7rem;
+  width: 98.6%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.5rem;
+  height: 95%;
+  background-color: var(--color-three);
+  border-radius: 1rem;
+  padding: 2rem;
+  color: var(--color-four);
+}
+
+.purchase-card {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 17rem;
+  background-color: var(--color-eight);
+  height: 6rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  font-size: 1.2rem;
+  text-align: right;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.purchase-card:hover {
+  box-shadow: 1px 1px 10px var(--color-two);
+  background-image: var(--color-five);
+  color: var(--color-three);
+  cursor: pointer;
+}
+
+/* Modal */
+
+.modal {
+  width: 103.2%;
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  position: relative;
+  right: 1.2rem;
+  bottom: 1.3rem;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+  background-image: var(--color-five);
+  padding: 1.6rem;
+}
+
+.modal-close-btn {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 10rem;
+  text-align: center;
+  padding-top: 0.2rem;
+}
+
+.modal-close-btn:hover {
+  background-color: rgba(167, 167, 167, 0.4);
 }
