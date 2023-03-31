@@ -3,10 +3,10 @@ function Header() {
     <div className="header">
       <div className="header-elements">
         <div className="icons">
-          <i class="fa-solid fa-bell"></i>
-          <i class="fa-solid fa-gear"></i>
+          <i className="fa-solid fa-bell"></i>
+          <i className="fa-solid fa-gear"></i>
           <div className="log-in">
-            <i class="fa-solid fa-user"></i>
+            <i className="fa-solid fa-user"></i>
             <span className="log-in-text">Log-Out</span>
           </div>
         </div>
@@ -18,7 +18,7 @@ function Header() {
               placeholder="Search"
               className="search-input"
             />
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
       </div>
