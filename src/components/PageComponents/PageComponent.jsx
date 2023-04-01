@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 
 function PageComponent({ children }) {
   return (
-    <div>
+    <div className="view-port">
       <div className="pagecomponent">
         <Header />
         <Navbar />

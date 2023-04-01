@@ -10,7 +10,6 @@ function App() {
       <Router>
         <PageComponent>
           <Routes>
-            {/* <Route exact path="/" element={} /> */}
             <Route path="/purchase" element={<Purchase />} />
             <Route path="/dashboard" element={<Layount />} />
             <Route path="/sell" element={<Sell />} />
