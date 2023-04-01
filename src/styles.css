@@ -262,7 +262,7 @@ button:focus {
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content:space-evenly;
+  justify-content: space-evenly;
 }
 
 .purchase-box {
@@ -369,7 +369,7 @@ button:focus {
   width: 100%;
   height: 100%;
 }
-.entrance-through{
+.entrance-through {
   background-color: #733838;
   width: 100%;
   height: 60%;
@@ -384,20 +384,19 @@ button:focus {
   width: 100%;
   height: 40%;
   display: flex;
-  justify-content: right;
+  flex-direction: column;
   padding: 1rem;
   padding-right: 2rem;
   border-radius: 0rem 0rem 0rem 2rem;
-  flex-direction: row-reverse;
+  gap: 1rem;
 }
-
 
 .entrance-input-box {
   display: flex;
   justify-content: space-evenly;
   gap: 1rem;
   height: 1.5rem;
-  min-width: 15rem; 
+  min-width: 15rem;
   margin-left: 1rem;
 }
 
@@ -406,12 +405,13 @@ button:focus {
   width: 14rem;
   border: none;
   background-color: var(--color-three);
-  padding: 0.7rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   color: white;
 }
 
 .entrance-input-box > input:focus {
-  box-shadow: 1px 1px 10px var(--color-one);
+  box-shadow: 1px 1px 10px var(--color-two);
 }
 
 .entrance-input-box > select {
@@ -441,8 +441,20 @@ option {
   text-align: right;
   border-radius: 1rem;
   padding-right: 1rem !important;
+  padding-top: 0.2rem !important;
 }
 
 .sc-hLseeU > input:focus {
   box-shadow: 1px 1px 10px var(--color-two);
+}
+
+.entrance-section {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: right;
+}
+
+label {
+  width: 3rem;
+  text-align: right;
 }

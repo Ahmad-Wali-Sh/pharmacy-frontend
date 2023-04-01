@@ -43,12 +43,9 @@ export default function Entrance(props) {
     color: "white",
     border: "none",
     textAlign: "right",
-    direction: 'RTL',
-    hoverBackgroundColor: 'grey',
-    
-  }
-
-
+    direction: "RTL",
+    hoverBackgroundColor: "grey",
+  };
 
   return (
     <>
@@ -79,24 +76,55 @@ export default function Entrance(props) {
                 <div className="entrance-report">Reports</div>
                 <div className="entrance-inputs-container">
                   <div className="entrance-entrance">
-                    <div className="entrance-input-box">
-                      <select>
-                        <option>ثبت نهایی</option>
-                        <option>...</option>
-                      </select>
-                      <label>:وضعیت</label>
-                    </div>
-                    <div className="entrance-input-box">
-                      <div className="react-autocomplete">
-                        <ReactSearchAutocomplete
-                          styling={AutoCompleteStyle}
-                          showIcon={false}
-                          showClear={false}
-                          items={companies}
-                          inputDebounce={10}
-                        />
+                    <div className="entrance-section">
+                      <div className="entrance-input-box">
+                        <select>
+                          <option>ثبت نهایی</option>
+                          <option>...</option>
+                        </select>
+                        <label>:وضعیت</label>
                       </div>
-                      <label>:شرکت</label>
+                      <div className="entrance-input-box">
+                        <div className="react-autocomplete">
+                          <ReactSearchAutocomplete
+                            styling={AutoCompleteStyle}
+                            showIcon={false}
+                            showClear={false}
+                            items={companies}
+                            inputDebounce={10}
+                          />
+                        </div>
+                        <label>:شرکت</label>
+                      </div>
+                      <div className="entrance-input-box">
+                        <input type="date" />
+                        <label>:تاریخ</label>
+                      </div>
+                    </div>
+                    <div className="entrance-section">
+                      <div className="entrance-input-box">
+                        <select>
+                          <option>ثبت نهایی</option>
+                          <option>...</option>
+                        </select>
+                        <label>:انبار</label>
+                      </div>
+                      <div className="entrance-input-box">
+                        <div className="react-autocomplete">
+                          <ReactSearchAutocomplete
+                            styling={AutoCompleteStyle}
+                            showIcon={false}
+                            showClear={false}
+                            items={companies}
+                            inputDebounce={10}
+                          />
+                        </div>
+                        <label>:شرکت</label>
+                      </div>
+                      <div className="entrance-input-box">
+                        <input />
+                        <label>:شماره</label>
+                      </div>
                     </div>
                   </div>
                   <div className="entrance-through">Medicians</div>
