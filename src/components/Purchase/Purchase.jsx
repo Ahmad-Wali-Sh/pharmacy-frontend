@@ -30,7 +30,6 @@ function Purchase() {
         />
       </div>
       <div className="purchase-form">
-          Hi
       </div>
     </div>
   );
