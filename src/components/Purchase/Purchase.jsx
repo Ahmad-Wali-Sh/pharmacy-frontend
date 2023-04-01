@@ -13,6 +13,24 @@ function Purchase() {
           number="12"
           icon="fa-solid fa-cart-arrow-down"
         />
+        <Entrance
+          title="ثبت ورودی"
+          number="12"
+          icon="fa-solid fa-cart-arrow-down"
+        />
+        <Entrance
+          title="ثبت ورودی"
+          number="12"
+          icon="fa-solid fa-cart-arrow-down"
+        />
+        <Entrance
+          title="ثبت ورودی"
+          number="12"
+          icon="fa-solid fa-cart-arrow-down"
+        />
+      </div>
+      <div className="purchase-form">
+          Hi
       </div>
     </div>
   );
