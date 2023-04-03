@@ -71,17 +71,30 @@ export default function Entrance(props) {
     height: "1.5rem",
     borderRadius: "1rem",
     fontSize: "14px",
-    padding: '1rem',
     backgroundColor: "rgb(34, 34, 34)",
     color: "white",
     border: "none",
-    textAlign: "right",
     hoverBackgroundColor: "grey",
-    zIndex: '1'
+    zIndex: "1",
+    overflow: "scroll",
   };
-  const AutoCompleteStyle2 = {...AutoCompleteStyle, zIndex: '0'}
+  const AutoCompleteStyle2 = {
+    ...AutoCompleteStyle,
+    zIndex: "0",
+  };
 
-
+  const formatResult = (item) => {
+    return (
+      <>
+        <span style={{ display: "block", textAlign: "left" }}>
+          id: {item.id}
+        </span>
+        <span style={{ display: "block", textAlign: "left" }}>
+          name: {item.name}
+        </span>
+      </>
+    );
+  };
 
   const Submit = (data) => {
     const newForm = new FormData();
@@ -123,46 +136,98 @@ export default function Entrance(props) {
             </div>
             <div className="entrance-box">
               <div className="entrance-report"></div>
-
               <div className="entrance-entrance">
-                  <label>وضعیت:</label>
-                  <select {...register("final-register")}>
-                    <option value="1">ثبت نهایی</option>
-                    <option value="2">...</option>
-                  </select>
-                  <label>شرکت:</label>
-                  <ReactSearchAutocomplete
-                    items={companies}
-                    onSelect={(item)=> setCompany(item) }
-                    styling={AutoCompleteStyle}
-                    showClear={false}
-                    inputDebounce="10"
-                    />
-                  <label>انبار:</label>
-                  <ReactSearchAutocomplete
-                    items={companies}
-                    styling={AutoCompleteStyle}
-                    showClear={false}
-                    inputDebounce="10"
-                    />
-                  <label>شماره:</label>
-                  <input />
-                  
-                  <label>شماره:</label>
-                  <div>
-                    <div>
+                <label>وضعیت:</label>
+                <select {...register("final-register")}>
+                  <option value="1">ثبت نهایی</option>
+                  <option value="2">...</option>
+                </select>
+                <label>شرکت:</label>
+                <ReactSearchAutocomplete
+                  items={companies}
+                  onSelect={(item) => setCompany(item)}
+                  styling={AutoCompleteStyle}
+                  showClear={false}
+                  inputDebounce="10"
+                />
+                <label>انبار:</label>
+                <ReactSearchAutocomplete
+                  items={companies}
+                  styling={AutoCompleteStyle}
+                  showClear={false}
+                  inputDebounce="10"
+                />
+                <label>تاریخ:</label>
+                <input type="date" />
+                <label>شماره:</label>
+                <input />
+                <label>ش.حواله:</label>
+                <input />
+                <label>
+                  <h5>تحویل دهنده:</h5>
+                </label>
+                <input />
+                <label>
+                  <h5>تحویل گیرنده:</h5>
+                </label>
+                <input />
+                <label>واحد پول:</label>
+                <select>
+                  <option>USD</option>
+                  <option>AFG</option>
+                </select>
+                <label>پرداخت:</label>
+                <select>
+                  <option>مستقیم</option>
+                  <option>نسیه</option>
+                </select>
+                <label>سود ٪:</label>
+                <input />
+                <label>
+                  <h5>بدون تخفیف:</h5>
+                </label>
+                <input type="checkbox" className="checkbox-input" />
+                <label>توضیحات:</label>
+                <textarea></textarea>
+              </div>
 
+              <div className="entrance-through">
+                <label>قلم:</label>
+                <div className="entrance-through-medician-input">
                   <ReactSearchAutocomplete
                     items={companies}
+                    onSelect={(item) => setCompany(item)}
                     styling={AutoCompleteStyle2}
                     showClear={false}
                     inputDebounce="10"
-                    />
-                    </div>
-                  </div>
+                    formatResult={formatResult}
+                  />
+                </div>
+                <label>تعداد:</label>
+                <input />
+                <label>قیمت فی:</label>
+                <input />
+                <label>
+                  <h5> ت.د.پاکت:</h5>
+                </label>
+                <input />
+                <label>تخفیف:</label>
+                <input />
+                <label>تخفیف ٪:</label>
+                <input />
+                <label>انقضا:</label>
+                <input type="date" />
+                <label>فایده:</label>
+                <input />
+                <label>فایده ٪:</label>
+                <input />
+                <div></div>
+                <div></div>
+                <label>بونوس:</label>
+                <input />
+                <label>ت.بونوس:</label>
+                <input />
               </div>
-
-              <div className="entrance-through"></div>
 
               <div className="entrance-medician">
                 <input type="submit"></input>
