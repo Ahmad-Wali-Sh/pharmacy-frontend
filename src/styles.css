@@ -375,7 +375,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   grid-area: 1 / 2 / 2 / 3;
   display: grid;
-  grid-template-columns: 0.3fr 0.9fr 0.3fr 0.9fr 0.3fr 0.9fr;
+  grid-template-columns: 0.31fr 0.9fr 0.3fr 0.9fr 0.3fr 0.9fr;
   grid-template-rows: 15% 15% 15% 15%;
   gap: 0.7rem;
   padding: 1rem;
