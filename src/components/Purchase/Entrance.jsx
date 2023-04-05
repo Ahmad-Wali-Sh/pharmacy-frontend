@@ -2,6 +2,8 @@ import Modal from "react-modal";
 import React from "react";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
+import.meta.env.VITE_MEDICIAN;
 
 export default function Entrance(props) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -89,7 +91,7 @@ export default function Entrance(props) {
           id: {item.id}
         </span>
         <span style={{ display: "block", textAlign: "left" }}>
-          name: {item.name}
+          name: {item.brand_name}
         </span>
       </>
     );
@@ -98,8 +100,64 @@ export default function Entrance(props) {
   const [autoCompleteData, setAutoCompleteData] = React.useState({
     company: "",
     store: "",
-    medician: ""
+    medician: "",
   });
+
+  console.log(autoCompleteData);
+
+  /* Styling Finished */
+  /* CRUD */
+
+  const ENTRANCE_URL = import.meta.env.VITE_ENTRANCE;
+  const FINAL_REGISTER_URL = import.meta.env.VITE_FINAL_REGISTER;
+  const COMPANY_URL = import.meta.env.VITE_PHARM_COMPANIES;
+  const STORE_URL = import.meta.env.VITE_STORE;
+  const CURRENCY_URL = import.meta.env.VITE_CURRENCY;
+  const PAYMENT_METHOD_URL = import.meta.env.VITE_PAYMENT_METHOD;
+  const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
+  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+
+  const [entrance, setEntrance] = React.useState("");
+  const [finalRegister, setFinalRegister] = React.useState([]);
+  const [company, setCompany] = React.useState([]);
+  const [store, setStore] = React.useState([]);
+  const [currency, setCurrency] = React.useState([]);
+  const [paymentMethod, setPaymentMethod] = React.useState([]);
+  const [reRender, setReRender] = React.useState([]);
+
+  React.useEffect(() => {
+    axios
+      .get(ENTRANCE_URL)
+      .then((result) => setEntrance(result.data))
+      .catch((e) => console.log(e));
+
+    axios
+      .get(FINAL_REGISTER_URL)
+      .then((result) => setFinalRegister(result.data))
+      .catch((e) => console.log(e));
+
+    axios
+      .get(COMPANY_URL)
+      .then((result) => setCompany(result.data))
+      .catch((e) => console.log(e));
+
+    axios
+      .get(STORE_URL)
+      .then((result) => setStore(result.data))
+      .catch((e) => console.log(e));
+
+    axios
+      .get(CURRENCY_URL)
+      .then((result) => setCurrency(result.data))
+      .catch((e) => console.log(e));
+
+    axios
+      .get(PAYMENT_METHOD_URL)
+      .then((result) => setPaymentMethod(result.data))
+      .catch((e) => console.log(e));
+  }, [reRender]);
+
+  console.log(finalRegister);
 
   const Submit = (data) => {
     const EntranceForm = new FormData();
@@ -116,24 +174,37 @@ export default function Entrance(props) {
     EntranceForm.append("final_register", data.final_register);
     EntranceForm.append("store", autoCompleteData.store.id);
 
-    
     const EntranceThrough = new FormData();
-    EntranceThrough.append('number_in_factor', data.number_in_factor)
-    EntranceThrough.append('medician', autoCompleteData.medician.id)
-    EntranceThrough.append('each_price_factor', data.each_price_factor)
-    EntranceThrough.append('each_quantity', data.each_quantity)
-    EntranceThrough.append('discount_money', data.discount_money)
-    EntranceThrough.append('discount_percent', data.discount_percent)
-    EntranceThrough.append('expire_date', data.expire_date)
-    EntranceThrough.append('interest_money', data.interest_money)
-    EntranceThrough.append('interest_percent', data.interest_percent)
-    EntranceThrough.append('bonus', data.bonus)
-    EntranceThrough.append('quantity_bonus', data.quantity_bonus)
-    EntranceThrough.append('entrance', data.entrance_id)
+    EntranceThrough.append("number_in_factor", data.number_in_factor);
+    EntranceThrough.append("medician", autoCompleteData.medician.id);
+    EntranceThrough.append("each_price_factor", data.each_price_factor);
+    EntranceThrough.append("each_quantity", data.each_quantity);
+    EntranceThrough.append("discount_money", data.discount_money);
+    EntranceThrough.append("discount_percent", data.discount_percent);
+    EntranceThrough.append("expire_date", data.expire_date);
+    EntranceThrough.append("interest_money", data.interest_money);
+    EntranceThrough.append("interest_percent", data.interest_percent);
+    EntranceThrough.append("bonus", data.bonus);
+    EntranceThrough.append("quantity_bonus", data.quantity_bonus);
+    EntranceThrough.append("entrance", data.entrance_id);
 
     console.log(EntranceForm);
     console.log(EntranceThrough);
+
+    axios
+      .post(ENTRANCE_URL, EntranceForm)
+      .then((data) => {
+        console.log(data);
+        axios
+          .get(ENTRANCE_URL)
+          .then((result) => setEntrance(result.data))
+          .catch((e) => console.log(e));
+      })
+      .catch((e) => console.log(e));
+
+    setReRender("Render");
   };
+  console.log(reRender);
 
   return (
     <>
@@ -164,12 +235,13 @@ export default function Entrance(props) {
               <div className="entrance-entrance">
                 <label>وضعیت:</label>
                 <select {...register("final_register")}>
-                  <option value="1">ثبت نهایی</option>
-                  <option value="2">...</option>
+                  {finalRegister.map((final) => (
+                    <option value={final.id}>{final.name}</option>
+                  ))}
                 </select>
                 <label>شرکت:</label>
                 <ReactSearchAutocomplete
-                  items={companies}
+                  items={company}
                   onSelect={(item) =>
                     setAutoCompleteData({ ...autoCompleteData, company: item })
                   }
@@ -179,7 +251,7 @@ export default function Entrance(props) {
                 />
                 <label>انبار:</label>
                 <ReactSearchAutocomplete
-                  items={companies}
+                  items={store}
                   styling={AutoCompleteStyle}
                   onSelect={(item) =>
                     setAutoCompleteData({ ...autoCompleteData, store: item })
@@ -192,7 +264,11 @@ export default function Entrance(props) {
                 <label>شماره:</label>
                 <input required type="text" {...register("factor_number")} />
                 <label>ش.حواله:</label>
-                <input type='text' {...register("entrance_id")}/>
+                <input
+                  
+                  type="text"
+                  {...register("entrance_id")}
+                />
                 <label>
                   <h5>تحویل دهنده:</h5>
                 </label>
@@ -203,13 +279,15 @@ export default function Entrance(props) {
                 <input type="text" {...register("recived_by")} />
                 <label>واحد پول:</label>
                 <select {...register("currency")}>
-                  <option>USD</option>
-                  <option>AFG</option>
+                  {currency.map((currency) => (
+                    <option value={currency.id}>{currency.name}</option>
+                  ))}
                 </select>
                 <label>پرداخت:</label>
                 <select {...register("payment_method")}>
-                  <option>مستقیم</option>
-                  <option>نسیه</option>
+                  {paymentMethod.map((payment) => (
+                    <option value={payment.id}>{payment.name}</option>
+                  ))}
                 </select>
                 <label>فایده ٪:</label>
                 <input type="text" {...register("total_interest")} />
@@ -229,40 +307,45 @@ export default function Entrance(props) {
                 <label>قلم:</label>
                 <div className="entrance-through-medician-input">
                   <ReactSearchAutocomplete
-                    items={companies}
+                    items={entrance}
+                    fuseOptions={{ keys: ["brand_name"] }}
+                    resultStringKeyName="brand_name"
                     styling={AutoCompleteStyle2}
                     showClear={false}
                     inputDebounce="10"
                     onSelect={(item) =>
-                      setAutoCompleteData({ ...autoCompleteData, medician: item })
+                      setAutoCompleteData({
+                        ...autoCompleteData,
+                        medician: item,
+                      })
                     }
                     formatResult={formatResult}
                   />
                 </div>
                 <label>تعداد:</label>
-                <input type="text" {...register('number_in_factor')}/>
+                <input type="text" {...register("number_in_factor")} />
                 <label>قیمت فی:</label>
-                <input type="text" {...register('each_price_factor')}/>
+                <input type="text" {...register("each_price_factor")} />
                 <label>
                   <h5> ت.د.پاکت:</h5>
                 </label>
-                <input type="text" {...register('each_quantity')}/>
+                <input type="text" {...register("each_quantity")} />
                 <label>تخفیف:</label>
-                <input type="text" {...register('discount_money')}/>
+                <input type="text" {...register("discount_money")} />
                 <label>تخفیف ٪:</label>
-                <input type="text" {...register('discount_percent')}/>
+                <input type="text" {...register("discount_percent")} />
                 <label>انقضا:</label>
-                <input type="date" {...register('expire_date')}/>
+                <input type="date" {...register("expire_date")} />
                 <label>فایده:</label>
-                <input type="text" {...register('interest_money')}/>
+                <input type="text" {...register("interest_money")} />
                 <label>فایده ٪:</label>
-                <input type="text" {...register('interest_percent')}/>
+                <input type="text" {...register("interest_percent")} />
                 <div></div>
                 <div></div>
                 <label>بونوس:</label>
-                <input type="text" {...register('bonus')}/>
+                <input type="text" {...register("bonus")} />
                 <label>ت.بونوس:</label>
-                <input type="text" {...register('quantity_bonus')}/>
+                <input type="text" {...register("quantity_bonus")} />
               </div>
 
               <div className="entrance-medician">
