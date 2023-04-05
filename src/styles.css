@@ -51,6 +51,7 @@
   );
   --color-eight: rgb(61, 35, 35);
   --color-nine: rgb(87, 84, 84);
+  --color-ten: white;
 }
 
 body {
@@ -388,7 +389,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   border: none;
   background-color: var(--color-three);
-  color: white;
+  color: var(--color-ten);
   padding-left: 0.5rem;
   padding-right: 0.7rem;
 }
@@ -398,7 +399,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   border: none;
   background-color: var(--color-three);
-  color: white;
+  color: var(--color-ten);
   padding-left: 0.5rem;
   padding-right: 0.7rem;
 }
@@ -414,7 +415,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   border: none;
   background-color: var(--color-three);
-  color: white;
+  color: var(--color-ten);
   padding: 0.4rem;
   resize: none;
   font-size: 0.9rem;
@@ -440,7 +441,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   border: none;
   background-color: var(--color-three);
-  color: white;
+  color: var(--color-ten);
   padding-left: 0.5rem;
   padding-right: 0.7rem;
 }
@@ -450,7 +451,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   border: none;
   background-color: var(--color-three);
-  color: white;
+  color: var(--color-ten);
   padding-left: 0.5rem;
   padding-right: 0.7rem;
 }
@@ -460,7 +461,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   border: none;
   background-color: var(--color-three);
-  color: white;
+  color: var(--color-ten);
   padding: 0.4rem;
   resize: none;
 }
