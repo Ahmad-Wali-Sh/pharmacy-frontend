@@ -117,7 +117,7 @@ export default function Entrance(props) {
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
 
-  const [entrance, setEntrance] = React.useState("");
+  const [entrance, setEntrance] = React.useState([]);
   const [finalRegister, setFinalRegister] = React.useState([]);
   const [company, setCompany] = React.useState([]);
   const [store, setStore] = React.useState([]);
@@ -265,7 +265,7 @@ export default function Entrance(props) {
                 <input required type="text" {...register("factor_number")} />
                 <label>ش.حواله:</label>
                 <input
-                  
+                  value={entrance.includes(entrance[0]) ? entrance[entrance.length - 1].id : 1}
                   type="text"
                   {...register("entrance_id")}
                 />
