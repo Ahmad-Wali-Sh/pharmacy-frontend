@@ -524,8 +524,53 @@ input[type="date"]:disabled {
   grid-area: 3 / 1 / 4 / 3;
 }
 
-.entrance-input-box {
+.entrance-medician-header {
+  background-color: var(--color-two);
+  border-radius: 1rem 1rem 0rem 0rem;
+  width: 100%;
+  padding: 0.1rem;
+  padding-right: 3rem;
+  display: grid;
+  grid-template-columns: 0.5fr 3fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1.7fr 0.9fr 0.9fr 0.9fr 0.9fr 0.7fr;
+  font-size: 0.9rem;
+  direction: rtl;
 }
 
-.react-autocomplete {
+.entrance-map {
+  overflow-y: scroll ;
+  height: 85%;
+}
+
+.entrance-medician-map {
+  background-color: var(--color-four);
+  border-bottom: 1px solid black;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 0.1rem;
+  padding-right: 3rem;
+  display: grid;
+  grid-template-columns: 0.5fr 3fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1.7fr 0.9fr 0.9fr 0.9fr 0.9fr 0.7fr;
+  direction: rtl;
+
+}
+
+.entrance-medician-map > input {
+  width: 70%;
+  background-color: var(--color-four);
+  border: none;
+}
+.entrance-medician-map > input[type=submit] {
+  width: 70%;
+  background-color: var(--color-eleven);
+  color: white;
+  border-radius: 1rem;
+  padding: 0.2rem;
+  font-size: smaller;
+  border: none;
+}
+
+.entrance-medician-map > input[type=submit]:hover {
+
+  background-color: var(--color-twelve);
+
 }
