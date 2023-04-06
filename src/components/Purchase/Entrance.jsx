@@ -100,7 +100,7 @@ export default function Entrance(props) {
   const [autoCompleteData, setAutoCompleteData] = React.useState({
     company: "",
     store: "",
-    medician: "",
+    medician: [],
   });
 
   console.log(autoCompleteData);
@@ -124,6 +124,10 @@ export default function Entrance(props) {
   const [currency, setCurrency] = React.useState([]);
   const [paymentMethod, setPaymentMethod] = React.useState([]);
   const [reRender, setReRender] = React.useState([]);
+  const [entrancePosted, setEntrancePosted] = React.useState(false)
+  const [exactEntrance, setExatEntrance] = React.useState([])
+
+  const [medician, setMedician] = React.useState([])
 
   React.useEffect(() => {
     axios
@@ -155,11 +159,18 @@ export default function Entrance(props) {
       .get(PAYMENT_METHOD_URL)
       .then((result) => setPaymentMethod(result.data))
       .catch((e) => console.log(e));
+
+    axios
+      .get(MEDICIAN_URL)
+      .then((result)=> setMedician(result.data))
+      .catch((e) => console.log(e))
+
+
   }, [reRender]);
 
   console.log(finalRegister);
 
-  const Submit = (data) => {
+  const EntranceSubmit = (data) => {
     const EntranceForm = new FormData();
     EntranceForm.append("factor_number", data.factor_number);
     EntranceForm.append("factor_date", data.factor_date);
@@ -170,9 +181,34 @@ export default function Entrance(props) {
     EntranceForm.append("without_discount", data.without_discount);
     EntranceForm.append("company", autoCompleteData.company.id);
     EntranceForm.append("payment_method", data.payment_method);
-    EntranceForm.append("currency", data.currency);
+    EntranceForm.append("currency", data.currency ? data.currency : 1);
     EntranceForm.append("final_register", data.final_register);
     EntranceForm.append("store", autoCompleteData.store.id);
+
+
+    console.log(EntranceForm);
+
+    if (entrancePosted == false) {
+      axios
+      .post(ENTRANCE_URL, EntranceForm)
+      .then((data) => {
+        setEntrancePosted(true)
+        setExatEntrance(data.data)
+        console.log(data);
+        axios
+          .get(ENTRANCE_URL)
+          .then((result) => setEntrance(result.data))
+          .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
+        
+      }  
+    setReRender("Render");
+  };
+
+  console.log(exactEntrance)
+
+  const EntranceThroughSubmit = (data) => {
 
     const EntranceThrough = new FormData();
     EntranceThrough.append("number_in_factor", data.number_in_factor);
@@ -186,22 +222,22 @@ export default function Entrance(props) {
     EntranceThrough.append("interest_percent", data.interest_percent);
     EntranceThrough.append("bonus", data.bonus);
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
-    EntranceThrough.append("entrance", data.entrance_id);
+    EntranceThrough.append("entrance", exactEntrance.id);
 
-    console.log(EntranceForm);
     console.log(EntranceThrough);
 
-    axios
-      .post(ENTRANCE_URL, EntranceForm)
-      .then((data) => {
-        console.log(data);
-        axios
-          .get(ENTRANCE_URL)
-          .then((result) => setEntrance(result.data))
-          .catch((e) => console.log(e));
-      })
-      .catch((e) => console.log(e));
 
+    if (entrancePosted) {
+      axios
+      .post(ENTRANCE_THROUGH_URL, EntranceThrough)
+      .then((data) => {
+        console.log(data)
+        
+      })
+      .catch((e) => console.log(e))
+    }
+
+    
     setReRender("Render");
   };
   console.log(reRender);
@@ -211,7 +247,7 @@ export default function Entrance(props) {
       <div className="purchase-card" onClick={registerModalOpener}>
         <div>
           <h3>{props.title}</h3>
-          <h4>{props.number}</h4>
+          <h4>{entrance.length}</h4>
         </div>
         <div>
           <i className={props.icon}></i>
@@ -223,7 +259,6 @@ export default function Entrance(props) {
         onRequestClose={registerModalCloser}
       >
         <div className="modal">
-          <form className="form" onSubmit={handleSubmit(Submit)}>
             <div className="modal-header">
               <h3>ثبت ورودی</h3>
               <div className="modal-close-btn" onClick={registerModalCloser}>
@@ -232,7 +267,7 @@ export default function Entrance(props) {
             </div>
             <div className="entrance-box">
               <div className="entrance-report"></div>
-              <div className="entrance-entrance">
+          <form className="entrance-entrance" onSubmit={handleSubmit(EntranceSubmit)}>
                 <label>وضعیت:</label>
                 <select {...register("final_register")}>
                   {finalRegister.map((final) => (
@@ -265,9 +300,10 @@ export default function Entrance(props) {
                 <input required type="text" {...register("factor_number")} />
                 <label>ش.حواله:</label>
                 <input
-                  value={entrance.includes(entrance[0]) ? entrance[entrance.length - 1].id : 1}
+                  value={exactEntrance.id}
                   type="text"
                   {...register("entrance_id")}
+                  disabled
                 />
                 <label>
                   <h5>تحویل دهنده:</h5>
@@ -301,13 +337,14 @@ export default function Entrance(props) {
                 />
                 <label>توضیحات:</label>
                 <textarea {...register("description")}></textarea>
-              </div>
-
-              <div className="entrance-through">
+                <input type="submit" value='Submit'></input>
+                <input type="reset" value='Reset'></input>
+              </form>
+              <form className="entrance-through" onSubmit={handleSubmit(EntranceThroughSubmit)}>
                 <label>قلم:</label>
                 <div className="entrance-through-medician-input">
                   <ReactSearchAutocomplete
-                    items={entrance}
+                    items={medician}
                     fuseOptions={{ keys: ["brand_name"] }}
                     resultStringKeyName="brand_name"
                     styling={AutoCompleteStyle2}
@@ -329,7 +366,7 @@ export default function Entrance(props) {
                 <label>
                   <h5> ت.د.پاکت:</h5>
                 </label>
-                <input type="text" {...register("each_quantity")} />
+                <input type="text" value={autoCompleteData.medician.no_pocket} {...register("each_quantity")} />
                 <label>تخفیف:</label>
                 <input type="text" {...register("discount_money")} />
                 <label>تخفیف ٪:</label>
@@ -346,13 +383,14 @@ export default function Entrance(props) {
                 <input type="text" {...register("bonus")} />
                 <label>ت.بونوس:</label>
                 <input type="text" {...register("quantity_bonus")} />
-              </div>
+                <div></div>
+                <input type="submit" value='Add'></input>
+              </form>
 
               <div className="entrance-medician">
-                <input type="submit"></input>
               </div>
             </div>
-          </form>
+          
         </div>
       </Modal>
     </>
