@@ -354,7 +354,7 @@ export default function Entrance(props) {
               <label>ت.بونوس:</label>
               <input type="text" {...register("quantity_bonus")} />
               <div></div>
-              <input type="submit" value="Add"></input>
+              <input type="submit" value="⤵ Add"></input>
             </form>
 
             <form className="entrance-medician">
