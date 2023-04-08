@@ -72,7 +72,7 @@ export default function Entrance(props) {
             ))}/>
             </div>
             <div className="medician-text-field">
-                <h4>{item.brand_name + ", " + item.ml + ", " + kind.map((kind)=> item.kind == kind.id ? kind.name_english : "sda")}</h4>
+                <h4>{item.brand_name + ", " + item.ml + ", " + kind.map((kind)=> item.kind == kind.id ? kind.name_english : "")}</h4>
                 <h4></h4>
                 <h4>Generic: {item.generic_name.toString()}</h4>
                 <h4></h4>
@@ -417,7 +417,8 @@ export default function Entrance(props) {
 
             <form className="entrance-medician">
               <div className="entrance-medician-header">
-                <label>id</label>
+                <label></label>
+                <label>No</label>
                 <label>قلم</label>
                 <label>تعداد</label>
                 <label>قیمت فی</label>
@@ -432,15 +433,12 @@ export default function Entrance(props) {
                 <label>ذخیره</label>
               </div>
               <div className="entrance-map">
-                {entranceThrough.map((through) => (
+                {entranceThrough.map((through, key) => (
                   <div className="entrance-medician-map">
-                    <input
-                      name="id"
-                      type="text"
-                      defaultValue={through.id}
-                      key={through.id}
-                    />
-                    <input type="text" defaultValue={through.medician} />
+                   <label>{key + 1}</label>
+                    <h4>{medician.map((item)=> (
+                      item.id == through.medician ? (item.brand_name + ", " + item.ml + ", " + kind.map((kind)=> item.kind == kind.id ? kind.name_english : "" )) : " "
+                    ))}</h4>
                     <input
                       type="text"
                       defaultValue={through.number_in_factor}

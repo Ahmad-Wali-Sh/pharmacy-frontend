@@ -5,7 +5,9 @@ import Purchase from "./components/Purchase/Purchase";
 import Sell from "./components/Sell/Sell";
 
 
+
 function App() {
+  
   return (
     <div className="app">
       <Router>
