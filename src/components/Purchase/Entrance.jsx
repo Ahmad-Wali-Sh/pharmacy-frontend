@@ -1,9 +1,10 @@
 import Modal from "react-modal";
 import React from "react";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from "axios";
-import.meta.env.VITE_MEDICIAN;
+import { toast } from "react-toastify";
+import { Dna } from "react-loader-spinner";
 
 export default function Entrance(props) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -51,14 +52,38 @@ export default function Entrance(props) {
 
   const formatResult = (item) => {
     return (
-      <>
-        <span style={{ display: "block", textAlign: "left" }}>
-          id: {item.id}
-        </span>
-        <span style={{ display: "block", textAlign: "left" }}>
-          name: {item.brand_name}
-        </span>
-      </>
+        <div className="medician-format">
+            <div className="medician-image">
+              <img className="medician-image" src={item.image ? item.image.slice(38) : "./images/nophoto.jpg"}/>
+            </div>
+            <div className="medician-image">
+              <img className="medician-image" src={kind.map((kind)=> (
+                item.kind == kind.id && kind.image ? kind.image.slice(38) : "./images/nophoto.jpg"
+              ))}/>
+            </div>
+            <div className="medician-image">
+            <img className="medician-image" src={country.map((country) => (
+              item.country == country.id && country.image ? country.image.slice(38) : "./images/nophoto.jpg"
+            ))}/>
+            </div>
+            <div className="medician-image">
+            <img className="medician-image" src={pharmGroub.map((pharm) => (
+              item.pharm_groub == pharm.id && pharm.image ? pharm.image.slice(38) : "./images/nophoto.jpg"
+            ))}/>
+            </div>
+            <div className="medician-text-field">
+                <h4>{item.brand_name + ", " + item.ml + ", " + kind.map((kind)=> item.kind == kind.id ? kind.name_english : "sda")}</h4>
+                <h4></h4>
+                <h4>Generic: {item.generic_name.toString()}</h4>
+                <h4></h4>
+                <h4>Location: {item.location}</h4>
+                <h4></h4>
+                <h4>Price: {item.price}</h4>
+                <h4>NO.Pack: {item.no_pocket}</h4>
+                <h4>Existence: {item.existence}</h4>
+            </div>
+        </div>
+
     );
   };
 
@@ -81,6 +106,9 @@ export default function Entrance(props) {
   const PAYMENT_METHOD_URL = import.meta.env.VITE_PAYMENT_METHOD;
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const COUNTRY_URL = import.meta.env.VITE_COUNTRY
+  const KIND_URL = import.meta.env.VITE_KIND
+  const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB
 
   const [entrance, setEntrance] = React.useState([]);
   const [finalRegister, setFinalRegister] = React.useState([]);
@@ -88,6 +116,9 @@ export default function Entrance(props) {
   const [store, setStore] = React.useState([]);
   const [currency, setCurrency] = React.useState([]);
   const [paymentMethod, setPaymentMethod] = React.useState([]);
+  const [country, setCountry] = React.useState([]);
+  const [kind, setKind] = React.useState([]);
+  const [pharmGroub, setPharmGroub] = React.useState([]);
   const [reRender, setReRender] = React.useState([]);
   const [entrancePosted, setEntrancePosted] = React.useState(false);
   const [exactEntrance, setExatEntrance] = React.useState([]);
@@ -129,6 +160,18 @@ export default function Entrance(props) {
       .get(MEDICIAN_URL)
       .then((result) => setMedician(result.data))
       .catch((e) => console.log(e));
+    axios
+      .get(COUNTRY_URL)
+      .then((result) => setCountry(result.data))
+      .catch((e) => console.log(e));
+    axios
+      .get(KIND_URL)
+      .then((result) => setKind(result.data))
+      .catch((e) => console.log(e));
+    axios
+      .get(PHARM_GROUB_URL)
+      .then((result) => setPharmGroub(result.data))
+      .catch((e) => console.log(e));
   }, [reRender]);
 
   console.log(finalRegister);
@@ -155,14 +198,21 @@ export default function Entrance(props) {
         .post(ENTRANCE_URL, EntranceForm)
         .then((data) => {
           setEntrancePosted(true);
+          toast.success("Entrance Saved Successfuly.");
           setExatEntrance(data.data);
           console.log(data);
           axios
             .get(ENTRANCE_URL)
-            .then((result) => setEntrance(result.data))
+            .then((result) => {
+              setEntrance(result.data);
+              toast.info("Data Updated.");
+            })
             .catch((e) => console.log(e));
         })
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          console.log(e);
+          toast.error("Check Your Input And Try Again!");
+        });
     }
     setReRender("Render");
   };
@@ -188,15 +238,17 @@ export default function Entrance(props) {
 
     console.log(EntranceThrough);
 
-    if (entrancePosted) {
-      axios
-        .post(ENTRANCE_THROUGH_URL, EntranceThrough)
-        .then((data) => {
-          console.log(data);
-          setEntranceThrough((prev) => [...prev, data.data]);
-        })
-        .catch((e) => console.log(e));
-    }
+    axios
+      .post(ENTRANCE_THROUGH_URL, EntranceThrough)
+      .then((data) => {
+        console.log(data);
+        setEntranceThrough((prev) => [...prev, data.data]);
+        toast.info("New Item Added.");
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error("Check Your Input And Try Again. ");
+      });
 
     setReRender("Render");
   };
@@ -207,7 +259,7 @@ export default function Entrance(props) {
       <div className="purchase-card" onClick={registerModalOpener}>
         <div>
           <h3>{props.title}</h3>
-          <h4>{entrance.length}</h4>
+          <div>{entrance.length ? entrance.length : <LoadingDNA />}</div>
         </div>
         <div>
           <i className={props.icon}></i>
@@ -234,7 +286,9 @@ export default function Entrance(props) {
               <label>وضعیت:</label>
               <select {...register("final_register")}>
                 {finalRegister.map((final) => (
-                  <option value={final.id}>{final.name}</option>
+                  <option key={final.id} value={final.id}>
+                    {final.name}
+                  </option>
                 ))}
               </select>
               <label>شرکت:</label>
@@ -279,13 +333,17 @@ export default function Entrance(props) {
               <label>واحد پول:</label>
               <select {...register("currency")}>
                 {currency.map((currency) => (
-                  <option value={currency.id}>{currency.name}</option>
+                  <option key={currency.id} value={currency.id}>
+                    {currency.name}
+                  </option>
                 ))}
               </select>
               <label>پرداخت:</label>
               <select {...register("payment_method")}>
                 {paymentMethod.map((payment) => (
-                  <option value={payment.id}>{payment.name}</option>
+                  <option key={payment.id} value={payment.id}>
+                    {payment.name}
+                  </option>
                 ))}
               </select>
               <label>فایده ٪:</label>
@@ -374,31 +432,60 @@ export default function Entrance(props) {
                 <label>ذخیره</label>
               </div>
               <div className="entrance-map">
-              {entranceThrough.map((through) => (
-                <div className="entrance-medician-map">
-                  <input name="id" type="text" defaultValue={through.id} />
-                  <input
-                    type="text"
-                    defaultValue={through.medician}
-                  />
-                  <input type="text" defaultValue={through.number_in_factor}/>
-                  <input type="text" defaultValue={through.each_price_factor} />
-                  <input type="text" defaultValue={through.each_quantity} />
-                  <input type="text" defaultValue={through.discount_money} />
-                  <input type="text" defaultValue={through.discount_percent} />
-                  <input type="date" defaultValue={through.expire_date} />
-                  <input type="text" defaultValue={through.interest_money} />
-                  <input type="text" defaultValue={through.interest_percent}/>
-                  <input type="text" defaultValue={through.bonus} />
-                  <input type="text" defaultValue={through.quantity_bonus} />
-                  <input type="submit" disabled value="Update" />
-                </div>
-              ))}
+                {entranceThrough.map((through) => (
+                  <div className="entrance-medician-map">
+                    <input
+                      name="id"
+                      type="text"
+                      defaultValue={through.id}
+                      key={through.id}
+                    />
+                    <input type="text" defaultValue={through.medician} />
+                    <input
+                      type="text"
+                      defaultValue={through.number_in_factor}
+                    />
+                    <input
+                      type="text"
+                      defaultValue={through.each_price_factor}
+                    />
+                    <input type="text" defaultValue={through.each_quantity} />
+                    <input type="text" defaultValue={through.discount_money} />
+                    <input
+                      type="text"
+                      defaultValue={through.discount_percent}
+                    />
+                    <input type="date" defaultValue={through.expire_date} />
+                    <input type="text" defaultValue={through.interest_money} />
+                    <input
+                      type="text"
+                      defaultValue={through.interest_percent}
+                    />
+                    <input type="text" defaultValue={through.bonus} />
+                    <input type="text" defaultValue={through.quantity_bonus} />
+                    <input type="submit" disabled value="Update" />
                   </div>
+                ))}
+              </div>
             </form>
           </div>
         </div>
       </Modal>
     </>
+  );
+}
+
+function LoadingDNA() {
+  return (
+    <div className="loading">
+      <Dna
+        visible={true}
+        width="40%"
+        height="100%"
+        ariaLabel="dna-loading"
+        wrapperStyle={{}}
+        wrapperClass="dna-wrapper"
+      />
+    </div>
   );
 }

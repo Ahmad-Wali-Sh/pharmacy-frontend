@@ -345,8 +345,6 @@ button:focus {
   background-color: rgba(167, 167, 167, 0.4);
 }
 
-.form {
-}
 
 .entrance-box {
   width: 100%;
@@ -571,7 +569,45 @@ input[type="date"]:disabled {
 }
 
 .entrance-medician-map > input[type=submit]:hover {
-
   background-color: var(--color-twelve);
+}
 
+
+.loading {
+  width: 100%;
+  height: 2rem;
+  text-align: right;
+  justify-content: right;
+}
+
+.medician-format {
+  height: 8%;
+  display: grid;
+  grid-template-columns: 8% 8% 8% 8% 68%;
+  grid-template-rows: 50% 50%;
+  text-align: left;
+  justify-content: start;
+  direction: ltr;
+  gap: 0.1rem;
+  padding: 0.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid grey;
+}
+
+.medician-text-field {
+  height: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  padding: 0.2rem;
+  padding-left: 2rem;
+
+
+}
+
+.medician-image {
+  width: 100%;
+  height: 100%;
+  background-color: #600f0f;
+  border-radius: 0.5rem;
 }
