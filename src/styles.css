@@ -120,6 +120,16 @@ body {
   height: 100%;
 }
 
+.fa-trash {
+  color: rgb(75, 45, 45);
+  font-size: 1rem;
+}
+
+.fa-marker {
+  color: rgb(72, 161, 72);
+  font-size: 1rem;
+}
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -649,3 +659,23 @@ input[type="date"]:disabled {
   height: 100%;
   border-radius: 0.5rem;
 }
+
+.medician-map-buttons {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.medician-map-buttons > div {
+  width: 1.7rem;
+  height: 1.7rem;
+  background-color: var(--color-nine);
+  text-align: center;
+  padding-top: 0.3rem;
+  border-radius: 0.4rem;
+}
+.medician-map-buttons > div:hover {
+  background-color: var(--color-sex);
+}
+
+
+

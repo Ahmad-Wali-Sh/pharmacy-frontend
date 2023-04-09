@@ -236,6 +236,7 @@ export default function Entrance(props) {
   };
 
   const [entranceThrough, setEntranceThrough] = React.useState([]);
+  console.log(entranceThrough);
 
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
@@ -265,6 +266,71 @@ export default function Entrance(props) {
       });
 
     setReRender("Render");
+  };
+
+  const MedicianUpdate = (data) => {
+
+    console.log(data.u_number_in_factor);
+    const MedicianUpdateForm = new FormData();
+    MedicianUpdateForm.append(
+      "number_in_factor",
+      data.u_number_in_factor[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "each_price_factor",
+      data.u_each_price_factor[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "each_quantity",
+      data.u_each_quantity[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "discount_money",
+      data.u_discount_money[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "discount_percent",
+      data.u_discount_percent[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "expire_date",
+      data.u_expire_date[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "interest_money",
+      data.u_interest_money[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "interest_percent",
+      data.u_interest_percent[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "bonus",
+      data.u_bonus[data.u_entrance_through_id]
+    );
+    MedicianUpdateForm.append(
+      "quantity_bonus",
+      data.u_quantity_bonus[data.u_entrance_through_id]
+      )
+
+    axios
+      .patch(
+        ENTRANCE_THROUGH_URL + data.u_entrance_through_id + "/",
+        MedicianUpdateForm
+      )
+      .then((e) => console.log(e))
+      .catch(() => toast.error("Check Your Input And Try Again!"));
+  };
+
+  const MedicianDelete = (data) => {
+    axios
+      .delete(ENTRANCE_THROUGH_URL + data.u_entrance_through_id + "/")
+      .then(() => toast.success("Deleted Successfuly!"))
+      .catch(() => toast.error("Can't Delete For Some Reason..."));
+
+    setEntranceThrough((prev) =>
+      prev.filter((object) => object.id != data.u_entrance_through_id)
+    );
   };
   return (
     <>
@@ -464,26 +530,67 @@ export default function Entrance(props) {
                     <input
                       type="text"
                       defaultValue={through.number_in_factor}
+                      {...register(`u_number_in_factor[${key + 1}]`)}
+                    />
+                    <input
+                      style={{ display: "none" }}
+                      type="text"
+                      {...register("u_entrance_through_id")}
+                      value={through.id}
                     />
                     <input
                       type="text"
                       defaultValue={through.each_price_factor}
+                      {...register(`u_each_price_factor[${through.id}]`)}
                     />
-                    <input type="text" defaultValue={through.each_quantity} />
-                    <input type="text" defaultValue={through.discount_money} />
+                    <input
+                      type="text"
+                      defaultValue={through.each_quantity}
+                      {...register(`u_each_quantity[${through.id}]`)}
+                    />
+                    <input
+                      type="text"
+                      defaultValue={through.discount_money}
+                      {...register(`u_discount_money[${through.id}]`)}
+                    />
                     <input
                       type="text"
                       defaultValue={through.discount_percent}
+                      {...register(`u_discount_percent[${through.id}]`)}
                     />
-                    <input type="date" defaultValue={through.expire_date} />
-                    <input type="text" defaultValue={through.interest_money} />
+                    <input
+                      type="date"
+                      defaultValue={through.expire_date}
+                      {...register(`u_expire_date[${through.id}]`)}
+                    />
+                    <input
+                      type="text"
+                      defaultValue={through.interest_money}
+                      {...register(`u_interest_money[${through.id}]`)}
+                    />
                     <input
                       type="text"
                       defaultValue={through.interest_percent}
+                      {...register(`u_interest_percent[${through.id}]`)}
                     />
-                    <input type="text" defaultValue={through.bonus} />
-                    <input type="text" defaultValue={through.quantity_bonus} />
-                    <input type="submit" disabled value="Update" />
+                    <input
+                      type="text"
+                      defaultValue={through.bonus}
+                      {...register(`u_bonus[${through.id}]`)}
+                    />
+                    <input
+                      type="text"
+                      defaultValue={through.quantity_bonus}
+                      {...register(`u_quantity_bonus[${through.id}]`)}
+                    />
+                    <div className="medician-map-buttons">
+                      <div onClick={handleSubmit(MedicianDelete)}>
+                        <i className="fa-solid fa-trash"></i>
+                      </div>
+                      <div onClick={handleSubmit(MedicianUpdate)}>
+                        <i class="fa-solid fa-marker"></i>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
