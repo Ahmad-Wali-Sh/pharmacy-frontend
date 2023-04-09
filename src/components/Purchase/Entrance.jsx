@@ -52,38 +52,63 @@ export default function Entrance(props) {
 
   const formatResult = (item) => {
     return (
-        <div className="medician-format">
-            <div className="medician-image">
-              <img className="medician-image" src={item.image ? item.image.slice(38) : "./images/nophoto.jpg"}/>
-            </div>
-            <div className="medician-image">
-              <img className="medician-image" src={kind.map((kind)=> (
-                item.kind == kind.id && kind.image ? kind.image.slice(38) : "./images/nophoto.jpg"
-              ))}/>
-            </div>
-            <div className="medician-image">
-            <img className="medician-image" src={country.map((country) => (
-              item.country == country.id && country.image ? country.image.slice(38) : "./images/nophoto.jpg"
-            ))}/>
-            </div>
-            <div className="medician-image">
-            <img className="medician-image" src={pharmGroub.map((pharm) => (
-              item.pharm_groub == pharm.id && pharm.image ? pharm.image.slice(38) : "./images/nophoto.jpg"
-            ))}/>
-            </div>
-            <div className="medician-text-field">
-                <h4>{item.brand_name + ", " + item.ml + ", " + kind.map((kind)=> item.kind == kind.id ? kind.name_english : "")}</h4>
-                <h4></h4>
-                <h4>Generic: {item.generic_name.toString()}</h4>
-                <h4></h4>
-                <h4>Location: {item.location}</h4>
-                <h4></h4>
-                <h4>Price: {item.price}</h4>
-                <h4>NO.Pack: {item.no_pocket}</h4>
-                <h4>Existence: {item.existence}</h4>
-            </div>
+      <div className="medician-format">
+        <div className="medician-image">
+          <img
+            className="medician-image"
+            src={item.image ? item.image.slice(38) : "./images/nophoto.jpg"}
+          />
         </div>
-
+        <div className="medician-image">
+          <img
+            className="medician-image"
+            src={kind.map((kind) =>
+              item.kind == kind.id && kind.image
+                ? kind.image.slice(38)
+                : "./images/nophoto.jpg"
+            )}
+          />
+        </div>
+        <div className="medician-image">
+          <img
+            className="medician-image"
+            src={country.map((country) =>
+              item.country == country.id && country.image
+                ? country.image.slice(38)
+                : "./images/nophoto.jpg"
+            )}
+          />
+        </div>
+        <div className="medician-image">
+          <img
+            className="medician-image"
+            src={pharmGroub.map((pharm) =>
+              item.pharm_groub == pharm.id && pharm.image
+                ? pharm.image.slice(38)
+                : "./images/nophoto.jpg"
+            )}
+          />
+        </div>
+        <div className="medician-text-field">
+          <h4>
+            {item.brand_name +
+              ", " +
+              item.ml +
+              ", " +
+              kind.map((kind) =>
+                item.kind == kind.id ? kind.name_english : ""
+              )}
+          </h4>
+          <h4></h4>
+          <h4>Generic: {item.generic_name.toString()}</h4>
+          <h4></h4>
+          <h4>Location: {item.location}</h4>
+          <h4></h4>
+          <h4>Price: {item.price}</h4>
+          <h4>NO.Pack: {item.no_pocket}</h4>
+          <h4>Existence: {item.existence}</h4>
+        </div>
+      </div>
     );
   };
 
@@ -92,8 +117,6 @@ export default function Entrance(props) {
     store: "",
     medician: [],
   });
-
-  console.log(autoCompleteData);
 
   /* Styling Finished */
   /* CRUD */
@@ -106,9 +129,9 @@ export default function Entrance(props) {
   const PAYMENT_METHOD_URL = import.meta.env.VITE_PAYMENT_METHOD;
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
-  const COUNTRY_URL = import.meta.env.VITE_COUNTRY
-  const KIND_URL = import.meta.env.VITE_KIND
-  const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB
+  const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
+  const KIND_URL = import.meta.env.VITE_KIND;
+  const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
 
   const [entrance, setEntrance] = React.useState([]);
   const [finalRegister, setFinalRegister] = React.useState([]);
@@ -174,8 +197,6 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   }, [reRender]);
 
-  console.log(finalRegister);
-
   const EntranceSubmit = (data) => {
     const EntranceForm = new FormData();
     EntranceForm.append("factor_number", data.factor_number);
@@ -191,8 +212,6 @@ export default function Entrance(props) {
     EntranceForm.append("final_register", data.final_register);
     EntranceForm.append("store", autoCompleteData.store.id);
 
-    console.log(EntranceForm);
-
     if (entrancePosted == false) {
       axios
         .post(ENTRANCE_URL, EntranceForm)
@@ -200,7 +219,6 @@ export default function Entrance(props) {
           setEntrancePosted(true);
           toast.success("Entrance Saved Successfuly.");
           setExatEntrance(data.data);
-          console.log(data);
           axios
             .get(ENTRANCE_URL)
             .then((result) => {
@@ -216,8 +234,6 @@ export default function Entrance(props) {
     }
     setReRender("Render");
   };
-
-  console.log(exactEntrance);
 
   const [entranceThrough, setEntranceThrough] = React.useState([]);
 
@@ -236,8 +252,6 @@ export default function Entrance(props) {
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
     EntranceThrough.append("entrance", exactEntrance.id);
 
-    console.log(EntranceThrough);
-
     axios
       .post(ENTRANCE_THROUGH_URL, EntranceThrough)
       .then((data) => {
@@ -247,13 +261,11 @@ export default function Entrance(props) {
       })
       .catch((e) => {
         console.log(e);
-        toast.error("Check Your Input And Try Again. ");
+        toast.error("Check Your Input And Try Again! ");
       });
 
     setReRender("Render");
   };
-  console.log(entranceThrough);
-
   return (
     <>
       <div className="purchase-card" onClick={registerModalOpener}>
@@ -435,10 +447,20 @@ export default function Entrance(props) {
               <div className="entrance-map">
                 {entranceThrough.map((through, key) => (
                   <div className="entrance-medician-map">
-                   <label>{key + 1}</label>
-                    <h4>{medician.map((item)=> (
-                      item.id == through.medician ? (item.brand_name + ", " + item.ml + ", " + kind.map((kind)=> item.kind == kind.id ? kind.name_english : "" )) : " "
-                    ))}</h4>
+                    <label>{key + 1}</label>
+                    <h4>
+                      {medician.map((item) =>
+                        item.id == through.medician
+                          ? item.brand_name +
+                            ", " +
+                            item.ml +
+                            ", " +
+                            kind.map((kind) =>
+                              item.kind == kind.id ? kind.name_english : ""
+                            )
+                          : " "
+                      )}
+                    </h4>
                     <input
                       type="text"
                       defaultValue={through.number_in_factor}
