@@ -118,8 +118,6 @@ export default function Entrance(props) {
     medician: [],
   });
 
-  const [myNumber, setMynumber] = React.useState(0);
-  console.log(myNumber);
 
   /* Styling Finished */
   /* CRUD */
@@ -239,6 +237,7 @@ export default function Entrance(props) {
   };
 
   const [entranceThrough, setEntranceThrough] = React.useState([]);
+  const [show, setShow] = React.useState([])
 
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
@@ -266,8 +265,8 @@ export default function Entrance(props) {
         console.log(e);
         toast.error("Check Your Input And Try Again! ");
       });
-    setMynumber((prev) => prev + 1);
     setReRender("Render");
+    setShow(prev => [...prev, true])
   };
 
   const MedicianUpdate = (data, key) => {
@@ -293,8 +292,10 @@ export default function Entrance(props) {
       )
       .then((e) => toast.success("Data Updated Successfuly."))
       .catch(() => toast.error("Check Your Input And Try Again!"));
-  };
 
+  };
+  const [numbering, setNumbring] = React.useState({})
+  console.log(numbering)
   const MedicianDelete = (data, key) => {
     console.log(data, key);
     axios
@@ -305,10 +306,41 @@ export default function Entrance(props) {
         console.log(e);
       });
 
-    setEntranceThrough((prev) =>
-      prev.filter((object) => object.id != data.u_entrance_through_id[key])
-    );
+    // setEntranceThrough((prev) =>
+    //   prev.filter((object) => object.id != data.u_entrance_through_id[key])
+    // );
+    let newArr = show
+    newArr[key] = false
+    setShow(newArr)
+
+    show.map((each)=> (
+      each == false && setNumbring((prev)=> prev + 1)
+    ))
   };
+  const SearchSubmit = (data) => {
+    console.log(data)
+    axios
+        .get(ENTRANCE_URL + data.entrance_search + "/")
+        .then((e)=> {
+          console.log(e)
+          setExatEntrance(e.data)
+        })
+
+    axios
+        .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
+        .then((e)=> {
+          console.log(e)
+          setEntranceThrough(e.data)
+        })
+        .catch((e)=> console.log(e))
+  }
+
+  function count () {
+       const counter = show.filter(bool => bool == false)
+       return counter.length
+   }
+
+  
   return (
     <>
       <div className="purchase-card" onClick={registerModalOpener}>
@@ -339,9 +371,9 @@ export default function Entrance(props) {
               onSubmit={handleSubmit(EntranceSubmit)}
             >
               <label>وضعیت:</label>
-              <select {...register("final_register")}>
-                {finalRegister.map((final) => (
-                  <option key={final.id} value={final.id}>
+              <select {...register("final_register")} value={finalRegister.map((final)=> exactEntrance.final_register != final.id ? final.id : "")}>
+                {finalRegister.map((final, key) => (
+                  <option key={final.id} value={final.id} >
                     {final.name}
                   </option>
                 ))}
@@ -367,24 +399,37 @@ export default function Entrance(props) {
                 inputDebounce="10"
               />
               <label>تاریخ:</label>
-              <input required type="date" {...register("factor_date")} />
+              <input required type="date" defaultValue={exactEntrance.factor_date} {...register("factor_date")} />
               <label>شماره:</label>
-              <input required type="text" {...register("factor_number")} />
+              <input required type="text" {...register("factor_number")} defaultValue={exactEntrance.factor_number} />
+              
               <label>ش.حواله:</label>
+              <div className="flex">
               <input
                 value={exactEntrance.id}
                 type="text"
                 {...register("entrance_id")}
                 disabled
               />
+              <form className="search-form" onSubmit={handleSubmit(SearchSubmit)}>
+              <input
+                type="text"
+                {...register("entrance_search")}
+                />
+              <div className="search-button-box" onClick={handleSubmit(SearchSubmit)}>
+              <i class="fa-brands fa-searchengin"></i>
+              </div>
+              </form>
+              </div>
+              
               <label>
                 <h5>تحویل دهنده:</h5>
               </label>
-              <input type="text" {...register("deliver_by")} />
+              <input type="text" {...register("deliver_by")} defaultValue={exactEntrance.deliver_by}/>
               <label>
                 <h5>تحویل گیرنده:</h5>
               </label>
-              <input type="text" {...register("recived_by")} />
+              <input type="text" {...register("recived_by")} defaultValue={exactEntrance.recived_by} />
               <label>واحد پول:</label>
               <select {...register("currency")}>
                 {currency.map((currency) => (
@@ -402,17 +447,18 @@ export default function Entrance(props) {
                 ))}
               </select>
               <label>فایده ٪:</label>
-              <input type="text" {...register("total_interest")} />
+              <input type="text" {...register("total_interest")} defaultValue={exactEntrance.total_interest} />
               <label>
                 <h5>بدون تخفیف:</h5>
               </label>
               <input
                 type="checkbox"
                 className="checkbox-input"
+                defaultChecked={exactEntrance.without_discount}
                 {...register("without_discount")}
               />
               <label>توضیحات:</label>
-              <textarea {...register("description")}></textarea>
+              <textarea {...register("description")} defaultValue={exactEntrance.description}></textarea>
               <input type="submit" value="Submit"></input>
               <input type="reset" value="Reset"></input>
             </form>
@@ -489,7 +535,7 @@ export default function Entrance(props) {
               </div>
               <div className="entrance-map">
                 {entranceThrough.map((through, key) => (
-                  <div className="entrance-medician-map">
+                  <div className={show[key] == true ? "entrance-medician-map" : "entrance-medician-map"}>
                     <label>{key + 1}</label>
                     <h4>
                       {medician.map((item) =>
