@@ -144,7 +144,17 @@ export default function Entrance(props) {
   const [pharmGroub, setPharmGroub] = React.useState([]);
   const [reRender, setReRender] = React.useState([]);
   const [entrancePosted, setEntrancePosted] = React.useState(false);
-  const [exactEntrance, setExatEntrance] = React.useState([]);
+  const [exactEntrance, setExatEntrance] = React.useState({
+    without_discount: false,
+    description: ""
+  });
+  const [report, setReport] = React.useState({
+    total: 0,
+    total_interest: 0,
+    number: 0,
+    sell_total: 0,
+    purchase_total: 0
+  })
 
   const [medician, setMedician] = React.useState([]);
 
@@ -197,22 +207,36 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   }, [reRender]);
 
-  const EntranceSubmit = (data) => {
-    const EntranceForm = new FormData();
-    EntranceForm.append("factor_number", data.factor_number);
-    EntranceForm.append("factor_date", data.factor_date);
-    EntranceForm.append("total_interest", data.total_interest);
-    EntranceForm.append("deliver_by", data.deliver_by);
-    EntranceForm.append("recived_by", data.recived_by);
-    EntranceForm.append("description", data.description);
-    EntranceForm.append("without_discount", data.without_discount);
-    EntranceForm.append("company", autoCompleteData.company.id);
-    EntranceForm.append("payment_method", data.payment_method);
-    EntranceForm.append("currency", data.currency ? data.currency : 1);
-    EntranceForm.append("final_register", data.final_register);
-    EntranceForm.append("store", autoCompleteData.store.id);
+  console.log(exactEntrance)
 
-    if (entrancePosted == false) {
+  const EntranceSubmit = (data) => {
+    console.log(data)
+    const EntranceForm = new FormData();
+    EntranceForm.append("factor_number", data.factor_number != "" ? data.factor_number : exactEntrance.factor_number);
+    EntranceForm.append("factor_date", data.factor_date != "" ? data.factor_date : exactEntrance.factor_date );
+    EntranceForm.append("total_interest", data.total_interest != "" ? data.total_interest : exactEntrance.total_interest);
+    EntranceForm.append("deliver_by", data.deliver_by != "" ? data.deliver_by : exactEntrance.deliver_by);
+    EntranceForm.append("recived_by", data.recived_by != "" ? data.recived_by : exactEntrance.recived_by);
+    EntranceForm.append("description", data.description != "" ? data.description : exactEntrance.description);
+    EntranceForm.append("without_discount", exactEntrance != [] ? exactEntrance.without_discount : data.without_discount);
+    EntranceForm.append("company", autoCompleteData.company != "" ? autoCompleteData.company.id : parseInt(exactEntrance.company));
+    EntranceForm.append("payment_method", data.payment_method != "" ? data.payment_method : exactEntrance.payment_method);
+    EntranceForm.append("currency", data.currency != "" ? data.currency : exactEntrance.currency);
+    EntranceForm.append("final_register", data.final_register != "" ? data.final_register : exactEntrance.final_register);
+    EntranceForm.append("store", autoCompleteData.store != "" ? autoCompleteData.store.id : exactEntrance.store);
+
+    if (searched == true) {
+      axios
+          .patch(ENTRANCE_URL + exactEntrance.id + "/", EntranceForm)
+          .then((e)=> {
+            toast.success('Data Updated Successfuly.')
+            console.log(e)})
+          .catch((e)=> {
+            toast.error("Check Your Input And Try Again!")
+            console.log(e)})
+    }
+
+    if (entrancePosted == false && searched == false) {
       axios
         .post(ENTRANCE_URL, EntranceForm)
         .then((data) => {
@@ -233,12 +257,17 @@ export default function Entrance(props) {
         });
     }
     setReRender("Render");
+    setSearched(true)
   };
 
   const [entranceThrough, setEntranceThrough] = React.useState([]);
+  const [searched, setSearched] = React.useState(false)
   const [show, setShow] = React.useState([]);
 
+
+
   const EntranceThroughSubmit = (data) => {
+
     const EntranceThrough = new FormData();
     EntranceThrough.append("number_in_factor", data.number_in_factor);
     EntranceThrough.append("medician", autoCompleteData.medician.id);
@@ -293,7 +322,10 @@ export default function Entrance(props) {
       .catch(() => toast.error("Check Your Input And Try Again!"));
   };
   const [numbering, setNumbring] = React.useState({});
-  console.log(numbering);
+
+
+
+
   const MedicianDelete = (data, key) => {
     console.log(data, key);
     axios
@@ -314,8 +346,12 @@ export default function Entrance(props) {
     show.map((each) => each == false && setNumbring((prev) => prev + 1));
   };
   const SearchSubmit = (data) => {
-    setExatEntrance([]);
+    setExatEntrance({
+      without_discount: false,
+      description: ""
+    });
     setEntranceThrough([]);
+    setSearched(true)
 
     axios.get(ENTRANCE_URL + data.entrance_search + "/").then((e) => {
       console.log(e);
@@ -331,8 +367,13 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   };
   const ResetForm = () => {
-    setExatEntrance([]);
+    setExatEntrance({
+      without_discount: false,
+      description: ""
+    });
     setEntranceThrough([]);
+    setEntrancePosted(false)
+    setSearched(false)
   };
 
   return (
@@ -359,7 +400,33 @@ export default function Entrance(props) {
             </div>
           </div>
           <div className="entrance-box">
-            <div className="entrance-report"></div>
+            <div className="entrance-report">
+              <div className="entrance-report-header">
+                راپور
+              </div>
+              <div className="entrance-report-body">
+                <div className="entrance-report-map-box">
+                  <label>تعداد اقلام</label>
+                  <label>{report.number}</label>
+                </div>
+                <div className="entrance-report-map-box">
+                  <label>مجموع فایده </label>
+                  <label>{report.total_interest}</label>
+                </div>
+                <div className="entrance-report-map-box">
+                  <label>مجموع خرید </label>
+                  <label>{report.purchase_total}</label>
+                </div>
+                <div className="entrance-report-map-box">
+                  <label>مجموع فروش </label>
+                  <label>{report.sell_total}</label>
+                </div>
+                <div className="entrance-report-map-box">
+                  <label>مجموع</label>
+                  <label>{report.total}</label>
+                </div>
+              </div>
+            </div>
             <form
               className="entrance-entrance"
               onSubmit={handleSubmit(EntranceSubmit)}
@@ -505,8 +572,11 @@ export default function Entrance(props) {
                 {...register("description")}
                 defaultValue={exactEntrance.description}
               ></textarea>
-              <input type="submit" value="Submit"></input>
+              <div></div>
+              <div className="entrance-buttons">
               <input type="reset" value="Reset" onClick={ResetForm}></input>
+              <input type="submit" value={searched ? "Update" : "Submit"}></input>
+              </div>
             </form>
             <form
               className="entrance-through"
@@ -659,13 +729,13 @@ export default function Entrance(props) {
                       {...register(`u_quantity_bonus[${key}]`)}
                     />
                     <div className="medician-map-buttons">
-                      <div
+                      {/* <div
                         onClick={handleSubmit((data) =>
                           MedicianDelete(data, key)
                         )}
                       >
                         <i className="fa-solid fa-trash"></i>
-                      </div>
+                      </div> */}
                       <div
                         onClick={handleSubmit((data) =>
                           MedicianUpdate(data, key)

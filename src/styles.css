@@ -36,7 +36,8 @@
   --color-ten: white;
   --color-eleven: rgb(58, 113, 58);
   --color-twelve: rgb(120, 57, 57);
-  --input-focus: 1px 1px 10px var(var(--color-two))
+  --input-focus: 1px 1px 10px var(var(--color-two));
+  --color-thirth: rgb(93, 93, 93);
 }
 
 body {
@@ -395,6 +396,41 @@ input[type="date"]:disabled {
   background-color: rgba(109, 109, 109, 0.476);
 }
 
+.entrance-buttons {
+  display: flex;
+  justify-content: left;
+  gap:0.3rem;
+}
+.entrance-buttons > input[type=submit] {
+  height: 1.5rem;
+  border-radius: 1rem;
+  width: 7rem;
+  text-align: center;
+  border: none;
+  background-color: var(--color-sex);
+  color: var(--color-ten);
+}
+.entrance-buttons > input[type=reset] {
+  height: 1.5rem;
+  border-radius: 1rem;
+  width: 6rem;
+  text-align: center;
+  grid-area: 5/6/5/7;
+  border: none;
+  background-color: var(--color-sex);
+  color: var(--color-ten);
+  padding-left: 0.5rem;
+  padding-right: 0.7rem;
+}
+
+.entrance-buttons > input[type=submit]:hover {
+  background-color: var(--color-eleven);
+}
+
+.entrance-buttons > input[type=reset]:hover {
+  background-color: var(--color-twelve);
+}
+
 .entrance-report {
   background-color: var(--color-sex);
   border-radius: 1rem;
@@ -729,3 +765,38 @@ input[type="date"]:disabled {
   padding-right: 0.7rem;
 }
 
+/* Entrance Report */
+.entrance-report {
+}
+
+.entrance-report-header {
+  width: 100%;
+  height: 2.3rem;
+  background-image: var(--color-five);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  text-align: right;
+  padding-right:1.3rem;
+  padding-top: 0.4rem;
+}
+
+.entrance-report-body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-seven);
+  direction: rtl;
+}
+
+.entrance-report-map-box {
+  width: 100%;
+  height: 2rem;
+  background-color: var(--color-thirth);
+  padding:0.3rem;
+  border-bottom: 1px solid var(--color-one);
+  font-size: medium;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 1rem;
+  padding-left: 1rem;
+
+}
