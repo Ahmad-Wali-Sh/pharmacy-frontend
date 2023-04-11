@@ -118,7 +118,6 @@ export default function Entrance(props) {
     medician: [],
   });
 
-
   /* Styling Finished */
   /* CRUD */
 
@@ -237,7 +236,7 @@ export default function Entrance(props) {
   };
 
   const [entranceThrough, setEntranceThrough] = React.useState([]);
-  const [show, setShow] = React.useState([])
+  const [show, setShow] = React.useState([]);
 
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
@@ -266,7 +265,7 @@ export default function Entrance(props) {
         toast.error("Check Your Input And Try Again! ");
       });
     setReRender("Render");
-    setShow(prev => [...prev, true])
+    setShow((prev) => [...prev, true]);
   };
 
   const MedicianUpdate = (data, key) => {
@@ -292,10 +291,9 @@ export default function Entrance(props) {
       )
       .then((e) => toast.success("Data Updated Successfuly."))
       .catch(() => toast.error("Check Your Input And Try Again!"));
-
   };
-  const [numbering, setNumbring] = React.useState({})
-  console.log(numbering)
+  const [numbering, setNumbring] = React.useState({});
+  console.log(numbering);
   const MedicianDelete = (data, key) => {
     console.log(data, key);
     axios
@@ -309,38 +307,34 @@ export default function Entrance(props) {
     // setEntranceThrough((prev) =>
     //   prev.filter((object) => object.id != data.u_entrance_through_id[key])
     // );
-    let newArr = show
-    newArr[key] = false
-    setShow(newArr)
+    let newArr = show;
+    newArr[key] = false;
+    setShow(newArr);
 
-    show.map((each)=> (
-      each == false && setNumbring((prev)=> prev + 1)
-    ))
+    show.map((each) => each == false && setNumbring((prev) => prev + 1));
   };
   const SearchSubmit = (data) => {
-    console.log(data)
-    axios
-        .get(ENTRANCE_URL + data.entrance_search + "/")
-        .then((e)=> {
-          console.log(e)
-          setExatEntrance(e.data)
-        })
+    setExatEntrance([]);
+    setEntranceThrough([]);
+
+    axios.get(ENTRANCE_URL + data.entrance_search + "/").then((e) => {
+      console.log(e);
+      setExatEntrance(e.data);
+    });
 
     axios
-        .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
-        .then((e)=> {
-          console.log(e)
-          setEntranceThrough(e.data)
-        })
-        .catch((e)=> console.log(e))
-  }
+      .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
+      .then((e) => {
+        console.log(e);
+        setEntranceThrough(e.data);
+      })
+      .catch((e) => console.log(e));
+  };
+  const ResetForm = () => {
+    setExatEntrance([]);
+    setEntranceThrough([]);
+  };
 
-  function count () {
-       const counter = show.filter(bool => bool == false)
-       return counter.length
-   }
-
-  
   return (
     <>
       <div className="purchase-card" onClick={registerModalOpener}>
@@ -371,9 +365,17 @@ export default function Entrance(props) {
               onSubmit={handleSubmit(EntranceSubmit)}
             >
               <label>وضعیت:</label>
-              <select {...register("final_register")} value={finalRegister.map((final)=> exactEntrance.final_register != final.id ? final.id : "")}>
+              <select
+                {...register("final_register")}
+                placeholder={exactEntrance.final_register}
+              >
+                <option value={exactEntrance.final_register} selected hidden>
+                  {finalRegister.map((final) =>
+                    final.id == exactEntrance.final_register ? final.name : ""
+                  )}
+                </option>
                 {finalRegister.map((final, key) => (
-                  <option key={final.id} value={final.id} >
+                  <option key={final.id} value={final.id}>
                     {final.name}
                   </option>
                 ))}
@@ -387,6 +389,9 @@ export default function Entrance(props) {
                 styling={AutoCompleteStyle}
                 showClear={false}
                 inputDebounce="10"
+                placeholder={company.map((company) =>
+                  company.id == exactEntrance.company ? company.name : ""
+                )}
               />
               <label>انبار:</label>
               <ReactSearchAutocomplete
@@ -397,41 +402,70 @@ export default function Entrance(props) {
                 }
                 showClear={false}
                 inputDebounce="10"
+                placeholder={store.map((store) =>
+                  store.id == exactEntrance.store ? store.name : ""
+                )}
               />
               <label>تاریخ:</label>
-              <input required type="date" defaultValue={exactEntrance.factor_date} {...register("factor_date")} />
+              <input
+                required
+                type="date"
+                defaultValue={exactEntrance.factor_date}
+                {...register("factor_date")}
+              />
               <label>شماره:</label>
-              <input required type="text" {...register("factor_number")} defaultValue={exactEntrance.factor_number} />
-              
+              <input
+                required
+                type="text"
+                {...register("factor_number")}
+                defaultValue={exactEntrance.factor_number}
+              />
+
               <label>ش.حواله:</label>
               <div className="flex">
-              <input
-                value={exactEntrance.id}
-                type="text"
-                {...register("entrance_id")}
-                disabled
-              />
-              <form className="search-form" onSubmit={handleSubmit(SearchSubmit)}>
-              <input
-                type="text"
-                {...register("entrance_search")}
+                <input
+                  value={exactEntrance.id}
+                  type="text"
+                  {...register("entrance_id")}
+                  disabled
                 />
-              <div className="search-button-box" onClick={handleSubmit(SearchSubmit)}>
-              <i class="fa-brands fa-searchengin"></i>
+                <form
+                  className="search-form"
+                  onSubmit={handleSubmit(SearchSubmit)}
+                >
+                  <input type="text" {...register("entrance_search")} />
+                  <div
+                    className="search-button-box"
+                    onClick={handleSubmit(SearchSubmit)}
+                  >
+                    <i class="fa-brands fa-searchengin"></i>
+                  </div>
+                </form>
               </div>
-              </form>
-              </div>
-              
+
               <label>
                 <h5>تحویل دهنده:</h5>
               </label>
-              <input type="text" {...register("deliver_by")} defaultValue={exactEntrance.deliver_by}/>
+              <input
+                type="text"
+                {...register("deliver_by")}
+                defaultValue={exactEntrance.deliver_by}
+              />
               <label>
                 <h5>تحویل گیرنده:</h5>
               </label>
-              <input type="text" {...register("recived_by")} defaultValue={exactEntrance.recived_by} />
+              <input
+                type="text"
+                {...register("recived_by")}
+                defaultValue={exactEntrance.recived_by}
+              />
               <label>واحد پول:</label>
               <select {...register("currency")}>
+                <option value={exactEntrance.currency} selected hidden>
+                  {currency.map((currency) =>
+                    currency.id == exactEntrance.currency ? currency.name : ""
+                  )}
+                </option>
                 {currency.map((currency) => (
                   <option key={currency.id} value={currency.id}>
                     {currency.name}
@@ -440,6 +474,11 @@ export default function Entrance(props) {
               </select>
               <label>پرداخت:</label>
               <select {...register("payment_method")}>
+                <option value={exactEntrance.payment_method} selected hidden>
+                  {paymentMethod.map((pay) =>
+                    pay.id == exactEntrance.payment_method ? pay.name : ""
+                  )}
+                </option>
                 {paymentMethod.map((payment) => (
                   <option key={payment.id} value={payment.id}>
                     {payment.name}
@@ -447,7 +486,11 @@ export default function Entrance(props) {
                 ))}
               </select>
               <label>فایده ٪:</label>
-              <input type="text" {...register("total_interest")} defaultValue={exactEntrance.total_interest} />
+              <input
+                type="text"
+                {...register("total_interest")}
+                defaultValue={exactEntrance.total_interest}
+              />
               <label>
                 <h5>بدون تخفیف:</h5>
               </label>
@@ -458,9 +501,12 @@ export default function Entrance(props) {
                 {...register("without_discount")}
               />
               <label>توضیحات:</label>
-              <textarea {...register("description")} defaultValue={exactEntrance.description}></textarea>
+              <textarea
+                {...register("description")}
+                defaultValue={exactEntrance.description}
+              ></textarea>
               <input type="submit" value="Submit"></input>
-              <input type="reset" value="Reset"></input>
+              <input type="reset" value="Reset" onClick={ResetForm}></input>
             </form>
             <form
               className="entrance-through"
@@ -535,7 +581,13 @@ export default function Entrance(props) {
               </div>
               <div className="entrance-map">
                 {entranceThrough.map((through, key) => (
-                  <div className={show[key] == true ? "entrance-medician-map" : "entrance-medician-map"}>
+                  <div
+                    className={
+                      show[key] == true
+                        ? "entrance-medician-map"
+                        : "entrance-medician-map"
+                    }
+                  >
                     <label>{key + 1}</label>
                     <h4>
                       {medician.map((item) =>
