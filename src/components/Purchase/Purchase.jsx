@@ -14,7 +14,7 @@ function Purchase() {
           number="12"
           icon="fa-solid fa-cart-arrow-down"
         />
-        <Entrance
+        {/* <Entrance
           title="ثبت انبار"
           number="12"
           icon="fa-solid fa-store"
@@ -28,7 +28,7 @@ function Purchase() {
           title="ثبت متفرقه"
           number="12"
           icon="fa-solid fa-feather"
-        />
+        /> */}
         
       </div>
       <div className="purchase-form">

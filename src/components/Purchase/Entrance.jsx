@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Dna } from "react-loader-spinner";
+import { MAX_RESULTS } from "react-search-autocomplete/dist/components/ReactSearchAutocomplete";
 
 export default function Entrance(props) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -63,10 +64,15 @@ export default function Entrance(props) {
           <img
             className="medician-image"
             src={kind.map((kind) =>
-              item.kind == kind.id && kind.image
+              item.kind == kind.id && kind.image == "./images/"
                 ? kind.image.slice(38)
                 : "./images/nophoto.jpg"
             )}
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null; // prevents looping
+              currentTarget.src = "./images/nophoto.jpg";
+            }}
+            alt=""
           />
         </div>
         <div className="medician-image">
@@ -77,6 +83,11 @@ export default function Entrance(props) {
                 ? country.image.slice(38)
                 : "./images/nophoto.jpg"
             )}
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null; // prevents looping
+              currentTarget.src = "./images/nophoto.jpg";
+            }}
+            alt=""
           />
         </div>
         <div className="medician-image">
@@ -85,20 +96,17 @@ export default function Entrance(props) {
             src={pharmGroub.map((pharm) =>
               item.pharm_groub == pharm.id && pharm.image
                 ? pharm.image.slice(38)
-                : "./images/nophoto.jpg"
+                : ""
             )}
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null; // prevents looping
+              currentTarget.src = "./images/nophoto.jpg";
+            }}
+            alt=""
           />
         </div>
         <div className="medician-text-field">
-          <h4>
-            {item.brand_name +
-              ", " +
-              item.ml +
-              ", " +
-              kind.map((kind) =>
-                item.kind == kind.id ? kind.name_english : ""
-              )}
-          </h4>
+          <h4>{item.brand_name}</h4>
           <h4></h4>
           <h4>Generic: {item.generic_name.toString()}</h4>
           <h4></h4>
@@ -146,15 +154,15 @@ export default function Entrance(props) {
   const [entrancePosted, setEntrancePosted] = React.useState(false);
   const [exactEntrance, setExatEntrance] = React.useState({
     without_discount: false,
-    description: ""
+    description: "",
   });
   const [report, setReport] = React.useState({
     total: 0,
     total_interest: 0,
     number: 0,
     sell_total: 0,
-    purchase_total: 0
-  })
+    purchase_total: 0,
+  });
 
   const [medician, setMedician] = React.useState([]);
 
@@ -205,35 +213,85 @@ export default function Entrance(props) {
       .get(PHARM_GROUB_URL)
       .then((result) => setPharmGroub(result.data))
       .catch((e) => console.log(e));
-  }, [reRender]);
-
-  console.log(exactEntrance)
+  }, []);
 
   const EntranceSubmit = (data) => {
-    console.log(data)
+    console.log(data);
     const EntranceForm = new FormData();
-    EntranceForm.append("factor_number", data.factor_number != "" ? data.factor_number : exactEntrance.factor_number);
-    EntranceForm.append("factor_date", data.factor_date != "" ? data.factor_date : exactEntrance.factor_date );
-    EntranceForm.append("total_interest", data.total_interest != "" ? data.total_interest : exactEntrance.total_interest);
-    EntranceForm.append("deliver_by", data.deliver_by != "" ? data.deliver_by : exactEntrance.deliver_by);
-    EntranceForm.append("recived_by", data.recived_by != "" ? data.recived_by : exactEntrance.recived_by);
-    EntranceForm.append("description", data.description != "" ? data.description : exactEntrance.description);
-    EntranceForm.append("without_discount", exactEntrance != [] ? exactEntrance.without_discount : data.without_discount);
-    EntranceForm.append("company", autoCompleteData.company != "" ? autoCompleteData.company.id : parseInt(exactEntrance.company));
-    EntranceForm.append("payment_method", data.payment_method != "" ? data.payment_method : exactEntrance.payment_method);
-    EntranceForm.append("currency", data.currency != "" ? data.currency : exactEntrance.currency);
-    EntranceForm.append("final_register", data.final_register != "" ? data.final_register : exactEntrance.final_register);
-    EntranceForm.append("store", autoCompleteData.store != "" ? autoCompleteData.store.id : exactEntrance.store);
+    EntranceForm.append(
+      "factor_number",
+      data.factor_number != ""
+        ? data.factor_number
+        : exactEntrance.factor_number
+    );
+    EntranceForm.append(
+      "factor_date",
+      data.factor_date != "" ? data.factor_date : exactEntrance.factor_date
+    );
+    EntranceForm.append(
+      "total_interest",
+      data.total_interest != ""
+        ? data.total_interest
+        : exactEntrance.total_interest
+    );
+    EntranceForm.append(
+      "deliver_by",
+      data.deliver_by != "" ? data.deliver_by : exactEntrance.deliver_by
+    );
+    EntranceForm.append(
+      "recived_by",
+      data.recived_by != "" ? data.recived_by : exactEntrance.recived_by
+    );
+    EntranceForm.append(
+      "description",
+      data.description != "" ? data.description : exactEntrance.description
+    );
+    EntranceForm.append(
+      "without_discount",
+      exactEntrance != []
+        ? exactEntrance.without_discount
+        : data.without_discount
+    );
+    EntranceForm.append(
+      "company",
+      autoCompleteData.company != ""
+        ? autoCompleteData.company.id
+        : parseInt(exactEntrance.company)
+    );
+    EntranceForm.append(
+      "payment_method",
+      data.payment_method != ""
+        ? data.payment_method
+        : exactEntrance.payment_method
+    );
+    EntranceForm.append(
+      "currency",
+      data.currency != "" ? data.currency : exactEntrance.currency
+    );
+    EntranceForm.append(
+      "final_register",
+      data.final_register != ""
+        ? data.final_register
+        : exactEntrance.final_register
+    );
+    EntranceForm.append(
+      "store",
+      autoCompleteData.store != ""
+        ? autoCompleteData.store.id
+        : exactEntrance.store
+    );
 
     if (searched == true) {
       axios
-          .patch(ENTRANCE_URL + exactEntrance.id + "/", EntranceForm)
-          .then((e)=> {
-            toast.success('Data Updated Successfuly.')
-            console.log(e)})
-          .catch((e)=> {
-            toast.error("Check Your Input And Try Again!")
-            console.log(e)})
+        .patch(ENTRANCE_URL + exactEntrance.id + "/", EntranceForm)
+        .then((e) => {
+          toast.success("Data Updated Successfuly.");
+          console.log(e);
+        })
+        .catch((e) => {
+          toast.error("Check Your Input And Try Again!");
+          console.log(e);
+        });
     }
 
     if (entrancePosted == false && searched == false) {
@@ -256,18 +314,14 @@ export default function Entrance(props) {
           toast.error("Check Your Input And Try Again!");
         });
     }
-    setReRender("Render");
-    setSearched(true)
+    setSearched(true);
   };
 
   const [entranceThrough, setEntranceThrough] = React.useState([]);
-  const [searched, setSearched] = React.useState(false)
+  const [searched, setSearched] = React.useState(false);
   const [show, setShow] = React.useState([]);
 
-
-
   const EntranceThroughSubmit = (data) => {
-
     const EntranceThrough = new FormData();
     EntranceThrough.append("number_in_factor", data.number_in_factor);
     EntranceThrough.append("medician", autoCompleteData.medician.id);
@@ -293,7 +347,6 @@ export default function Entrance(props) {
         console.log(e);
         toast.error("Check Your Input And Try Again! ");
       });
-    setReRender("Render");
     setShow((prev) => [...prev, true]);
   };
 
@@ -323,9 +376,6 @@ export default function Entrance(props) {
   };
   const [numbering, setNumbring] = React.useState({});
 
-
-
-
   const MedicianDelete = (data, key) => {
     console.log(data, key);
     axios
@@ -348,10 +398,10 @@ export default function Entrance(props) {
   const SearchSubmit = (data) => {
     setExatEntrance({
       without_discount: false,
-      description: ""
+      description: "",
     });
     setEntranceThrough([]);
-    setSearched(true)
+    setSearched(true);
 
     axios.get(ENTRANCE_URL + data.entrance_search + "/").then((e) => {
       console.log(e);
@@ -369,11 +419,42 @@ export default function Entrance(props) {
   const ResetForm = () => {
     setExatEntrance({
       without_discount: false,
-      description: ""
+      description: "",
     });
     setEntranceThrough([]);
-    setEntrancePosted(false)
-    setSearched(false)
+    setEntrancePosted(false);
+    setSearched(false);
+  };
+  React.useEffect(() => {
+    Reporting();
+  }, [entranceThrough]);
+
+  const Reporting = () => {
+    const totalInterest = () => {
+      let result;
+      const total = entranceThrough.map(
+        (through) => (result = +(through.number_in_factor * through.each_price))
+      );
+      total.forEach((item) => (result += item));
+      return result;
+    };
+
+    const totalSell = () => {
+      let result;
+      const total = entranceThrough.map(
+        (through) => (result = +(through.number_in_factor * through.each_price))
+      );
+      total.forEach((item) => (result += item));
+      return result;
+    };
+
+    setReport({
+      total: 0,
+      total_interest: totalInterest(),
+      number: entranceThrough.length,
+      sell_total: 0,
+      purchase_total: 0,
+    });
   };
 
   return (
@@ -381,7 +462,7 @@ export default function Entrance(props) {
       <div className="purchase-card" onClick={registerModalOpener}>
         <div>
           <h3>{props.title}</h3>
-          <div>{entrance.length ? entrance.length : <LoadingDNA />}</div>
+          <div>{medician.length ? entrance.length : <LoadingDNA />}</div>
         </div>
         <div>
           <i className={props.icon}></i>
@@ -401,9 +482,7 @@ export default function Entrance(props) {
           </div>
           <div className="entrance-box">
             <div className="entrance-report">
-              <div className="entrance-report-header">
-                راپور
-              </div>
+              <div className="entrance-report-header">راپور</div>
               <div className="entrance-report-body">
                 <div className="entrance-report-map-box">
                   <label>تعداد اقلام</label>
@@ -574,8 +653,11 @@ export default function Entrance(props) {
               ></textarea>
               <div></div>
               <div className="entrance-buttons">
-              <input type="reset" value="Reset" onClick={ResetForm}></input>
-              <input type="submit" value={searched ? "Update" : "Submit"}></input>
+                <input type="reset" value="Reset" onClick={ResetForm}></input>
+                <input
+                  type="submit"
+                  value={searched ? "Update" : "Submit"}
+                ></input>
               </div>
             </form>
             <form
@@ -597,6 +679,7 @@ export default function Entrance(props) {
                       medician: item,
                     })
                   }
+                  maxResults={4}
                   formatResult={formatResult}
                 />
               </div>
@@ -661,15 +744,7 @@ export default function Entrance(props) {
                     <label>{key + 1}</label>
                     <h4>
                       {medician.map((item) =>
-                        item.id == through.medician
-                          ? item.brand_name +
-                            ", " +
-                            item.ml +
-                            ", " +
-                            kind.map((kind) =>
-                              item.kind == kind.id ? kind.name_english : ""
-                            )
-                          : " "
+                        item.id == through.medician ? item.brand_name : " "
                       )}
                     </h4>
                     <input
