@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Dna } from "react-loader-spinner";
-import { MAX_RESULTS } from "react-search-autocomplete/dist/components/ReactSearchAutocomplete";
 
 export default function Entrance(props) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -457,6 +456,7 @@ export default function Entrance(props) {
     });
   };
 
+  const [searcher, setSearcher] = React.useState([])
   return (
     <>
       <div className="purchase-card" onClick={registerModalOpener}>
@@ -666,7 +666,17 @@ export default function Entrance(props) {
             >
               <label>قلم:</label>
               <div className="entrance-through-medician-input">
-                <ReactSearchAutocomplete
+              <input type="text" onChange={(e)=> {
+                axios
+                    .get(e.target.value != "" ? MEDICIAN_URL + "?search=" + e.target.value : MEDICIAN_URL + "?search=" + "''")
+                    .then((res)=> setSearcher(res.data))
+              }}/>
+              <select className="serahcer">
+                {searcher.map((res) => (
+                    <option>{res.brand_name}, {res.generic_name}</option>
+                ))}
+              </select>
+                {/* <ReactSearchAutocomplete
                   items={medician}
                   fuseOptions={{ keys: ["brand_name"] }}
                   resultStringKeyName="brand_name"
@@ -681,7 +691,7 @@ export default function Entrance(props) {
                   }
                   maxResults={4}
                   formatResult={formatResult}
-                />
+                /> */}
               </div>
               <label>تعداد:</label>
               <input type="text" {...register("number_in_factor")} />

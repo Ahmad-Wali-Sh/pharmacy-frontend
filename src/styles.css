@@ -800,3 +800,18 @@ input[type="date"]:disabled {
   padding-left: 1rem;
 
 }
+
+.serahcer {
+  width: 15rem;
+  background-color: #600f0f;
+  border: none;
+}
+
+.serahcer option {
+  background-color: #b8390e;
+  padding: 10rem 10rem 10rem 10rem
+}
+
+.serahcer:checked {
+  height: 10rem;
+}
