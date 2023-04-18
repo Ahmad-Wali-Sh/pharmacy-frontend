@@ -196,10 +196,10 @@ export default function Entrance(props) {
       .then((result) => setPaymentMethod(result.data))
       .catch((e) => console.log(e));
 
-    axios
-      .get(MEDICIAN_URL)
-      .then((result) => setMedician(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(MEDICIAN_URL)
+    //   .then((result) => setMedician(result.data))
+    //   .catch((e) => console.log(e));
     axios
       .get(COUNTRY_URL)
       .then((result) => setCountry(result.data))
@@ -456,7 +456,7 @@ export default function Entrance(props) {
     });
   };
 
-  const [searcher, setSearcher] = React.useState([])
+  const [searcher, setSearcher] = React.useState([]);
   return (
     <>
       <div className="purchase-card" onClick={registerModalOpener}>
@@ -666,23 +666,40 @@ export default function Entrance(props) {
             >
               <label>قلم:</label>
               <div className="entrance-through-medician-input">
-              <input type="text" onChange={(e)=> {
-                axios
-                    .get(e.target.value != "" ? MEDICIAN_URL + "?search=" + e.target.value : MEDICIAN_URL + "?search=" + "''")
-                    .then((res)=> setSearcher(res.data))
-              }}/>
-              <select className="serahcer">
-                {searcher.map((res) => (
-                    <option>{res.brand_name}, {res.generic_name}</option>
-                ))}
-              </select>
-                {/* <ReactSearchAutocomplete
+                {/* <input
+                  type="text"
+                  onChange={(e) => {
+                    axios
+                      .get(
+                        e.target.value != ""
+                          ? MEDICIAN_URL + "?search=" + e.target.value
+                          : MEDICIAN_URL + "?search=" + "''"
+                      )
+                      .then((res) => {
+                        setSearcher(res.data);
+                        console.log(res.data);
+                      });
+                  }}
+                /> */}
+                <ReactSearchAutocomplete
                   items={medician}
                   fuseOptions={{ keys: ["brand_name"] }}
                   resultStringKeyName="brand_name"
                   styling={AutoCompleteStyle2}
                   showClear={false}
                   inputDebounce="10"
+                  onSearch={(string, result) => {
+                    axios
+                      .get(
+                        string != ""
+                          ? MEDICIAN_URL + "?search=" + string
+                          : MEDICIAN_URL + "?search=" + "''"
+                      )
+                      .then((res) => {
+                        setMedician(res.data);
+                        console.log(res.data);
+                      });
+                  }}
                   onSelect={(item) =>
                     setAutoCompleteData({
                       ...autoCompleteData,
@@ -691,7 +708,7 @@ export default function Entrance(props) {
                   }
                   maxResults={4}
                   formatResult={formatResult}
-                /> */}
+                />
               </div>
               <label>تعداد:</label>
               <input type="text" {...register("number_in_factor")} />
