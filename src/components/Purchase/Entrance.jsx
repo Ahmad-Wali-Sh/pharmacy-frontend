@@ -823,7 +823,7 @@ export default function Entrance(props) {
                   <EntrancThroughEntry
                     through={through}
                     key={through.id}
-                    onSubmit={EntranceThroughSubmit}
+                    onSubmit={MedicianUpdate}
                   />
                 ))}
               </div>
@@ -863,8 +863,47 @@ function EntrancThroughEntry({ through, onSubmit }) {
     quantity_bonus: "",
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const MedicianUpdate = (data, key) => {
+    const MedicianUpdateForm = new FormData();
+    MedicianUpdateForm.append("number_in_factor", data.number_in_factor);
+    MedicianUpdateForm.append("each_price_factor",data.each_price_factor);
+    MedicianUpdateForm.append("each_quantity", data.each_quantity);
+    MedicianUpdateForm.append("discount_money", data.discount_money);
+    MedicianUpdateForm.append("discount_percent", data.discount_percent);
+    MedicianUpdateForm.append("expire_date", data.expire_date);
+    MedicianUpdateForm.append("interest_money", data.interest_money);
+    MedicianUpdateForm.append("interest_percent", data.interest_percent);
+    MedicianUpdateForm.append("bonus", data.bonus);
+    MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
+
+    axios
+      .patch(
+        ENTRANCE_THROUGH_URL + data.entrance_through_id + "/",
+        MedicianUpdateForm
+      )
+      .then(() => toast.success("Data Updated Successfuly."))
+      .catch(() => toast.error("Check Your Input And Try Again!"));
+  };
+
+  const MedicianDelete = (data, key) => {
+    console.log(data, key);
+    axios
+      .delete(ENTRANCE_THROUGH_URL + data.entrance_through_id + "/")
+      .then(() => toast.success("Deleted Successfuly!"))
+      .catch((e) => {
+        toast.error("Can't Delete For Some Reason...");
+        console.log(e);
+      });
+  };
+
   return (
-    <form onSubmit={(e) => onSubmit(e, data.id)}>
+    <form onSubmit={(e) => onSubmit(handleSubmit)}>
       <div className="entrance-medician-map">
         <label>1</label>
         <h4>
@@ -872,22 +911,27 @@ function EntrancThroughEntry({ through, onSubmit }) {
             item.id == through.medician ? item.brand_name : " "
           )} */}
         </h4>
-        <input type="text" defaultValue={through.number_in_factor} />
-        <input style={{ display: "none" }} type="text" value={through.id} />
-        <input type="text" defaultValue={through.each_price_factor} />
-        <input type="text" defaultValue={through.each_quantity} />
-        <input type="text" defaultValue={through.discount_money} />
-        <input type="text" defaultValue={through.discount_percent} />
-        <input type="date" defaultValue={through.expire_date} />
-        <input type="text" defaultValue={through.interest_money} />
-        <input type="text" defaultValue={through.interest_percent} />
-        <input type="text" defaultValue={through.bonus} />
-        <input type="text" defaultValue={through.quantity_bonus} />
+        <input type="text" defaultValue={through.number_in_factor} {...register('number_in_factor')}/>
+        <input style={{ display: "none" }} type="text" value={through.id} {...register('entrance_through_id')}/>
+        <input type="text" defaultValue={through.each_price_factor} {...register('each_price_factor')}/>
+        <input type="text" defaultValue={through.each_quantity} {...register('each_qunatity')}/>
+        <input type="text" defaultValue={through.discount_money} {...register('discount_money')}/>
+        <input type="text" defaultValue={through.discount_percent} {...register('discount_percent')}/>
+        <input type="date" defaultValue={through.expire_date} {...register('expire_date')}/>
+        <input type="text" defaultValue={through.interest_money} {...register('interest_money')}/>
+        <input type="text" defaultValue={through.interest_percent} {...register('interest_percent')}/>
+        <input type="text" defaultValue={through.bonus} {...register('bonus')}/>
+        <input type="text" defaultValue={through.quantity_bonus} {...register('quantity_bonus')}/>
         <div className="medician-map-buttons">
-          <div>
+          <div onClick={() => handleSubmit((data) => {
+            MedicianDelete(data)
+          })}>
             <i className="fa-solid fa-trash"></i>
           </div>
-          <div>
+          <input type='submit'/>
+          <div onClick={() => handleSubmit((data)=> {
+            MedicianUpdate(data)
+          })}>
             <i class="fa-solid fa-marker"></i>
           </div>
         </div>
