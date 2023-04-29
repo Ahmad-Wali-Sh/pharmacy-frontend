@@ -4,7 +4,9 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Dna } from "react-loader-spinner";
+import LoadingDNA from "../../PageComponents/LoadingDNA";
+import EntrancThroughEntry from "./EntrancThroughEntry";
+import SelectMedician from "./SelectMedician";
 
 export default function Entrance(props) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -45,85 +47,22 @@ export default function Entrance(props) {
     zIndex: "2",
     overflow: "scroll",
   };
-  const AutoCompleteStyle2 = {
-    ...AutoCompleteStyle,
-    zIndex: "1",
-  };
 
-  const formatResult = (item) => {
-    return (
-      <div className="medician-format">
-        <div className="medician-image">
-          <img
-            className="medician-image"
-            src={item.image ? item.image.slice(38) : "./images/nophoto.jpg"}
-          />
-        </div>
-        <div className="medician-image">
-          <img
-            className="medician-image"
-            src={kind.map((kind) =>
-              item.kind == kind.id && kind.image == "./images/"
-                ? kind.image.slice(38)
-                : "./images/nophoto.jpg"
-            )}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null; // prevents looping
-              currentTarget.src = "./images/nophoto.jpg";
-            }}
-            alt=""
-          />
-        </div>
-        <div className="medician-image">
-          <img
-            className="medician-image"
-            src={country.map((country) =>
-              item.country == country.id && country.image
-                ? country.image.slice(38)
-                : "./images/nophoto.jpg"
-            )}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null; // prevents looping
-              currentTarget.src = "./images/nophoto.jpg";
-            }}
-            alt=""
-          />
-        </div>
-        <div className="medician-image">
-          <img
-            className="medician-image"
-            src={pharmGroub.map((pharm) =>
-              item.pharm_groub == pharm.id && pharm.image
-                ? pharm.image.slice(38)
-                : ""
-            )}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null; // prevents looping
-              currentTarget.src = "./images/nophoto.jpg";
-            }}
-            alt=""
-          />
-        </div>
-        <div className="medician-text-field">
-          <h4>{item.brand_name}</h4>
-          <h4></h4>
-          <h4>Generic: {item.generic_name.toString()}</h4>
-          <h4></h4>
-          <h4>Location: {item.location}</h4>
-          <h4></h4>
-          <h4>Price: {item.price}</h4>
-          <h4>NO.Pack: {item.no_pocket}</h4>
-          <h4>Existence: {item.existence}</h4>
-        </div>
-      </div>
-    );
-  };
+
+  
 
   const [autoCompleteData, setAutoCompleteData] = React.useState({
     company: "",
     store: "",
     medician: [],
   });
+
+  function AutoCompleteHandle (data) {
+    setAutoCompleteData({
+      ...autoCompleteData,
+      medician: data,
+    })
+  }
 
   /* Styling Finished */
   /* CRUD */
@@ -348,41 +287,6 @@ export default function Entrance(props) {
     setShow((prev) => [...prev, true]);
   };
 
-  const MedicianUpdate = (data, key) => {
-    const MedicianUpdateForm = new FormData();
-    MedicianUpdateForm.append("number_in_factor", data.u_number_in_factor[key]);
-    MedicianUpdateForm.append(
-      "each_price_factor",
-      data.u_each_price_factor[key]
-    );
-    MedicianUpdateForm.append("each_quantity", data.u_each_quantity[key]);
-    MedicianUpdateForm.append("discount_money", data.u_discount_money[key]);
-    MedicianUpdateForm.append("discount_percent", data.u_discount_percent[key]);
-    MedicianUpdateForm.append("expire_date", data.u_expire_date[key]);
-    MedicianUpdateForm.append("interest_money", data.u_interest_money[key]);
-    MedicianUpdateForm.append("interest_percent", data.u_interest_percent[key]);
-    MedicianUpdateForm.append("bonus", data.u_bonus[key]);
-    MedicianUpdateForm.append("quantity_bonus", data.u_quantity_bonus[key]);
-
-    axios
-      .patch(
-        ENTRANCE_THROUGH_URL + data.u_entrance_through_id[key] + "/",
-        MedicianUpdateForm
-      )
-      .then(() => toast.success("Data Updated Successfuly."))
-      .catch(() => toast.error("Check Your Input And Try Again!"));
-  };
-
-  const MedicianDelete = (data, key) => {
-    console.log(data, key);
-    axios
-      .delete(ENTRANCE_THROUGH_URL + data.u_entrance_through_id[key] + "/")
-      .then(() => toast.success("Deleted Successfuly!"))
-      .catch((e) => {
-        toast.error("Can't Delete For Some Reason...");
-        console.log(e);
-      });
-  };
 
   const SearchSubmit = (data) => {
     setExatEntrance({
@@ -654,34 +558,7 @@ export default function Entrance(props) {
             >
               <label>قلم:</label>
               <div className="entrance-through-medician-input">
-                <ReactSearchAutocomplete
-                  items={medician}
-                  fuseOptions={{ keys: ["brand_name"] }}
-                  resultStringKeyName="brand_name"
-                  styling={AutoCompleteStyle2}
-                  showClear={false}
-                  inputDebounce="10"
-                  onSearch={(string, result) => {
-                    axios
-                      .get(
-                        string != ""
-                          ? MEDICIAN_URL + "?search=" + string
-                          : MEDICIAN_URL + "?search=" + "''"
-                      )
-                      .then((res) => {
-                        setMedician(res.data);
-                        console.log(res.data);
-                      });
-                  }}
-                  onSelect={(item) =>
-                    setAutoCompleteData({
-                      ...autoCompleteData,
-                      medician: item,
-                    })
-                  }
-                  maxResults={4}
-                  formatResult={formatResult}
-                />
+                <SelectMedician kind={kind} country={country} pharmGroub={pharmGroub} selectAutoCompleteData={AutoCompleteHandle} />
               </div>
               <label>تعداد:</label>
               <input type="text" {...register("number_in_factor")} />
@@ -734,96 +611,11 @@ export default function Entrance(props) {
               </div>
               <div className="entrance-map">
                 {entranceThrough.map((through, key) => (
-                  // <div
-                  //   className={
-                  //     show[key] == true
-                  //       ? "entrance-medician-map"
-                  //       : "entrance-medician-map"
-                  //   }
-                  // >
-                  //   <label>{key + 1}</label>
-                  //   <h4>
-                  //     {allMedician.map((item) =>
-                  //       item.id == through.medician ? item.brand_name : " "
-                  //     )}
-                  //   </h4>
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.number_in_factor}
-                  //     {...register(`u_number_in_factor[${key}]`)}
-                  //   />
-                  //   <input
-                  //     style={{ display: "none" }}
-                  //     type="text"
-                  //     {...register(`u_entrance_through_id[${key}]`)}
-                  //     value={through.id}
-                  //   />
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.each_price_factor}
-                  //     {...register(`u_each_price_factor[${key}]`)}
-                  //   />
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.each_quantity}
-                  //     {...register(`u_each_quantity[${key}]`)}
-                  //   />
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.discount_money}
-                  //     {...register(`u_discount_money[${key}]`)}
-                  //   />
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.discount_percent}
-                  //     {...register(`u_discount_percent[${key}]`)}
-                  //   />
-                  //   <input
-                  //     type="date"
-                  //     defaultValue={through.expire_date}
-                  //     {...register(`u_expire_date[${key}]`)}
-                  //   />
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.interest_money}
-                  //     {...register(`u_interest_money[${key}]`)}
-                  //   />
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.interest_percent}
-                  //     {...register(`u_interest_percent[${key}]`)}
-                  //   />
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.bonus}
-                  //     {...register(`u_bonus[${key}]`)}
-                  //   />
-                  //   <input
-                  //     type="text"
-                  //     defaultValue={through.quantity_bonus}
-                  //     {...register(`u_quantity_bonus[${key}]`)}
-                  //   />
-                  //   <div className="medician-map-buttons">
-                  //     <div
-                  //       onClick={handleSubmit((data) =>
-                  //         MedicianDelete(data, key)
-                  //       )}
-                  //     >
-                  //       <i className="fa-solid fa-trash"></i>
-                  //     </div>
-                  //     <div
-                  //       onClick={handleSubmit((data) =>
-                  //         MedicianUpdate(data, key)
-                  //       )}
-                  //     >
-                  //       <i class="fa-solid fa-marker"></i>
-                  //     </div>
-                  //   </div>
-                  // </div>
                   <EntrancThroughEntry
                     through={through}
-                    key={through.id}
-                    onSubmit={MedicianUpdate}
+                    keyValue={through.id}
+                    num={key}
+                    allMedician={allMedician}
                   />
                 ))}
               </div>
@@ -835,107 +627,6 @@ export default function Entrance(props) {
   );
 }
 
-function LoadingDNA() {
-  return (
-    <div className="loading">
-      <Dna
-        visible={true}
-        width="40%"
-        height="100%"
-        ariaLabel="dna-loading"
-        wrapperClass="dna-wrapper"
-      />
-    </div>
-  );
-}
 
-function EntrancThroughEntry({ through, onSubmit }) {
-  const [inputData, setInputDate] = React.useState({
-    number_in_factor: "",
-    each_price_factor: "",
-    each_quantity: "",
-    discount_money: "",
-    discount_percent: "",
-    expire_date: "",
-    interest_money: "",
-    interest_percent: "",
-    bonus: "",
-    quantity_bonus: "",
-  });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
-  const MedicianUpdate = (data, key) => {
-    const MedicianUpdateForm = new FormData();
-    MedicianUpdateForm.append("number_in_factor", data.number_in_factor);
-    MedicianUpdateForm.append("each_price_factor",data.each_price_factor);
-    MedicianUpdateForm.append("each_quantity", data.each_quantity);
-    MedicianUpdateForm.append("discount_money", data.discount_money);
-    MedicianUpdateForm.append("discount_percent", data.discount_percent);
-    MedicianUpdateForm.append("expire_date", data.expire_date);
-    MedicianUpdateForm.append("interest_money", data.interest_money);
-    MedicianUpdateForm.append("interest_percent", data.interest_percent);
-    MedicianUpdateForm.append("bonus", data.bonus);
-    MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
-
-    axios
-      .patch(
-        ENTRANCE_THROUGH_URL + data.entrance_through_id + "/",
-        MedicianUpdateForm
-      )
-      .then(() => toast.success("Data Updated Successfuly."))
-      .catch(() => toast.error("Check Your Input And Try Again!"));
-  };
-
-  const MedicianDelete = (data, key) => {
-    console.log(data, key);
-    axios
-      .delete(ENTRANCE_THROUGH_URL + data.entrance_through_id + "/")
-      .then(() => toast.success("Deleted Successfuly!"))
-      .catch((e) => {
-        toast.error("Can't Delete For Some Reason...");
-        console.log(e);
-      });
-  };
-
-  return (
-    <form onSubmit={(e) => onSubmit(handleSubmit)}>
-      <div className="entrance-medician-map">
-        <label>1</label>
-        <h4>
-          {/* {allMedician.map((item) =>
-            item.id == through.medician ? item.brand_name : " "
-          )} */}
-        </h4>
-        <input type="text" defaultValue={through.number_in_factor} {...register('number_in_factor')}/>
-        <input style={{ display: "none" }} type="text" value={through.id} {...register('entrance_through_id')}/>
-        <input type="text" defaultValue={through.each_price_factor} {...register('each_price_factor')}/>
-        <input type="text" defaultValue={through.each_quantity} {...register('each_qunatity')}/>
-        <input type="text" defaultValue={through.discount_money} {...register('discount_money')}/>
-        <input type="text" defaultValue={through.discount_percent} {...register('discount_percent')}/>
-        <input type="date" defaultValue={through.expire_date} {...register('expire_date')}/>
-        <input type="text" defaultValue={through.interest_money} {...register('interest_money')}/>
-        <input type="text" defaultValue={through.interest_percent} {...register('interest_percent')}/>
-        <input type="text" defaultValue={through.bonus} {...register('bonus')}/>
-        <input type="text" defaultValue={through.quantity_bonus} {...register('quantity_bonus')}/>
-        <div className="medician-map-buttons">
-          <div onClick={() => handleSubmit((data) => {
-            MedicianDelete(data)
-          })}>
-            <i className="fa-solid fa-trash"></i>
-          </div>
-          <input type='submit'/>
-          <div onClick={() => handleSubmit((data)=> {
-            MedicianUpdate(data)
-          })}>
-            <i class="fa-solid fa-marker"></i>
-          </div>
-        </div>
-      </div>
-    </form>
-  );
-}
