@@ -9,6 +9,8 @@ import EntrancThroughEntry from "./EntrancThroughEntry";
 import SelectMedician from "./SelectMedician";
 
 export default function Entrance(props) {
+  /* Modal */
+
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   function registerModalOpener() {
@@ -17,7 +19,7 @@ export default function Entrance(props) {
   function registerModalCloser() {
     setRegisterModalOpen(false);
   }
-  const customStyles = {
+  const ModalStyles = {
     content: {
       backgroundColor: "rgb(60,60,60)",
       border: "none",
@@ -30,11 +32,16 @@ export default function Entrance(props) {
       backgroundColor: "rgba(60,60,60,0.5)",
     },
   };
+
+  /* Form Hook */
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  /* AutoComplete Search */
 
   const AutoCompleteStyle = {
     height: "1.5rem",
@@ -48,24 +55,22 @@ export default function Entrance(props) {
     overflow: "scroll",
   };
 
-
-  
-
   const [autoCompleteData, setAutoCompleteData] = React.useState({
     company: "",
     store: "",
     medician: [],
   });
 
-  function AutoCompleteHandle (data) {
+  function AutoCompleteHandle(data) {
     setAutoCompleteData({
       ...autoCompleteData,
       medician: data,
-    })
+    });
   }
 
-  /* Styling Finished */
   /* CRUD */
+
+  /* Links */
 
   const ENTRANCE_URL = import.meta.env.VITE_ENTRANCE;
   const FINAL_REGISTER_URL = import.meta.env.VITE_FINAL_REGISTER;
@@ -79,6 +84,8 @@ export default function Entrance(props) {
   const KIND_URL = import.meta.env.VITE_KIND;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
 
+  /* States */
+
   const [entrance, setEntrance] = React.useState([]);
   const [finalRegister, setFinalRegister] = React.useState([]);
   const [company, setCompany] = React.useState([]);
@@ -88,13 +95,10 @@ export default function Entrance(props) {
   const [country, setCountry] = React.useState([]);
   const [kind, setKind] = React.useState([]);
   const [pharmGroub, setPharmGroub] = React.useState([]);
-  const [reRender, setReRender] = React.useState([]);
   const [entrancePosted, setEntrancePosted] = React.useState(false);
-  const [medician, setMedician] = React.useState([]);
   const [allMedician, setAllMedician] = React.useState([]);
   const [entranceThrough, setEntranceThrough] = React.useState([]);
   const [searched, setSearched] = React.useState(false);
-  const [show, setShow] = React.useState([]);
   const [exactEntrance, setExatEntrance] = React.useState({
     without_discount: false,
     description: "",
@@ -106,6 +110,8 @@ export default function Entrance(props) {
     sell_total: 0,
     purchase_total: 0,
   });
+
+  /* Requests */
 
   React.useEffect(() => {
     axios
@@ -156,8 +162,9 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   }, []);
 
+  /* Handlers and Submiting */
+
   const EntranceSubmit = (data) => {
-    console.log(data);
     const EntranceForm = new FormData();
     EntranceForm.append(
       "factor_number",
@@ -227,7 +234,6 @@ export default function Entrance(props) {
         .patch(ENTRANCE_URL + exactEntrance.id + "/", EntranceForm)
         .then((e) => {
           toast.success("Data Updated Successfuly.");
-          console.log(e);
         })
         .catch((e) => {
           toast.error("Check Your Input And Try Again!");
@@ -276,7 +282,6 @@ export default function Entrance(props) {
     axios
       .post(ENTRANCE_THROUGH_URL, EntranceThrough)
       .then((data) => {
-        console.log(data);
         setEntranceThrough((prev) => [...prev, data.data]);
         toast.info("New Item Added.");
       })
@@ -284,9 +289,7 @@ export default function Entrance(props) {
         console.log(e);
         toast.error("Check Your Input And Try Again! ");
       });
-    setShow((prev) => [...prev, true]);
   };
-
 
   const SearchSubmit = (data) => {
     setExatEntrance({
@@ -296,14 +299,12 @@ export default function Entrance(props) {
     setEntranceThrough([]);
     setSearched(true);
     axios.get(ENTRANCE_URL + data.entrance_search + "/").then((e) => {
-      console.log(e);
       setExatEntrance(e.data);
     });
 
     axios
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
       .then((e) => {
-        console.log(e);
         setEntranceThrough(e.data);
       })
       .catch((e) => console.log(e));
@@ -331,15 +332,6 @@ export default function Entrance(props) {
       return result;
     };
 
-    const totalSell = () => {
-      let result;
-      const total = entranceThrough.map(
-        (through) => (result = +(through.number_in_factor * through.each_price))
-      );
-      total.forEach((item) => (result += item));
-      return result;
-    };
-
     setReport({
       total: 0,
       total_interest: totalInterest(),
@@ -354,14 +346,14 @@ export default function Entrance(props) {
       <div className="purchase-card" onClick={registerModalOpener}>
         <div>
           <h3>{props.title}</h3>
-          <div>{medician.length ? entrance.length : <LoadingDNA />}</div>
+          <div>{entrance.length ? entrance.length : <LoadingDNA />}</div>
         </div>
         <div>
           <i className={props.icon}></i>
         </div>
       </div>
       <Modal
-        style={customStyles}
+        style={ModalStyles}
         isOpen={registerModalOpen}
         onRequestClose={registerModalCloser}
       >
@@ -558,7 +550,12 @@ export default function Entrance(props) {
             >
               <label>قلم:</label>
               <div className="entrance-through-medician-input">
-                <SelectMedician kind={kind} country={country} pharmGroub={pharmGroub} selectAutoCompleteData={AutoCompleteHandle} />
+                <SelectMedician
+                  kind={kind}
+                  country={country}
+                  pharmGroub={pharmGroub}
+                  selectAutoCompleteData={AutoCompleteHandle}
+                />
               </div>
               <label>تعداد:</label>
               <input type="text" {...register("number_in_factor")} />
@@ -616,6 +613,9 @@ export default function Entrance(props) {
                     keyValue={through.id}
                     num={key}
                     allMedician={allMedician}
+                    kind={kind}
+                    country={country}
+                    pharmGroub={pharmGroub}
                   />
                 ))}
               </div>
@@ -626,7 +626,3 @@ export default function Entrance(props) {
     </>
   );
 }
-
-
-
-
