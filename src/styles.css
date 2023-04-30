@@ -92,7 +92,6 @@ body {
   background-color: rgba(167, 167, 167, 0.4);
 }
 
-
 /* icons */
 
 .fa-solid {
@@ -376,7 +375,7 @@ button:focus {
   cursor: pointer;
 }
 
-/* Entrance */ 
+/* Entrance */
 
 .entrance-box {
   width: 100%;
@@ -399,9 +398,9 @@ input[type="date"]:disabled {
 .entrance-buttons {
   display: flex;
   justify-content: left;
-  gap:0.3rem;
+  gap: 0.3rem;
 }
-.entrance-buttons > input[type=submit] {
+.entrance-buttons > input[type="submit"] {
   height: 1.5rem;
   border-radius: 1rem;
   width: 7rem;
@@ -410,7 +409,7 @@ input[type="date"]:disabled {
   background-color: var(--color-sex);
   color: var(--color-ten);
 }
-.entrance-buttons > input[type=reset] {
+.entrance-buttons > input[type="reset"] {
   height: 1.5rem;
   border-radius: 1rem;
   width: 6rem;
@@ -423,11 +422,11 @@ input[type="date"]:disabled {
   padding-right: 0.7rem;
 }
 
-.entrance-buttons > input[type=submit]:hover {
+.entrance-buttons > input[type="submit"]:hover {
   background-color: var(--color-eleven);
 }
 
-.entrance-buttons > input[type=reset]:hover {
+.entrance-buttons > input[type="reset"]:hover {
   background-color: var(--color-twelve);
 }
 
@@ -472,24 +471,24 @@ input[type="date"]:disabled {
 
 .entrance-entrance > input:focus {
   box-shadow: -4px -4px 4px var(--color-two);
-} 
+}
 .entrance-entrance > select:focus {
   box-shadow: -4px -4px 4px var(--color-two);
-} 
+}
 .entrance-entrance > textarea:focus {
   box-shadow: -4px -4px 4px var(--color-two);
 }
 
-.sc-hLseeU > input:focus  {
+.sc-hLseeU > input:focus {
   box-shadow: -4px -4px 4px var(--color-two);
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
 }
 
 .sc-gueYoa > div {
-    display: none;
+  display: none;
 }
-.entrance-entrance > input[type=submit] {
+.entrance-entrance > input[type="submit"] {
   height: 1.5rem;
   border-radius: 1rem;
   width: 7rem;
@@ -502,7 +501,7 @@ input[type="date"]:disabled {
   padding-right: 0.7rem;
   margin-right: auto;
 }
-.entrance-entrance > input[type=reset] {
+.entrance-entrance > input[type="reset"] {
   height: 1.5rem;
   border-radius: 1rem;
   width: 6rem;
@@ -514,10 +513,10 @@ input[type="date"]:disabled {
   padding-left: 0.5rem;
   padding-right: 0.7rem;
 }
-.entrance-entrance > input[type=submit]:hover {
+.entrance-entrance > input[type="submit"]:hover {
   background-color: var(--color-eleven);
 }
-.entrance-entrance > input[type=reset]:hover {
+.entrance-entrance > input[type="reset"]:hover {
   background-color: var(--color-twelve);
 }
 
@@ -545,7 +544,7 @@ input[type="date"]:disabled {
   background-color: var(--color-sex);
   border-radius: 1rem;
   display: grid;
-  grid-template-columns: 0.3fr 0.9fr 0.3fr 1fr 0.2fr 1fr;
+  grid-template-columns: 0fr 0.9fr 0.3fr 1fr 0.2fr 1fr;
   grid-template-rows: 15% 15% 15% 15% 15%;
   gap: 0.7rem;
   padding: 1rem;
@@ -565,10 +564,10 @@ input[type="date"]:disabled {
 }
 .entrance-through > input:focus {
   box-shadow: -4px -4px 4px var(--color-two);
-} 
+}
 .entrance-through > select:focus {
   box-shadow: -4px -4px 4px var(--color-two);
-} 
+}
 .entrance-through > textarea:focus {
   box-shadow: -4px -4px 4px var(--color-two);
 }
@@ -582,7 +581,7 @@ input[type="date"]:disabled {
   padding-left: 0.5rem;
   padding-right: 0.7rem;
 }
-.entrance-through > input[type=submit] {
+.entrance-through > input[type="submit"] {
   height: 1.5rem;
   border-radius: 1rem;
   width: 7rem;
@@ -595,7 +594,7 @@ input[type="date"]:disabled {
   padding-right: 0.7rem;
   margin-right: auto;
 }
-.entrance-through > input[type=submit]:hover {
+.entrance-through > input[type="submit"]:hover {
   background-color: var(--color-eleven);
 }
 
@@ -624,15 +623,15 @@ input[type="date"]:disabled {
   border-radius: 1rem 1rem 0rem 0rem;
   width: 100%;
   padding: 0.1rem;
-  padding-right: 3rem;
+  padding-right: 1rem;
   display: grid;
-  grid-template-columns: 0.2fr 0.5fr 3fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1.7fr 0.9fr 0.9fr 0.9fr 0.9fr 0.7fr;
+  grid-template-columns: 0.1fr 0.5fr 3.6fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1.7fr 0.9fr 0.9fr 0.9fr 0.9fr 0.5fr;
   font-size: 0.9rem;
   direction: rtl;
 }
 
 .entrance-map {
-  overflow-y: scroll ;
+  overflow-y: scroll;
   height: 85%;
 }
 
@@ -642,11 +641,16 @@ input[type="date"]:disabled {
   font-size: 0.9rem;
   width: 100%;
   padding: 0.1rem;
-  padding-right: 3rem;
+  padding-right: 1rem;
   display: grid;
-  grid-template-columns: 0.5fr 3fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1.7fr 0.9fr 0.9fr 0.9fr 0.9fr 0.7fr;
+  grid-template-columns: 0.4fr 3.6fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1.7fr 0.9fr 0.9fr 0.9fr 0.9fr 0.5fr;
   direction: rtl;
+  justify-content: space-between;
+}
 
+.entrance-medician-map-name {
+  font-size: 0.8rem;
+  padding-top: 0.1rem;
 }
 
 .entrance-medician-map > input {
@@ -654,7 +658,7 @@ input[type="date"]:disabled {
   background-color: var(--color-four);
   border: none;
 }
-.entrance-medician-map > input[type=submit] {
+.entrance-medician-map > input[type="submit"] {
   width: 70%;
   background-color: var(--color-eleven);
   color: white;
@@ -664,7 +668,7 @@ input[type="date"]:disabled {
   border: none;
 }
 
-.entrance-medician-map > input[type=submit]:hover {
+.entrance-medician-map > input[type="submit"]:hover {
   background-color: var(--color-twelve);
 }
 
@@ -744,14 +748,14 @@ input[type="date"]:disabled {
   height: 1.5rem;
   border-radius: 2rem;
   text-align: center;
-  padding-top:0.2rem
+  padding-top: 0.2rem;
 }
 .search-button-box:hover {
   background-color: var(--color-twelve);
 }
 .search-form {
   display: flex;
-  gap: 1rem
+  gap: 1rem;
 }
 .search-form > input {
   width: 50%;
@@ -773,7 +777,7 @@ input[type="date"]:disabled {
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   text-align: right;
-  padding-right:1.3rem;
+  padding-right: 1.3rem;
   padding-top: 0.4rem;
 }
 
@@ -788,14 +792,13 @@ input[type="date"]:disabled {
   width: 100%;
   height: 2rem;
   background-color: var(--color-thirth);
-  padding:0.3rem;
+  padding: 0.3rem;
   border-bottom: 1px solid var(--color-one);
   font-size: medium;
   display: flex;
   justify-content: space-between;
   padding-right: 1rem;
   padding-left: 1rem;
-
 }
 
 .serahcer {
@@ -806,7 +809,7 @@ input[type="date"]:disabled {
 
 .serahcer option {
   background-color: #b8390e;
-  padding: 10rem 10rem 10rem 10rem
+  padding: 10rem 10rem 10rem 10rem;
 }
 
 .serahcer:checked {
@@ -825,11 +828,11 @@ input[type="date"]:disabled {
 
 .select-medician-button {
   background-color: var(--color-nine);
-  width: 10rem;
+  width: 11.5rem;
   text-align: center;
   border-radius: 1rem;
   position: relative;
-  left:1rem;
+  left: 1rem;
   cursor: pointer;
 }
 
@@ -838,5 +841,9 @@ input[type="date"]:disabled {
 }
 
 .medician-select-input-box {
-  padding: 0.5rem
+  padding: 0.5rem;
+}
+
+.selected-medician-show {
+  direction: ltr;
 }

@@ -1,12 +1,17 @@
 import React from "react";
 import Modal from "react-modal";
-import { ReactSearchAutocomplete }from 'react-search-autocomplete'
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import axios from "axios";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
 
-export default function SelectMedician ({kind, country, pharmGroub, selectAutoCompleteData}) {
+export default function SelectMedician({
+  kind,
+  country,
+  pharmGroub,
+  selectAutoCompleteData,
+}) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-  const [selectedMedician, setSelectedMedician] = React.useState("")
+  const [selectedMedician, setSelectedMedician] = React.useState("");
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -88,7 +93,27 @@ export default function SelectMedician ({kind, country, pharmGroub, selectAutoCo
           />
         </div>
         <div className="medician-text-field">
-          <h4>{item.brand_name}</h4>
+          <h4>
+            {item.brand_name +
+              " " +
+              (item.ml ? item.ml : " ") +
+              " " +
+              (item.country
+                ? country.map(
+                    (country) => country.id == item.country && country.name
+                  )
+                : " ") +
+              (item.kind
+                ? kind.map((kind) => kind.id == item.kind && kind.name)
+                : " ") +
+              " " +
+              (item.pharm_group
+                ? pharmGroub.map(
+                    (pharm) =>
+                      pharm.id == item.pharm_group && pharm.name_english
+                  )
+                : "")}
+          </h4>
           <h4></h4>
           <h4>Generic: {item.generic_name.toString()}</h4>
           <h4></h4>
@@ -124,7 +149,36 @@ export default function SelectMedician ({kind, country, pharmGroub, selectAutoCo
         <div className="select-medician-button" onClick={registerModalOpener}>
           انتخاب دارو
         </div>
-        <div>{selectedMedician ? selectedMedician.brand_name + " " + selectedMedician.ml + " - " + selectedMedician.existence : <LoadingDNA />}</div>
+        <div className="selected-medician-show">
+         
+          {selectedMedician ? (
+            selectedMedician.brand_name +
+            " " +
+            (selectedMedician.ml ? selectedMedician.ml : " ") +
+            " " +
+            (selectedMedician.country
+              ? country.map(
+                  (country) =>
+                    country.id == selectedMedician.country && country.name
+                )
+              : " ") +
+            (selectedMedician.kind
+              ? kind.map(
+                  (kind) => kind.id == selectedMedician.kind && kind.name
+                )
+              : " ") +
+            " " +
+            (selectedMedician.pharm_group
+              ? pharmGroub.map(
+                  (pharm) =>
+                    pharm.id == selectedMedician.pharm_group &&
+                    pharm.name_english
+                )
+              : "")
+          ) : (
+            <LoadingDNA />
+          )}
+        </div>
         <Modal
           style={customStyles}
           isOpen={registerModalOpen}
@@ -138,43 +192,38 @@ export default function SelectMedician ({kind, country, pharmGroub, selectAutoCo
               </div>
             </div>
             <div className="medician-select-input-box">
-
-            <ReactSearchAutocomplete
-                  items={medician}
-                  showIcon={false}
-                  fuseOptions={{ keys: ["brand_name"] }}
-                  resultStringKeyName="brand_name"
-                  styling={AutoCompleteStyle2}
-                  showClear={false}
-                  inputDebounce="10"
-                  onSearch={(string, result) => {
-                    axios
-                      .get(
-                        string != ""
-                          ? MEDICIAN_URL + "?search=" + string
-                          : MEDICIAN_URL + "?search=" + "''"
-                      )
-                      .then((res) => {
-                        setMedician(res.data);
-                        console.log(res.data);
-                      });
-                  }}
-                  onSelect={(item) =>{
-                    selectAutoCompleteData(item)
-                    registerModalCloser()
-                    setSelectedMedician(item)
-                    console.log(selectedMedician)
-                  }
-                  }
-                  maxResults={3}
-                  formatResult={formatResult}
-                  autoFocus={true}
-                />
-                  </div>
+              <ReactSearchAutocomplete
+                items={medician}
+                showIcon={false}
+                fuseOptions={{ keys: ["brand_name"] }}
+                resultStringKeyName="brand_name"
+                styling={AutoCompleteStyle2}
+                showClear={false}
+                inputDebounce="10"
+                onSearch={(string, result) => {
+                  axios
+                    .get(
+                      string != ""
+                        ? MEDICIAN_URL + "?search=" + string
+                        : MEDICIAN_URL + "?search=" + "''"
+                    )
+                    .then((res) => {
+                      setMedician(res.data);
+                    });
+                }}
+                onSelect={(item) => {
+                  selectAutoCompleteData(item);
+                  registerModalCloser();
+                  setSelectedMedician(item);
+                }}
+                maxResults={3}
+                formatResult={formatResult}
+                autoFocus={true}
+              />
+            </div>
           </div>
         </Modal>
       </div>
     </>
   );
 }
-
