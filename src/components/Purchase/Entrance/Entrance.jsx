@@ -7,18 +7,12 @@ import { toast } from "react-toastify";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
 import EntrancThroughEntry from "./EntrancThroughEntry";
 import SelectMedician from "./SelectMedician";
+import Company from "../Company/Company";
 
 export default function Entrance(props) {
   /* Modal */
 
-  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-
-  function registerModalOpener() {
-    setRegisterModalOpen(true);
-  }
-  function registerModalCloser() {
-    setRegisterModalOpen(false);
-  }
+ 
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(60,60,60)",
@@ -99,6 +93,7 @@ export default function Entrance(props) {
   const [allMedician, setAllMedician] = React.useState([]);
   const [entranceThrough, setEntranceThrough] = React.useState([]);
   const [searched, setSearched] = React.useState(false);
+  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [exactEntrance, setExatEntrance] = React.useState({
     without_discount: false,
     description: "",
@@ -110,6 +105,29 @@ export default function Entrance(props) {
     sell_total: 0,
     purchase_total: 0,
   });
+
+  
+  function registerModalOpener() {
+    setRegisterModalOpen(true);
+
+    axios
+      .get(COMPANY_URL)
+      .then((result) => setCompany(result.data))
+      .catch((e) => console.log(e));
+
+      axios
+      .get(STORE_URL)
+      .then((result) => setStore(result.data))
+      .catch((e) => console.log(e));
+
+      axios
+      .get(FINAL_REGISTER_URL)
+      .then((result) => setFinalRegister(result.data))
+      .catch((e) => console.log(e));
+  }
+  function registerModalCloser() {
+    setRegisterModalOpen(false);
+  }
 
   /* Requests */
 
@@ -341,6 +359,20 @@ export default function Entrance(props) {
     });
   };
 
+  function UpdateUI () {
+    setEntranceThrough([])
+    axios
+        .get(ENTRANCE_THROUGH_URL + "?entrance=" + exactEntrance.id)
+        .then((res)=> setEntranceThrough(res.data))
+        .catch((err)=> console.log(err))
+  }
+  function UpdateChunk () {
+    axios
+        .get(ENTRANCE_THROUGH_URL + "?entrance=" + exactEntrance.id)
+        .then((res)=> setEntranceThrough(res.data))
+        .catch((err)=> console.log(err))
+  }
+
   return (
     <>
       <div className="purchase-card" onClick={registerModalOpener}>
@@ -411,6 +443,7 @@ export default function Entrance(props) {
                 ))}
               </select>
               <label>شرکت:</label>
+              <div>
               <ReactSearchAutocomplete
                 items={company}
                 onSelect={(item) =>
@@ -420,9 +453,11 @@ export default function Entrance(props) {
                 showClear={false}
                 inputDebounce="10"
                 placeholder={company.map((company) =>
-                  company.id == exactEntrance.company ? company.name : ""
-                )}
-              />
+                  company.id == exactEntrance.company ? company.name : ``
+                  )}
+                  />
+                  <Company button={2}/>
+              </div>
               <label>انبار:</label>
               <ReactSearchAutocomplete
                 items={store}
@@ -616,6 +651,8 @@ export default function Entrance(props) {
                     kind={kind}
                     country={country}
                     pharmGroub={pharmGroub}
+                    UpdateUI={UpdateUI}
+                    UpdateChunk={UpdateChunk}
                   />
                 ))}
               </div>

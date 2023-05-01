@@ -2,24 +2,38 @@ import React from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import LoadingDNA from "../../PageComponents/LoadingDNA";
 
 function EntrancThroughEntry({
   through,
   keyValue,
   num,
-  SearchSubmit,
-  allMedician,
   country,
   pharmGroub,
   kind,
+  UpdateUI,
+  UpdateChunk
 }) {
+  
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
+  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
 
+  const [exactMedician, setExactMedician] = React.useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  React.useEffect(() => {
+    axios
+      .get(MEDICIAN_URL + through.medician)
+      .then((res) => {
+        setExactMedician(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const MedicianUpdate = (data) => {
     const MedicianUpdateForm = new FormData();
@@ -35,23 +49,32 @@ function EntrancThroughEntry({
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
 
     axios
-      .patch(ENTRANCE_THROUGH_URL + keyValue + "/", MedicianUpdateForm)
-      .then(() => toast.success("Data Updated Successfuly."))
+      .patch(ENTRANCE_THROUGH_URL + through.id + "/", MedicianUpdateForm)
+      .then(() => {
+        toast.success("Data Updated Successfuly.")
+        UpdateChunk()
+      })
       .catch(() => toast.error("Check Your Input And Try Again!"));
   };
 
-  const MedicianDelete = (data) => {
-    axios
-      .delete(ENTRANCE_THROUGH_URL + keyValue + "/")
-      .then(() => {
-        toast.success("Deleted Successfuly!");
-        handleSubmit(SearchSubmit);
-      })
-      .catch((e) => {
-        toast.error("Can't Delete For Some Reason...");
-        console.log(e);
-      });
+
+  const MedicianDelete = () => {
+
+
+      axios
+        .delete(ENTRANCE_THROUGH_URL + keyValue + "/")
+        .then(() => {
+          toast.success("Deleted Successfuly!");
+          UpdateUI()
+        })
+        .catch((e) => {
+          toast.error("Can't Delete For Some Reason...");
+          console.log(e);
+        });
   };
+
+
+
 
   return (
     <form>
@@ -61,28 +84,22 @@ function EntrancThroughEntry({
       >
         <label>{num + 1}</label>
         <h4 className="entrance-medician-map-name">
-          {allMedician.map((item) =>
-            item.id == through.medician
-              ? item.brand_name +
-                " " +
-                (item.ml ? item.ml : " ") +
-                " " +
-                (item.country
-                  ? country.map(
-                      (country) => country.id == item.country && country.name
-                    )
-                  : " ") +
-                (item.kind
-                  ? kind.map((kind) => kind.id == item.kind && kind.name)
-                  : " ") +
-                " " +
-                (item.pharm_group
-                  ? pharmGroub.map(
-                      (pharm) =>
-                        pharm.id == item.pharm_group && pharm.name_english
-                    )
-                  : "")
-              : " "
+          {exactMedician ? (
+            exactMedician.brand_name +
+            " " +
+            exactMedician.ml +
+            " " +
+            country.map((country) =>
+              country.id == exactMedician.country ? country.name : ""
+            ) + " " +
+            pharmGroub.map((pharm)=> (
+              pharm.id == exactMedician.pharm_group ? pharm.name_english : ""
+            ))
+
+          ) : (
+            <div className="loading-medician">
+              <LoadingDNA />
+            </div>
           )}
         </h4>
         <input
