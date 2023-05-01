@@ -57,12 +57,16 @@ function Company({ button, title, icon, Update }) {
       .then((e) => {
         if (button == 2) {
           registerModalCloser();
-          toast.success("Data Updated Successfuly.");
           Update();
         }
+        toast.success("Data Updated Successfuly.");
         console.log(e.data);
       })
-      .catch((err) => console.log(err));
+
+      .catch((err) => {
+        console.log(err);
+        toast.error("Check Your Input And Try Again!");
+      });
   };
   return (
     <>
