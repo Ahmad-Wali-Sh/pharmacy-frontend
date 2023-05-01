@@ -94,34 +94,28 @@ export default function SelectMedician({
         </div>
         <div className="medician-text-field">
           <div>
-            <h4>
-              {item.brand_name +
-                " " +
-                (item.ml ? item.ml : " ") +
-                " " +
-                (item.country
-                  ? country.map(
-                      (country) => country.id == item.country && country.name
-                    )
-                  : " ") +
-                (item.kind
-                  ? kind.map((kind) => kind.id == item.kind && kind.name)
-                  : " ") +
-                " " +
-                (item.pharm_group
-                  ? pharmGroub.map(
-                      (pharm) =>
-                        pharm.id == item.pharm_group && pharm.name_english
-                    )
-                  : "")}
-            </h4>
+            <div className="medician-select-information">
+              <h4>{item.brand_name + " " + (item.ml ? item.ml : " ")}</h4>
+              <h4>
+                &nbsp;
+                {country.map(
+                  (country) => country.id == item.country && country.name
+                )}
+              </h4>
+              <h4>
+                &nbsp;
+                {pharmGroub.map(
+                  (pharm) => pharm.id == item.pharm_group && pharm.name_english
+                )}
+              </h4>
+            </div>
             <h4>ترکیب: {item.generic_name.toString()}</h4>
           </div>
           <div className="medician-text-field-numbers">
-          <h4>مکان: {item.location}</h4>
-          <h4>قیمت: {`${item.price}AF`}</h4>
-          <h4>تعداد در پاکت: {item.no_pocket}</h4>
-          <h4>موجودیت: {item.existence}</h4>
+            <h4>مکان: {item.location}</h4>
+            <h4>قیمت: {`${item.price}AF`}</h4>
+            <h4>تعداد در پاکت: {item.no_pocket}</h4>
+            <h4>موجودیت: {item.existence}</h4>
           </div>
         </div>
       </div>
@@ -143,7 +137,8 @@ export default function SelectMedician({
     ...AutoCompleteStyle,
     zIndex: "1",
   };
-
+  0;
+  1;
   return (
     <>
       <div className="select-medician">
@@ -151,33 +146,22 @@ export default function SelectMedician({
           انتخاب دارو
         </div>
         <div className="selected-medician-show">
-          {selectedMedician ? (
-            selectedMedician.brand_name +
-            " " +
-            (selectedMedician.ml ? selectedMedician.ml : " ") +
-            " " +
-            (selectedMedician.country
-              ? country.map(
-                  (country) =>
-                    country.id == selectedMedician.country && country.name
-                )
-              : " ") +
-            (selectedMedician.kind
-              ? kind.map(
-                  (kind) => kind.id == selectedMedician.kind && kind.name
-                )
-              : " ") +
-            " " +
-            (selectedMedician.pharm_group
-              ? pharmGroub.map(
-                  (pharm) =>
-                    pharm.id == selectedMedician.pharm_group &&
-                    pharm.name_english
-                )
-              : "")
-          ) : (
-            <LoadingDNA />
-          )}
+          <h4>
+            {selectedMedician &&
+              (selectedMedician.brand_name + " " + selectedMedician.ml)}
+          </h4>
+          <h4>
+            &nbsp;
+            {country.map((country) =>
+              country.id == selectedMedician.country ? country.name : ""
+            )}
+          </h4>
+          <h4>
+            &nbsp;
+            {pharmGroub.map((pharm) =>
+              pharm.id == selectedMedician.pharm_group ? pharm.name_english : ""
+            )}
+          </h4>
         </div>
         <Modal
           style={customStyles}

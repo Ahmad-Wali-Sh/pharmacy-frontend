@@ -12,9 +12,8 @@ function EntrancThroughEntry({
   pharmGroub,
   kind,
   UpdateUI,
-  UpdateChunk
+  UpdateChunk,
 }) {
-  
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
 
@@ -51,30 +50,24 @@ function EntrancThroughEntry({
     axios
       .patch(ENTRANCE_THROUGH_URL + through.id + "/", MedicianUpdateForm)
       .then(() => {
-        toast.success("Data Updated Successfuly.")
-        UpdateChunk()
+        toast.success("Data Updated Successfuly.");
+        UpdateChunk();
       })
       .catch(() => toast.error("Check Your Input And Try Again!"));
   };
 
-
   const MedicianDelete = () => {
-
-
-      axios
-        .delete(ENTRANCE_THROUGH_URL + keyValue + "/")
-        .then(() => {
-          toast.success("Deleted Successfuly!");
-          UpdateUI()
-        })
-        .catch((e) => {
-          toast.error("Can't Delete For Some Reason...");
-          console.log(e);
-        });
+    axios
+      .delete(ENTRANCE_THROUGH_URL + keyValue + "/")
+      .then(() => {
+        toast.success("Deleted Successfuly!");
+        UpdateUI();
+      })
+      .catch((e) => {
+        toast.error("Can't Delete For Some Reason...");
+        console.log(e);
+      });
   };
-
-
-
 
   return (
     <form>
@@ -83,25 +76,30 @@ function EntrancThroughEntry({
         onBlurCapture={handleSubmit(MedicianUpdate)}
       >
         <label>{num + 1}</label>
-        <h4 className="entrance-medician-map-name">
-          {exactMedician ? (
-            exactMedician.brand_name +
-            " " +
-            exactMedician.ml +
-            " " +
-            country.map((country) =>
-              country.id == exactMedician.country ? country.name : ""
-            ) + " " +
-            pharmGroub.map((pharm)=> (
-              pharm.id == exactMedician.pharm_group ? pharm.name_english : ""
-            ))
-
-          ) : (
-            <div className="loading-medician">
-              <LoadingDNA />
-            </div>
-          )}
-        </h4>
+        <div className="entrance-medician-map-box">
+          <h4 className="entrance-medician-map-name">
+            <h4>
+              {country.map(
+                (country) =>
+                  country.id == exactMedician.country && `${country.name} _`
+              )}
+            </h4>
+            <h4>
+              {pharmGroub.map(
+                (pharm) =>
+                  pharm.id == exactMedician.pharm_group &&
+                  `_ ${pharm.name_english} __`
+              )}
+            </h4>
+            {exactMedician ? (
+              " " + exactMedician.brand_name + " " + exactMedician.ml
+            ) : (
+              <div className="loading-medician">
+                <LoadingDNA />
+              </div>
+            )}
+          </h4>
+        </div>
         <input
           type="text"
           defaultValue={through.number_in_factor}
