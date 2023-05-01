@@ -93,35 +93,36 @@ export default function SelectMedician({
           />
         </div>
         <div className="medician-text-field">
-          <h4>
-            {item.brand_name +
-              " " +
-              (item.ml ? item.ml : " ") +
-              " " +
-              (item.country
-                ? country.map(
-                    (country) => country.id == item.country && country.name
-                  )
-                : " ") +
-              (item.kind
-                ? kind.map((kind) => kind.id == item.kind && kind.name)
-                : " ") +
-              " " +
-              (item.pharm_group
-                ? pharmGroub.map(
-                    (pharm) =>
-                      pharm.id == item.pharm_group && pharm.name_english
-                  )
-                : "")}
-          </h4>
-          <h4></h4>
-          <h4>Generic: {item.generic_name.toString()}</h4>
-          <h4></h4>
-          <h4>Location: {item.location}</h4>
-          <h4></h4>
-          <h4>Price: {item.price}</h4>
-          <h4>NO.Pack: {item.no_pocket}</h4>
-          <h4>Existence: {item.existence}</h4>
+          <div>
+            <h4>
+              {item.brand_name +
+                " " +
+                (item.ml ? item.ml : " ") +
+                " " +
+                (item.country
+                  ? country.map(
+                      (country) => country.id == item.country && country.name
+                    )
+                  : " ") +
+                (item.kind
+                  ? kind.map((kind) => kind.id == item.kind && kind.name)
+                  : " ") +
+                " " +
+                (item.pharm_group
+                  ? pharmGroub.map(
+                      (pharm) =>
+                        pharm.id == item.pharm_group && pharm.name_english
+                    )
+                  : "")}
+            </h4>
+            <h4>ترکیب: {item.generic_name.toString()}</h4>
+          </div>
+          <div className="medician-text-field-numbers">
+          <h4>مکان: {item.location}</h4>
+          <h4>قیمت: {`${item.price}AF`}</h4>
+          <h4>تعداد در پاکت: {item.no_pocket}</h4>
+          <h4>موجودیت: {item.existence}</h4>
+          </div>
         </div>
       </div>
     );
@@ -150,7 +151,6 @@ export default function SelectMedician({
           انتخاب دارو
         </div>
         <div className="selected-medician-show">
-         
           {selectedMedician ? (
             selectedMedician.brand_name +
             " " +

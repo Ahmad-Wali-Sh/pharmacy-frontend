@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
+import Company from "./Company/Company";
 import Entrance from "./Entrance/Entrance";
 
 
@@ -13,11 +14,17 @@ function Purchase() {
           title="ثبت ورودی"
           icon="fa-solid fa-cart-arrow-down"
         />
+        <Company 
+          title="ثبت شرکت"
+          icon="fa-solid fa-store"
+          button={1}
+        />
         {/* <Entrance
           title="ثبت انبار"
           number="12"
           icon="fa-solid fa-store"
         />
+        
         <Entrance
           title="ثبت شرکت"
           number="12"
