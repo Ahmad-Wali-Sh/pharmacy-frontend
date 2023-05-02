@@ -36,6 +36,15 @@ function Company({ button, title, icon, Update }) {
 
   const COMPANIES_URL = import.meta.env.VITE_PHARM_COMPANIES;
 
+  const [companyLength, setCompanyLength] = React.useState([])
+
+  React.useEffect(()=> {
+      axios
+          .get(COMPANIES_URL)
+          .then((res) => setCompanyLength(res.data.length))
+          .catch((err) => console.log(err))
+  },[])
+
   const SubmitForm = (data) => {
     const CompanyForm = new FormData();
     CompanyForm.append("name", data.name);
@@ -74,7 +83,7 @@ function Company({ button, title, icon, Update }) {
         <div className="purchase-card" onClick={registerModalOpener}>
           <div>
             <h3>{title}</h3>
-            <div>{123}</div>
+            <div>{companyLength}</div>
           </div>
           <div>
             <i className={icon}></i>
@@ -82,8 +91,10 @@ function Company({ button, title, icon, Update }) {
         </div>
       )}
       {button == 2 && (
-        <div className="plus" onClick={registerModalOpener}>
+        <div className="plus-box" onClick={registerModalOpener}>
+          <div className="plus">
           <i class="fa-solid fa-plus"></i>
+          </div>
         </div>
       )}
       <Modal

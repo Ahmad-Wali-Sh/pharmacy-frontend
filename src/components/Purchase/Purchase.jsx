@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "react-modal";
 import Company from "./Company/Company";
 import Entrance from "./Entrance/Entrance";
+import Store from "./Store/Store";
 
 Modal.setAppElement("#root");
 
@@ -10,12 +11,14 @@ function Purchase() {
     <div className="purchase">
       <div className="purchase-box">
         <Entrance title="ثبت ورودی" icon="fa-solid fa-cart-arrow-down" />
-        <Company title="ثبت شرکت" icon="fa-solid fa-store" button={1} />
+        <Company title="ثبت شرکت" icon="fa-solid fa-building" button={1} />
+        <Store title="ثبت انبار" icon="fa-solid fa-store" button={1}/>
         {/* <Entrance
           title="ثبت انبار"
           number="12"
           icon="fa-solid fa-store"
         />
+        
         
         <Entrance
           title="ثبت شرکت"

@@ -8,6 +8,7 @@ import LoadingDNA from "../../PageComponents/LoadingDNA";
 import EntrancThroughEntry from "./EntrancThroughEntry";
 import SelectMedician from "./SelectMedician";
 import Company from "../Company/Company";
+import Store from "../Store/Store";
 
 export default function Entrance(props) {
   /* Modal */
@@ -382,6 +383,13 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   }
 
+  function UpdateStores () {
+    axios
+      .get(STORE_URL)
+      .then((result) => setStore(result.data))
+      .catch((e) => console.log(e));
+  }
+
   React.useEffect(() => {
     store.map((store) =>
       store.id == exactEntrance.store ? setStoreName(store.name) : ""
@@ -470,10 +478,14 @@ export default function Entrance(props) {
                   showClear={false}
                   inputDebounce="10"
                   placeholder={companyName}
+                  showIcon={false}
+                  className="autoComplete"
                 />
                 <Company button={2} Update={UpdateCompanies} />
               </div>
               <label>انبار:</label>
+              <div>
+
               <ReactSearchAutocomplete
                 items={store}
                 styling={AutoCompleteStyle}
@@ -483,7 +495,10 @@ export default function Entrance(props) {
                 showClear={false}
                 inputDebounce="10"
                 placeholder={storeName}
-              />
+                showIcon={false}
+                />
+                <Store button={2} Update={UpdateStores} />
+              </div>
               <label>تاریخ:</label>
               <input
                 required
