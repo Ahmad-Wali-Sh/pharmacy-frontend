@@ -115,7 +115,7 @@ function Store({title, icon, button, Update}) {
                 <label>مسئول:</label>
                 <input type="text" defaultValue="" {...register("responsible")} />
                 <label>عکس:</label>
-                <input type="file" accept="image/*" className="file-input"{...register("image")} onChange={(e) => setFile(e.target.files[0]) } />
+                <input type="file" accept="image/*" className="file-input" onChange={(e) => setFile(e.target.files[0]) } />
                 <label>توضیحات:</label>
                 <textarea type="text" defaultValue="" {...register("description")} />
               </div>
