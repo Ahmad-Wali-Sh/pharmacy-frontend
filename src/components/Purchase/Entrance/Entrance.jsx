@@ -12,7 +12,6 @@ import Company from "../Company/Company";
 export default function Entrance(props) {
   /* Modal */
 
- 
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(60,60,60)",
@@ -93,6 +92,8 @@ export default function Entrance(props) {
   const [allMedician, setAllMedician] = React.useState([]);
   const [entranceThrough, setEntranceThrough] = React.useState([]);
   const [searched, setSearched] = React.useState(false);
+  const [storeName, setStoreName] = React.useState("");
+  const [companyName, setCompanyName] = React.useState("");
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [exactEntrance, setExatEntrance] = React.useState({
     without_discount: false,
@@ -106,7 +107,6 @@ export default function Entrance(props) {
     purchase_total: 0,
   });
 
-  
   function registerModalOpener() {
     setRegisterModalOpen(true);
 
@@ -115,12 +115,12 @@ export default function Entrance(props) {
       .then((result) => setCompany(result.data))
       .catch((e) => console.log(e));
 
-      axios
+    axios
       .get(STORE_URL)
       .then((result) => setStore(result.data))
       .catch((e) => console.log(e));
 
-      axios
+    axios
       .get(FINAL_REGISTER_URL)
       .then((result) => setFinalRegister(result.data))
       .catch((e) => console.log(e));
@@ -332,6 +332,8 @@ export default function Entrance(props) {
       without_discount: false,
       description: "",
     });
+    setCompanyName("");
+    setStoreName("");
     setEntranceThrough([]);
     setEntrancePosted(false);
     setSearched(false);
@@ -359,20 +361,35 @@ export default function Entrance(props) {
     });
   };
 
-  function UpdateUI () {
-    setEntranceThrough([])
+  function UpdateUI() {
+    setEntranceThrough([]);
     axios
-        .get(ENTRANCE_THROUGH_URL + "?entrance=" + exactEntrance.id)
-        .then((res)=> setEntranceThrough(res.data))
-        .catch((err)=> console.log(err))
+      .get(ENTRANCE_THROUGH_URL + "?entrance=" + exactEntrance.id)
+      .then((res) => setEntranceThrough(res.data))
+      .catch((err) => console.log(err));
   }
-  function UpdateChunk () {
+  function UpdateChunk() {
     axios
-        .get(ENTRANCE_THROUGH_URL + "?entrance=" + exactEntrance.id)
-        .then((res)=> setEntranceThrough(res.data))
-        .catch((err)=> console.log(err))
+      .get(ENTRANCE_THROUGH_URL + "?entrance=" + exactEntrance.id)
+      .then((res) => setEntranceThrough(res.data))
+      .catch((err) => console.log(err));
   }
 
+  function UpdateCompanies() {
+    axios
+      .get(COMPANY_URL)
+      .then((result) => setCompany(result.data))
+      .catch((e) => console.log(e));
+  }
+
+  React.useEffect(() => {
+    store.map((store) =>
+      store.id == exactEntrance.store ? setStoreName(store.name) : ""
+    );
+    company.map((company) =>
+      company.id == exactEntrance.company ? setCompanyName(company.name) : ""
+    );
+  }, [exactEntrance]);
   return (
     <>
       <div className="purchase-card" onClick={registerModalOpener}>
@@ -444,19 +461,17 @@ export default function Entrance(props) {
               </select>
               <label>شرکت:</label>
               <div>
-              <ReactSearchAutocomplete
-                items={company}
-                onSelect={(item) =>
-                  setAutoCompleteData({ ...autoCompleteData, company: item })
-                }
-                styling={AutoCompleteStyle}
-                showClear={false}
-                inputDebounce="10"
-                placeholder={company.map((company) =>
-                  company.id == exactEntrance.company ? company.name : ``
-                  )}
-                  />
-                  <Company button={2}/>
+                <ReactSearchAutocomplete
+                  items={company}
+                  onSelect={(item) =>
+                    setAutoCompleteData({ ...autoCompleteData, company: item })
+                  }
+                  styling={AutoCompleteStyle}
+                  showClear={false}
+                  inputDebounce="10"
+                  placeholder={companyName}
+                />
+                <Company button={2} Update={UpdateCompanies} />
               </div>
               <label>انبار:</label>
               <ReactSearchAutocomplete
@@ -467,9 +482,7 @@ export default function Entrance(props) {
                 }
                 showClear={false}
                 inputDebounce="10"
-                placeholder={store.map((store) =>
-                  store.id == exactEntrance.store ? store.name : ""
-                )}
+                placeholder={storeName}
               />
               <label>تاریخ:</label>
               <input

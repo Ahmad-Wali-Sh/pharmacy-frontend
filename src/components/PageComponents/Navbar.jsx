@@ -26,7 +26,7 @@ function Navbar() {
             <div className="button">فروشات</div>
           </Link>
           <Link to="/purchase" className="button">
-            <div className="button">خرید</div>
+            <div className="button">خریداری</div>
           </Link>
         </div>
       </div>

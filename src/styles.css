@@ -651,8 +651,22 @@ input[type="date"]:disabled {
 .entrance-medician-map-name {
   font-size: 0.8rem;
   padding-top: 0.1rem;
-  direction: ltr;
+  direction: rtl;
   text-align: right;
+  display: flex;
+}
+
+.medician-select-information {
+  display: flex;
+}
+
+.entrance-medician-map-box {
+  display: flex;
+  direction: rtl;
+}
+
+.entrance-medician-map-box > h4 {
+  margin-left: 1rem;
 }
 
 .entrance-medician-map > input {
@@ -712,7 +726,7 @@ input[type="date"]:disabled {
 }
 
 .medician-text-field-numbers > h4 {
-  direction: rtl ;
+  direction: rtl;
 }
 .medician-image {
   width: 9rem;
@@ -860,6 +874,7 @@ input[type="date"]:disabled {
 
 .selected-medician-show {
   direction: ltr;
+  display: flex;
 }
 
 .loading-medician {
@@ -888,7 +903,6 @@ input[type="date"]:disabled {
   padding-top: 2rem;
   padding-right: 2rem;
   gap: 0.2rem;
-
 }
 
 .company-form > input {
@@ -959,4 +973,3 @@ input[type="date"]:disabled {
   position: relative;
   right: 1rem;
 }
-
