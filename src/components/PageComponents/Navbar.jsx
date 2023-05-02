@@ -28,6 +28,9 @@ function Navbar() {
           <Link to="/purchase" className="button">
             <div className="button">خریداری</div>
           </Link>
+          <Link to="/medician" className="button">
+            <div className="button">داروخانه</div>
+          </Link>
         </div>
       </div>
     </div>

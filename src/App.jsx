@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layount from "./components/Layount";
+import Medician from "./components/Medician/Medician";
 import PageComponent from "./components/PageComponents/PageComponent";
 import Purchase from "./components/Purchase/Purchase";
 import Sell from "./components/Sell/Sell";
@@ -16,6 +17,7 @@ function App() {
             <Route path="/purchase" element={<Purchase />} />
             <Route path="/dashboard" element={<Layount />} />
             <Route path="/sell" element={<Sell />} />
+            <Route path="/medician" element={<Medician />} />
           </Routes>
         </PageComponent>
       </Router>
