@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
+import MedicianEntrance from "../Medician/MedicianEntrance/MedicianEntrance";
 import Company from "./Company/Company";
 import Entrance from "./Entrance/Entrance";
 import Store from "./Store/Store";
@@ -12,7 +13,8 @@ function Purchase() {
       <div className="purchase-box">
         <Entrance title="ثبت ورودی" icon="fa-solid fa-cart-arrow-down" />
         <Company title="ثبت شرکت" icon="fa-solid fa-building" button={1} />
-        <Store title="ثبت انبار" icon="fa-solid fa-store" button={1}/>
+        <Store title="ثبت انبار" icon="fa-solid fa-store" button={1} />
+        <MedicianEntrance title="ثبت دوا" icon="fa-solid fa-tablets" />
         {/* <Entrance
           title="ثبت انبار"
           number="12"

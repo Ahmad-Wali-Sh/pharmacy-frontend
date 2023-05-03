@@ -5,6 +5,7 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import Store from "../../Purchase/Store/Store";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 function MedicianEntrance(props) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -45,11 +46,12 @@ function MedicianEntrance(props) {
     border: "none",
     hoverBackgroundColor: "grey",
     overflow: "scroll",
-    zIndex: "2"
+    zIndex: "2",
   };
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
   const KIND_URL = import.meta.env.VITE_KIND;
+  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
 
   const [country, setCountry] = React.useState([]);
   const [pharmGroup, setPharmGroup] = React.useState([]);
@@ -61,7 +63,7 @@ function MedicianEntrance(props) {
     kind: "",
   });
 
-  console.log(autoCompleteData)
+  console.log(autoCompleteData);
   React.useEffect(() => {
     axios
       .get(COUNTRY_URL)
@@ -79,17 +81,39 @@ function MedicianEntrance(props) {
 
   const SubmitMedician = (data) => {
     const MedicianForm = new FormData();
-    MedicianForm.append("brand_name", data.brand_name)
-    MedicianForm.append("geniric_name", data.geniric_name)
-    MedicianForm.append("no_pocket", data.no_pocket)
-    MedicianForm.append("ml", data.ml)
-    MedicianForm.append("weight", data.no_pocket)
-    MedicianForm.append("no_pocket", data.no_pocket)
-    MedicianForm.append("no_pocket", data.no_pocket)
-    MedicianForm.append("no_pocket", data.no_pocket)
-  }
+    MedicianForm.append("brand_name", data.brand_name);
+    MedicianForm.append("geniric_name", data.geniric_name);
+    MedicianForm.append("no_pocket", data.no_pocket);
+    MedicianForm.append("ml", data.ml);
+    MedicianForm.append("weight", data.no_pocket);
+    MedicianForm.append("location", data.location);
+    MedicianForm.append("company", data.company);
+    MedicianForm.append("minmum_existence", data.minmum_existence);
+    MedicianForm.append("maximum_existence", data.maximum_existence);
+    MedicianForm.append("must_advised", data.must_advised);
+    MedicianForm.append("dividing_rules", data.dividing_rules);
+    MedicianForm.append("price", data.price);
+    MedicianForm.append("generic_name", data.generic_name);
+    MedicianForm.append("cautions", data.cautions);
+    MedicianForm.append("usages", data.usages);
+    MedicianForm.append("description", data.description);
+    MedicianForm.append("barcode", data.barcode);
+    MedicianForm.append("image", file);
+    MedicianForm.append("pharm_group", autoCompleteData.pharm_group.id);
+    MedicianForm.append("kind", autoCompleteData.kind.id);
+    MedicianForm.append("country", autoCompleteData.country.id);
 
- 
+    axios
+      .post(MEDICIAN_URL, MedicianForm)
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Data Updated Successfuly.");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Check Your Input And Try Again!");
+      });
+  };
 
   return (
     <>
@@ -117,13 +141,13 @@ function MedicianEntrance(props) {
           <div className="medician-inter">
             <div className="medician-inter-form">
               <label>نام برند:</label>
-              <input type="text" {...register('brand_name')}/>
+              <input type="text" {...register("brand_name")} />
               <label>محلول:</label>
-              <input type="text" {...register('ml')}/>
+              <input type="text" {...register("ml")} />
               <label>گروپ دوایی:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
-                fuseOptions={{ keys: ["name_english", "name_persian"]}}
+                  fuseOptions={{ keys: ["name_english", "name_persian"] }}
                   items={pharmGroup}
                   styling={AutoCompleteStyle}
                   showClear={false}
@@ -131,20 +155,20 @@ function MedicianEntrance(props) {
                   showIcon={false}
                   resultStringKeyName="name_english"
                   onSelect={(data) => {
-                      setAutoCompleteData({
-                          ...autoCompleteData,
-                          pharm_group: data
-                      })
+                    setAutoCompleteData({
+                      ...autoCompleteData,
+                      pharm_group: data,
+                    });
                   }}
                 />
                 <Store button={2} />
               </div>
               <label>ت.پاکت:</label>
-              <input type="text" {...register('no_pocket')}/>
+              <input type="text" {...register("no_pocket")} />
               <label>نوع:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
-                  fuseOptions={{ keys: ["name_english", "name_persian"]}}
+                  fuseOptions={{ keys: ["name_english", "name_persian"] }}
                   items={kind}
                   styling={AutoCompleteStyle}
                   showClear={false}
@@ -153,19 +177,19 @@ function MedicianEntrance(props) {
                   resultStringKeyName="name_english"
                   onSelect={(data) => {
                     setAutoCompleteData({
-                        ...autoCompleteData,
-                        kind: data
-                    })
-                }}
+                      ...autoCompleteData,
+                      kind: data,
+                    });
+                  }}
                 />
                 <Store button={2} />
               </div>
               <label>وزن:</label>
-              <input type="text" {...register('weight')}/>
+              <input type="text" {...register("weight")} />
               <label>مکان:</label>
-              <input type="text" {...register('location')}/>
+              <input type="text" {...register("location")} />
               <label>شرکت:</label>
-              <input type="text" {...register('company')}/>
+              <input type="text" {...register("company")} />
               <label>کشور:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
@@ -176,36 +200,54 @@ function MedicianEntrance(props) {
                   showIcon={false}
                   onSelect={(data) => {
                     setAutoCompleteData({
-                        ...autoCompleteData,
-                        country: data
-                    })
-                }}
+                      ...autoCompleteData,
+                      country: data,
+                    });
+                  }}
                 />
                 <Store button={2} />
               </div>
               <label>قیمت:</label>
-              <input type="text" {...register('price')}/>
+              <input type="text" {...register("price")} />
               <label>حداقل:</label>
-              <input type="text" {...register('minmum_existence')}/>
+              <input type="text" {...register("minmum_existence")} />
               <label>حداکثر:</label>
-              <input type="text" {...register('maximum_existence')}/>
+              <input type="text" {...register("maximum_existence")} />
               <label>ترکیب:</label>
-              <input type="text" className="generic-input" {...register('generic_name')} />
+              <input
+                type="text"
+                className="generic-input"
+                {...register("generic_name")}
+              />
               <label>توصیه حتمی:</label>
-              <input type="checkbox" className="must-advised-input" {...register('must_advised')} />
+              <input
+                type="checkbox"
+                className="must-advised-input"
+                {...register("must_advised")}
+              />
               <label>اخطاریه:</label>
-              <textarea {...register("cautions")}/>
+              <textarea {...register("cautions")} />
               <label>استفاده:</label>
-              <textarea {...register('usages')}/>
+              <textarea {...register("usages")} />
               <label>عکس:</label>
-              <input type="file" className="medician-image-field" onChange={(e) => setFile(e.target.files[0])}/>
+              <input
+                type="file"
+                className="medician-image-field"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
               <label>توضیحات:</label>
-              <textarea {...register('description')}/>
+              <textarea {...register("description")} />
               <label>سهمیه:</label>
-              <textarea {...register("dividing_rules")}/>
+              <textarea {...register("dividing_rules")} />
+              <label>بارکد:</label>
+              <input type="text" {...register("barcode")} />
             </div>
             <div className="medician-inter-submit">
-              <input type="submit" value="ثبت دوا" onClick={handleSubmit(SubmitMedician)} />
+              <input
+                type="submit"
+                value="ثبت دوا"
+                onClick={handleSubmit(SubmitMedician)}
+              />
               <input type="reset" value="ریسیت" />
             </div>
           </div>
