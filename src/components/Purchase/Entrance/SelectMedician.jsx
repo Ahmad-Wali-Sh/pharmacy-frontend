@@ -30,7 +30,6 @@ export default function SelectMedician({
       backgroundColor: "rgb(60,60,60)",
       border: "none",
       borderRadius: "1rem",
-      overflow: "hidden",
       padding: "0px",
       margin: "0px",
     },
@@ -124,8 +123,6 @@ export default function SelectMedician({
     ...AutoCompleteStyle,
     zIndex: "1",
   };
-  0;
-  1;
   return (
     <>
       <div className="select-medician">
@@ -188,9 +185,10 @@ export default function SelectMedician({
                   registerModalCloser();
                   setSelectedMedician(item);
                 }}
-                maxResults={3}
+                maxResults={20}
                 formatResult={formatResult}
                 autoFocus={true}
+                className="search"
               />
               <MedicianEntrance button={2}/>
             </div>

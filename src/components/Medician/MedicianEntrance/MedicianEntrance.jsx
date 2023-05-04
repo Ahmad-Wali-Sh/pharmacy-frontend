@@ -2,7 +2,6 @@ import React from "react";
 import Modal from "react-modal";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import Store from "../../Purchase/Store/Store";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";

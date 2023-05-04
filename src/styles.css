@@ -886,6 +886,8 @@ input[type="date"]:disabled {
 
 .medician-select-input-box {
   padding: 0.5rem;
+  overflow-y: scroll !important;
+  min-height: 90%;
 }
 
 .selected-medician-show {
@@ -1189,3 +1191,5 @@ input[type="date"]:disabled {
   background-image: var(--color-five);
   cursor: pointer;
 }
+
+
