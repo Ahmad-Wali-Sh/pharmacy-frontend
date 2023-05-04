@@ -4,7 +4,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-function PharmGroup({title, icon, button, Update}) {
+function Country({title, icon, button, Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
     const [file, setFile] = React.useState("");
 
@@ -23,7 +23,7 @@ function PharmGroup({title, icon, button, Update}) {
         overflow: "hidden",
         padding: "0px",
         width: "35%",
-        left: "30%"
+        left: "30%",
       },
       overlay: {
         backgroundColor: "rgba(60,60,60,0.5)",
@@ -37,17 +37,15 @@ function PharmGroup({title, icon, button, Update}) {
       formState: { errors },
     } = useForm();
   
-    const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
+    const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   
     const SubmitForm = (data) => {
-      const PharmGroupForm = new FormData();
-      PharmGroupForm.append("name_english", data.name_english);
-      PharmGroupForm.append("name_persian", data.name_persian);
-      PharmGroupForm.append("description", data.description);
-      PharmGroupForm.append("image", file);
+      const CountryForm = new FormData();
+      CountryForm.append("name", data.name);
+      CountryForm.append("image", file);
   
       axios
-        .post(PHARM_GROUB_URL, PharmGroupForm)
+        .post(COUNTRY_URL, CountryForm)
         .then((e) => {
           if (button == 2) {
             registerModalCloser();
@@ -66,7 +64,7 @@ function PharmGroup({title, icon, button, Update}) {
 
     React.useEffect(() => {
         axios
-            .get(PHARM_GROUB_URL)
+            .get(COUNTRY_URL)
             .then((res) => setStoreLength(res.data.length))
             .catch((err) => console.log(err))
     }, [])
@@ -96,7 +94,7 @@ function PharmGroup({title, icon, button, Update}) {
           onRequestClose={registerModalCloser}
         >
           <div className="modal-header">
-            <h3>ثبت گروپ دوایی</h3>
+            <h3>ثبت کشور</h3>
             <div className="modal-close-btn" onClick={registerModalCloser}>
               <i className="fa-solid fa-xmark"></i>
             </div>
@@ -105,13 +103,9 @@ function PharmGroup({title, icon, button, Update}) {
             <div className="store">
               <div className="store-form">
                 <label>نام انگلیسی:</label>
-                <input type="text" defaultValue="" {...register("name_english")} />
-                <label>نام فارسی:</label>
-                <input type="text" defaultValue="" {...register("name_persian")} />
+                <input type="text" defaultValue="" {...register("name")} />
                 <label>عکس:</label>
                 <input type="file" accept="image/*" className="file-input" onChange={(e) => setFile(e.target.files[0]) } />
-                <label>توضیحات:</label>
-                <textarea type="text" defaultValue="" {...register("description")} />
               </div>
               <div className="store-submit">
                 <input
@@ -128,4 +122,4 @@ function PharmGroup({title, icon, button, Update}) {
     );
 }
 
-export default PharmGroup;
+export default Country;

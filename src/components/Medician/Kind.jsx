@@ -4,7 +4,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-function PharmGroup({title, icon, button, Update}) {
+function Kind({title, icon, button, Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
     const [file, setFile] = React.useState("");
 
@@ -37,17 +37,17 @@ function PharmGroup({title, icon, button, Update}) {
       formState: { errors },
     } = useForm();
   
-    const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
+    const KIND_URL = import.meta.env.VITE_KIND;
   
     const SubmitForm = (data) => {
-      const PharmGroupForm = new FormData();
-      PharmGroupForm.append("name_english", data.name_english);
-      PharmGroupForm.append("name_persian", data.name_persian);
-      PharmGroupForm.append("description", data.description);
-      PharmGroupForm.append("image", file);
+      const KindForm = new FormData();
+      KindForm.append("name_english", data.name_english);
+      KindForm.append("name_persian", data.name_persian);
+      KindForm.append("description", data.description);
+      KindForm.append("image", file);
   
       axios
-        .post(PHARM_GROUB_URL, PharmGroupForm)
+        .post(KIND_URL, KindForm)
         .then((e) => {
           if (button == 2) {
             registerModalCloser();
@@ -66,7 +66,7 @@ function PharmGroup({title, icon, button, Update}) {
 
     React.useEffect(() => {
         axios
-            .get(PHARM_GROUB_URL)
+            .get(KIND_URL)
             .then((res) => setStoreLength(res.data.length))
             .catch((err) => console.log(err))
     }, [])
@@ -96,7 +96,7 @@ function PharmGroup({title, icon, button, Update}) {
           onRequestClose={registerModalCloser}
         >
           <div className="modal-header">
-            <h3>ثبت گروپ دوایی</h3>
+            <h3>ثبت نوع</h3>
             <div className="modal-close-btn" onClick={registerModalCloser}>
               <i className="fa-solid fa-xmark"></i>
             </div>
@@ -128,4 +128,4 @@ function PharmGroup({title, icon, button, Update}) {
     );
 }
 
-export default PharmGroup;
+export default Kind;

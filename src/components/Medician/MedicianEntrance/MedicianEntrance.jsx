@@ -6,11 +6,15 @@ import Store from "../../Purchase/Store/Store";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import Kind from "../Kind";
+import PharmGroup from "../PharmGroup";
+import Country from "../Country";
 
 function MedicianEntrance({title, icon, button}) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   function registerModalOpener() {
+    UpdateFunction()
     setRegisterModalOpen(true);
   }
   function registerModalCloser() {
@@ -121,6 +125,21 @@ function MedicianEntrance({title, icon, button}) {
       });
   };
 
+  const UpdateFunction = () => {
+    axios
+      .get(COUNTRY_URL)
+      .then((res) => setCountry(res.data))
+      .catch((err) => console.log(err));
+    axios
+      .get(PHARM_GROUB_URL)
+      .then((res) => setPharmGroup(res.data))
+      .catch((err) => console.log(err));
+    axios
+      .get(KIND_URL)
+      .then((res) => setKind(res.data))
+      .catch((err) => console.log(err));
+  }
+
   return (
     <>
       {button == 1 && 
@@ -178,7 +197,7 @@ function MedicianEntrance({title, icon, button}) {
                     });
                   }}
                 />
-                <Store button={2} />
+                <PharmGroup button={2} Update={UpdateFunction} />
               </div>
               <label>ت.پاکت:</label>
               <input type="text" {...register("no_pocket")} />
@@ -199,7 +218,7 @@ function MedicianEntrance({title, icon, button}) {
                     });
                   }}
                 />
-                <Store button={2} />
+                <Kind button={2} Update={UpdateFunction} />
               </div>
               <label>وزن:</label>
               <input type="text" {...register("weight")} />
@@ -222,7 +241,7 @@ function MedicianEntrance({title, icon, button}) {
                     });
                   }}
                 />
-                <Store button={2} />
+                <Country button={2} Update={UpdateFunction} />
               </div>
               <label>قیمت:</label>
               <input type="text" {...register("price")} />
