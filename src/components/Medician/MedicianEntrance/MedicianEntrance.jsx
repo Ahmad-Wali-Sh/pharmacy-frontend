@@ -7,7 +7,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-function MedicianEntrance(props) {
+function MedicianEntrance({title, icon, button}) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   function registerModalOpener() {
@@ -48,6 +48,13 @@ function MedicianEntrance(props) {
     overflow: "scroll",
     zIndex: "2",
   };
+
+  const AutoCompleteStyle2 = {
+    ...AutoCompleteStyle,
+    zIndex: "1"
+  }
+
+
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
   const KIND_URL = import.meta.env.VITE_KIND;
@@ -63,7 +70,6 @@ function MedicianEntrance(props) {
     kind: "",
   });
 
-  console.log(autoCompleteData);
   React.useEffect(() => {
     axios
       .get(COUNTRY_URL)
@@ -117,15 +123,26 @@ function MedicianEntrance(props) {
 
   return (
     <>
+      {button == 1 && 
       <div className="purchase-card" onClick={registerModalOpener}>
         <div>
-          <h3>{props.title}</h3>
+          <h3>{title}</h3>
           <div>{<LoadingDNA />}</div>
         </div>
         <div>
-          <i className={props.icon}></i>
+          <i className={icon}></i>
         </div>
-      </div>
+      </div>}
+
+      {button == 2 && (
+        <div className="plus-box medician-select-plus" onClick={registerModalOpener}>
+          <div className="plus ">
+          <i class="fa-solid fa-plus"></i>
+          </div>
+        </div>
+      )}
+
+
       <Modal
         style={ModalStyles}
         isOpen={registerModalOpen}
@@ -194,7 +211,7 @@ function MedicianEntrance(props) {
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
                   items={country}
-                  styling={AutoCompleteStyle}
+                  styling={AutoCompleteStyle2}
                   showClear={false}
                   inputDebounce="10"
                   showIcon={false}

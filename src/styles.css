@@ -116,6 +116,10 @@ body {
   font-size: 2.2rem;
 }
 
+.fa-cannabis {
+  font-size: 2.2rem;
+}
+
 .fa-searchengin {
   color: var(--color-three);
   font-size: 1rem;
@@ -1003,7 +1007,7 @@ input[type="date"]:disabled {
   margin: 0.6rem;
   border-radius: 1rem;
   display: grid;
-  grid-template-columns: 0.23fr 1fr;
+  grid-template-columns: 0.3fr 1fr;
   grid-template-rows: repeat(6, 1fr);
   direction: rtl;
   padding: 1rem;
@@ -1061,12 +1065,8 @@ input[type="date"]:disabled {
   box-shadow: -4px -4px 4px var(--color-two);
 }
 
-.autoComplete {
-  background-color: #600f0f;
-}
 
 .hQCTOB > input {
-  background-color: #600f0f;
   margin-right: 1.6rem;
 }
 .sc-fsQiph > input {
@@ -1082,6 +1082,11 @@ input[type="date"]:disabled {
 .medician-inter {
   width: 100%;
   height: 100%;
+}
+
+.medician-select-plus {
+  margin-left: auto;
+
 }
 
 .medician-inter-form {
@@ -1169,7 +1174,7 @@ input[type="date"]:disabled {
   border: none;
   width: 10%;
   height: 100%;
-  background-color: #b8390e;
+  background-color: var(--color-two);
   color: white;
 }
 .medician-inter-submit > input:hover {

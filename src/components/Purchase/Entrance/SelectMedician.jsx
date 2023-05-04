@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import axios from "axios";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
+import MedicianEntrance from "../../Medician/MedicianEntrance/MedicianEntrance";
 
 export default function SelectMedician({
   kind,
@@ -39,6 +40,19 @@ export default function SelectMedician({
   };
 
   const formatResult = (item) => {
+
+
+    const pharmImage = pharmGroub.filter((value)=> {
+     return (value.id == item.pharm_group) && value.image
+    })
+    
+    const kindImage = kind.filter((value)=> {
+      return (value.id == item.kind) && value.image 
+    })
+    console.log(kindImage)
+    const countryImage = country.filter((value)=> {
+      return (value.id == item.country && value.image)
+    })
     return (
       <div className="medician-format">
         <div className="medician-image">
@@ -50,46 +64,19 @@ export default function SelectMedician({
         <div className="medician-image">
           <img
             className="medician-image"
-            src={kind.map((kind) =>
-              item.kind == kind.id && kind.image == "./images/"
-                ? kind.image.slice(38)
-                : "./images/nophoto.jpg"
-            )}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null; // prevents looping
-              currentTarget.src = "./images/nophoto.jpg";
-            }}
-            alt=""
+            src={pharmImage[0] && pharmImage[0].image ?  pharmImage[0].image.slice(38) : "./images/nophoto.jpg"}
           />
         </div>
         <div className="medician-image">
           <img
             className="medician-image"
-            src={country.map((country) =>
-              item.country == country.id && country.image
-                ? country.image.slice(38)
-                : "./images/nophoto.jpg"
-            )}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null; // prevents looping
-              currentTarget.src = "./images/nophoto.jpg";
-            }}
-            alt=""
+            src={kindImage[0] && kindImage[0].image ? kindImage[0].image.slice(38) : "./images/nophoto.jpg"}
           />
         </div>
         <div className="medician-image">
           <img
             className="medician-image"
-            src={pharmGroub.map((pharm) =>
-              item.pharm_groub == pharm.id && pharm.image
-                ? pharm.image.slice(38)
-                : ""
-            )}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null; // prevents looping
-              currentTarget.src = "./images/nophoto.jpg";
-            }}
-            alt=""
+          src={countryImage[0] && countryImage[0].image ?  countryImage[0].image.slice(38) : "./images/nophoto.jpg" }
           />
         </div>
         <div className="medician-text-field">
@@ -192,6 +179,7 @@ export default function SelectMedician({
                         : MEDICIAN_URL + "?search=" + "''"
                     )
                     .then((res) => {
+                      setMedician('')
                       setMedician(res.data);
                     });
                 }}
@@ -204,6 +192,7 @@ export default function SelectMedician({
                 formatResult={formatResult}
                 autoFocus={true}
               />
+              <MedicianEntrance button={2}/>
             </div>
           </div>
         </Modal>
