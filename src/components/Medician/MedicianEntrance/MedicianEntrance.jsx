@@ -2,15 +2,18 @@ import React from "react";
 import Modal from "react-modal";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import Store from "../../Purchase/Store/Store";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import Kind from "../Kind";
+import PharmGroup from "../PharmGroup";
+import Country from "../Country";
 
-function MedicianEntrance(props) {
+function MedicianEntrance({title, icon, button}) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   function registerModalOpener() {
+    UpdateFunction()
     setRegisterModalOpen(true);
   }
   function registerModalCloser() {
@@ -48,6 +51,13 @@ function MedicianEntrance(props) {
     overflow: "scroll",
     zIndex: "2",
   };
+
+  const AutoCompleteStyle2 = {
+    ...AutoCompleteStyle,
+    zIndex: "1"
+  }
+
+
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
   const KIND_URL = import.meta.env.VITE_KIND;
@@ -63,7 +73,6 @@ function MedicianEntrance(props) {
     kind: "",
   });
 
-  console.log(autoCompleteData);
   React.useEffect(() => {
     axios
       .get(COUNTRY_URL)
@@ -115,17 +124,43 @@ function MedicianEntrance(props) {
       });
   };
 
+  const UpdateFunction = () => {
+    axios
+      .get(COUNTRY_URL)
+      .then((res) => setCountry(res.data))
+      .catch((err) => console.log(err));
+    axios
+      .get(PHARM_GROUB_URL)
+      .then((res) => setPharmGroup(res.data))
+      .catch((err) => console.log(err));
+    axios
+      .get(KIND_URL)
+      .then((res) => setKind(res.data))
+      .catch((err) => console.log(err));
+  }
+
   return (
     <>
+      {button == 1 && 
       <div className="purchase-card" onClick={registerModalOpener}>
         <div>
-          <h3>{props.title}</h3>
+          <h3>{title}</h3>
           <div>{<LoadingDNA />}</div>
         </div>
         <div>
-          <i className={props.icon}></i>
+          <i className={icon}></i>
         </div>
-      </div>
+      </div>}
+
+      {button == 2 && (
+        <div className="plus-box medician-select-plus" onClick={registerModalOpener}>
+          <div className="plus ">
+          <i class="fa-solid fa-plus"></i>
+          </div>
+        </div>
+      )}
+
+
       <Modal
         style={ModalStyles}
         isOpen={registerModalOpen}
@@ -161,7 +196,7 @@ function MedicianEntrance(props) {
                     });
                   }}
                 />
-                <Store button={2} />
+                <PharmGroup button={2} Update={UpdateFunction} />
               </div>
               <label>ت.پاکت:</label>
               <input type="text" {...register("no_pocket")} />
@@ -182,7 +217,7 @@ function MedicianEntrance(props) {
                     });
                   }}
                 />
-                <Store button={2} />
+                <Kind button={2} Update={UpdateFunction} />
               </div>
               <label>وزن:</label>
               <input type="text" {...register("weight")} />
@@ -194,7 +229,7 @@ function MedicianEntrance(props) {
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
                   items={country}
-                  styling={AutoCompleteStyle}
+                  styling={AutoCompleteStyle2}
                   showClear={false}
                   inputDebounce="10"
                   showIcon={false}
@@ -205,7 +240,7 @@ function MedicianEntrance(props) {
                     });
                   }}
                 />
-                <Store button={2} />
+                <Country button={2} Update={UpdateFunction} />
               </div>
               <label>قیمت:</label>
               <input type="text" {...register("price")} />

@@ -317,9 +317,14 @@ export default function Entrance(props) {
     });
     setEntranceThrough([]);
     setSearched(true);
-    axios.get(ENTRANCE_URL + data.entrance_search + "/").then((e) => {
-      setExatEntrance(e.data);
-    });
+    axios.get(ENTRANCE_URL + data.entrance_search + "/")
+          .then((e) => {
+           setExatEntrance(e.data);
+          })
+          .catch((err)=> {
+            console.log(err)
+            toast.error("Check Your Input And Try Again!");
+          })
 
     axios
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)

@@ -14,24 +14,7 @@ function Purchase() {
         <Entrance title="ثبت ورودی" icon="fa-solid fa-cart-arrow-down" />
         <Company title="ثبت شرکت" icon="fa-solid fa-building" button={1} />
         <Store title="ثبت انبار" icon="fa-solid fa-store" button={1} />
-        <MedicianEntrance title="ثبت دوا" icon="fa-solid fa-tablets" />
-        {/* <Entrance
-          title="ثبت انبار"
-          number="12"
-          icon="fa-solid fa-store"
-        />
-        
-        
-        <Entrance
-          title="ثبت شرکت"
-          number="12"
-          icon="fa-solid fa-building"
-        />
-        <Entrance
-          title="ثبت متفرقه"
-          number="12"
-          icon="fa-solid fa-feather"
-        /> */}
+        <MedicianEntrance title="ثبت دوا" icon="fa-solid fa-tablets" button={1} />
       </div>
       <div className="purchase-form"></div>
     </div>

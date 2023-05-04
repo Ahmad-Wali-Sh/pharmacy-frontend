@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Layount from "./components/Layount";
+import Layount from "./components/Dashboard/Layount";
 import Medician from "./components/Medician/Medician";
 import PageComponent from "./components/PageComponents/PageComponent";
 import Purchase from "./components/Purchase/Purchase";
