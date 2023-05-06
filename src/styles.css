@@ -124,7 +124,15 @@ body {
   font-size: 2.2rem;
 }
 
+.fa-bed {
+  font-size: 2.2rem;
+}
+
 .fa-earth-asia {
+  font-size: 2.2rem;
+}
+
+.fa-user-doctor {
   font-size: 2.2rem;
 }
 
@@ -944,6 +952,23 @@ input[type="date"]:disabled {
   grid-area: 5 / 2 / 5 / 5;
 }
 
+.company-form > select {
+  height: 1.7rem;
+  border: none;
+  background-color: var(--color-three);
+  border-radius: 1rem;
+  padding-right: 1rem;
+  position: relative;
+  margin-left: 9rem;
+  font-size: large;
+  color: white;
+  font-weight: bold;
+}
+
+.company-form > select:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+}
+
 .company-form-description {
   grid-area: 8 / 2 / 10 / 5;
   height: 5rem !important;
@@ -1201,7 +1226,7 @@ input[type="date"]:disabled {
   grid-area: 1 / 2 / 2 / 3;
   display: grid;
   grid-template-columns: 0.31fr 0.9fr 0.3fr 0.9fr 0.3fr 0.9fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 20% 20% 20%;
   gap: 0.7rem;
   padding: 1rem;
   text-align: left;
@@ -1245,7 +1270,7 @@ input[type="date"]:disabled {
   gap: 0.2rem;
   display: grid;
   grid-template-columns: 20% 79.7%;
-  grid-template-rows: 30% 22% 38%;
+  grid-template-rows: 0.6fr 0.1fr 1fr;
 }
 
 .prescription-through {
@@ -1290,4 +1315,42 @@ input[type="date"]:disabled {
 
 .prescription-add-button:hover {
   background-color: var(--color-eleven);
+}
+
+.prescription-through-map {
+  background-color: var(--color-four);
+  border-bottom: 1px solid black;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 0.1rem;
+  padding-right: 1rem;
+  display: grid;
+  grid-template-columns: 0.4fr 10fr 1fr 0.5fr ;
+  direction: rtl;
+  justify-content: space-between;
+}
+
+.prescription-through-map > input[type="text"] {
+  width: 70%;
+  background-color: var(--color-sex);
+  border: none;
+  border-radius: 2rem;
+  padding-right: 1rem;
+  color: white;
+}
+
+.prescription-medician-header {
+  background-color: var(--color-two);
+  border-radius: 1rem 1rem 0rem 0rem;
+  width: 100%;
+  padding: 0.1rem;
+  padding-right: 1rem;
+  display: grid;
+  grid-template-columns: 0.1fr 0.5fr 10fr 0.8fr 0.5fr ;
+  font-size: 0.9rem;
+  direction: rtl;
+}
+
+.doctor-discription {
+  grid-area: 6 / 2 / 6 / 5 ;
 }
