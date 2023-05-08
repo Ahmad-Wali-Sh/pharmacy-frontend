@@ -1270,7 +1270,7 @@ input[type="date"]:disabled {
   gap: 0.2rem;
   display: grid;
   grid-template-columns: 20% 79.7%;
-  grid-template-rows: 0.6fr 0.1fr 1fr;
+  grid-template-rows: 30% 22.5% 36%;
 }
 
 .prescription-through {
@@ -1306,7 +1306,7 @@ input[type="date"]:disabled {
 .prescription-add-button {
   height: 1.5rem;
   border-radius: 1rem;
-  width: 7rem;
+  width: 4rem;
   text-align: center;
   border: none;
   background-color: var(--color-thirth);
@@ -1353,4 +1353,30 @@ input[type="date"]:disabled {
 
 .doctor-discription {
   grid-area: 6 / 2 / 6 / 5 ;
+}
+
+.prescription-medicine {
+  overflow-y: scroll;
+  height: 90%;
+}
+
+.prescription-medician-map {
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  grid-area: 3 / 1 / 4 / 3;
+}
+
+.prescription-create-button {
+  border-radius: 1rem;
+  border:none;
+  width: 5rem;
+  height: 1.4rem;
+  margin-left:0.2rem;
+  background-color: var(--color-thirth);
+  color: white;
+}
+
+.prescription-create-button:hover {
+  background-color: var(--color-eleven);
+  cursor: pointer;
 }
