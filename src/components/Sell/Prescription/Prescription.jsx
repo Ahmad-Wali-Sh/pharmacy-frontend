@@ -282,10 +282,6 @@ export default function Prescription(props) {
   const CreateNewHandle = (data) => {
     console.log(data)
 
-    setTimeout(() => {
-      setRegisterModalOpen(true)
-    }, 100)
-
     const PrescriptionForm = new FormData()
     PrescriptionForm.append("name", autoCompleteData.patient);
     PrescriptionForm.append("doctor", autoCompleteData.doctor);
@@ -295,13 +291,30 @@ export default function Prescription(props) {
     PrescriptionForm.append("discount_percent", prescription.discount_percent);
     PrescriptionForm.append("zakat", prescription.zakat);
     PrescriptionForm.append("khairat", prescription.khairat);
-    PrescriptionForm.append("prescription_number", prescription.prescription_number ? prescription.prescription_number : data.prescription_number);
 
     console.log(PrescriptionForm)
-    // axios
-    //     .post(PRESCRIPTION_URL, PrescriptionForm)
-    //     .then((res) => console.log(res))
-    //     .catch((err) => console.log(err))
+    axios
+        .post(PRESCRIPTION_URL, PrescriptionForm)
+        .then((res) => {
+          console.log(res.data)
+          setPrescription(res.data)
+          prescriptionThrough.map((item) => {
+            const PrescriptionThroughForm = new FormData();
+            PrescriptionThroughForm.append("quantity", item.quantity);
+            PrescriptionThroughForm.append("each_price", item.each_price);
+            PrescriptionThroughForm.append("medician", item.medician);
+            PrescriptionThroughForm.append("prescription", res.data.id);
+            setPrescriptionThrough([])
+            axios
+                .post(PRESCRIPTION_THOURGH_URL, PrescriptionThroughForm)
+                .then((res)=> {
+                  console.log(res.data)
+                  setPrescriptionThrough((prev) => [...prev, res.data])
+                })
+                .catch((err) => console.log(err))
+          })
+        })
+        .catch((err) => console.log(err))
   }
 
   return (
@@ -417,14 +430,8 @@ export default function Prescription(props) {
                 {...register("prescription_number")}
                 defaultValue={prescription.prescription_number}
               />
-              <label>ش.نسخه:</label>
+              <label>جستوجو:</label>
               <div className="flex">
-                <input
-                  value={prescription.id}
-                  type="text"
-                  {...register("prescription_id")}
-                  disabled
-                />
                 <form className="search-form">
                   <input type="text" {...register("number")} />
                   <div
