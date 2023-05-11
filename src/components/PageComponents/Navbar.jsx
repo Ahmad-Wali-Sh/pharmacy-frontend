@@ -31,6 +31,9 @@ function Navbar() {
           <Link to="/medician" className="button">
             <div className="button">داروخانه</div>
           </Link>
+          <Link to="/reports" className="button">
+            <div className="button">گذارشات</div>
+          </Link>
         </div>
       </div>
     </div>
