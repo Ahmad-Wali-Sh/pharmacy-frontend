@@ -16,7 +16,8 @@ function Medician() {
         <Kind button={1} title="ثبت نوع" icon="fa-solid fa-prescription-bottle-medical" />
         <Country button={1} title="ثبت کشور" icon="fa-solid fa-earth-asia" />
       </div>
-      <div className="purchase-form"></div>
+      <div className="purchase-form">
+      </div>
     </div>
   );
 }

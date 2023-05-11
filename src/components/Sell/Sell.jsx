@@ -14,7 +14,8 @@ function Sell() {
         <Doctor title="ثبت داکتر" button={1} icon="fa-solid fa-user-doctor"/>
         <Patient title="ثبت مریض" button={1} icon="fa-solid fa-bed"/>
       </div>
-      <div className="purchase-form"></div>
+      <div className="purchase-form">
+      </div>
     </div>
   );
 }

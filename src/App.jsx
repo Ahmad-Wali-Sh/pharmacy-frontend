@@ -3,6 +3,7 @@ import Layount from "./components/Dashboard/Layount";
 import Medician from "./components/Medician/Medician";
 import PageComponent from "./components/PageComponents/PageComponent";
 import Purchase from "./components/Purchase/Purchase";
+import Reports from "./components/Reports/Reports";
 import Sell from "./components/Sell/Sell";
 
 
@@ -18,6 +19,7 @@ function App() {
             <Route path="/dashboard" element={<Layount />} />
             <Route path="/sell" element={<Sell />} />
             <Route path="/medician" element={<Medician />} />
+            <Route path="/reports" element={<Reports />} />
           </Routes>
         </PageComponent>
       </Router>

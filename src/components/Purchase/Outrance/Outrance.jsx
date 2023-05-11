@@ -5,12 +5,12 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
-import EntrancThroughEntry from "./EntrancThroughEntry";
-import SelectMedician from "./SelectMedician";
 import Company from "../Company/Company";
 import Store from "../Store/Store";
+import SelectMedician from "../Entrance/SelectMedician"
+import OutranceThroughEntry from "./OutranceThroughEntry";
 
-export default function Entrance(props) {
+export default function Outrance(props) {
   /* Modal */
 
   const ModalStyles = {
@@ -66,13 +66,13 @@ export default function Entrance(props) {
 
   /* Links */
 
-  const ENTRANCE_URL = import.meta.env.VITE_ENTRANCE;
+  const ENTRANCE_URL = import.meta.env.VITE_OUTRANCE;
   const FINAL_REGISTER_URL = import.meta.env.VITE_FINAL_REGISTER;
   const COMPANY_URL = import.meta.env.VITE_PHARM_COMPANIES;
   const STORE_URL = import.meta.env.VITE_STORE;
   const CURRENCY_URL = import.meta.env.VITE_CURRENCY;
   const PAYMENT_METHOD_URL = import.meta.env.VITE_PAYMENT_METHOD;
-  const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
+  const ENTRANCE_THROUGH_URL = import.meta.env.VITE_OUTRANCE_THROUGH;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const KIND_URL = import.meta.env.VITE_KIND;
@@ -296,7 +296,7 @@ export default function Entrance(props) {
     EntranceThrough.append("interest_percent", data.interest_percent);
     EntranceThrough.append("bonus", data.bonus);
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
-    EntranceThrough.append("entrance", exactEntrance.id);
+    EntranceThrough.append("outrance", exactEntrance.id);
 
     axios
       .post(ENTRANCE_THROUGH_URL, EntranceThrough)
@@ -327,7 +327,7 @@ export default function Entrance(props) {
           })
 
     axios
-      .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
+      .get(ENTRANCE_THROUGH_URL + "?outrance=" + data.entrance_search)
       .then((e) => {
         setEntranceThrough(e.data);
       })
@@ -350,7 +350,7 @@ export default function Entrance(props) {
 
   const Reporting = () => {
     const totalInterest = () => {
-      let result = 0;
+      let result;
       const total = entranceThrough.map(
         (through) => (result = +(through.number_in_factor * through.each_price))
       );
@@ -358,32 +358,25 @@ export default function Entrance(props) {
       return result;
     };
 
-    const totalPurchase = () => {
-      const result = entranceThrough.reduce((total, currentValue) => {
-        return total + (currentValue.number_in_factor * currentValue.each_price)
-      }, 0) 
-      return result
-    }
-
     setReport({
       total: 0,
       total_interest: totalInterest(),
       number: entranceThrough.length,
       sell_total: 0,
-      purchase_total: totalPurchase(),
+      purchase_total: 0,
     });
   };
 
   function UpdateUI() {
     setEntranceThrough([]);
     axios
-      .get(ENTRANCE_THROUGH_URL + "?entrance=" + exactEntrance.id)
+      .get(ENTRANCE_THROUGH_URL + "?outrance=" + exactEntrance.id)
       .then((res) => setEntranceThrough(res.data))
       .catch((err) => console.log(err));
   }
   function UpdateChunk() {
     axios
-      .get(ENTRANCE_THROUGH_URL + "?entrance=" + exactEntrance.id)
+      .get(ENTRANCE_THROUGH_URL + "?outrance=" + exactEntrance.id)
       .then((res) => setEntranceThrough(res.data))
       .catch((err) => console.log(err));
   }
@@ -428,7 +421,7 @@ export default function Entrance(props) {
       >
         <div className="modal">
           <div className="modal-header">
-            <h3>ثبت ورودی</h3>
+            <h3>ثبت خروجی</h3>
             <div className="modal-close-btn" onClick={registerModalCloser}>
               <i className="fa-solid fa-xmark"></i>
             </div>
@@ -442,16 +435,16 @@ export default function Entrance(props) {
                   <label>{report.number}</label>
                 </div>
                 <div className="entrance-report-map-box">
+                  <label>مجموع فایده </label>
+                  <label>{report.total_interest}</label>
+                </div>
+                <div className="entrance-report-map-box">
                   <label>مجموع خرید </label>
                   <label>{report.purchase_total}</label>
                 </div>
                 <div className="entrance-report-map-box">
                   <label>مجموع فروش </label>
                   <label>{report.sell_total}</label>
-                </div>
-                <div className="entrance-report-map-box">
-                  <label>پیشبینی فایده </label>
-                  <label>{report.total_interest}</label>
                 </div>
                 <div className="entrance-report-map-box">
                   <label>مجموع</label>
@@ -683,7 +676,7 @@ export default function Entrance(props) {
               </div>
               <div className="entrance-map">
                 {entranceThrough.map((through, key) => (
-                  <EntrancThroughEntry
+                  <OutranceThroughEntry
                     through={through}
                     keyValue={through.id}
                     num={key}

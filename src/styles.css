@@ -116,6 +116,14 @@ body {
   font-size: 2.2rem;
 }
 
+.fa-clipboard-list {
+  font-size: 2.2rem;
+}
+
+.fa-arrow-right-from-bracket {
+  font-size: 2.2rem
+}
+
 .fa-cannabis {
   font-size: 2.2rem;
 }
@@ -375,6 +383,10 @@ button:focus {
   margin-right: auto;
   border-radius: 1rem;
   height: 77%;
+  padding: 1rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: 7rem;
 }
 
 .purchase-card {
@@ -1379,4 +1391,58 @@ input[type="date"]:disabled {
 .prescription-create-button:hover {
   background-color: var(--color-eleven);
   cursor: pointer;
+}
+
+
+/* Lists  */
+
+.list-items {
+  background-color:var(--color-sex);
+  width: 99%;
+  height: 10%;
+  border-radius: 1rem;
+  margin:0.4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap:1rem;
+}
+
+.list-card {
+  background-color: var(--color-nine);
+  width: 100%;
+  height: 85%;
+  border-radius: 1rem;
+  margin: 0.2rem;
+  padding-top: 0.7rem;
+  text-align: center;
+}
+
+.list-card:hover {
+  background-image: var(--color-five);
+  cursor: pointer;
+  
+}
+
+.kind-list-filter-box {
+  background-color: var(--color-sex);
+  width:99%;
+  margin:0.4rem;
+  border-radius: 1rem;
+  display: grid;
+  direction: rtl;
+  grid-template-columns: 0.3fr 1fr 0.3fr 1fr 0.5fr 0.2fr 0.3fr;
+  padding: 1rem;
+  text-align: left;
+  gap: 0.6rem
+}
+
+.kind-list-search-btn {
+  border-radius: 1rem;
+  border: none;
+  height: 100%;
+  background-color: var(--color-four);
+}
+.kind-list-search-btn:hover {
+  background-image: var(--color-five);
+  color: white
 }
