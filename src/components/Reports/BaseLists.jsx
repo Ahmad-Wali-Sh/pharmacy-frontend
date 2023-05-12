@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
-import KindList from "./KindList";
-import MedicianList from "./MedicianList";
+import KindList from "./KindList/KindList";
+import MedicianList from "./MedicianList/MedicianList";
 
 function BaseLists({ title, icon }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -51,15 +51,12 @@ function BaseLists({ title, icon }) {
           </div>
         </div>
         <div className="list-items">
-            <KindList Closer={registerModalCloser}/>
-            <MedicianList Closer={registerModalCloser}/>
+          <KindList Closer={registerModalCloser} />
+          <MedicianList Closer={registerModalCloser} />
         </div>
       </Modal>
     </>
   );
 }
-
-
-
 
 export default BaseLists;
