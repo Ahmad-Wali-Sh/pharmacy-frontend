@@ -9,7 +9,7 @@ import Kind from "../Kind";
 import PharmGroup from "../PharmGroup";
 import Country from "../Country";
 
-function MedicianEntrance({title, icon, button}) {
+function MedicianEntrance({title, icon, button, medician}) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   function registerModalOpener() {
@@ -68,9 +68,9 @@ function MedicianEntrance({title, icon, button}) {
   const [kind, setKind] = React.useState([]);
   const [file, setFile] = React.useState("");
   const [autoCompleteData, setAutoCompleteData] = React.useState({
-    country: "",
-    pharm_group: "",
-    kind: "",
+    country: medician.country ? medician.country : "",
+    pharm_group: medician.pharm_group ? medician.pharm_group : "",
+    kind: medician.kind ? medician.kind : "",
   });
 
   React.useEffect(() => {
@@ -107,11 +107,12 @@ function MedicianEntrance({title, icon, button}) {
     MedicianForm.append("usages", data.usages);
     MedicianForm.append("description", data.description);
     MedicianForm.append("barcode", data.barcode);
-    MedicianForm.append("image", file);
-    MedicianForm.append("pharm_group", autoCompleteData.pharm_group.id);
-    MedicianForm.append("kind", autoCompleteData.kind.id);
-    MedicianForm.append("country", autoCompleteData.country.id);
+    {file && MedicianForm.append("image", file);}
+    MedicianForm.append("pharm_group", autoCompleteData.pharm_group);
+    MedicianForm.append("kind", autoCompleteData.kind);
+    MedicianForm.append("country", autoCompleteData.country);
 
+    {button == 1 || button == 2 && 
     axios
       .post(MEDICIAN_URL, MedicianForm)
       .then((res) => {
@@ -121,8 +122,16 @@ function MedicianEntrance({title, icon, button}) {
       .catch((err) => {
         console.log(err);
         toast.error("Check Your Input And Try Again!");
-      });
+      });}
+
+      {button == 3 && 
+        axios
+            .patch(MEDICIAN_URL + medician.id + "/", MedicianForm)
+            .then((res) => console.log(res.data))
+            .catch((err) => console.log(err))
+      }
   };
+
 
   const UpdateFunction = () => {
     axios
@@ -160,6 +169,13 @@ function MedicianEntrance({title, icon, button}) {
         </div>
       )}
 
+      {button == 3 && (
+        <div onClick={registerModalOpener}>
+          <i class="fa-solid fa-circle-info"></i>
+        </div>
+      )
+      }
+
 
       <Modal
         style={ModalStyles}
@@ -176,9 +192,9 @@ function MedicianEntrance({title, icon, button}) {
           <div className="medician-inter">
             <div className="medician-inter-form">
               <label>نام برند:</label>
-              <input type="text" {...register("brand_name")} />
+              <input type="text" {...register("brand_name")} defaultValue={medician.brand_name} />
               <label>محلول:</label>
-              <input type="text" {...register("ml")} />
+              <input type="text" {...register("ml")} defaultValue={medician.ml}/>
               <label>گروپ دوایی:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
@@ -192,14 +208,15 @@ function MedicianEntrance({title, icon, button}) {
                   onSelect={(data) => {
                     setAutoCompleteData({
                       ...autoCompleteData,
-                      pharm_group: data,
+                      pharm_group: data.id,
                     });
                   }}
+                  placeholder={medician.pharm_group}
                 />
                 <PharmGroup button={2} Update={UpdateFunction} />
               </div>
               <label>ت.پاکت:</label>
-              <input type="text" {...register("no_pocket")} />
+              <input type="text" {...register("no_pocket")} defaultValue={medician.no_pocket} />
               <label>نوع:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
@@ -213,18 +230,19 @@ function MedicianEntrance({title, icon, button}) {
                   onSelect={(data) => {
                     setAutoCompleteData({
                       ...autoCompleteData,
-                      kind: data,
+                      kind: data.id,
                     });
                   }}
+                  placeholder={medician.kind}
                 />
                 <Kind button={2} Update={UpdateFunction} />
               </div>
               <label>وزن:</label>
-              <input type="text" {...register("weight")} />
+              <input type="text" {...register("weight")} defaultValue={medician.weight} />
               <label>مکان:</label>
-              <input type="text" {...register("location")} />
+              <input type="text" {...register("location")} defaultValue={medician.location} />
               <label>شرکت:</label>
-              <input type="text" {...register("company")} />
+              <input type="text" {...register("company")} defaultValue={medician.company}/>
               <label>کشور:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
@@ -236,34 +254,37 @@ function MedicianEntrance({title, icon, button}) {
                   onSelect={(data) => {
                     setAutoCompleteData({
                       ...autoCompleteData,
-                      country: data,
+                      country: data.id,
                     });
                   }}
+                  placeholder={medician.country}
                 />
                 <Country button={2} Update={UpdateFunction} />
               </div>
               <label>قیمت:</label>
-              <input type="text" {...register("price")} />
+              <input type="text" {...register("price")} defaultValue={medician.price} />
               <label>حداقل:</label>
-              <input type="text" {...register("minmum_existence")} />
+              <input type="text" {...register("minmum_existence")} defaultValue={medician.minmum_existence}/>
               <label>حداکثر:</label>
-              <input type="text" {...register("maximum_existence")} />
+              <input type="text" {...register("maximum_existence")} defaultValue={medician.maximum_existence} />
               <label>ترکیب:</label>
               <input
                 type="text"
                 className="generic-input"
                 {...register("generic_name")}
+                defaultValue={medician.generic_name}
               />
               <label>توصیه حتمی:</label>
               <input
                 type="checkbox"
                 className="must-advised-input"
                 {...register("must_advised")}
+                defaultChecked={medician.must_advised}
               />
               <label>اخطاریه:</label>
-              <textarea {...register("cautions")} />
+              <textarea {...register("cautions")} defaultValue={medician.cautions}/>
               <label>استفاده:</label>
-              <textarea {...register("usages")} />
+              <textarea {...register("usages")} defaultValue={medician.usages}/>
               <label>عکس:</label>
               <input
                 type="file"
@@ -271,11 +292,11 @@ function MedicianEntrance({title, icon, button}) {
                 onChange={(e) => setFile(e.target.files[0])}
               />
               <label>توضیحات:</label>
-              <textarea {...register("description")} />
+              <textarea {...register("description")} defaultValue={medician.description}/>
               <label>سهمیه:</label>
-              <textarea {...register("dividing_rules")} />
+              <textarea {...register("dividing_rules")} defaultValue={medician.dividing_rules} />
               <label>بارکد:</label>
-              <input type="text" {...register("barcode")} />
+              <input type="text" {...register("barcode")} defaultValue={medician.barcode} />
             </div>
             <div className="medician-inter-submit">
               <input
