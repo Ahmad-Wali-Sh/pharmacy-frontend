@@ -121,7 +121,7 @@ body {
 }
 
 .fa-arrow-right-from-bracket {
-  font-size: 2.2rem
+  font-size: 2.2rem;
 }
 
 .fa-cannabis {
@@ -1112,7 +1112,6 @@ input[type="date"]:disabled {
   box-shadow: -4px -4px 4px var(--color-two);
 }
 
-
 .hQCTOB > input {
   margin-right: 1.6rem;
 }
@@ -1133,7 +1132,6 @@ input[type="date"]:disabled {
 
 .medician-select-plus {
   margin-left: auto;
-
 }
 
 .medician-inter-form {
@@ -1229,7 +1227,6 @@ input[type="date"]:disabled {
   cursor: pointer;
 }
 
-
 /* Prescription */
 
 .prescription-prescription {
@@ -1245,7 +1242,6 @@ input[type="date"]:disabled {
   font-size: 0.9rem;
   direction: rtl;
 }
-
 
 .prescription-prescription > input {
   height: 1.47rem;
@@ -1322,7 +1318,7 @@ input[type="date"]:disabled {
   text-align: center;
   border: none;
   background-color: var(--color-thirth);
-  color: var(--color-ten);  
+  color: var(--color-ten);
 }
 
 .prescription-add-button:hover {
@@ -1337,7 +1333,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 0.4fr 10fr 1fr 0.5fr ;
+  grid-template-columns: 0.4fr 10fr 1fr 0.5fr;
   direction: rtl;
   justify-content: space-between;
 }
@@ -1358,13 +1354,13 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 0.1fr 0.5fr 10fr 0.8fr 0.5fr ;
+  grid-template-columns: 0.1fr 0.5fr 10fr 0.8fr 0.5fr;
   font-size: 0.9rem;
   direction: rtl;
 }
 
 .doctor-discription {
-  grid-area: 6 / 2 / 6 / 5 ;
+  grid-area: 6 / 2 / 6 / 5;
 }
 
 .prescription-medicine {
@@ -1380,10 +1376,10 @@ input[type="date"]:disabled {
 
 .prescription-create-button {
   border-radius: 1rem;
-  border:none;
+  border: none;
   width: 5rem;
   height: 1.4rem;
-  margin-left:0.2rem;
+  margin-left: 0.2rem;
   background-color: var(--color-thirth);
   color: white;
 }
@@ -1393,18 +1389,17 @@ input[type="date"]:disabled {
   cursor: pointer;
 }
 
-
 /* Lists  */
 
 .list-items {
-  background-color:var(--color-sex);
+  background-color: var(--color-sex);
   width: 99%;
   height: 10%;
   border-radius: 1rem;
-  margin:0.4rem;
+  margin: 0.4rem;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  gap:1rem;
+  gap: 1rem;
 }
 
 .list-card {
@@ -1420,20 +1415,28 @@ input[type="date"]:disabled {
 .list-card:hover {
   background-image: var(--color-five);
   cursor: pointer;
-  
 }
 
 .kind-list-filter-box {
+  margin: 0.2rem;
+  border-radius: 1rem;
+  display: grid;
+  direction: rtl;
+  grid-template-rows: 10% 7% 60%;
+  height: 100%;
+}
+
+.kind-list-filters {
   background-color: var(--color-sex);
-  width:99%;
-  margin:0.4rem;
+  width: 99%;
+  margin: 0.4rem;
   border-radius: 1rem;
   display: grid;
   direction: rtl;
   grid-template-columns: 0.3fr 1fr 0.3fr 1fr 0.5fr 0.2fr 0.3fr;
   padding: 1rem;
   text-align: left;
-  gap: 0.6rem
+  gap: 0.6rem;
 }
 
 .kind-list-search-btn {
@@ -1444,5 +1447,134 @@ input[type="date"]:disabled {
 }
 .kind-list-search-btn:hover {
   background-image: var(--color-five);
-  color: white
+  color: white;
+}
+
+.kind-list-map-box {
+  width: 99%;
+  background-color: #b8390e;
+  border-radius: 1rem;
+  margin: 0.4rem;
+  display: grid;
+  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 0.2fr;
+  padding: 0.3rem;
+  padding-right: 2rem;
+}
+
+.kind-list-map-container {
+  background-color: var(--color-sex);
+  width: 99%;
+  margin: 0.4rem;
+  border-radius: 1rem;
+  overflow: scroll;
+  direction: ltr;
+}
+
+.kind-list-map {
+  direction: rtl;
+  display: grid;
+  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 0.2fr;
+  padding-right: 1rem;
+  color: white;
+  padding: 0.3rem;
+  text-align: right;
+  padding-right: 2rem;
+  box-shadow: 1px 1px 1px black;
+  align-items: center;
+}
+
+.kind-list-map > input[type="text"] {
+  border: none;
+  background-color: #600f0f00;
+  color: white;
+  font-size: large;
+}
+
+.kind-list-image {
+  width: 60%;
+  height: 100%;
+}
+
+.medician-list-box {
+  width: 99%;
+  height: 77%;
+  border-radius: 1rem;
+  margin: 0.4rem;
+  display: grid;
+  grid-template-rows: 27% 7%;
+  gap: 0.4rem;
+}
+
+.medician-list-filter-box {
+  width: 100%;
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  direction: rtl;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
+  grid-template-rows: 1.6rem 1.6rem 1.6rem 1.6rem;
+  text-align: left;
+  gap: 0.4rem;
+}
+
+.medician-list-filter-box > input[type="text"] {
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-three);
+  padding-right: 01rem;
+  font-size: 1rem;
+  color: var(--color-ten);
+}
+
+.medician-list-header {
+  background-color: var(--color-two);
+  border-radius: 1rem;
+  display: grid;
+  grid-template-columns: 0.2fr 0.7fr 0.4fr 0.4fr 0.4fr 0.4fr 0.4fr 0.6fr 0.2fr;
+  direction: rtl;
+  padding: 0.3rem;
+  padding-right: 1rem;
+}
+
+.medician-list-header-buttons {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.medician-list-map-box {
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  overflow: scroll;
+}
+
+.medician-filter-buttons {
+  width: 100%;
+  display: grid;
+  direction: ltr;
+  grid-template-columns: 40% 30%;
+  gap: 0.4rem;
+}
+
+.medician-list-map {
+  display: grid;
+  grid-template-columns: 0.2fr 0.7fr 0.4fr 0.4fr 0.4fr 0.4fr 0.4fr 0.6fr 0.2fr;
+  color: white;
+  padding: 0.3rem;
+  direction: rtl;
+  text-align: right;
+  padding-right: 1rem;
+  box-shadow: 1px 1px 1px black;
+  align-items: center;
+  overflow: hidden;
+}
+
+.medician-list-map > input[type="text"] {
+  border: none;
+  background-color: #600f0f00;
+  color: white;
+}
+
+.medician-image-preview {
+  width: 2rem;
 }
