@@ -1491,8 +1491,9 @@ input[type="date"]:disabled {
 }
 
 .kind-list-image {
-  width: 60%;
+  width: 40%;
   height: 100%;
+  border-radius: 1rem;
 }
 
 .medician-list-box {
@@ -1501,7 +1502,8 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   margin: 0.4rem;
   display: grid;
-  grid-template-rows: 27% 7%;
+  grid-template-columns: 100%;
+  grid-template-rows: 33% 7% 56%;
   gap: 0.4rem;
 }
 
@@ -1531,10 +1533,11 @@ input[type="date"]:disabled {
   background-color: var(--color-two);
   border-radius: 1rem;
   display: grid;
-  grid-template-columns: 0.2fr 0.7fr 0.4fr 0.4fr 0.4fr 0.4fr 0.4fr 0.6fr 0.2fr;
+  grid-template-columns: 5% 22% 8% 10% 12% 12% 6% 18% 20%;
   direction: rtl;
   padding: 0.3rem;
-  padding-right: 1rem;
+  padding-right: 1.8rem;
+  font-size: small;
 }
 
 .medician-list-header-buttons {
@@ -1545,7 +1548,6 @@ input[type="date"]:disabled {
 .medician-list-map-box {
   background-color: var(--color-sex);
   border-radius: 1rem;
-  overflow: scroll;
 }
 
 .medician-filter-buttons {
@@ -1558,15 +1560,14 @@ input[type="date"]:disabled {
 
 .medician-list-map {
   display: grid;
-  grid-template-columns: 0.2fr 0.7fr 0.4fr 0.4fr 0.4fr 0.4fr 0.4fr 0.6fr 0.2fr;
+  grid-template-columns: 5% 22% 8% 10% 12% 12% 6% 18% 20%;
   color: white;
   padding: 0.3rem;
   direction: rtl;
-  text-align: right;
   padding-right: 1rem;
   box-shadow: 1px 1px 1px black;
   align-items: center;
-  overflow: hidden;
+  height: 100%;
 }
 
 .medician-list-map > input[type="text"] {
@@ -1576,5 +1577,7 @@ input[type="date"]:disabled {
 }
 
 .medician-image-preview {
-  width: 2rem;
+  width: 40%;
+  margin-right: 3rem;
+  border-radius: 1rem;
 }
