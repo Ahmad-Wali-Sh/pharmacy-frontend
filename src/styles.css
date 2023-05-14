@@ -1456,9 +1456,9 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   margin: 0.4rem;
   display: grid;
-  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 0.2fr;
+  grid-template-columns: 5% 20% 20% 20% 10% 20% 10%;
   padding: 0.3rem;
-  padding-right: 2rem;
+  padding-right: 3rem;
   font-size: small;
 }
 
@@ -1474,7 +1474,7 @@ input[type="date"]:disabled {
 .kind-list-map {
   direction: rtl;
   display: grid;
-  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 0.2fr;
+  grid-template-columns: 5% 20% 20% 20% 10% 20% 10%;
   padding-right: 1rem;
   color: white;
   padding: 0.3rem;
@@ -1482,6 +1482,7 @@ input[type="date"]:disabled {
   padding-right: 2rem;
   box-shadow: 1px 1px 1px black;
   align-items: center;
+  font-size: small;
 }
 
 .kind-list-map > input[type="text"] {
@@ -1495,6 +1496,7 @@ input[type="date"]:disabled {
   width: 40%;
   height: 100%;
   border-radius: 1rem;
+  margin-right: 3rem;
 }
 
 .medician-list-box {

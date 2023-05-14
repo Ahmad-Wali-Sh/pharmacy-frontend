@@ -1,10 +1,10 @@
 import React from "react";
 import Modal from "react-modal";
 import MedicianList from "../MedicianList/MedicianList";
-
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import axios from "axios";
 import KindListmap from "./KindListmap";
+import fileDownload from "js-file-download";
 
 function KindList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -50,6 +50,7 @@ function KindList({ Closer }) {
 
   const KIND_URL = import.meta.env.VITE_KIND;
 
+
   const [kindAll, setKindAll] = React.useState([]);
   const [kindList, setKindList] = React.useState([]);
   console.log(kindList);
@@ -61,23 +62,23 @@ function KindList({ Closer }) {
       .catch((err) => console.log(err));
   }, []);
 
-  const [autoCompleteData, setAutoCompleteData] = React.useState({
-    english_name: "",
-    persian_name: "",
-  });
 
-  console.log(autoCompleteData);
+  const [enligshName, setEnlishName] = React.useState('')
+  const [persianName, setPersianName] = React.useState('')
 
+  console.log(enligshName)
+  console.log(persianName)
   const SearchHandle = () => {
-    ResetForm();
+    setKindList([]);
     axios
       .get(
         KIND_URL +
           "?name_english=" +
-          autoCompleteData.english_name +
+          enligshName +
           "&" +
           "name_persian=" +
-          autoCompleteData.persian_name
+          persianName + 
+          "&ordering=id"
       )
       .then((res) => {
         setKindList(res.data);
@@ -87,12 +88,28 @@ function KindList({ Closer }) {
   };
 
   const ResetForm = () => {
-    setAutoCompleteData({
-      english_name: "",
-      persian_name: "",
-    });
+    setPersianName('')
+    setEnlishName('')
     setKindList([]);
   };
+
+
+  const ExcelExport = () => {
+    axios({
+      url: KIND_URL +
+      "?format=xml&" +
+      "name_english=" +
+      enligshName +
+      "&" +
+      "name_persian=" +
+      persianName + 
+      "&ordering=id", 
+      method: 'GET',
+      responseType: 'blob'
+    }).then((response) => {
+      fileDownload(response.data, 'kind_report.xml')
+    })
+  }
 
   return (
     <>
@@ -125,11 +142,11 @@ function KindList({ Closer }) {
               inputDebounce="10"
               showIcon={false}
               resultStringKeyName="name_english"
-              onSelect={(data) => {
-                setAutoCompleteData({
-                  ...autoCompleteData,
-                  english_name: data.name_english,
-                });
+              onSelect={(data) =>{
+                setEnlishName(data.name_english)
+              }}
+              onSearch={(string, result) => {
+                setEnlishName(string)
               }}
             />
             <label>نام فارسی</label>
@@ -142,19 +159,20 @@ function KindList({ Closer }) {
               showIcon={false}
               resultStringKeyName="name_persian"
               onSelect={(data) => {
-                setAutoCompleteData({
-                  ...autoCompleteData,
-                  persian_name: data.name_persian,
-                });
+                setPersianName(data.name_persin)
               }}
-              onClear={() => {
-                setAutoCompleteData({
-                  english_name: "",
-                  persian_name: "",
-                });
+              onSearch={(string, result) => {
+                setPersianName(string)
               }}
+              
             />
-            <div></div>
+           
+            <input
+              type="button"
+              value="اکسل"
+              className="kind-list-search-btn"
+              onClick={ExcelExport}
+            />
             <input
               type="button"
               value="ریسیت"
@@ -167,6 +185,7 @@ function KindList({ Closer }) {
               className="kind-list-search-btn"
               onClick={SearchHandle}
             />
+            
           </div>
           <div className="kind-list-map-box">
             <h3>No</h3>
