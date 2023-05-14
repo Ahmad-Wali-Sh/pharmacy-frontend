@@ -34,7 +34,6 @@ function MedicineBaseLists({ title, icon }) {
       <div className="purchase-card" onClick={registerModalOpener}>
         <div>
           <h3>{title}</h3>
-          <div>{0}</div>
         </div>
         <div>
           <i className={icon}></i>

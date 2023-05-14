@@ -8,7 +8,7 @@ function Reports() {
   return (
     <div className="purchase">
       <div className="purchase-box">
-          <MedicineBaseLists title="موارد اولیه" icon="fa-solid fa-clipboard-list"/>
+          <MedicineBaseLists title="داروخانه" icon="fa-solid fa-clipboard-list"/>
       </div>
       <div className="purchase-form">
       </div>
