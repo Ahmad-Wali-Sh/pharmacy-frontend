@@ -1422,7 +1422,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   display: grid;
   direction: rtl;
-  grid-template-rows: 10% 7% 60%;
+  grid-template-rows: 12% 7% 58%;
   height: 100%;
 }
 
@@ -1459,6 +1459,7 @@ input[type="date"]:disabled {
   grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 0.2fr;
   padding: 0.3rem;
   padding-right: 2rem;
+  font-size: small;
 }
 
 .kind-list-map-container {
@@ -1514,7 +1515,7 @@ input[type="date"]:disabled {
   direction: rtl;
   padding: 1rem;
   display: grid;
-  grid-template-columns: 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
+  grid-template-columns: 0.3fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
   grid-template-rows: 1.6rem 1.6rem 1.6rem 1.6rem;
   text-align: left;
   gap: 0.4rem;
