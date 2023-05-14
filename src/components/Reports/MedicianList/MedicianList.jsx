@@ -6,6 +6,7 @@ import MedicianListMap from "./MedicianListMap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { FixedSizeList as List } from "react-window";
+import fileDownload from "js-file-download";
 
 function MedicianList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -65,6 +66,7 @@ function MedicianList({ Closer }) {
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
   const KIND_URL = import.meta.env.VITE_KIND;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const MEDICIAN_URL_EXCEL = import.meta.env.VITE_MEDICIAN_EXCEL;
 
   const [kind, setKind] = React.useState([]);
   const [pharmGroup, setPharmGroup] = React.useState([]);
@@ -100,22 +102,22 @@ function MedicianList({ Closer }) {
     axios
       .get(
         MEDICIAN_URL +
-          "?brand_name=" +
-          data.brand_name +
-          "&generic_name=" +
-          data.generic_name +
-          "&no_pocket=" +
-          data.no_pocket +
-          "&ml=" +
-          data.ml +
-          "&location=" +
-          data.location +
-          "&barcode=" +
-          data.barcode +
-          "&company=" +
-          data.company +
-          "&price=" +
-          data.price +
+        "?brand_name=" +
+        data.brand_name +
+        "&generic_name=" +
+        data.generic_name +
+        "&no_pocket=" +
+        data.no_pocket +
+        "&ml=" +
+        data.ml +
+        "&location=" +
+        data.location +
+        "&barcode=" +
+        data.barcode +
+        "&company=" +
+        data.company +
+        "&price=" +
+        data.price +
           "&existence=" +
           data.existence +
           "&pharm_group=" +
@@ -123,23 +125,13 @@ function MedicianList({ Closer }) {
           "&kind=" +
           autoCompleteData.kind +
           "&country=" +
-          autoCompleteData.country
+          autoCompleteData.country + 
+          "&ordering=id"
       )
       .then((res) => setMedicianList(res.data));
   };
 
-  const MedicianListRow = ({ data, index, style }) => (
-    <div style={style}>
-      <MedicianListMap
-        num={index}
-        country={country}
-        kind={kind}
-        pharmGroup={pharmGroup}
-        medician={medicianList}
-      />
-    </div>
-  );
-
+  
   const ResetForm = () => {
     setMedicianList([]);
     setAutoCompleteData({
@@ -148,6 +140,55 @@ function MedicianList({ Closer }) {
       kind: "",
     });
   };
+  const MedicianListRow = ({ data, index, style }) => (
+    <div style={style}>
+      <MedicianListMap
+        num={index}
+        country={country}
+        kind={kind}
+        pharmGroup={pharmGroup}
+        medician={medicianList}
+        AutoReSearch={handleSubmit(SearchHandle)}
+      />
+    </div>
+  );
+
+  const ExcelExport = (data) => {
+    axios({
+      url: MEDICIAN_URL_EXCEL +
+      '?format=xml&' +
+      "brand_name=" +
+      data.brand_name +
+      "&generic_name=" +
+      data.generic_name +
+      "&no_pocket=" +
+      data.no_pocket +
+      "&ml=" +
+      data.ml +
+      "&location=" +
+      data.location +
+      "&barcode=" +
+      data.barcode +
+      "&company=" +
+      data.company +
+      "&price=" +
+      data.price +
+      "&existence=" +
+      data.existence +
+      "&pharm_group=" +
+      autoCompleteData.pharm_group +
+      "&kind=" +
+      autoCompleteData.kind +
+      "&country=" +
+      autoCompleteData.country + 
+      "&ordering=id", 
+      method: 'GET',
+      responseType: 'blob'
+    }).then((response) => {
+      console.log(response)
+      fileDownload(response.data, 'medicine_report.xml')
+    })
+  }
 
   return (
     <>
@@ -242,7 +283,12 @@ function MedicianList({ Closer }) {
             <div></div>
             <div></div>
             <div></div>
-            <div></div>
+            <input
+                type="button"
+                value="اکسل"
+                className="kind-list-search-btn"
+                onClick={handleSubmit(ExcelExport)}
+              />
             <div className="medician-filter-buttons">
               <input
                 type="button"
@@ -256,6 +302,7 @@ function MedicianList({ Closer }) {
                 className="kind-list-search-btn"
                 onClick={ResetForm}
               />
+              
             </div>
           </div>
           <div className="medician-list-header">

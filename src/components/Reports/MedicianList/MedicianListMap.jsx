@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import MedicianEntrance from "../../Medician/MedicianEntrance/MedicianEntrance";
 
-function MedicianListMap({ num, country, medician, kind, pharmGroup }) {
+function MedicianListMap({ num, country, medician, kind, pharmGroup, AutoReSearch}) {
   const [file, setFile] = React.useState("");
   const [imagePreview, setImagePreview] = React.useState("");
 
@@ -28,8 +28,12 @@ function MedicianListMap({ num, country, medician, kind, pharmGroup }) {
 
     axios
       .patch(MEDICIAN_URL + medician[num].id + "/", MedicianForm)
-      .then((res) => console.log(res.data))
+      .then((res) => {
+        console.log(res.data)
+      })
       .catch((err) => console.log(err));
+
+    
   };
 
   return (
@@ -70,8 +74,14 @@ function MedicianListMap({ num, country, medician, kind, pharmGroup }) {
         onChange={(e) => {
           setFile(e.target.files[0]);
           setImagePreview(URL.createObjectURL(e.target.files[0]));
+          handleSubmit(MedicianUpdate)
+
+          const ImageForm = new FormData()
+          ImageForm.append('image', e.target.files[0])
+          axios
+              .patch(MEDICIAN_URL + medician[num].id + "/", ImageForm)
+              .then(() => {})
         }}
-        onBlurCapture={handleSubmit(MedicianUpdate)}
       />
       <img
         src={

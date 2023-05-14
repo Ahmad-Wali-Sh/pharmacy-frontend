@@ -32,7 +32,7 @@ function KindListmap({ kind, num, Update }) {
       data.description && KindForm.append("description", data.description);
     }
     axios
-      .patch(KIND_URL + kind.id + "/", KindForm)
+      .patch(KIND_URL + kind.id + "/", KindForm, Headers={'Content-type': 'json'})
       .then((res) => {
         console.log(res);
       })
