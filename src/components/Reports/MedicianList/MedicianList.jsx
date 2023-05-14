@@ -5,7 +5,7 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import MedicianListMap from "./MedicianListMap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { FixedSizeList as List} from 'react-window'
+import { FixedSizeList as List } from "react-window";
 
 function MedicianList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -88,6 +88,12 @@ function MedicianList({ Closer }) {
       .catch((err) => console.log(err));
   }, []);
 
+  React.useEffect(() => {
+    kind.map(
+      (kind) => kind.id == medician.kind && setKindName(kind.name_english)
+    );
+  }, []);
+
   const SearchHandle = (data) => {
     setMedicianList([]);
 
@@ -122,16 +128,26 @@ function MedicianList({ Closer }) {
       .then((res) => setMedicianList(res.data));
   };
 
-  const MedicianListRow = ({data, index, style}) => (
+  const MedicianListRow = ({ data, index, style }) => (
     <div style={style}>
-      <MedicianListMap num={index} country={country} kind={kind} pharmGroup={pharmGroup} medician={medicianList}/>
+      <MedicianListMap
+        num={index}
+        country={country}
+        kind={kind}
+        pharmGroup={pharmGroup}
+        medician={medicianList}
+      />
     </div>
-  )
+  );
 
   const ResetForm = () => {
-    setMedicianList([])
-  }
-
+    setMedicianList([]);
+    setAutoCompleteData({
+      country: "",
+      pharm_group: "",
+      kind: "",
+    });
+  };
 
   return (
     <>
@@ -254,11 +270,8 @@ function MedicianList({ Closer }) {
             <h3>بیشتر</h3>
           </div>
           <div className="medician-list-map-box">
-            <List 
-            height={260}
-            itemCount={medicianList.length}
-            itemSize={100}>
-                {MedicianListRow}
+            <List height={260} itemCount={medicianList.length} itemSize={100}>
+              {MedicianListRow}
             </List>
           </div>
         </div>
