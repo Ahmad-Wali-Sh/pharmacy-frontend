@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
-import MedicianEntrance from "../../Medician/MedicianEntrance/MedicianEntrance";
+import MedicianEntrance from "../../../Medician/MedicianEntrance/MedicianEntrance";
 
 function MedicianListMap({ num, country, medician, kind, pharmGroup, AutoReSearch}) {
   const [file, setFile] = React.useState("");

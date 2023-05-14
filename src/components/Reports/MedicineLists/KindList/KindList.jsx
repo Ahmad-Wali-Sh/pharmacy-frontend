@@ -5,6 +5,8 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import axios from "axios";
 import KindListmap from "./KindListmap";
 import fileDownload from "js-file-download";
+import PharmGroupList from "../PharmGroupList/PharmGroupList";
+import CountryList from "../CountryList/CountryList";
 
 function KindList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -130,6 +132,8 @@ function KindList({ Closer }) {
         <div className="list-items">
           <div></div>
           <MedicianList Closer={registerModalCloser} />
+          <PharmGroupList Closer={registerModalCloser} />
+          <CountryList Closer={registerModalCloser}/>
         </div>
         <div className="kind-list-filter-box">
           <div className="kind-list-filters">

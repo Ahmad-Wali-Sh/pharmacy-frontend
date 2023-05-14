@@ -7,6 +7,8 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { FixedSizeList as List } from "react-window";
 import fileDownload from "js-file-download";
+import PharmGroupList from "../PharmGroupList/PharmGroupList";
+import CountryList from "../CountryList/CountryList";
 
 function MedicianList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -208,6 +210,9 @@ function MedicianList({ Closer }) {
         </div>
         <div className="list-items">
           <KindList Closer={registerModalCloser} />
+          <div></div>
+          <PharmGroupList Closer={registerModalCloser}/>
+          <CountryList Closer={registerModalCloser}/>
         </div>
         <div className="medician-list-box">
           <div className="medician-list-filter-box">

@@ -1,9 +1,11 @@
 import React from "react";
 import Modal from "react-modal";
+import CountryList from "./CountryList/CountryList";
 import KindList from "./KindList/KindList";
 import MedicianList from "./MedicianList/MedicianList";
+import SellList from "./PharmGroupList/PharmGroupList";
 
-function BaseLists({ title, icon }) {
+function MedicineBaseLists({ title, icon }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   function registerModalOpener() {
@@ -53,10 +55,12 @@ function BaseLists({ title, icon }) {
         <div className="list-items">
           <KindList Closer={registerModalCloser} />
           <MedicianList Closer={registerModalCloser} />
+          <SellList Closer={registerModalCloser} />
+          <CountryList Closer={registerModalCloser}/>
         </div>
       </Modal>
     </>
   );
 }
 
-export default BaseLists;
+export default MedicineBaseLists;
