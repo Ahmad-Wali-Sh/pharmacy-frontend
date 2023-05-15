@@ -59,7 +59,7 @@ function Doctor({ button, title, icon, Update }) {
     DoctorForm.append("discription", data.discription);
 
     axios
-      .post(DOCOTOR_URL, DoctorForm)
+      .post(DOCOTOR_URL, DoctorForm, {withCredentials:true})
       .then((e) => {
         if (button == 2) {
           registerModalCloser();
