@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import React from "react";
+import { useAuthUser } from "react-auth-kit";
 
 function Navbar() {
+  const auth = useAuthUser();
+  console.log(auth());
+
   return (
     <div className="navbar">
       <div className="navbar-elements">
@@ -14,8 +18,8 @@ function Navbar() {
         <div className="profile">
           <img className="profile-image" src="./images/pic.jpg" />
           <div className="profile-text">
-            <h5>Ahmad Wali Sharify</h5>
-            <h6>Admin</h6>
+            <h5>{(auth().username)}</h5>
+            <h6>{auth().email}</h6>
           </div>
         </div>
         <div className="navbar-buttons">

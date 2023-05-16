@@ -36,14 +36,14 @@ function Doctor({ button, title, icon, Update }) {
 
   const DOCOTOR_URL = import.meta.env.VITE_DOCTOR;
 
-  const [companyLength, setCompanyLength] = React.useState([])
+  const [companyLength, setCompanyLength] = React.useState([]);
 
-  React.useEffect(()=> {
-      axios
-          .get(DOCOTOR_URL)
-          .then((res) => setCompanyLength(res.data.length))
-          .catch((err) => console.log(err))
-  },[])
+  React.useEffect(() => {
+    axios
+      .get(DOCOTOR_URL)
+      .then((res) => setCompanyLength(res.data.length))
+      .catch((err) => console.log(err));
+  }, []);
 
   const SubmitForm = (data) => {
     const DoctorForm = new FormData();
@@ -57,9 +57,10 @@ function Doctor({ button, title, icon, Update }) {
     DoctorForm.append("work_time", data.work_time);
     DoctorForm.append("home_address", data.home_address);
     DoctorForm.append("discription", data.discription);
+    DoctorForm.append("user", 1);
 
     axios
-      .post(DOCOTOR_URL, DoctorForm, {withCredentials:true})
+      .post(DOCOTOR_URL, DoctorForm)
       .then((e) => {
         if (button == 2) {
           registerModalCloser();
@@ -89,7 +90,7 @@ function Doctor({ button, title, icon, Update }) {
       {button == 2 && (
         <div className="plus-box" onClick={registerModalOpener}>
           <div className="plus">
-          <i class="fa-solid fa-plus"></i>
+            <i class="fa-solid fa-plus"></i>
           </div>
         </div>
       )}
@@ -122,18 +123,18 @@ function Doctor({ button, title, icon, Update }) {
               <label>کار:</label>
               <input type="text" {...register("workplace")} />
               <label>ساعت کاری:</label>
-              <input
-                type="text"
-                {...register("work_time")}
-              />
+              <input type="text" {...register("work_time")} />
               <label>آدرس خانه:</label>
               <input type="text" {...register("home_address")} />
               <div></div>
               <div></div>
 
               <label>توضیحات:</label>
-              <input type="text" {...register("discription")} className="doctor-discription" />
-              
+              <input
+                type="text"
+                {...register("discription")}
+                className="doctor-discription"
+              />
             </div>
             <div className="company-submit">
               <input

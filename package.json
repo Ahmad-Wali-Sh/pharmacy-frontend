@@ -13,6 +13,7 @@
     "env-cmd": "^10.1.0",
     "js-file-download": "^0.4.12",
     "react": "^18.2.0",
+    "react-auth-kit": "^2.12.2",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
     "react-loader-spinner": "^5.3.4",
