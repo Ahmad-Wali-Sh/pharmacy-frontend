@@ -88,7 +88,7 @@ function MedicianListMap({ num, country, medician, kind, pharmGroup, AutoReSearc
           imagePreview
             ? imagePreview
             : medician[num].image
-            ? medician[num].image.slice(38)
+            ? new URL(medician[num].image).pathname.slice(16)
             : ""
         }
         alt="No Photo"

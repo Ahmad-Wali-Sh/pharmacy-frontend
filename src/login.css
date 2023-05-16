@@ -18,6 +18,10 @@ body {
   min-height: 100vh;
 }
 
+.title-text {
+  color: grey;
+}
+
 .screen {
   background: linear-gradient(90deg, #5d54a4, #7c78b8);
   position: relative;
