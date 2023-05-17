@@ -29,7 +29,7 @@ function Login() {
             .then((me_res) => {
               signIn({
                 token: res.data.auth_token,
-                expiresIn: 20,
+                expiresIn: 60,
                 tokenType: "Token",
                 authState: me_res.data,
               });
@@ -46,6 +46,7 @@ function Login() {
       <div className="screen">
         <div className="screen__content">
           <form className="login">
+            <h3 className="title-text">Welcome | Sharif Pharmacy</h3>
             <div className="login__field">
               <i className="login__icon fas fa-user"></i>
               <input

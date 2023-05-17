@@ -57,25 +57,25 @@ export default function SelectMedician({
         <div className="medician-image">
           <img
             className="medician-image"
-            src={item.image ? item.image.slice(38) : "./images/nophoto.jpg"}
+            src={item.image ? new URL(item.image).pathname.slice(16) : "./images/nophoto.jpg"}
           />
         </div>
         <div className="medician-image">
           <img
             className="medician-image"
-            src={pharmImage[0] && pharmImage[0].image ?  pharmImage[0].image.slice(38) : "./images/nophoto.jpg"}
+            src={pharmImage[0] && pharmImage[0].image ?  new URL(pharmImage[0].image).pathname.slice(16) : "./images/nophoto.jpg"}
           />
         </div>
         <div className="medician-image">
           <img
             className="medician-image"
-            src={kindImage[0] && kindImage[0].image ? kindImage[0].image.slice(38) : "./images/nophoto.jpg"}
+            src={kindImage[0] && kindImage[0].image ? new URL(kindImage[0].image).pathname.slice(16) : "./images/nophoto.jpg"}
           />
         </div>
         <div className="medician-image">
           <img
             className="medician-image"
-          src={countryImage[0] && countryImage[0].image ?  countryImage[0].image.slice(38) : "./images/nophoto.jpg" }
+          src={countryImage[0] && countryImage[0].image ?  new URL(countryImage[0].image).pathname.slice(16) : "./images/nophoto.jpg" }
           />
         </div>
         <div className="medician-text-field">
