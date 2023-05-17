@@ -74,7 +74,7 @@ function PharmGroupListMap({ kind, num, Update }) {
         }}
       />
       <img
-        src={imagePreview ? imagePreview : kind.image && kind.image.slice(38)}
+        src={imagePreview ? imagePreview : kind.image && new URL(kind.image).pathname.slice(16)}
         className="kind-list-image"
         alt="No Photo"
       />

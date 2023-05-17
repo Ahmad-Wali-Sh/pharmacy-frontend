@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import { useAuthUser } from "react-auth-kit";
+import axios from "axios";
 
 function Navbar() {
   const auth = useAuthUser();
   console.log(auth());
-
+  
+  if (localStorage._auth) {
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Token ${localStorage._auth}`
+    }
   return (
     <div className="navbar">
       <div className="navbar-elements">
@@ -36,7 +42,7 @@ function Navbar() {
             <div className="button">داروخانه</div>
           </Link>
           <Link to="/reports" className="button">
-            <div className="button">گذارشات</div>
+            <div className="button">گزارشات</div>
           </Link>
         </div>
       </div>
