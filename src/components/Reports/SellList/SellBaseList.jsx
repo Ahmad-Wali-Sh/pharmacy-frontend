@@ -1,11 +1,10 @@
 import React from "react";
 import Modal from "react-modal";
-import CountryList from "./CountryList/CountryList";
-import KindList from "./KindList/KindList";
-import MedicianList from "./MedicianList/MedicianList";
-import PharmGroupList from "./PharmGroupList/PharmGroupList";
+import DoctorList from "./DoctorList/DoctorList";
+import PatientList from "./PatientList/PatientList";
+import PrescriptionList from "./PrescriptionList/PrescriptionList";
 
-function MedicineBaseLists({ title, icon }) {
+function SellBaseList({ title, icon }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   function registerModalOpener() {
@@ -46,20 +45,22 @@ function MedicineBaseLists({ title, icon }) {
         onRequestClose={registerModalCloser}
       >
         <div className="modal-header">
-          <h3>لست موارد اولیه</h3>
+          <h3>گزارشات بخش فروش</h3>
           <div className="modal-close-btn" onClick={registerModalCloser}>
             <i className="fa-solid fa-xmark"></i>
           </div>
         </div>
         <div className="list-items">
-          <KindList Closer={registerModalCloser} />
-          <MedicianList Closer={registerModalCloser} />
-          <PharmGroupList Closer={registerModalCloser} />
-          <CountryList Closer={registerModalCloser} />
+          <PrescriptionList
+            title="فهرست نسخه ها"
+            Closer={registerModalCloser}
+          />
+          <DoctorList title="فهرست داکترها" Closer={registerModalCloser} />
+          <PatientList title="فهرست مریض ها" Closer={registerModalCloser} />
         </div>
       </Modal>
     </>
   );
 }
 
-export default MedicineBaseLists;
+export default SellBaseList;

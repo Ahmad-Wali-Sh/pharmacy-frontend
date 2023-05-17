@@ -1584,3 +1584,82 @@ input[type="date"]:disabled {
   margin-right: 3rem;
   border-radius: 1rem;
 }
+
+.prescription-list-box {
+  height: 77%;
+  border-radius: 1rem;
+  width: 99%;
+  margin-left: 0.5%;
+  display: grid;
+  grid-template-rows: 20% 7%;
+  gap: 1%;
+}
+
+.prescription-list-filter {
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  direction: rtl;
+  display: grid;
+  grid-template-columns: 7% 25% 7% 25% 7% 25%;
+  grid-template-rows: 35% 35%;
+  text-align: left;
+  gap: 0.6rem;
+  padding: 1rem;
+}
+
+.prescription-list-filter-dates {
+  display: grid;
+  grid-area: 1 / 5 / 1 / 8;
+  width: 100%;
+  grid-template-columns: 10% 35% 10% 35%;
+  gap: 0.4rem;
+}
+
+.prescription-list-filter-dates > input[type="date"] {
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-three);
+  color: var(--color-ten);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.prescription-list-filter-buttons {
+  grid-area: 2 / 5 / 2 / 8;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  direction: rtl;
+  width: 70%;
+  margin-right: 15%;
+}
+
+.prescription-list-filter-buttons > input[type="button"] {
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-four);
+}
+
+.prescription-list-filter-buttons > input[type="button"]:hover {
+  background-image: var(--color-five);
+  color: var(--color-ten);
+}
+
+.prescription-list-filter > input[type="text"] {
+  border-radius: 1rem;
+  border: none;
+  background-color: var(--color-three);
+  color: var(--color-ten);
+  padding-right: 1rem;
+  font-size: medium;
+}
+
+.prescription-list-header {
+  background-color: var(--color-two);
+  border-radius: 1rem;
+}
+
+.prescription-list-map-box {
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+}
