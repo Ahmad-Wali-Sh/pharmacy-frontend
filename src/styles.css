@@ -1654,6 +1654,14 @@ input[type="date"]:disabled {
   font-size: medium;
 }
 
+.prescription-list-filter > select {
+  border-radius: 1rem;
+  border: none;
+  background-color: var(--color-three);
+  color: var(--color-ten);
+  padding-right: 1rem;
+  font-size: medium;
+}
 .prescription-list-header {
   background-color: var(--color-two);
   border-radius: 1rem;
@@ -1662,4 +1670,25 @@ input[type="date"]:disabled {
 .prescription-list-map-box {
   background-color: var(--color-sex);
   border-radius: 1rem;
+}
+
+.prescription-list-header {
+  display: grid;
+  grid-template-columns: 5% 15% 15% 15% 15% 15% 15% 10%;
+  direction: rtl;
+  font-size: small;
+  align-items: center;
+  padding-right: 2rem;
+  text-align: right;
+}
+
+.prescription-list-map {
+  display: grid;
+  direction: rtl;
+  grid-template-columns: 5% 15% 15% 15% 15% 15% 15% 10%;
+  padding: 0.5rem;
+  padding-right: 2rem;
+  text-align: right;
+  border-bottom: 1px solid grey;
+  color: var(--color-ten);
 }
