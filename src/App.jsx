@@ -7,7 +7,6 @@ import Reports from "./components/Reports/Reports";
 import Sell from "./components/Sell/Sell";
 import Login from "./Login";
 import { useIsAuthenticated } from "react-auth-kit";
-import axios from "axios";
 
 function App() {
   const RequireAuth = ({ children }) => {

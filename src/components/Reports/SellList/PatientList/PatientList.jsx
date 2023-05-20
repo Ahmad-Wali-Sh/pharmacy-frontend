@@ -1,11 +1,9 @@
 import React from "react";
 import Modal from "react-modal";
-import CountryList from "./CountryList/CountryList";
-import KindList from "./KindList/KindList";
-import MedicianList from "./MedicianList/MedicianList";
-import PharmGroupList from "./PharmGroupList/PharmGroupList";
+import DoctorList from "../DoctorList/DoctorList";
+import PrescriptionList from "../PrescriptionList/PrescriptionList";
 
-function MedicineBaseLists({ title, icon }) {
+function PatientList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   function registerModalOpener() {
@@ -13,6 +11,7 @@ function MedicineBaseLists({ title, icon }) {
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
+    Closer();
   }
 
   const ModalStyles = {
@@ -31,35 +30,28 @@ function MedicineBaseLists({ title, icon }) {
 
   return (
     <>
-      <div className="purchase-card" onClick={registerModalOpener}>
-        <div>
-          <h3>{title}</h3>
-        </div>
-        <div>
-          <i className={icon}></i>
-        </div>
+      <div className="list-card" onClick={registerModalOpener}>
+        <h3>فهرست مریض ها</h3>
       </div>
-
       <Modal
         style={ModalStyles}
         isOpen={registerModalOpen}
         onRequestClose={registerModalCloser}
       >
         <div className="modal-header">
-          <h3>لست موارد اولیه</h3>
+          <h3>فهرست مریض ها</h3>
           <div className="modal-close-btn" onClick={registerModalCloser}>
             <i className="fa-solid fa-xmark"></i>
           </div>
         </div>
         <div className="list-items">
-          <KindList Closer={registerModalCloser} />
-          <MedicianList Closer={registerModalCloser} />
-          <PharmGroupList Closer={registerModalCloser} />
-          <CountryList Closer={registerModalCloser} />
+          <PrescriptionList Closer={registerModalCloser} />
+          <DoctorList Closer={registerModalCloser} />
+          <div></div>
         </div>
       </Modal>
     </>
   );
 }
 
-export default MedicineBaseLists;
+export default PatientList;
