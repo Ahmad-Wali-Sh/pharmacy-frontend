@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layount from "./components/Dashboard/Layount";
 import Medician from "./components/Medician/Medician";
@@ -16,8 +17,6 @@ function App() {
     }
     return children;
   };
-
-  
 
   return (
     <div className="app">
