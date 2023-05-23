@@ -9,6 +9,8 @@ import EntrancThroughEntry from "./EntrancThroughEntry";
 import SelectMedician from "./SelectMedician";
 import Company from "../Company/Company";
 import Store from "../Store/Store";
+import FinalRegister from "../FinalRegister/FinalRegister";
+import Currency from "../Currency/Currency";
 
 export default function Entrance(props) {
   /* Modal */
@@ -405,6 +407,12 @@ export default function Entrance(props) {
       .then((result) => setStore(result.data))
       .catch((e) => console.log(e));
   }
+  function UpdateFinals() {
+    axios
+      .get(FINAL_REGISTER_URL)
+      .then((result) => setFinalRegister(result.data))
+      .catch((e) => console.log(e));
+  }
 
   React.useEffect(() => {
     store.map((store) =>
@@ -468,9 +476,12 @@ export default function Entrance(props) {
               onSubmit={handleSubmit(EntranceSubmit)}
             >
               <label>وضعیت:</label>
+              
+              <div className="final-register-box">
               <select
                 {...register("final_register")}
                 placeholder={exactEntrance.final_register}
+                className="final-select"
               >
                 <option value={exactEntrance.final_register} selected hidden>
                   {finalRegister.map((final) =>
@@ -483,6 +494,8 @@ export default function Entrance(props) {
                   </option>
                 ))}
               </select>
+              <FinalRegister Update={UpdateFinals}/>
+                </div>
               <label>شرکت:</label>
               <div>
                 <ReactSearchAutocomplete
@@ -568,11 +581,12 @@ export default function Entrance(props) {
                 defaultValue={exactEntrance.recived_by}
               />
               <label>واحد پول:</label>
+              <div className="currency-input-box">
               <select {...register("currency")}>
                 <option value={exactEntrance.currency} selected hidden>
                   {currency.map((currency) =>
                     currency.id == exactEntrance.currency ? currency.name : ""
-                  )}
+                    )}
                 </option>
                 {currency.map((currency) => (
                   <option key={currency.id} value={currency.id}>
@@ -580,6 +594,8 @@ export default function Entrance(props) {
                   </option>
                 ))}
               </select>
+              <Currency />
+                </div>
               <label>پرداخت:</label>
               <select {...register("payment_method")}>
                 <option value={exactEntrance.payment_method} selected hidden>
