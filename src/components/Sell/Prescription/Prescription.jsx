@@ -564,6 +564,7 @@ export default function Prescription(props) {
                 <label></label>
                 <label>No</label>
                 <label>قلم</label>
+                <label>قیمت</label>
                 <label>تعداد</label>
                 <label>حذف</label>
               </div>

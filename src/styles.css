@@ -1354,7 +1354,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 0.1fr 0.5fr 10fr 0.8fr 0.5fr;
+  grid-template-columns: 0.1fr 0.5fr 30rem 10fr 0.8fr 0.5fr;
   font-size: 0.9rem;
   direction: rtl;
 }

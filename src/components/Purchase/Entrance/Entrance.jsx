@@ -133,6 +133,9 @@ export default function Entrance(props) {
   /* Requests */
 
   React.useEffect(() => {
+    if (props.trigger) {
+      registerModalOpener();
+    }
     axios
       .get(ENTRANCE_URL)
       .then((result) => setEntrance(result.data))
@@ -179,7 +182,7 @@ export default function Entrance(props) {
       .get(PHARM_GROUB_URL)
       .then((result) => setPharmGroub(result.data))
       .catch((e) => console.log(e));
-  }, []);
+  }, [props.trigger]);
 
   /* Handlers and Submiting */
 
@@ -317,14 +320,15 @@ export default function Entrance(props) {
     });
     setEntranceThrough([]);
     setSearched(true);
-    axios.get(ENTRANCE_URL + data.entrance_search + "/")
-          .then((e) => {
-           setExatEntrance(e.data);
-          })
-          .catch((err)=> {
-            console.log(err)
-            toast.error("Check Your Input And Try Again!");
-          })
+    axios
+      .get(ENTRANCE_URL + data.entrance_search + "/")
+      .then((e) => {
+        setExatEntrance(e.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Check Your Input And Try Again!");
+      });
 
     axios
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
@@ -360,10 +364,10 @@ export default function Entrance(props) {
 
     const totalPurchase = () => {
       const result = entranceThrough.reduce((total, currentValue) => {
-        return total + (currentValue.number_in_factor * currentValue.each_price)
-      }, 0) 
-      return result
-    }
+        return total + currentValue.number_in_factor * currentValue.each_price;
+      }, 0);
+      return result;
+    };
 
     setReport({
       total: 0,
@@ -395,7 +399,7 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   }
 
-  function UpdateStores () {
+  function UpdateStores() {
     axios
       .get(STORE_URL)
       .then((result) => setStore(result.data))
@@ -497,17 +501,16 @@ export default function Entrance(props) {
               </div>
               <label>انبار:</label>
               <div>
-
-              <ReactSearchAutocomplete
-                items={store}
-                styling={AutoCompleteStyle}
-                onSelect={(item) =>
-                  setAutoCompleteData({ ...autoCompleteData, store: item })
-                }
-                showClear={false}
-                inputDebounce="10"
-                placeholder={storeName}
-                showIcon={false}
+                <ReactSearchAutocomplete
+                  items={store}
+                  styling={AutoCompleteStyle}
+                  onSelect={(item) =>
+                    setAutoCompleteData({ ...autoCompleteData, store: item })
+                  }
+                  showClear={false}
+                  inputDebounce="10"
+                  placeholder={storeName}
+                  showIcon={false}
                 />
                 <Store button={2} Update={UpdateStores} />
               </div>

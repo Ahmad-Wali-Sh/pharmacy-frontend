@@ -90,13 +90,16 @@ function PrescriptionThroughEntry({
               </div>
             )}
           </h4>
+          <h4 style={{ marginRight: "20rem" }}>
+            {exactMedician && exactMedician.price}AFG
+          </h4>
         </div>
         <input
           type="text"
           defaultValue={through.quantity}
           {...register("quantity")}
         />
-        
+
         <div className="medician-map-buttons">
           <div onClick={handleSubmit(MedicianDelete)}>
             <i className="fa-solid fa-trash"></i>
