@@ -765,9 +765,8 @@ input[type="date"]:disabled {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   direction: rtl;
-  margin-right: 5rem
+  margin-right: 5rem;
 }
-
 
 .final-register-input-buttons > input {
   height: 2rem;
@@ -782,8 +781,6 @@ input[type="date"]:disabled {
   border: none;
   background-image: var(--color-five);
 }
-
-
 
 .default-inputs {
   height: 1.47rem;
@@ -1762,4 +1759,23 @@ input[type="date"]:disabled {
   text-align: right;
   border-bottom: 1px solid grey;
   color: var(--color-ten);
+}
+
+.currency-select {
+  width: 90%;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-three);
+  color: var(--color-ten);
+  
+}
+
+.currency-select:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+}
+
+.plus-box-currency {
+  position: relative;
+  top: -1.3rem;
+  width: 10%;
 }

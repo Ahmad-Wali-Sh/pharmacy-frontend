@@ -11,6 +11,7 @@ import Company from "../Company/Company";
 import Store from "../Store/Store";
 import FinalRegister from "../FinalRegister/FinalRegister";
 import Currency from "../Currency/Currency";
+import Payment from "../Payment/Payment";
 
 export default function Entrance(props) {
   /* Modal */
@@ -82,7 +83,6 @@ export default function Entrance(props) {
 
   /* States */
 
-  const [entrance, setEntrance] = React.useState([]);
   const [finalRegister, setFinalRegister] = React.useState([]);
   const [company, setCompany] = React.useState([]);
   const [store, setStore] = React.useState([]);
@@ -92,7 +92,6 @@ export default function Entrance(props) {
   const [kind, setKind] = React.useState([]);
   const [pharmGroub, setPharmGroub] = React.useState([]);
   const [entrancePosted, setEntrancePosted] = React.useState(false);
-  const [allMedician, setAllMedician] = React.useState([]);
   const [entranceThrough, setEntranceThrough] = React.useState([]);
   const [searched, setSearched] = React.useState(false);
   const [storeName, setStoreName] = React.useState("");
@@ -138,10 +137,6 @@ export default function Entrance(props) {
     if (props.trigger) {
       registerModalOpener();
     }
-    axios
-      .get(ENTRANCE_URL)
-      .then((result) => setEntrance(result.data))
-      .catch((e) => console.log(e));
 
     axios
       .get(FINAL_REGISTER_URL)
@@ -166,11 +161,6 @@ export default function Entrance(props) {
     axios
       .get(PAYMENT_METHOD_URL)
       .then((result) => setPaymentMethod(result.data))
-      .catch((e) => console.log(e));
-
-    axios
-      .get(MEDICIAN_URL)
-      .then((result) => setAllMedician(result.data))
       .catch((e) => console.log(e));
     axios
       .get(COUNTRY_URL)
@@ -226,7 +216,7 @@ export default function Entrance(props) {
     );
     EntranceForm.append(
       "company",
-      autoCompleteData.company != ""
+      autoCompleteData.company.id != undefined
         ? autoCompleteData.company.id
         : parseInt(exactEntrance.company)
     );
@@ -248,7 +238,7 @@ export default function Entrance(props) {
     );
     EntranceForm.append(
       "store",
-      autoCompleteData.store != ""
+      autoCompleteData.store.id != undefined
         ? autoCompleteData.store.id
         : exactEntrance.store
     );
@@ -258,6 +248,7 @@ export default function Entrance(props) {
         .patch(ENTRANCE_URL + exactEntrance.id + "/", EntranceForm)
         .then((e) => {
           toast.success("Data Updated Successfuly.");
+          setExatEntrance(e.data);
         })
         .catch((e) => {
           toast.error("Check Your Input And Try Again!");
@@ -272,47 +263,13 @@ export default function Entrance(props) {
           setEntrancePosted(true);
           toast.success("Entrance Saved Successfuly.");
           setExatEntrance(data.data);
-          axios
-            .get(ENTRANCE_URL)
-            .then((result) => {
-              setEntrance(result.data);
-              toast.info("Data Updated.");
-            })
-            .catch((e) => console.log(e));
+          setSearched(true);
         })
         .catch((e) => {
           console.log(e);
           toast.error("Check Your Input And Try Again!");
         });
     }
-    setSearched(true);
-  };
-
-  const EntranceThroughSubmit = (data) => {
-    const EntranceThrough = new FormData();
-    EntranceThrough.append("number_in_factor", data.number_in_factor);
-    EntranceThrough.append("medician", autoCompleteData.medician.id);
-    EntranceThrough.append("each_price_factor", data.each_price_factor);
-    EntranceThrough.append("each_quantity", data.each_quantity);
-    EntranceThrough.append("discount_money", data.discount_money);
-    EntranceThrough.append("discount_percent", data.discount_percent);
-    EntranceThrough.append("expire_date", data.expire_date);
-    EntranceThrough.append("interest_money", data.interest_money);
-    EntranceThrough.append("interest_percent", data.interest_percent);
-    EntranceThrough.append("bonus", data.bonus);
-    EntranceThrough.append("quantity_bonus", data.quantity_bonus);
-    EntranceThrough.append("entrance", exactEntrance.id);
-
-    axios
-      .post(ENTRANCE_THROUGH_URL, EntranceThrough)
-      .then((data) => {
-        setEntranceThrough((prev) => [...prev, data.data]);
-        toast.info("New Item Added.");
-      })
-      .catch((e) => {
-        console.log(e);
-        toast.error("Check Your Input And Try Again! ");
-      });
   };
 
   const SearchSubmit = (data) => {
@@ -339,16 +296,62 @@ export default function Entrance(props) {
       })
       .catch((e) => console.log(e));
   };
+
+  const EntranceThroughSubmit = (data) => {
+    const EntranceThrough = new FormData();
+    EntranceThrough.append("number_in_factor", data.number_in_factor);
+    EntranceThrough.append("medician", autoCompleteData.medician.id);
+    EntranceThrough.append("each_price_factor", data.each_price_factor);
+    EntranceThrough.append(
+      "each_quantity",
+      data.each_quantity != ""
+        ? data.each_quantity
+        : autoCompleteData.medician.no_pocket
+    );
+    EntranceThrough.append("discount_money", data.discount_money);
+    EntranceThrough.append("discount_percent", data.discount_percent);
+    EntranceThrough.append("expire_date", data.expire_date);
+    EntranceThrough.append("interest_money", data.interest_money);
+    EntranceThrough.append(
+      "interest_percent",
+      data.interest_percent != ""
+        ? data.interest_percent
+        : exactEntrance.total_interest
+    );
+    EntranceThrough.append("bonus", data.bonus);
+    EntranceThrough.append("quantity_bonus", data.quantity_bonus);
+    EntranceThrough.append("entrance", exactEntrance.id);
+
+    axios
+      .post(ENTRANCE_THROUGH_URL, EntranceThrough)
+      .then((data) => {
+        setEntranceThrough((prev) => [...prev, data.data]);
+        toast.info("New Item Added.");
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error("Check Your Input And Try Again! ");
+      });
+  };
   const ResetForm = () => {
     setExatEntrance({
       without_discount: false,
       description: "",
+    });
+    setAutoCompleteData({
+      company: "",
+      store: "",
+      medician: [],
     });
     setCompanyName("");
     setStoreName("");
     setEntranceThrough([]);
     setEntrancePosted(false);
     setSearched(false);
+    registerModalCloser();
+    registerModalOpener();
+    registerModalCloser();
+    registerModalOpener();
   };
   React.useEffect(() => {
     Reporting();
@@ -414,6 +417,20 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   }
 
+  function CurrencyUpdate() {
+    axios
+      .get(CURRENCY_URL)
+      .then((result) => setCurrency(result.data))
+      .catch((e) => console.log(e));
+  }
+
+  function PaymentUpdate() {
+    axios
+      .get(PAYMENT_METHOD_URL)
+      .then((result) => setPaymentMethod(result.data))
+      .catch((err) => console.log(e));
+  }
+
   React.useEffect(() => {
     store.map((store) =>
       store.id == exactEntrance.store ? setStoreName(store.name) : ""
@@ -427,7 +444,6 @@ export default function Entrance(props) {
       <div className="purchase-card" onClick={registerModalOpener}>
         <div>
           <h3>{props.title}</h3>
-          <div>{entrance.length ? entrance.length : <LoadingDNA />}</div>
         </div>
         <div>
           <i className={props.icon}></i>
@@ -476,26 +492,26 @@ export default function Entrance(props) {
               onSubmit={handleSubmit(EntranceSubmit)}
             >
               <label>وضعیت:</label>
-              
+
               <div className="final-register-box">
-              <select
-                {...register("final_register")}
-                placeholder={exactEntrance.final_register}
-                className="final-select"
-              >
-                <option value={exactEntrance.final_register} selected hidden>
-                  {finalRegister.map((final) =>
-                    final.id == exactEntrance.final_register ? final.name : ""
-                  )}
-                </option>
-                {finalRegister.map((final, key) => (
-                  <option key={final.id} value={final.id}>
-                    {final.name}
+                <select
+                  {...register("final_register")}
+                  placeholder={exactEntrance.final_register}
+                  className="final-select"
+                >
+                  <option value={exactEntrance.final_register} selected hidden>
+                    {finalRegister.map((final) =>
+                      final.id == exactEntrance.final_register ? final.name : ""
+                    )}
                   </option>
-                ))}
-              </select>
-              <FinalRegister Update={UpdateFinals}/>
-                </div>
+                  {finalRegister.map((final, key) => (
+                    <option key={final.id} value={final.id}>
+                      {final.name}
+                    </option>
+                  ))}
+                </select>
+                <FinalRegister Update={UpdateFinals} />
+              </div>
               <label>شرکت:</label>
               <div>
                 <ReactSearchAutocomplete
@@ -581,34 +597,37 @@ export default function Entrance(props) {
                 defaultValue={exactEntrance.recived_by}
               />
               <label>واحد پول:</label>
-              <div className="currency-input-box">
-              <select {...register("currency")}>
-                <option value={exactEntrance.currency} selected hidden>
-                  {currency.map((currency) =>
-                    currency.id == exactEntrance.currency ? currency.name : ""
+              <div>
+                <select {...register("currency")} className="currency-select">
+                  <option value={exactEntrance.currency} selected hidden>
+                    {currency.map((currency) =>
+                      currency.id == exactEntrance.currency ? currency.name : ""
                     )}
-                </option>
-                {currency.map((currency) => (
-                  <option key={currency.id} value={currency.id}>
-                    {currency.name}
                   </option>
-                ))}
-              </select>
-              <Currency />
-                </div>
+                  {currency.map((currency) => (
+                    <option key={currency.id} value={currency.id}>
+                      {currency.name}
+                    </option>
+                  ))}
+                </select>
+                <Currency Update={CurrencyUpdate} />
+              </div>
               <label>پرداخت:</label>
-              <select {...register("payment_method")}>
-                <option value={exactEntrance.payment_method} selected hidden>
-                  {paymentMethod.map((pay) =>
-                    pay.id == exactEntrance.payment_method ? pay.name : ""
-                  )}
-                </option>
-                {paymentMethod.map((payment) => (
-                  <option key={payment.id} value={payment.id}>
-                    {payment.name}
+              <div className="final-register-box">
+                <select {...register("payment_method")}>
+                  <option value={exactEntrance.payment_method} selected hidden>
+                    {paymentMethod.map((pay) =>
+                      pay.id == exactEntrance.payment_method ? pay.name : ""
+                    )}
                   </option>
-                ))}
-              </select>
+                  {paymentMethod.map((payment) => (
+                    <option key={payment.id} value={payment.id}>
+                      {payment.name}
+                    </option>
+                  ))}
+                </select>
+                <Payment Update={PaymentUpdate} />
+              </div>
               <label>فایده ٪:</label>
               <input
                 type="text"
@@ -660,7 +679,7 @@ export default function Entrance(props) {
               </label>
               <input
                 type="text"
-                value={autoCompleteData.medician.no_pocket}
+                placeholder={autoCompleteData.medician.no_pocket}
                 {...register("each_quantity")}
               />
               <label>تخفیف:</label>
@@ -706,7 +725,6 @@ export default function Entrance(props) {
                     through={through}
                     keyValue={through.id}
                     num={key}
-                    allMedician={allMedician}
                     kind={kind}
                     country={country}
                     pharmGroub={pharmGroub}

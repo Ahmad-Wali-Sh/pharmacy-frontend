@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
 import Company from "../Company/Company";
 import Store from "../Store/Store";
-import SelectMedician from "../Entrance/SelectMedician"
+import SelectMedician from "../Entrance/SelectMedician";
 import OutranceThroughEntry from "./OutranceThroughEntry";
 
 export default function Outrance(props) {
@@ -73,7 +73,6 @@ export default function Outrance(props) {
   const CURRENCY_URL = import.meta.env.VITE_CURRENCY;
   const PAYMENT_METHOD_URL = import.meta.env.VITE_PAYMENT_METHOD;
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_OUTRANCE_THROUGH;
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const KIND_URL = import.meta.env.VITE_KIND;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
@@ -90,7 +89,6 @@ export default function Outrance(props) {
   const [kind, setKind] = React.useState([]);
   const [pharmGroub, setPharmGroub] = React.useState([]);
   const [entrancePosted, setEntrancePosted] = React.useState(false);
-  const [allMedician, setAllMedician] = React.useState([]);
   const [entranceThrough, setEntranceThrough] = React.useState([]);
   const [searched, setSearched] = React.useState(false);
   const [storeName, setStoreName] = React.useState("");
@@ -163,10 +161,6 @@ export default function Outrance(props) {
       .then((result) => setPaymentMethod(result.data))
       .catch((e) => console.log(e));
 
-    axios
-      .get(MEDICIAN_URL)
-      .then((result) => setAllMedician(result.data))
-      .catch((e) => console.log(e));
     axios
       .get(COUNTRY_URL)
       .then((result) => setCountry(result.data))
@@ -317,14 +311,15 @@ export default function Outrance(props) {
     });
     setEntranceThrough([]);
     setSearched(true);
-    axios.get(ENTRANCE_URL + data.entrance_search + "/")
-          .then((e) => {
-           setExatEntrance(e.data);
-          })
-          .catch((err)=> {
-            console.log(err)
-            toast.error("Check Your Input And Try Again!");
-          })
+    axios
+      .get(ENTRANCE_URL + data.entrance_search + "/")
+      .then((e) => {
+        setExatEntrance(e.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Check Your Input And Try Again!");
+      });
 
     axios
       .get(ENTRANCE_THROUGH_URL + "?outrance=" + data.entrance_search)
@@ -388,7 +383,7 @@ export default function Outrance(props) {
       .catch((e) => console.log(e));
   }
 
-  function UpdateStores () {
+  function UpdateStores() {
     axios
       .get(STORE_URL)
       .then((result) => setStore(result.data))
@@ -490,17 +485,16 @@ export default function Outrance(props) {
               </div>
               <label>انبار:</label>
               <div>
-
-              <ReactSearchAutocomplete
-                items={store}
-                styling={AutoCompleteStyle}
-                onSelect={(item) =>
-                  setAutoCompleteData({ ...autoCompleteData, store: item })
-                }
-                showClear={false}
-                inputDebounce="10"
-                placeholder={storeName}
-                showIcon={false}
+                <ReactSearchAutocomplete
+                  items={store}
+                  styling={AutoCompleteStyle}
+                  onSelect={(item) =>
+                    setAutoCompleteData({ ...autoCompleteData, store: item })
+                  }
+                  showClear={false}
+                  inputDebounce="10"
+                  placeholder={storeName}
+                  showIcon={false}
                 />
                 <Store button={2} Update={UpdateStores} />
               </div>
@@ -680,7 +674,6 @@ export default function Outrance(props) {
                     through={through}
                     keyValue={through.id}
                     num={key}
-                    allMedician={allMedician}
                     kind={kind}
                     country={country}
                     pharmGroub={pharmGroub}
