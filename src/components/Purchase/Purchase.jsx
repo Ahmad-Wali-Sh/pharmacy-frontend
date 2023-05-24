@@ -12,7 +12,6 @@ function Purchase() {
   const [entTrigger, setEntTrigger] = React.useState(0);
 
   const handleKeys = (event) => {
-    console.log(event.key);
     event.keyCode === 113 && setEntTrigger((prev) => prev + 1);
   };
 
