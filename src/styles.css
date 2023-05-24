@@ -1577,6 +1577,9 @@ input[type="date"]:disabled {
   grid-template-rows: 33% 7% 56%;
   gap: 0.4rem;
 }
+.entrance-buttons > input:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+}
 
 .medician-list-filter-box {
   width: 100%;
