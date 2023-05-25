@@ -1581,6 +1581,11 @@ input[type="date"]:disabled {
   box-shadow: -4px -4px 4px var(--color-two);
 }
 
+.datapicker-class {
+  background-color: #533855;
+  color: yellow
+}
+
 .medician-list-filter-box {
   width: 100%;
   background-color: var(--color-sex);

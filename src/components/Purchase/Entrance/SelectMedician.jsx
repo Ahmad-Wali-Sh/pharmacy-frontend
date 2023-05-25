@@ -16,7 +16,7 @@ export default function SelectMedician({
   const [selectedMedician, setSelectedMedician] = React.useState("");
 
   function registerModalOpener() {
-    tabFormulate()
+   {tabFormulate != undefined && tabFormulate()}
     setRegisterModalOpen(true);
   }
   function registerModalCloser() {
