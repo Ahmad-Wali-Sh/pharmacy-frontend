@@ -2,7 +2,6 @@ import React from "react";
 import Modal from "react-modal";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import axios from "axios";
-import LoadingDNA from "../../PageComponents/LoadingDNA";
 import MedicianEntrance from "../../Medician/MedicianEntrance/MedicianEntrance";
 
 export default function SelectMedician({
@@ -10,16 +9,27 @@ export default function SelectMedician({
   country,
   pharmGroub,
   selectAutoCompleteData,
+  trigger, 
+  tabFormulate
 }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [selectedMedician, setSelectedMedician] = React.useState("");
 
   function registerModalOpener() {
+   {tabFormulate != undefined && tabFormulate()}
     setRegisterModalOpen(true);
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
   }
+  
+  
+  React.useEffect(()=> {
+    if (trigger != 0){
+      registerModalOpener()
+    }
+    
+  },[trigger])
 
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
 
@@ -108,6 +118,12 @@ export default function SelectMedician({
     );
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter'){
+      registerModalOpener()
+    }
+  }
+
   const AutoCompleteStyle = {
     height: "1.5rem",
     borderRadius: "1rem",
@@ -126,7 +142,7 @@ export default function SelectMedician({
   return (
     <>
       <div className="select-medician">
-        <div className="select-medician-button" onClick={registerModalOpener}>
+        <div className="select-medician-button" onClick={registerModalOpener} onKeyDown={handleKeyDown} tabIndex={0}>
           انتخاب دارو
         </div>
         <div className="selected-medician-show">
@@ -182,6 +198,7 @@ export default function SelectMedician({
                 }}
                 onSelect={(item) => {
                   selectAutoCompleteData(item);
+                  
                   registerModalCloser();
                   setSelectedMedician(item);
                 }}

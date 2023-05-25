@@ -112,7 +112,7 @@ function Company({ button, title, icon, Update }) {
           <div className="company">
             <div className="company-form">
               <label>نام شرکت:</label>
-              <input type="text" {...register("name")} />
+              <input type="text" {...register("name")} required/>
               <div></div>
               <div></div>
               <label>رئیس:</label>
