@@ -1746,6 +1746,7 @@ input[type="date"]:disabled {
 .prescription-list-map-box {
   background-color: var(--color-sex);
   border-radius: 1rem;
+  overflow: scroll;
 }
 
 .prescription-list-header {
