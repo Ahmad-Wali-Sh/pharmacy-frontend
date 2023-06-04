@@ -79,7 +79,6 @@ export default function Entrance(props) {
   const CURRENCY_URL = import.meta.env.VITE_CURRENCY;
   const PAYMENT_METHOD_URL = import.meta.env.VITE_PAYMENT_METHOD;
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const KIND_URL = import.meta.env.VITE_KIND;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
