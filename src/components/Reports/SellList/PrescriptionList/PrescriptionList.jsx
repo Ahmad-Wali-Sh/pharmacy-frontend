@@ -6,6 +6,7 @@ import PrescriptionListMap from "./PrescriptionListMap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FixedSizeList as List } from "react-window";
+import fileDownload from "js-file-download";
 
 function PrescriptionList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -65,6 +66,15 @@ function PrescriptionList({ Closer }) {
       })
       .catch((err) => console.log(err));
   };
+  
+  const resetHandle = () => {
+    setPrescriptionList([]);
+    setDepartment([])
+  }
+
+  const ExcelOutput = () => {
+    fileDownload()
+  }
 
   return (
     <>
@@ -108,8 +118,8 @@ function PrescriptionList({ Closer }) {
             <label>داکتر:</label>
             <input type="text" {...register("doctor")} />
             <div className="prescription-list-filter-buttons">
-              <input type="button" value="اکسل" />
-              <input type="button" value="ریسیت" />
+              <input type="button" value="اکسل" onClick={ExcelOutput}/>
+              <input type="button" value="ریسیت" onClick={resetHandle} />
               <input
                 type="button"
                 value="جستوجو"

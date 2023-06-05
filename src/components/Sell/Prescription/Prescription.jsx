@@ -249,8 +249,8 @@ export default function Prescription(props) {
   };
 
   React.useEffect(() => {
-    if (props.button == 1) {
-      ResetForm();
+    ResetForm();
+    if (props.button == 1 && registerModalOpen) {
       axios
         .get(
           PRESCRIPTION_URL +
@@ -259,7 +259,7 @@ export default function Prescription(props) {
         )
         .then((res) => {
           setPrescription(res.data[0] ? res.data[0] : []);
-          console.log(res.data);
+          console.log(res.data)
           setSubmited(true);
           {
             res.data[0] ? toast.success("Search Was Successful.") : "";
@@ -268,7 +268,6 @@ export default function Prescription(props) {
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
             .then((res) => {
               setPrescriptionThrough(res.data);
-              console.log(res);
             })
             .catch((err) => console.log(err));
         })
@@ -277,10 +276,12 @@ export default function Prescription(props) {
           toast.error("Check Your Input And Try Again!");
         });
     }
-  }, []);
+  }, [registerModalOpen]);
+
+  console.log(prescription)
 
   const ResetForm = () => {
-    setPrescription("");
+    setPrescription([]);
     setSubmited(false);
     setPrescriptionThrough([]);
     setPatientName("");
@@ -326,7 +327,6 @@ export default function Prescription(props) {
     PrescriptionForm.append("zakat", prescription.zakat);
     PrescriptionForm.append("khairat", prescription.khairat);
 
-    console.log(PrescriptionForm);
     axios
       .post(PRESCRIPTION_URL, PrescriptionForm)
       .then((res) => {
@@ -371,7 +371,7 @@ export default function Prescription(props) {
           <i class="fa-solid fa-circle-info"></i>
         </div>
       )}
-      <Modal
+      {registerModalOpen == true && <Modal
         style={ModalStyles}
         isOpen={registerModalOpen}
         onRequestClose={registerModalCloser}
@@ -534,12 +534,19 @@ export default function Prescription(props) {
             <form className="prescription-through">
               <label>قلم:</label>
               <div className="entrance-through-medician-input">
-                <SelectMedician
+                {props.button != 1 && <SelectMedician
                   kind={kind}
                   country={country}
                   pharmGroub={pharmGroub}
                   selectAutoCompleteData={AutoCompleteHandle}
-                />
+                />}
+                {props.button == 1 && <SelectMedician
+                  kind={kind}
+                  country={country}
+                  pharmGroub={pharmGroub}
+                  selectAutoCompleteData={AutoCompleteHandle}
+                  trigger={0}
+                />}
               </div>
               <label>تعداد:</label>
               <input type="text" {...register("quantity")} />
@@ -585,7 +592,7 @@ export default function Prescription(props) {
             </form>
           </div>
         </div>
-      </Modal>
+      </Modal>}
     </>
   );
 }

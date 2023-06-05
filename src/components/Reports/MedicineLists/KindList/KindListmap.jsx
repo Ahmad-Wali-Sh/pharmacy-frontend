@@ -15,7 +15,6 @@ function KindListmap({ kind, num, Update }) {
   const KIND_URL = import.meta.env.VITE_KIND;
 
   const UpdateKindList = (data) => {
-    console.log(file);
     const KindForm = new FormData();
     KindForm.append(
       "name_english",
