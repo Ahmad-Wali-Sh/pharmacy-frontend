@@ -14,6 +14,8 @@ import Payment from "../Payment/Payment";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import {DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple} from 'react-hichestan-datetimepicker';
+
 
 export default function Entrance(props) {
   /* Modal */
@@ -182,23 +184,9 @@ export default function Entrance(props) {
   /* Handlers and Submiting */
 
 
-  const [datePickerValue, setDatePickerValue] = React.useState(new Date())
-  const [datePickerState, setDatePickerStatus] = React.useState(false)
-  console.log(datePickerValue)
+  const [datePickerValue, setDatePickerValue] = React.useState(new Date().toISOString())
 
-  const DateKeyDownsHandle = (e) => {
-    if (e.key === 'Enter') {
-      console.log('nothing')
-      e.preventDefault()
-    }
-  } 
 
-  const DatePickerHandle = (value) => {
-    let Miladi = value.toDate().toISOString().slice(0,10)
-    console.log(Miladi)
-    const date = new DateObject(Miladi).convert(persian, persian_fa)
-    setDatePickerValue(date.format('YYYY-MM-DD'))
-  }
 
   const EntranceSubmit = (data) => {
     const EntranceForm = new FormData();
@@ -389,11 +377,15 @@ export default function Entrance(props) {
   const Reporting = () => {
     const totalInterest = () => {
       let result = 0;
-      const total = entranceThrough.map(
-        (through) => (result = +(through.number_in_factor * through.each_price))
+      entranceThrough.map(
+        (through) => {
+          result += (through.total_interest)
+          console.log(result)
+          return result;
+        } 
       );
-      total.forEach((item) => (result += item));
-      return result;
+      return result
+
     };
 
     const totalPurchase = () => {
@@ -403,12 +395,17 @@ export default function Entrance(props) {
       return result;
     };
 
+    const grandTotal = () => {
+      
+    }
+
     setReport({
       total: 0,
       total_interest: totalInterest(),
       number: entranceThrough.length,
       sell_total: 0,
       purchase_total: totalPurchase(),
+      grandTotal: totalInterest() + totalPurchase()
     });
   };
 
@@ -508,16 +505,12 @@ export default function Entrance(props) {
                   <label>{report.purchase_total}</label>
                 </div>
                 <div className="entrance-report-map-box">
-                  <label>مجموع فروش </label>
-                  <label>{report.sell_total}</label>
-                </div>
-                <div className="entrance-report-map-box">
-                  <label>پیشبینی فایده </label>
+                  <label>مجموع فایده </label>
                   <label>{report.total_interest}</label>
                 </div>
                 <div className="entrance-report-map-box">
                   <label>مجموع</label>
-                  <label>{report.total}</label>
+                  <label>{report.grandTotal}</label>
                 </div>
               </div>
             </div>
@@ -581,7 +574,7 @@ export default function Entrance(props) {
               <label>تاریخ:</label>
 
               
-                  <DatePicker
+                  {/* <DatePicker
                     calendar={persian}
                     locale={persian_fa}
                     className="datapicker-class"
@@ -598,7 +591,8 @@ export default function Entrance(props) {
                     onOpen={() => setDatePickerStatus(false)}
                     onBlurCapture={() => setDatePickerStatus(false)}
                     onKeyDown={DateKeyDownsHandle}
-                    />
+                    /> */}
+                    <DateInputSimple onChange={(res) => setDatePickerValue(res.target.value)} value={datePickerValue}/>
               <label>شماره:</label>
               <input
                 type="text"
@@ -814,7 +808,6 @@ export default function Entrance(props) {
 
             <form className="entrance-medician">
               <div className="entrance-medician-header">
-                <label></label>
                 <label>No</label>
                 <label>قلم</label>
                 <label>تعداد</label>
@@ -827,6 +820,9 @@ export default function Entrance(props) {
                 <label>فایده %</label>
                 <label>بونوس </label>
                 <label>بونوس %</label>
+                <label>جمع خرید</label>
+                <label>جمع فایده</label>
+                <label>مجموع</label>
                 <label>ذخیره</label>
               </div>
               <div className="entrance-map">

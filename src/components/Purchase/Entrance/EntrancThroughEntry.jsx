@@ -102,7 +102,7 @@ function EntrancThroughEntry({
         </div>
         <input
           type="text"
-          defaultValue={through.number_in_factor}
+          defaultValue={through.register_quantity}
           {...register("number_in_factor")}
         />
         <input
@@ -156,6 +156,9 @@ function EntrancThroughEntry({
           defaultValue={through.quantity_bonus}
           {...register("quantity_bonus")}
         />
+        <h4>{through.total_purchaseـafghani}</h4>
+        <h4>{through.total_interest}</h4>
+        <h4>{through.total_sell}</h4>
         <div className="medician-map-buttons">
           <div onClick={handleSubmit(MedicianDelete)}>
             <i className="fa-solid fa-trash"></i>

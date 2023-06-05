@@ -169,21 +169,21 @@ function Traz({ Closer }) {
                 <div className="traz-map">
                     <h4>{key + 1}</h4>
                     <h4>{traz.type == "EntranceThrough" ? "ورودی" : ""}</h4>
-                    <h4>{traz.type == "EntranceThrough" ? traz.id : ""}</h4>
+                    <h4>{traz.type == "EntranceThrough" ? traz.entrance : ""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.register_quantity : ""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.each_price : ""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.expire_date :""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.company : ""}</h4>
-                    <h4>{traz.type == "EntranceThrough" ? traz.user : ""}</h4>
+                    <h4>{"Ahmad"}</h4>
                     <h4>{traz.timestamp.substring(0,10)}</h4>
                     <h4>{traz.timestamp.substring(11, 16)}</h4>
                     <h4>{traz.type == "OutranceThrough" ? "خروجی" : traz.type == "PrescriptionThrough" ? "خروجی" : ""}</h4>
-                    <h4>{traz.type == "OutranceThrough" ? traz.id : ""}</h4>
+                    <h4>{traz.type == "OutranceThrough" ? traz.outrance : traz.type == "PrescriptionThrough" ? traz.prescription : ""}</h4>
                     <h4>{traz.type == "OutranceThrough" ? traz.register_quantity : traz.type == "PrescriptionThrough" ? traz.quantity : "" }</h4>
                     <h4>{traz.type == "OutranceThrough" ? traz.each_price : traz.type == "PrescriptionThrough" ? traz.each_price : ""}</h4>
                     <h4></h4>
                     <h4></h4>
-                    <h4></h4>
+                    <h4>{traz.type == "OutranceThrough" ? traz.outrance : traz.type == "PrescriptionThrough" ? traz.prescription : ""}</h4>
                 </div>
               ))}
           </div>
