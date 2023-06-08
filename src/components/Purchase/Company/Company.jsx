@@ -36,14 +36,14 @@ function Company({ button, title, icon, Update }) {
 
   const COMPANIES_URL = import.meta.env.VITE_PHARM_COMPANIES;
 
-  const [companyLength, setCompanyLength] = React.useState([])
+  const [companyLength, setCompanyLength] = React.useState([]);
 
-  React.useEffect(()=> {
-      axios
-          .get(COMPANIES_URL)
-          .then((res) => setCompanyLength(res.data.length))
-          .catch((err) => console.log(err))
-  },[])
+  React.useEffect(() => {
+    axios
+      .get(COMPANIES_URL)
+      .then((res) => setCompanyLength(res.data.length))
+      .catch((err) => console.log(err));
+  }, []);
 
   const SubmitForm = (data) => {
     const CompanyForm = new FormData();
@@ -93,8 +93,13 @@ function Company({ button, title, icon, Update }) {
       {button == 2 && (
         <div className="plus-box" onClick={registerModalOpener}>
           <div className="plus">
-          <i class="fa-solid fa-plus"></i>
+            <i class="fa-solid fa-plus"></i>
           </div>
+        </div>
+      )}
+      {button == 3 && (
+        <div onClick={registerModalOpener}>
+          <i class="fa-solid fa-circle-info"></i>
         </div>
       )}
       <Modal
@@ -112,7 +117,7 @@ function Company({ button, title, icon, Update }) {
           <div className="company">
             <div className="company-form">
               <label>نام شرکت:</label>
-              <input type="text" {...register("name")} required/>
+              <input type="text" {...register("name")} required />
               <div></div>
               <div></div>
               <label>رئیس:</label>

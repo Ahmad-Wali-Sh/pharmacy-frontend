@@ -14,8 +14,12 @@ import Payment from "../Payment/Payment";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import {DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple} from 'react-hichestan-datetimepicker';
-
+import {
+  DateTimeInput,
+  DateTimeInputSimple,
+  DateInput,
+  DateInputSimple,
+} from "react-hichestan-datetimepicker";
 
 export default function Entrance(props) {
   /* Modal */
@@ -26,7 +30,7 @@ export default function Entrance(props) {
       border: "none",
       borderRadius: "1rem",
       overflow: "hidden",
-      padding: "0px", 
+      padding: "0px",
       margin: "0px",
     },
     overlay: {
@@ -183,10 +187,11 @@ export default function Entrance(props) {
 
   /* Handlers and Submiting */
 
-
-  const [datePickerValue, setDatePickerValue] = React.useState(new Date().toISOString())
-
-
+  const [datePickerValue, setDatePickerValue] = React.useState(
+    new Date().toISOString()
+  );
+  const [expireDate, setExpireDate] = React.useState("");
+  console.log(expireDate);
 
   const EntranceSubmit = (data) => {
     const EntranceForm = new FormData();
@@ -290,14 +295,14 @@ export default function Entrance(props) {
     setEntranceThrough([]);
     setEntrancePosted(false);
     setSearched(false);
-    setDatePickerValue('')
+    setDatePickerValue("");
 
     axios
       .get(ENTRANCE_URL + data.entrance_search + "/")
       .then((e) => {
         setExatEntrance(e.data);
         setSearched(true);
-        setDatePickerValue(e.data.factor_date)
+        setDatePickerValue(e.data.factor_date);
       })
       .catch((err) => {
         console.log(err);
@@ -325,7 +330,7 @@ export default function Entrance(props) {
     );
     EntranceThrough.append("discount_money", data.discount_money);
     EntranceThrough.append("discount_percent", data.discount_percent);
-    EntranceThrough.append("expire_date", data.expire_date);
+    EntranceThrough.append("expire_date", expireDate);
     EntranceThrough.append("interest_money", data.interest_money);
     EntranceThrough.append(
       "interest_percent",
@@ -366,7 +371,7 @@ export default function Entrance(props) {
     setSearched(false);
     registerModalCloser();
     registerModalOpener();
-    setDatePickerValue('')
+    setDatePickerValue("");
 
     document.getElementsByClassName("entrance--inputs").reset();
   };
@@ -377,15 +382,12 @@ export default function Entrance(props) {
   const Reporting = () => {
     const totalInterest = () => {
       let result = 0;
-      entranceThrough.map(
-        (through) => {
-          result += (through.total_interest)
-          console.log(result)
-          return result;
-        } 
-      );
-      return result
-
+      entranceThrough.map((through) => {
+        result += through.total_interest;
+        console.log(result);
+        return result;
+      });
+      return result;
     };
 
     const totalPurchase = () => {
@@ -395,9 +397,7 @@ export default function Entrance(props) {
       return result;
     };
 
-    const grandTotal = () => {
-      
-    }
+    const grandTotal = () => {};
 
     setReport({
       total: 0,
@@ -405,7 +405,7 @@ export default function Entrance(props) {
       number: entranceThrough.length,
       sell_total: 0,
       purchase_total: totalPurchase(),
-      grandTotal: totalInterest() + totalPurchase()
+      grandTotal: totalInterest() + totalPurchase(),
     });
   };
 
@@ -470,111 +470,141 @@ export default function Entrance(props) {
     document.getElementById("number-in-factor-input").focus();
   };
 
+  React.useEffect(() => {
+    if (props.button == 1 && registerModalOpen) {
+      axios
+        .get(ENTRANCE_URL + props.entrance.id)
+        .then((res) => {
+          setExatEntrance(res.data);
+          setSearched(true);
+          axios
+            .get(ENTRANCE_THROUGH_URL + "?entrance=" + res.data.id)
+            .then((res) => setEntranceThrough(res.data))
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [registerModalOpen]);
+
   return (
     <>
-      <div className="purchase-card" onClick={registerModalOpener}>
-        <div>
-          <h3>{props.title}</h3>
-        </div>
-        <div>
-          <i className={props.icon}></i>
-        </div>
-      </div>
-      <Modal
-        style={ModalStyles}
-        isOpen={registerModalOpen}
-        onRequestClose={registerModalCloser}
-      >
-        <div className="modal">
-          <div className="modal-header">
-            <h3>ثبت ورودی</h3>
-            <div className="modal-close-btn" onClick={registerModalCloser}>
-              <i className="fa-solid fa-xmark"></i>
-            </div>
+      {!props.button && (
+        <div className="purchase-card" onClick={registerModalOpener}>
+          <div>
+            <h3>{props.title}</h3>
           </div>
-          <div className="entrance-box">
-            <div className="entrance-report">
-              <div className="entrance-report-header">راپور</div>
-              <div className="entrance-report-body">
-                <div className="entrance-report-map-box">
-                  <label>تعداد اقلام</label>
-                  <label>{report.number}</label>
-                </div>
-                <div className="entrance-report-map-box">
-                  <label>مجموع خرید </label>
-                  <label>{report.purchase_total}</label>
-                </div>
-                <div className="entrance-report-map-box">
-                  <label>مجموع فایده </label>
-                  <label>{report.total_interest}</label>
-                </div>
-                <div className="entrance-report-map-box">
-                  <label>مجموع</label>
-                  <label>{report.grandTotal}</label>
-                </div>
+          <div>
+            <i className={props.icon}></i>
+          </div>
+        </div>
+      )}
+      {props.button && props.button == 1 && (
+        <div onClick={registerModalOpener}>
+          <i class="fa-solid fa-circle-info"></i>
+        </div>
+      )}
+      {registerModalOpen == true && (
+        <Modal
+          style={ModalStyles}
+          isOpen={registerModalOpen}
+          onRequestClose={registerModalCloser}
+        >
+          <div className="modal">
+            <div className="modal-header">
+              <h3>ثبت ورودی</h3>
+              <div className="modal-close-btn" onClick={registerModalCloser}>
+                <i className="fa-solid fa-xmark"></i>
               </div>
             </div>
-            <form
-              className="entrance-entrance"
-            >
-              <label>وضعیت:</label>
+            <div className="entrance-box">
+              <div className="entrance-report">
+                <div className="entrance-report-header">راپور</div>
+                <div className="entrance-report-body">
+                  <div className="entrance-report-map-box">
+                    <label>تعداد اقلام</label>
+                    <label>{report.number}</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>مجموع خرید </label>
+                    <label>{report.purchase_total}</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>مجموع فایده </label>
+                    <label>{report.total_interest}</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>مجموع</label>
+                    <label>{report.grandTotal}</label>
+                  </div>
+                </div>
+              </div>
+              <form className="entrance-entrance">
+                <label>وضعیت:</label>
 
-              <div className="final-register-box">
-                <select
-                  {...register("final_register")}
-                  placeholder={exactEntrance.final_register}
-                  className="final-select entrance--inputs"
-                  tabIndex={0}
-                >
-                  <option value={exactEntrance.final_register} selected hidden>
-                    {finalRegister.map((final) =>
-                      final.id == exactEntrance.final_register ? final.name : ""
-                    )}
-                  </option>
-                  {finalRegister.map((final, key) => (
-                    <option key={final.id} value={final.id}>
-                      {final.name}
+                <div className="final-register-box">
+                  <select
+                    {...register("final_register")}
+                    placeholder={exactEntrance.final_register}
+                    className="final-select entrance--inputs"
+                    tabIndex={0}
+                  >
+                    <option
+                      value={exactEntrance.final_register}
+                      selected
+                      hidden
+                    >
+                      {finalRegister.map((final) =>
+                        final.id == exactEntrance.final_register
+                          ? final.name
+                          : ""
+                      )}
                     </option>
-                  ))}
-                </select>
-                <FinalRegister Update={UpdateFinals} />
-              </div>
-              <label>شرکت:</label>
-              <div>
-                <ReactSearchAutocomplete
-                  items={company}
-                  onSelect={(item) =>
-                    setAutoCompleteData({ ...autoCompleteData, company: item })
-                  }
-                  styling={AutoCompleteStyle}
-                  showClear={false}
-                  inputDebounce="10"
-                  placeholder={companyName}
-                  showIcon={false}
-                  className="autoComplete entrance--inputs"
-                />
-                <Company button={2} Update={UpdateCompanies} />
-              </div>
-              <label>انبار:</label>
-              <div>
-                <ReactSearchAutocomplete
-                  items={store}
-                  styling={AutoCompleteStyle}
-                  onSelect={(item) =>
-                    setAutoCompleteData({ ...autoCompleteData, store: item })
-                  }
-                  showClear={false}
-                  inputDebounce="10"
-                  placeholder={storeName}
-                  showIcon={false}
-                  className="entrance--inputs"
-                />
-                <Store button={2} Update={UpdateStores} />
-              </div>
-              <label>تاریخ:</label>
+                    {finalRegister.map((final, key) => (
+                      <option key={final.id} value={final.id}>
+                        {final.name}
+                      </option>
+                    ))}
+                  </select>
+                  <FinalRegister Update={UpdateFinals} />
+                </div>
+                <label>شرکت:</label>
+                <div>
+                  <ReactSearchAutocomplete
+                    items={company}
+                    onSelect={(item) =>
+                      setAutoCompleteData({
+                        ...autoCompleteData,
+                        company: item,
+                      })
+                    }
+                    styling={AutoCompleteStyle}
+                    showClear={false}
+                    inputDebounce="10"
+                    placeholder={companyName}
+                    showIcon={false}
+                    className="autoComplete entrance--inputs"
+                  />
+                  <Company button={2} Update={UpdateCompanies} />
+                </div>
+                <label>انبار:</label>
+                <div>
+                  <ReactSearchAutocomplete
+                    items={store}
+                    styling={AutoCompleteStyle}
+                    onSelect={(item) =>
+                      setAutoCompleteData({ ...autoCompleteData, store: item })
+                    }
+                    showClear={false}
+                    inputDebounce="10"
+                    placeholder={storeName}
+                    showIcon={false}
+                    className="entrance--inputs"
+                  />
+                  <Store button={2} Update={UpdateStores} />
+                </div>
+                <label>تاریخ:</label>
 
-              
-                  {/* <DatePicker
+                {/* <DatePicker
                     calendar={persian}
                     locale={persian_fa}
                     className="datapicker-class"
@@ -592,257 +622,274 @@ export default function Entrance(props) {
                     onBlurCapture={() => setDatePickerStatus(false)}
                     onKeyDown={DateKeyDownsHandle}
                     /> */}
-                    <DateInputSimple onChange={(res) => setDatePickerValue(res.target.value)} value={datePickerValue}/>
-              <label>شماره:</label>
-              <input
-                type="text"
-                {...register("factor_number")}
-                defaultValue={exactEntrance.factor_number}
-                className="entrance--inputs"
-              />
-
-              <label>ش.حواله:</label>
-              <div className="flex">
+                <DateInputSimple
+                  onChange={(res) => setDatePickerValue(res.target.value)}
+                  value={datePickerValue}
+                />
+                <label>شماره:</label>
                 <input
-                  value={exactEntrance.id}
                   type="text"
-                  {...register("entrance_id")}
-                  disabled
+                  {...register("factor_number")}
+                  defaultValue={exactEntrance.factor_number}
+                  className="entrance--inputs"
                 />
-                <form
-                  className="search-form"
-                  onSubmit={handleSubmit(SearchSubmit)}
-                >
+
+                <label>ش.حواله:</label>
+                <div className="flex">
                   <input
+                    value={exactEntrance.id}
                     type="text"
-                    {...register("entrance_search")}
-                    tabIndex={-1}
+                    {...register("entrance_id")}
+                    disabled
                   />
-                  <div
-                    className="search-button-box"
-                    onClick={handleSubmit(SearchSubmit)}
+                  <form
+                    className="search-form"
+                    onSubmit={handleSubmit(SearchSubmit)}
                   >
-                    <i class="fa-brands fa-searchengin"></i>
-                  </div>
-                </form>
-              </div>
+                    <input
+                      type="text"
+                      {...register("entrance_search")}
+                      tabIndex={-1}
+                    />
+                    <div
+                      className="search-button-box"
+                      onClick={handleSubmit(SearchSubmit)}
+                    >
+                      <i class="fa-brands fa-searchengin"></i>
+                    </div>
+                  </form>
+                </div>
 
-              <label>
-                <h5>تحویل دهنده:</h5>
-              </label>
-              <input
-                type="text"
-                {...register("deliver_by")}
-                defaultValue={exactEntrance.deliver_by}
-                className="entrance--inputs"
-              />
-              <label>
-                <h5>تحویل گیرنده:</h5>
-              </label>
-              <input
-                type="text"
-                {...register("recived_by")}
-                defaultValue={exactEntrance.recived_by}
-                className="entrance--inputs"
-              />
-              <label>واحد پول:</label>
-              <div>
-                <select
-                  {...register("currency")}
-                  className="currency-select entrance--inputs"
-                >
-                  <option value={exactEntrance.currency} selected hidden>
-                    {currency.map((currency) =>
-                      currency.id == exactEntrance.currency ? currency.name : ""
-                    )}
-                  </option>
-                  {currency.map((currency) => (
-                    <option key={currency.id} value={currency.id}>
-                      {currency.name}
-                    </option>
-                  ))}
-                </select>
-                <Currency Update={CurrencyUpdate} />
-              </div>
-              <label>پرداخت:</label>
-              <div className="final-register-box">
-                <select
-                  {...register("payment_method")}
-                  className="entrance--inputs"
-                >
-                  <option value={exactEntrance.payment_method} selected hidden>
-                    {paymentMethod.map((pay) =>
-                      pay.id == exactEntrance.payment_method ? pay.name : ""
-                    )}
-                  </option>
-                  {paymentMethod.map((payment) => (
-                    <option key={payment.id} value={payment.id}>
-                      {payment.name}
-                    </option>
-                  ))}
-                </select>
-                <Payment Update={PaymentUpdate} />
-              </div>
-              <label>فایده ٪:</label>
-              <input
-                type="text"
-                {...register("total_interest")}
-                defaultValue={exactEntrance.total_interest}
-                className="entrance--inputs"
-              />
-              <label>
-                <h5>بدون تخفیف:</h5>
-              </label>
-              <input
-                type="checkbox"
-                className="checkbox-input entrance--inputs"
-                defaultChecked={exactEntrance.without_discount}
-                {...register("without_discount")}
-              />
-              <label>توضیحات:</label>
-              <textarea
-                {...register("description")}
-                defaultValue={exactEntrance.description}
-                className="entrance--inputs"
-              ></textarea>
-              <div></div>
-              <div className="entrance-buttons">
+                <label>
+                  <h5>تحویل دهنده:</h5>
+                </label>
                 <input
-                  type="reset"
-                  value="Reset"
-                  onClick={ResetForm}
-                  tabIndex={-1}
-                ></input>
-                <input
-                  type="submit"
-                  value={searched ? "Update" : "Submit"}
+                  type="text"
+                  {...register("deliver_by")}
+                  defaultValue={exactEntrance.deliver_by}
                   className="entrance--inputs"
-                  onClick={handleSubmit(EntranceSubmit)}
-                ></input>
-              </div>
-            </form>
-            <form
-              className="entrance-through"
-              onSubmit={handleSubmit(EntranceThroughSubmit)}
-            >
-              <label>قلم:</label>
-              <div className="entrance-through-medician-input">
-                <SelectMedician
-                  kind={kind}
-                  country={country}
-                  pharmGroub={pharmGroub}
-                  selectAutoCompleteData={AutoCompleteHandle}
-                  trigger={selectTrigger}
-                  tabFormulate={tabFormulate}
                 />
-              </div>
-              <label>تعداد:</label>
-              <input
-                type="text"
-                {...register("number_in_factor")}
-                id="number-in-factor-input"
-                className="entrance--inputs"
-              />
-              <label>قیمت فی:</label>
-              <input
-                type="text"
-                {...register("each_price_factor")}
-                className="entrance--inputs"
-              />
-              <label>
-                <h5> ت.د.پاکت:</h5>
-              </label>
-              <input
-                type="text"
-                placeholder={autoCompleteData.medician.no_pocket}
-                {...register("each_quantity")}
-                className="entrance--inputs"
-              />
-              <label>تخفیف:</label>
-              <input
-                type="text"
-                {...register("discount_money")}
-                className="entrance--inputs"
-              />
-              <label>تخفیف ٪:</label>
-              <input
-                type="text"
-                {...register("discount_percent")}
-                className="entrance--inputs"
-              />
-              <label>انقضا:</label>
-              <input
-                type="date"
-                {...register("expire_date")}
-                className="entrance--inputs"
-              />
-              <label>فایده:</label>
-              <input
-                type="text"
-                {...register("interest_money")}
-                className="entrance--inputs"
-              />
-              <label>فایده ٪:</label>
-              <input
-                type="text"
-                {...register("interest_percent")}
-                className="entrance--inputs"
-              />
-              <div></div>
-              <div></div>
-              <label>بونوس:</label>
-              <input
-                type="text"
-                {...register("bonus")}
-                className="entrance--inputs"
-              />
-              <label>ت.بونوس:</label>
-              <input
-                type="text"
-                {...register("quantity_bonus")}
-                className="entrance--inputs"
-              />
-              <div></div>
-              <input type="submit" value="⤵ Add"></input>
-            </form>
-
-            <form className="entrance-medician">
-              <div className="entrance-medician-header">
-                <label>No</label>
-                <label>قلم</label>
-                <label>تعداد</label>
-                <label>قیمت فی</label>
-                <label>ت.د.پاکت</label>
-                <label>تخفیف</label>
-                <label>تخفیف %</label>
-                <label>انقضا</label>
-                <label>فایده</label>
-                <label>فایده %</label>
-                <label>بونوس </label>
-                <label>بونوس %</label>
-                <label>جمع خرید</label>
-                <label>جمع فایده</label>
-                <label>مجموع</label>
-                <label>ذخیره</label>
-              </div>
-              <div className="entrance-map">
-                {entranceThrough.map((through, key) => (
-                  <EntrancThroughEntry
-                    through={through}
-                    keyValue={through.id}
-                    num={key}
+                <label>
+                  <h5>تحویل گیرنده:</h5>
+                </label>
+                <input
+                  type="text"
+                  {...register("recived_by")}
+                  defaultValue={exactEntrance.recived_by}
+                  className="entrance--inputs"
+                />
+                <label>واحد پول:</label>
+                <div>
+                  <select
+                    {...register("currency")}
+                    className="currency-select entrance--inputs"
+                  >
+                    <option value={exactEntrance.currency} selected hidden>
+                      {currency.map((currency) =>
+                        currency.id == exactEntrance.currency
+                          ? currency.name
+                          : ""
+                      )}
+                    </option>
+                    {currency.map((currency) => (
+                      <option key={currency.id} value={currency.id}>
+                        {currency.name}
+                      </option>
+                    ))}
+                  </select>
+                  <Currency Update={CurrencyUpdate} />
+                </div>
+                <label>پرداخت:</label>
+                <div className="final-register-box">
+                  <select
+                    {...register("payment_method")}
+                    className="entrance--inputs"
+                  >
+                    <option
+                      value={exactEntrance.payment_method}
+                      selected
+                      hidden
+                    >
+                      {paymentMethod.map((pay) =>
+                        pay.id == exactEntrance.payment_method ? pay.name : ""
+                      )}
+                    </option>
+                    {paymentMethod.map((payment) => (
+                      <option key={payment.id} value={payment.id}>
+                        {payment.name}
+                      </option>
+                    ))}
+                  </select>
+                  <Payment Update={PaymentUpdate} />
+                </div>
+                <label>فایده ٪:</label>
+                <input
+                  type="text"
+                  {...register("total_interest")}
+                  defaultValue={exactEntrance.total_interest}
+                  className="entrance--inputs"
+                />
+                <label>
+                  <h5>بدون تخفیف:</h5>
+                </label>
+                <input
+                  type="checkbox"
+                  className="checkbox-input entrance--inputs"
+                  defaultChecked={exactEntrance.without_discount}
+                  {...register("without_discount")}
+                />
+                <label>توضیحات:</label>
+                <textarea
+                  {...register("description")}
+                  defaultValue={exactEntrance.description}
+                  className="entrance--inputs"
+                ></textarea>
+                <div></div>
+                <div className="entrance-buttons">
+                  <input
+                    type="reset"
+                    value="Reset"
+                    onClick={ResetForm}
+                    tabIndex={-1}
+                  ></input>
+                  <input
+                    type="submit"
+                    value={searched ? "Update" : "Submit"}
+                    className="entrance--inputs"
+                    onClick={handleSubmit(EntranceSubmit)}
+                  ></input>
+                </div>
+              </form>
+              <form
+                className="entrance-through"
+                onSubmit={handleSubmit(EntranceThroughSubmit)}
+              >
+                <label>قلم:</label>
+                <div className="entrance-through-medician-input">
+                  <SelectMedician
                     kind={kind}
                     country={country}
                     pharmGroub={pharmGroub}
-                    UpdateUI={UpdateUI}
-                    UpdateChunk={UpdateChunk}
+                    selectAutoCompleteData={AutoCompleteHandle}
+                    trigger={selectTrigger}
+                    tabFormulate={tabFormulate}
                   />
-                ))}
-              </div>
-            </form>
+                </div>
+                <label>تعداد:</label>
+                <input
+                  type="text"
+                  {...register("number_in_factor")}
+                  id="number-in-factor-input"
+                  className="entrance--inputs"
+                />
+                <label>قیمت فی:</label>
+                <input
+                  type="text"
+                  {...register("each_price_factor")}
+                  className="entrance--inputs"
+                />
+                <label>
+                  <h5> ت.د.پاکت:</h5>
+                </label>
+                <input
+                  type="text"
+                  placeholder={autoCompleteData.medician.no_pocket}
+                  {...register("each_quantity")}
+                  className="entrance--inputs"
+                />
+                <label>تخفیف:</label>
+                <input
+                  type="text"
+                  {...register("discount_money")}
+                  className="entrance--inputs"
+                />
+                <label>تخفیف ٪:</label>
+                <input
+                  type="text"
+                  {...register("discount_percent")}
+                  className="entrance--inputs"
+                />
+                <label>انقضا:</label>
+                <input
+                  type="date"
+                  {...register("expire_date")}
+                  className="entrance--inputs"
+                  onChange={(res) => setExpireDate(res.target.value)}
+                  value={expireDate}
+                />
+                <label>فایده:</label>
+                <input
+                  type="text"
+                  {...register("interest_money")}
+                  className="entrance--inputs"
+                />
+                <label>فایده ٪:</label>
+                <input
+                  type="text"
+                  {...register("interest_percent")}
+                  className="entrance--inputs"
+                />
+                <label></label>
+                <DateInputSimple
+                  onChange={(res) =>
+                    setExpireDate(res.target.value.slice(0, 10))
+                  }
+                  value={expireDate}
+                />
+                <label>بونوس:</label>
+                <input
+                  type="text"
+                  {...register("bonus")}
+                  className="entrance--inputs"
+                />
+                <label>ت.بونوس:</label>
+                <input
+                  type="text"
+                  {...register("quantity_bonus")}
+                  className="entrance--inputs"
+                />
+                <div></div>
+                <input type="submit" value="⤵ Add"></input>
+              </form>
+
+              <form className="entrance-medician">
+                <div className="entrance-medician-header">
+                  <label>No</label>
+                  <label>قلم</label>
+                  <label>تعداد</label>
+                  <label>قیمت فی</label>
+                  <label>ت.د.پاکت</label>
+                  <label>تخفیف</label>
+                  <label>تخفیف %</label>
+                  <label>انقضا</label>
+                  <label>فایده</label>
+                  <label>فایده %</label>
+                  <label>بونوس </label>
+                  <label>بونوس %</label>
+                  <label>جمع خرید</label>
+                  <label>جمع فایده</label>
+                  <label>مجموع</label>
+                  <label>ذخیره</label>
+                </div>
+                <div className="entrance-map">
+                  {entranceThrough.map((through, key) => (
+                    <EntrancThroughEntry
+                      through={through}
+                      keyValue={through.id}
+                      num={key}
+                      kind={kind}
+                      country={country}
+                      pharmGroub={pharmGroub}
+                      UpdateUI={UpdateUI}
+                      UpdateChunk={UpdateChunk}
+                    />
+                  ))}
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
     </>
   );
 }
