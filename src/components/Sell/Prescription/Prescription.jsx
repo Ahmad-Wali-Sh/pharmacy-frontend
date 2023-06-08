@@ -32,6 +32,7 @@ export default function Prescription(props) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -91,10 +92,7 @@ export default function Prescription(props) {
   const [prescriptionThrough, setPrescriptionThrough] = React.useState([]);
   const [report, setReport] = React.useState({
     total: 0,
-    total_interest: 0,
     number: 0,
-    sell_total: 0,
-    purchase_total: 0,
   });
 
   function registerModalOpener() {
@@ -110,6 +108,7 @@ export default function Prescription(props) {
   }
 
   function registerModalCloser() {
+    ResetForm()
     setRegisterModalOpen(false);
   }
 
@@ -206,21 +205,35 @@ export default function Prescription(props) {
   const PrescriptionThrough = (data) => {
     const PrescritptionThroughForm = new FormData();
     PrescritptionThroughForm.append("quantity", data.quantity);
-    PrescritptionThroughForm.append("each_price", data.each_price);
+    PrescritptionThroughForm.append("each_price", autoCompleteData.medician.price);
     PrescritptionThroughForm.append("medician", autoCompleteData.medician.id);
     PrescritptionThroughForm.append("prescription", prescription.id);
 
-    axios
-      .post(PRESCRIPTION_THOURGH_URL, PrescritptionThroughForm)
-      .then((res) => {
-        console.log(res.data);
-        setPrescriptionThrough((prev) => [...prev, res.data]);
-        toast.info("Item Added.");
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Check Your Input And Try Again!");
-      });
+    let result = true;
+    const Conditional = () => {prescriptionThrough.map((prescription) => {
+      prescription.medician == autoCompleteData.medician.id && (result = false)
+      return result
+    })
+    return result
+  } 
+
+    if (Conditional() == true){
+      axios
+        .post(PRESCRIPTION_THOURGH_URL, PrescritptionThroughForm)
+        .then((res) => {
+          console.log(res.data);
+          setPrescriptionThrough((prev) => [...prev, res.data]);
+          toast.info("Item Added.");
+          setTrigger((prev) => prev + 1);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Check Your Input And Try Again!");
+        });
+    }
+    if (Conditional() == false) {
+      alert('این دوا قبلا ثبت شده است.')
+    }
   };
 
   const SearchSubmit = (data) => {
@@ -248,7 +261,12 @@ export default function Prescription(props) {
       });
   };
 
+  const [selectTrigger, setTrigger] = React.useState(1);
+
   React.useEffect(() => {
+    if (props.trigger) {
+      registerModalOpener();
+    }
     ResetForm();
     if (props.button == 1 && registerModalOpen) {
       axios
@@ -275,7 +293,7 @@ export default function Prescription(props) {
           toast.error("Check Your Input And Try Again!");
         });
     }
-  }, [registerModalOpen]);
+  }, [registerModalOpen, props.trigger]);
 
   const ResetForm = () => {
     setPrescription([]);
@@ -347,6 +365,62 @@ export default function Prescription(props) {
       })
       .catch((err) => console.log(err));
   };
+  React.useEffect(() => {
+    Reporting();
+  }, [prescriptionThrough]);
+
+  console.log(autoCompleteData)
+
+  const Reporting = () => {
+    
+    const totalCalculate = () => {
+      let result = 0;
+      prescriptionThrough.map((item)=> {
+        result += item.each_price * item.quantity
+        return result
+      })
+      return result
+    }
+
+    setReport({
+      total: totalCalculate(),
+      number: prescriptionThrough.length,
+    });
+  };
+
+  const tabFormulate = () => {
+    document.getElementById("number-in-factor-input").focus();
+  };
+
+  const departmentSubmit = () => {
+    
+    registerModalOpener()
+    const DepartmentForm = new FormData()
+    DepartmentForm.append("name", autoCompleteData.patient);
+    DepartmentForm.append("doctor", autoCompleteData.doctor);
+    DepartmentForm.append("department", props.department.id);
+    DepartmentForm.append("round_number", "");
+    DepartmentForm.append("discount_money", "");
+    DepartmentForm.append("discount_percent", "");
+    DepartmentForm.append("zakat", "");
+    DepartmentForm.append("khairat", "");
+    
+    
+    axios
+        .post(PRESCRIPTION_URL, DepartmentForm)
+        .then((res) => {
+          console.log(res.data);
+          setPrescription(res.data);
+          setSubmited(true);
+          toast.success("Data Submited Successfuly.");
+
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Check Your Input And Try Again!");
+        });
+    reset({})
+  }
 
   return (
     <>
@@ -368,6 +442,12 @@ export default function Prescription(props) {
           <i class="fa-solid fa-circle-info"></i>
         </div>
       )}
+      {props.button == 2 && (
+        <div className="department-card" onClick={departmentSubmit}>
+        <h3>{props.department.name}</h3>
+        </div>
+      )
+      }
       {registerModalOpen == true && (
         <Modal
           style={ModalStyles}
@@ -390,19 +470,7 @@ export default function Prescription(props) {
                     <label>{report.number}</label>
                   </div>
                   <div className="entrance-report-map-box">
-                    <label>مجموع فایده </label>
-                    <label>{report.total_interest}</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>مجموع خرید </label>
-                    <label>{report.purchase_total}</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>مجموع فروش </label>
-                    <label>{report.sell_total}</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>مجموع</label>
+                    <label> قابل پرداخت</label>
                     <label>{report.total}</label>
                   </div>
                 </div>
@@ -460,12 +528,12 @@ export default function Prescription(props) {
                   />
                   <Doctor button={2} Update={UpdateDoctorsPatient} />
                 </div>
-                <label>نمبر روند:</label>
+                {/* <label>نمبر روند:</label>
                 <input
                   type="text"
                   {...register("round_number")}
                   defaultValue={prescription.round_number}
-                />
+                /> */}
                 <label>شماره:</label>
                 <input
                   required
@@ -485,7 +553,8 @@ export default function Prescription(props) {
                     </div>
                   </form>
                 </div>
-
+                <div></div>
+                <div></div>
                 <label>تخفیف:</label>
                 <input
                   type="text"
@@ -518,13 +587,16 @@ export default function Prescription(props) {
                   <input
                     type="submit"
                     value={submited ? "Update" : "Submit"}
-                    onClick={handleSubmit(PrescriptionSubmit)}
+                    onClick={handleSubmit(PrescriptionSubmit)
+                    }
                   ></input>
                   <input
                     type="button"
                     value="Create New"
                     className="prescription-create-button"
-                    onClick={handleSubmit(CreateNewHandle)}
+                    onClick={
+                      handleSubmit(CreateNewHandle)
+                    }
                   ></input>
                 </div>
               </form>
@@ -532,12 +604,14 @@ export default function Prescription(props) {
               <form className="prescription-through">
                 <label>قلم:</label>
                 <div className="entrance-through-medician-input">
-                  {props.button != 1 && (
+                  {props.button != 1 && props.button != 2 && (
                     <SelectMedician
                       kind={kind}
                       country={country}
                       pharmGroub={pharmGroub}
                       selectAutoCompleteData={AutoCompleteHandle}
+                      trigger={selectTrigger}
+                      tabFormulate={tabFormulate}
                     />
                   )}
                   {props.button == 1 && (
@@ -546,21 +620,23 @@ export default function Prescription(props) {
                       country={country}
                       pharmGroub={pharmGroub}
                       selectAutoCompleteData={AutoCompleteHandle}
-                      trigger={0}
+                      trigger={selectTrigger}
+                      tabFormulate={tabFormulate}
                     />
+                  )}
+                  {props.button == 2 &&  (
+                    <SelectMedician
+                    kind={kind}
+                    country={country}
+                    pharmGroub={pharmGroub}
+                    selectAutoCompleteData={AutoCompleteHandle}
+                    tabFormulate={tabFormulate}
+                    trigger={selectTrigger}
+                  />
                   )}
                 </div>
                 <label>تعداد:</label>
-                <input type="text" {...register("quantity")} />
-                <label>قیمت فی:</label>
-                <input type="text" {...register("each_price")} />
-                <label>
-                  <h5> ت.د.پاکت:</h5>
-                </label>
-                <input
-                  type="text"
-                  value={autoCompleteData.medician.no_pocket}
-                />
+                <input type="text" {...register("quantity")} id="number-in-factor-input" />
                 <div className="prescription-button">
                   <input
                     type="submit"
@@ -573,10 +649,10 @@ export default function Prescription(props) {
 
               <form className="prescription-medician-map">
                 <div className="prescription-medician-header">
-                  <label></label>
                   <label>No</label>
                   <label>قلم</label>
-                  <label>قیمت</label>
+                  <label>قیمت فی</label>
+                  <label>قیمت کل</label>
                   <label>تعداد</label>
                   <label>حذف</label>
                 </div>
