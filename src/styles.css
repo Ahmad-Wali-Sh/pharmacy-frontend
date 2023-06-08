@@ -42,7 +42,7 @@
 
 body {
   background-color: var(--color-three);
-  --jb-date-input-bgcolor: var(--color-sex)
+  --jb-date-input-bgcolor: var(--color-sex);
 }
 
 /* Modals */
@@ -179,6 +179,30 @@ button:focus {
 .view-port {
   height: 100vh;
   width: 100%;
+}
+
+/* Standards */
+
+.text-input-standard {
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-three);
+  padding-right: 01rem;
+  font-size: 0.9rem;
+  height: 1.6rem;
+  color: var(--color-ten);
+}
+.text-input-standard:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+}
+.filterlists-button-standard {
+  border-radius: 1rem;
+  border: none;
+  background-color: var(--color-four);
+}
+.filterlists-button-standard:hover {
+  background-color: var(--color-two);
+  color: white;
 }
 
 /* Page Component */
@@ -1584,7 +1608,7 @@ input[type="date"]:disabled {
 
 .datapicker-class {
   background-color: #533855;
-  color: yellow
+  color: yellow;
 }
 
 .medician-list-filter-box {
@@ -1777,7 +1801,6 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   background-color: var(--color-three);
   color: var(--color-ten);
-  
 }
 
 .currency-select:focus {
@@ -1796,11 +1819,11 @@ input[type="date"]:disabled {
   width: 99%;
   height: 76.7%;
   border-radius: 1rem;
-  margin-left:auto;
+  margin-left: auto;
   margin-right: auto;
   display: grid;
   grid-template-rows: 11% 7% 71%;
-  gap: 0.3rem
+  gap: 0.3rem;
 }
 
 .traz-filters {
@@ -1809,7 +1832,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   padding: 0.7rem;
   display: flex;
-  gap:2rem;
+  gap: 2rem;
   direction: rtl;
 }
 
@@ -1832,7 +1855,7 @@ input[type="date"]:disabled {
 
 .traz-date-filters {
   display: flex;
-  gap:1rem;
+  gap: 1rem;
 }
 
 .traz-date-filters > input[type="button"] {
@@ -1840,13 +1863,11 @@ input[type="date"]:disabled {
   border: none;
   width: 3rem;
   background-color: var(--color-four);
-  
 }
 .traz-date-filters > input[type="button"]:hover {
   background-color: var(--color-two);
-  color: white
+  color: white;
 }
-
 
 .traz-list {
   background-color: var(--color-sex);
@@ -1868,4 +1889,217 @@ input[type="date"]:disabled {
   font-size: 0.9rem;
   border-bottom: 1px solid var(--color-nine);
   padding: 0.3rem;
+}
+
+/* Entrance List Filtering */
+
+.entrance-filter-list-box {
+  width: 99%;
+  height: 77%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2%;
+}
+
+.entrance-filters {
+  width: 100%;
+  height: 20%;
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  direction: rtl;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
+  gap: 1rem;
+}
+
+.entrance-filters-buttons {
+  grid-area: 2 / 7 / 2 / 9;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  direction: ltr;
+  gap: 1rem;
+}
+
+.entrance-filters-header {
+  width: 100%;
+  height: 5%;
+  background-color: var(--color-two);
+  border-radius: 1rem;
+  display: grid;
+  direction: rtl;
+  text-align: right;
+  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  color: var(--color-ten);
+  padding-right: 2rem;
+  font-size: 0.8rem;
+}
+
+.entrance-filters-list {
+  width: 100%;
+  height: 72%;
+  border-radius: 1rem;
+  background-color: var(--color-sex);
+  overflow: scroll;
+}
+
+.entrance-filters-list-map {
+  display: grid;
+  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  direction: rtl;
+  padding: 0.2rem;
+  padding-right: 2rem;
+  border-bottom: 1px solid var(--color-nine);
+}
+
+.fa-circle-info:hover {
+  color: white;
+}
+
+/* Store List Filtering */
+.store-list-filtering-box {
+  width: 99%;
+  height: 77%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2%;
+}
+
+.store-filters {
+  width: 100%;
+  height: 12%;
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  direction: rtl;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
+  gap: 1rem;
+}
+
+.store-filters-header {
+  width: 100%;
+  height: 5%;
+  background-color: var(--color-two);
+  border-radius: 1rem;
+  display: grid;
+  direction: rtl;
+  text-align: right;
+  grid-template-columns: 5% 12% 12% 12% 12% 14% 15% 12% 10%;
+  align-items: center;
+  color: var(--color-ten);
+  padding-right: 2rem;
+  font-size: 0.8rem;
+}
+
+.store-filters-buttons {
+  grid-area: 1 / 7 / 1 / 9;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  direction: ltr;
+}
+.store-filters-list {
+  width: 100%;
+  height: 80%;
+  border-radius: 1rem;
+  background-color: var(--color-sex);
+  overflow: scroll;
+}
+
+.store-list-map {
+  display: grid;
+  direction: rtl;
+  text-align: right;
+  display: grid;
+  padding: 0.7rem;
+  color: var(--color-ten);
+  padding-right: 2rem;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--color-nine);
+  align-items: center;
+  grid-template-columns: 5% 12% 12% 12% 12% 14% 15% 12% 10%;
+}
+
+.store-list-map > input {
+  background-color: #53385500;
+  color: var(--color-ten);
+  border: none;
+}
+
+/* Company List Filtering */
+
+.company-list-filtering-box {
+  width: 99%;
+  height: 77%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2%;
+}
+
+.company-list-filtering {
+  width: 100%;
+  height: 10%;
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  direction: rtl;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
+  gap: 1rem;
+}
+
+.company-list-header {
+  width: 100%;
+  height: 5%;
+  background-color: var(--color-two);
+  border-radius: 1rem;
+  display: grid;
+  direction: rtl;
+  text-align: right;
+  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  color: var(--color-ten);
+  padding-right: 2rem;
+  font-size: 0.8rem;
+}
+
+.company-list {
+  width: 100%;
+  height: 84%;
+  border-radius: 1rem;
+  background-color: var(--color-sex);
+  overflow: scroll;
+}
+
+.company-list-buttons {
+  grid-area: 1 / 8 / 1 / 10;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  direction: ltr;
+}
+
+.company-list-map {
+  display: grid;
+  direction: rtl;
+  text-align: right;
+  display: grid;
+  padding: 0.5rem;
+  padding-right: 2rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--color-nine);
+  align-items: center;
+  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  color: var(--color-ten);
 }
