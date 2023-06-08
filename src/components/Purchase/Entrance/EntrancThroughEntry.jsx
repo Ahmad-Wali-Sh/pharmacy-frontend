@@ -52,6 +52,7 @@ function EntrancThroughEntry({
       .then(() => {
         toast.success("Data Updated Successfuly.");
         UpdateChunk();
+        UpdateUI();
       })
       .catch(() => toast.error("Check Your Input And Try Again!"));
   };

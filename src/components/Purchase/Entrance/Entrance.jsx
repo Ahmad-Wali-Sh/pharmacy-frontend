@@ -342,6 +342,21 @@ export default function Entrance(props) {
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
     EntranceThrough.append("entrance", exactEntrance.id);
 
+    let result = true;
+    const Conditional = () => {entranceThrough.map((prescription) => {
+      prescription.medician == autoCompleteData.medician.id && (result = false)
+      return result
+    })
+    return result
+  } 
+
+  const ConditionalInclude = () => {
+    entranceThrough.includes(autoCompleteData.medician.id)
+  }
+
+  console.log(ConditionalInclude())
+
+    if (Conditional() == true){
     axios
       .post(ENTRANCE_THROUGH_URL, EntranceThrough)
       .then((data) => {
@@ -352,7 +367,11 @@ export default function Entrance(props) {
       .catch((e) => {
         console.log(e);
         toast.error("Check Your Input And Try Again! ");
-      });
+      });}
+
+    if (Conditional() == false) {
+      alert('این دوا قبلا ثبت شده است.')
+    }
   };
   const ResetForm = () => {
     setExatEntrance({
@@ -583,6 +602,7 @@ export default function Entrance(props) {
                     placeholder={companyName}
                     showIcon={false}
                     className="autoComplete entrance--inputs"
+                    
                   />
                   <Company button={2} Update={UpdateCompanies} />
                 </div>
