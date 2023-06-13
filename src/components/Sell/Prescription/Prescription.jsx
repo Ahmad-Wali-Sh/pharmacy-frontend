@@ -97,6 +97,8 @@ export default function Prescription(props) {
   const [departmentSelected, setDepartmentSelected] = React.useState("");
 
   function registerModalOpener() {
+    ResetForm();
+    reset({});
     setRegisterModalOpen(true);
     axios
       .get(PATIENT_URL)
@@ -321,6 +323,7 @@ export default function Prescription(props) {
     setPatientName("");
     setDoctorName("");
     setDepartmentSelected([]);
+    reset({});
   };
 
   function UpdateUI() {
@@ -399,9 +402,58 @@ export default function Prescription(props) {
       return result;
     };
 
+    const totalToSaleCalculate = () => {
+      let result =
+        totalCalculate() -
+        (prescription.discount_money +
+          (totalCalculate() * prescription.discount_percent) / 100) -
+        prescription.zakat -
+        prescription.khairat;
+      return result;
+    };
+    const CellingHandler = () => {
+      const cellingStart = departmentSelected.celling_start;
+      const total = Math.round(totalToSaleCalculate());
+      const lastDigit = Number(String(total).slice(-1));
+      let result = 0;
+      if (total > cellingStart && lastDigit >= 3) {
+        if (lastDigit == 3) {
+          result = Math.ceil(total) + 7 - total;
+        }
+        if (lastDigit == 4) {
+          result = Math.ceil(total) + 6 - total;
+        }
+        if (lastDigit == 5) {
+          result = Math.ceil(total) + 5 - total;
+        }
+        if (lastDigit == 6) {
+          result = Math.ceil(total) + 4 - total;
+        }
+        if (lastDigit == 7) {
+          result = Math.ceil(total) + 3 - total;
+        }
+        if (lastDigit == 8) {
+          result = Math.ceil(total) + 2 - total;
+        }
+        if (lastDigit == 9) {
+          result = Math.ceil(total) + 1 - total;
+        }
+      }
+      const RoundForm = new FormData();
+      RoundForm.append("rounded_number", result);
+      axios
+        .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+
+      return result;
+    };
+
     setReport({
-      total: totalCalculate(),
+      total: Math.round(totalCalculate()),
       number: prescriptionThrough.length,
+      total_to_sale: Math.round(totalToSaleCalculate()) + CellingHandler(),
+      rounded_number: CellingHandler(),
     });
   };
 
@@ -443,10 +495,14 @@ export default function Prescription(props) {
   const DepartmentHandler = (department) => {
     axios
       .get(DEPARTMENT_URL + department)
-      .then((res) => setDepartmentSelected(res.data))
+      .then((res) => {
+        ResetForm();
+        setDepartmentSelected("");
+        setDepartmentSelected(res.data);
+      })
       .catch((err) => console.log(err));
   };
-  console.log(prescription);
+
   return (
     <>
       {props.button == undefined && (
@@ -490,38 +546,35 @@ export default function Prescription(props) {
                 <div className="entrance-report-header">راپور</div>
                 <div className="entrance-report-body">
                   <div className="entrance-report-map-box">
-                    <label>تعداد اقلام</label>
                     <label>{report.number}</label>
+                    <label>:تعداد اقلام</label>
                   </div>
                   <div className="entrance-report-map-box">
-                    <label>مجموع فروش:</label>
                     <label>{report.total}</label>
+                    <label>:مجموع فروش</label>
                   </div>
                   <div className="entrance-report-map-box">
-                    <label>تخفیف:</label>
                     <label>
                       {prescription.discount_money +
                         (report.total * prescription.discount_percent) / 100}
                     </label>
+                    <label>:تخفیف</label>
                   </div>
                   <div className="entrance-report-map-box">
-                    <label>خیرات:</label>
                     <label>{prescription.khairat}</label>
+                    <label>:خیرات</label>
                   </div>
                   <div className="entrance-report-map-box">
-                    <label>ذکات:</label>
                     <label>{prescription.zakat}</label>
+                    <label>:ذکات</label>
                   </div>
                   <div className="entrance-report-map-box">
-                    <label>قابل پرداخت:</label>
-                    <label>
-                      {report.total -
-                        (prescription.discount_money +
-                          (report.total * prescription.discount_percent) /
-                            100) -
-                        prescription.zakat -
-                        prescription.khairat}
-                    </label>
+                    <label>{report.total_to_sale}</label>
+                    <label>:قابل پرداخت</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>{report.rounded_number}</label>
+                    <label>:مقدار روند شده </label>
                   </div>
                 </div>
               </div>
