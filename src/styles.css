@@ -2151,3 +2151,40 @@ input[type="date"]:disabled {
 .department-card:hover {
   background-image: var(--color-five);
 }
+
+/* Alert */
+
+.alert-box{
+  height: 75%;
+  direction: rtl;
+  padding: 1rem;
+}
+
+.alert-text-box{
+  margin-bottom: 1.2rem;
+}
+
+.alert-button-box {
+  background-color: var(--color-nine);
+  height: 40%;
+  display: flex;
+  border-radius: 1rem;
+  gap:1rem;
+  align-items: center;
+  padding-right:1rem;
+}
+
+.alert-button-box > button {
+  width: 20%;
+  height: 60%;
+  border:none;
+  border-radius: 1rem;
+  background-color: var(--color-four);
+  color: var(--color-ten)
+}
+.alert-button-box > button:hover {
+  background-image: var(--color-five);
+  color: var(--color-ten)
+}
+
+
