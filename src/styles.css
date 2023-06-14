@@ -956,6 +956,7 @@ input[type="date"]:disabled {
   justify-content: space-between;
   padding-right: 1rem;
   padding-left: 1rem;
+  direction: ltr;
 }
 
 .serahcer {
@@ -1427,7 +1428,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 4% 40% 25% 20% 7% 10%;;
+  grid-template-columns: 4% 40% 25% 20% 7% 10%;
   direction: rtl;
   justify-content: space-between;
 }
@@ -2127,7 +2128,7 @@ input[type="date"]:disabled {
   background-color: var(--color-sex);
   align-items: center;
   display: flex;
-  gap:1rem;
+  gap: 1rem;
   justify-content: right;
   padding-right: 1rem;
   padding-left: 1rem;

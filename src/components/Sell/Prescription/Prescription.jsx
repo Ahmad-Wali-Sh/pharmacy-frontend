@@ -94,8 +94,11 @@ export default function Prescription(props) {
     total: 0,
     number: 0,
   });
+  const [departmentSelected, setDepartmentSelected] = React.useState("");
 
   function registerModalOpener() {
+    ResetForm();
+    reset({});
     setRegisterModalOpen(true);
     axios
       .get(PATIENT_URL)
@@ -108,7 +111,7 @@ export default function Prescription(props) {
   }
 
   function registerModalCloser() {
-    ResetForm()
+    ResetForm();
     setRegisterModalOpen(false);
   }
 
@@ -161,8 +164,18 @@ export default function Prescription(props) {
     PrescriptionForm.append("doctor", autoCompleteData.doctor);
     PrescriptionForm.append("department", data.department);
     PrescriptionForm.append("round_number", data.round_number);
-    PrescriptionForm.append("discount_money", data.discount_money);
-    PrescriptionForm.append("discount_percent", data.discount_percent);
+    PrescriptionForm.append(
+      "discount_money",
+      data.discount_money
+        ? data.discount_money
+        : departmentSelected.discount_money
+    );
+    PrescriptionForm.append(
+      "discount_percent",
+      data.discount_percent
+        ? data.discount_money
+        : departmentSelected.discount_percent
+    );
     PrescriptionForm.append("zakat", data.zakat);
     PrescriptionForm.append("khairat", data.khairat);
     PrescriptionForm.append(
@@ -191,7 +204,6 @@ export default function Prescription(props) {
       axios
         .patch(PRESCRIPTION_URL + prescription.id + "/", PrescriptionForm)
         .then((res) => {
-          console.log(res.data);
           setPrescription(res.data);
           toast.success("Data Updated Successfuly.");
         })
@@ -205,19 +217,24 @@ export default function Prescription(props) {
   const PrescriptionThrough = (data) => {
     const PrescritptionThroughForm = new FormData();
     PrescritptionThroughForm.append("quantity", data.quantity);
-    PrescritptionThroughForm.append("each_price", autoCompleteData.medician.price);
+    PrescritptionThroughForm.append(
+      "each_price",
+      autoCompleteData.medician.price
+    );
     PrescritptionThroughForm.append("medician", autoCompleteData.medician.id);
     PrescritptionThroughForm.append("prescription", prescription.id);
 
     let result = true;
-    const Conditional = () => {prescriptionThrough.map((prescription) => {
-      prescription.medician == autoCompleteData.medician.id && (result = false)
-      return result
-    })
-    return result
-  } 
+    const Conditional = () => {
+      prescriptionThrough.map((prescription) => {
+        prescription.medician == autoCompleteData.medician.id &&
+          (result = false);
+        return result;
+      });
+      return result;
+    };
 
-    if (Conditional() == true){
+    if (Conditional() == true) {
       axios
         .post(PRESCRIPTION_THOURGH_URL, PrescritptionThroughForm)
         .then((res) => {
@@ -232,7 +249,7 @@ export default function Prescription(props) {
         });
     }
     if (Conditional() == false) {
-      alert('این دوا قبلا ثبت شده است.')
+      alert("این دوا قبلا ثبت شده است.");
     }
   };
 
@@ -247,6 +264,10 @@ export default function Prescription(props) {
         {
           res.data[0] ? toast.success("Search Was Successful.") : "";
         }
+        axios
+          .get(DEPARTMENT_URL + res.data[0].department)
+          .then((res) => setDepartmentSelected(res.data))
+          .catch((err) => console.log(err));
         axios
           .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
           .then((res) => {
@@ -301,6 +322,8 @@ export default function Prescription(props) {
     setPrescriptionThrough([]);
     setPatientName("");
     setDoctorName("");
+    setDepartmentSelected([]);
+    reset({});
   };
 
   function UpdateUI() {
@@ -369,22 +392,68 @@ export default function Prescription(props) {
     Reporting();
   }, [prescriptionThrough]);
 
-  console.log(autoCompleteData)
-
   const Reporting = () => {
-    
     const totalCalculate = () => {
       let result = 0;
-      prescriptionThrough.map((item)=> {
-        result += item.each_price * item.quantity
-        return result
-      })
-      return result
-    }
+      prescriptionThrough.map((item) => {
+        result += item.each_price * item.quantity;
+        return result;
+      });
+      return result;
+    };
+
+    const totalToSaleCalculate = () => {
+      let result =
+        totalCalculate() -
+        (prescription.discount_money +
+          (totalCalculate() * prescription.discount_percent) / 100) -
+        prescription.zakat -
+        prescription.khairat;
+      return result;
+    };
+    const CellingHandler = () => {
+      const cellingStart = departmentSelected.celling_start;
+      const total = Math.round(totalToSaleCalculate());
+      const lastDigit = Number(String(total).slice(-1));
+      let result = 0;
+      if (total > cellingStart && lastDigit >= 3) {
+        if (lastDigit == 3) {
+          result = Math.ceil(total) + 7 - total;
+        }
+        if (lastDigit == 4) {
+          result = Math.ceil(total) + 6 - total;
+        }
+        if (lastDigit == 5) {
+          result = Math.ceil(total) + 5 - total;
+        }
+        if (lastDigit == 6) {
+          result = Math.ceil(total) + 4 - total;
+        }
+        if (lastDigit == 7) {
+          result = Math.ceil(total) + 3 - total;
+        }
+        if (lastDigit == 8) {
+          result = Math.ceil(total) + 2 - total;
+        }
+        if (lastDigit == 9) {
+          result = Math.ceil(total) + 1 - total;
+        }
+      }
+      const RoundForm = new FormData();
+      RoundForm.append("rounded_number", result);
+      axios
+        .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+
+      return result;
+    };
 
     setReport({
-      total: totalCalculate(),
+      total: Math.round(totalCalculate()),
       number: prescriptionThrough.length,
+      total_to_sale: Math.round(totalToSaleCalculate()) + CellingHandler(),
+      rounded_number: CellingHandler(),
     });
   };
 
@@ -393,34 +462,46 @@ export default function Prescription(props) {
   };
 
   const departmentSubmit = () => {
-    
-    registerModalOpener()
-    const DepartmentForm = new FormData()
-    DepartmentForm.append("name", autoCompleteData.patient);
-    DepartmentForm.append("doctor", autoCompleteData.doctor);
-    DepartmentForm.append("department", props.department.id);
-    DepartmentForm.append("round_number", "");
-    DepartmentForm.append("discount_money", "");
-    DepartmentForm.append("discount_percent", "");
-    DepartmentForm.append("zakat", "");
-    DepartmentForm.append("khairat", "");
-    
-    
-    axios
+    registerModalOpener();
+    axios.get(DEPARTMENT_URL + props.department.id).then((res) => {
+      const DepartmentForm = new FormData();
+      DepartmentForm.append("name", autoCompleteData.patient);
+      DepartmentForm.append("doctor", autoCompleteData.doctor);
+      DepartmentForm.append("department", props.department.id);
+      DepartmentForm.append("discount_money", res.data.discount_money);
+      DepartmentForm.append("discount_percent", res.data.discount_percent);
+      DepartmentForm.append("zakat", "");
+      DepartmentForm.append("khairat", "");
+      axios
         .post(PRESCRIPTION_URL, DepartmentForm)
         .then((res) => {
           console.log(res.data);
           setPrescription(res.data);
           setSubmited(true);
           toast.success("Data Submited Successfuly.");
-
+          axios
+            .get(DEPARTMENT_URL + props.department.id)
+            .then((res) => setDepartmentSelected(res.data))
+            .catch((err) => console.log(err));
         })
         .catch((err) => {
           console.log(err);
           toast.error("Check Your Input And Try Again!");
         });
-    reset({})
-  }
+    });
+    reset({});
+  };
+
+  const DepartmentHandler = (department) => {
+    axios
+      .get(DEPARTMENT_URL + department)
+      .then((res) => {
+        ResetForm();
+        setDepartmentSelected("");
+        setDepartmentSelected(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -444,10 +525,9 @@ export default function Prescription(props) {
       )}
       {props.button == 2 && (
         <div className="department-card" onClick={departmentSubmit}>
-        <h3>{props.department.name}</h3>
+          <h3>{props.department.name}</h3>
         </div>
-      )
-      }
+      )}
       {registerModalOpen == true && (
         <Modal
           style={ModalStyles}
@@ -466,12 +546,35 @@ export default function Prescription(props) {
                 <div className="entrance-report-header">راپور</div>
                 <div className="entrance-report-body">
                   <div className="entrance-report-map-box">
-                    <label>تعداد اقلام</label>
                     <label>{report.number}</label>
+                    <label>:تعداد اقلام</label>
                   </div>
                   <div className="entrance-report-map-box">
-                    <label> قابل پرداخت</label>
                     <label>{report.total}</label>
+                    <label>:مجموع فروش</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>
+                      {prescription.discount_money +
+                        (report.total * prescription.discount_percent) / 100}
+                    </label>
+                    <label>:تخفیف</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>{prescription.khairat}</label>
+                    <label>:خیرات</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>{prescription.zakat}</label>
+                    <label>:ذکات</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>{report.total_to_sale}</label>
+                    <label>:قابل پرداخت</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>{report.rounded_number}</label>
+                    <label>:مقدار روند شده </label>
                   </div>
                 </div>
               </div>
@@ -480,6 +583,9 @@ export default function Prescription(props) {
                 <select
                   {...register("department")}
                   defaultValue={prescription.id}
+                  onChange={(res) => {
+                    DepartmentHandler(res.target.value);
+                  }}
                 >
                   <option value={prescription.department} selected hidden>
                     {department.map(
@@ -528,12 +634,6 @@ export default function Prescription(props) {
                   />
                   <Doctor button={2} Update={UpdateDoctorsPatient} />
                 </div>
-                {/* <label>نمبر روند:</label>
-                <input
-                  type="text"
-                  {...register("round_number")}
-                  defaultValue={prescription.round_number}
-                /> */}
                 <label>شماره:</label>
                 <input
                   required
@@ -559,13 +659,19 @@ export default function Prescription(props) {
                 <input
                   type="text"
                   {...register("discount_money")}
-                  defaultValue={prescription.discount_money}
+                  defaultValue={
+                    prescription.discount_money ||
+                    departmentSelected.discount_money
+                  }
                 />
                 <label>تخفیف %:</label>
                 <input
                   type="text"
                   {...register("discount_percent")}
-                  defaultValue={prescription.discount_percent}
+                  defaultValue={
+                    prescription.discount_percent ||
+                    departmentSelected.discount_percent
+                  }
                 />
                 <div></div>
                 <div></div>
@@ -587,16 +693,13 @@ export default function Prescription(props) {
                   <input
                     type="submit"
                     value={submited ? "Update" : "Submit"}
-                    onClick={handleSubmit(PrescriptionSubmit)
-                    }
+                    onClick={handleSubmit(PrescriptionSubmit)}
                   ></input>
                   <input
                     type="button"
                     value="Create New"
                     className="prescription-create-button"
-                    onClick={
-                      handleSubmit(CreateNewHandle)
-                    }
+                    onClick={handleSubmit(CreateNewHandle)}
                   ></input>
                 </div>
               </form>
@@ -624,19 +727,23 @@ export default function Prescription(props) {
                       tabFormulate={tabFormulate}
                     />
                   )}
-                  {props.button == 2 &&  (
+                  {props.button == 2 && (
                     <SelectMedician
-                    kind={kind}
-                    country={country}
-                    pharmGroub={pharmGroub}
-                    selectAutoCompleteData={AutoCompleteHandle}
-                    tabFormulate={tabFormulate}
-                    trigger={selectTrigger}
-                  />
+                      kind={kind}
+                      country={country}
+                      pharmGroub={pharmGroub}
+                      selectAutoCompleteData={AutoCompleteHandle}
+                      tabFormulate={tabFormulate}
+                      trigger={selectTrigger}
+                    />
                   )}
                 </div>
                 <label>تعداد:</label>
-                <input type="text" {...register("quantity")} id="number-in-factor-input" />
+                <input
+                  type="text"
+                  {...register("quantity")}
+                  id="number-in-factor-input"
+                />
                 <div className="prescription-button">
                   <input
                     type="submit"
