@@ -43,7 +43,7 @@ function PrescriptionThroughEntry({
       .then(() => {
         toast.success("Data Updated Successfuly.");
         UpdateChunk();
-        UpdateUI()
+        UpdateUI();
       })
       .catch(() => toast.error("Check Your Input And Try Again!"));
   };
@@ -92,17 +92,13 @@ function PrescriptionThroughEntry({
             )}
           </h4>
         </div>
-          <h4>
-            {through.each_price}AFG
-          </h4>
-          <h4>
-            {through.total_price}AFG
-          </h4>
+        <h4>{through.each_price}AFG</h4>
         <input
           type="text"
           defaultValue={through.quantity}
           {...register("quantity")}
         />
+        <h4>{through.total_price}AFG</h4>
         <div className="medician-map-buttons">
           <div onClick={handleSubmit(MedicianDelete)}>
             <i className="fa-solid fa-trash"></i>

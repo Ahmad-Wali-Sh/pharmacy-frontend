@@ -1420,19 +1420,6 @@ input[type="date"]:disabled {
   background-color: var(--color-eleven);
 }
 
-.prescription-through-map {
-  background-color: var(--color-four);
-  border-bottom: 1px solid black;
-  font-size: 0.9rem;
-  width: 100%;
-  padding: 0.1rem;
-  padding-right: 1rem;
-  display: grid;
-  grid-template-columns: 4% 40% 25% 20% 7% 10%;
-  direction: rtl;
-  justify-content: space-between;
-}
-
 .prescription-through-map > input[type="text"] {
   width: 70%;
   background-color: var(--color-sex);
@@ -1442,6 +1429,19 @@ input[type="date"]:disabled {
   color: white;
 }
 
+.prescription-through-map {
+  background-color: var(--color-four);
+  border-bottom: 1px solid black;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 0.1rem;
+  padding-right: 1.8rem;
+  display: grid;
+  grid-template-columns: 4% 62% 10% 10% 10% 10%;
+  direction: rtl;
+  justify-content: space-between;
+}
+
 .prescription-medician-header {
   background-color: var(--color-two);
   border-radius: 1rem 1rem 0rem 0rem;
@@ -1449,7 +1449,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 4% 40% 25% 20% 7% 10%;
+  grid-template-columns: 4% 62% 11% 9% 10% 10%;
   font-size: 0.9rem;
   direction: rtl;
 }
@@ -2154,13 +2154,13 @@ input[type="date"]:disabled {
 
 /* Alert */
 
-.alert-box{
+.alert-box {
   height: 75%;
   direction: rtl;
   padding: 1rem;
 }
 
-.alert-text-box{
+.alert-text-box {
   margin-bottom: 1.2rem;
 }
 
@@ -2169,22 +2169,20 @@ input[type="date"]:disabled {
   height: 40%;
   display: flex;
   border-radius: 1rem;
-  gap:1rem;
+  gap: 1rem;
   align-items: center;
-  padding-right:1rem;
+  padding-right: 1rem;
 }
 
 .alert-button-box > button {
   width: 20%;
   height: 60%;
-  border:none;
+  border: none;
   border-radius: 1rem;
   background-color: var(--color-four);
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
 .alert-button-box > button:hover {
   background-image: var(--color-five);
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
-
-
