@@ -38,6 +38,25 @@ export default function Entrance(props) {
     },
   };
 
+  const popUpStyle = {
+    content: {
+      backgroundColor: "rgb(120,120,120)",
+      border: "none",
+      borderRadius: "1rem",
+      overflow: "hidden",
+      padding: "0px",
+      margin: "0px",
+      zIndex: "100",
+      width: "30%",
+      height: "30%",
+      top:"30%",
+      left:"35%"
+    },
+    overlay: {
+      backgroundColor: "rgba(60,60,60,0.5)",
+    },
+  }
+
   /* Form Hook */
 
   const {
@@ -317,6 +336,35 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   };
 
+  
+  const [popUpOpen, setpopUpOpen] = React.useState(false)
+  const [excatTrough, setExactThrough] = React.useState("")
+
+  const popUpCloser = () => {
+    setpopUpOpen(false)
+  }
+  const popUpOpener = () => {
+    setpopUpOpen(true)
+  }
+
+  const MedicineIncluder = (data) => {
+
+    const MedicianUpdateForm = new FormData();
+    MedicianUpdateForm.append("number_in_factor", excatTrough && parseInt(excatTrough.number_in_factor) + parseInt(data.number_in_factor));
+
+    axios
+      .patch(ENTRANCE_THROUGH_URL + excatTrough.id + "/", MedicianUpdateForm)
+      .then(() => {
+        toast.success("Data Updated Successfuly.");
+        UpdateChunk();
+        UpdateUI()
+        popUpCloser()
+      })
+      .catch(() => toast.error("Check Your Input And Try Again!"));
+
+  }
+
+
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
     EntranceThrough.append("number_in_factor", data.number_in_factor);
@@ -344,7 +392,7 @@ export default function Entrance(props) {
 
     let result = true;
     const Conditional = () => {entranceThrough.map((prescription) => {
-      prescription.medician == autoCompleteData.medician.id && (result = false)
+      prescription.medician == autoCompleteData.medician.id && (result = false, setExactThrough(prescription))
       return result
     })
     return result
@@ -370,7 +418,7 @@ export default function Entrance(props) {
       });}
 
     if (Conditional() == false) {
-      alert('این دوا قبلا ثبت شده است.')
+      popUpOpener()
     }
   };
   const ResetForm = () => {
@@ -528,6 +576,32 @@ export default function Entrance(props) {
           isOpen={registerModalOpen}
           onRequestClose={registerModalCloser}
         >
+           <Modal
+        isOpen={popUpOpen}
+        onRequestClose={popUpCloser}
+        style={popUpStyle}
+      >
+        <>
+        <div className="modal-header">
+              <h3>!خطا</h3>
+              <div className="modal-close-btn" onClick={popUpCloser}>
+                <i className="fa-solid fa-xmark"></i>
+              </div>
+          </div>
+          <div className="alert-box">
+            
+          <div className="alert-text-box">
+            <h4>این دوا قبلا ثبت شده است</h4>
+            <h4>آیا میخواهید به تعداد آن اضافه نمائید؟</h4>
+          </div>
+          <div className="alert-button-box">
+            <button onClick={handleSubmit(MedicineIncluder)}>بله</button>
+            <button onClick={popUpCloser}>نخیر</button>
+          </div>
+          </div>
+
+        </>
+      </Modal>
           <div className="modal">
             <div className="modal-header">
               <h3>ثبت ورودی</h3>
