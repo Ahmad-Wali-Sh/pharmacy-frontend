@@ -21,7 +21,7 @@ export default function Prescription(props) {
       overflow: "hidden",
       padding: "0px",
       margin: "0px",
-      zIndex: "2"
+      zIndex: "2",
     },
     overlay: {
       backgroundColor: "rgba(60,60,60,0.5)",
@@ -39,13 +39,13 @@ export default function Prescription(props) {
       zIndex: "100",
       width: "30%",
       height: "30%",
-      top:"30%",
-      left:"35%"
+      top: "30%",
+      left: "35%",
     },
     overlay: {
       backgroundColor: "rgba(60,60,60,0.5)",
     },
-  }
+  };
 
   /* Form Hook */
 
@@ -178,21 +178,23 @@ export default function Prescription(props) {
 
   /* Handlers and Submiting */
 
-
-  const [popUpOpen, setpopUpOpen] = React.useState(false)
+  const [popUpOpen, setpopUpOpen] = React.useState(false);
 
   const popUpCloser = () => {
-    setpopUpOpen(false)
-  }
+    setpopUpOpen(false);
+  };
   const popUpOpener = () => {
-    setpopUpOpen(true)
-  }
+    setpopUpOpen(true);
+  };
 
   const PrescriptionSubmit = (data) => {
     const PrescriptionForm = new FormData();
     PrescriptionForm.append("name", autoCompleteData.patient);
     PrescriptionForm.append("doctor", autoCompleteData.doctor);
-    PrescriptionForm.append("department", data.department ? data.department : departmentSelected.id);
+    PrescriptionForm.append(
+      "department",
+      data.department ? data.department : departmentSelected.id
+    );
     PrescriptionForm.append("round_number", data.round_number);
     PrescriptionForm.append(
       "discount_money",
@@ -203,7 +205,7 @@ export default function Prescription(props) {
     PrescriptionForm.append(
       "discount_percent",
       data.discount_percent
-        ? data.discount_money
+        ? data.discount_percent
         : departmentSelected.discount_percent
     );
     PrescriptionForm.append("zakat", data.zakat);
@@ -231,13 +233,16 @@ export default function Prescription(props) {
     }
 
     if (submited == true) {
+      console.log(data.discount_percent);
       axios
         .patch(PRESCRIPTION_URL + prescription.id + "/", PrescriptionForm)
         .then((res) => {
           setPrescription(res.data);
           toast.success("Data Updated Successfuly.");
           UpdateChunk();
-          UpdateUI()
+          UpdateUI();
+          console.log(res.data);
+          console.log(PrescriptionForm);
         })
         .catch((err) => {
           console.log(err);
@@ -246,7 +251,7 @@ export default function Prescription(props) {
     }
   };
 
-  const [excatTrough, setExactThrough] = React.useState("")
+  const [excatTrough, setExactThrough] = React.useState("");
 
   const PrescriptionThrough = (data) => {
     const PrescritptionThroughForm = new FormData();
@@ -261,8 +266,9 @@ export default function Prescription(props) {
     let result = true;
     const Conditional = () => {
       prescriptionThrough.map((prescription) => {
-        prescription.medician == autoCompleteData.medician.id && (result = false, setExactThrough(prescription)) 
-          
+        prescription.medician == autoCompleteData.medician.id &&
+          ((result = false), setExactThrough(prescription));
+
         return result;
       });
       return result;
@@ -283,26 +289,30 @@ export default function Prescription(props) {
         });
     }
     if (Conditional() == false) {
-      popUpOpener()
+      popUpOpener();
     }
   };
-  
-  const MedicineIncluder = (data) => {
 
+  const MedicineIncluder = (data) => {
     const MedicianUpdateForm = new FormData();
-    MedicianUpdateForm.append("quantity", excatTrough && parseInt(excatTrough.quantity) + parseInt(data.quantity));
+    MedicianUpdateForm.append(
+      "quantity",
+      excatTrough && parseInt(excatTrough.quantity) + parseInt(data.quantity)
+    );
 
     axios
-      .patch(PRESCRIPTION_THOURGH_URL + excatTrough.id + "/", MedicianUpdateForm)
+      .patch(
+        PRESCRIPTION_THOURGH_URL + excatTrough.id + "/",
+        MedicianUpdateForm
+      )
       .then(() => {
         toast.success("Data Updated Successfuly.");
         UpdateChunk();
-        UpdateUI()
-        popUpCloser()
+        UpdateUI();
+        popUpCloser();
       })
       .catch(() => toast.error("Check Your Input And Try Again!"));
-
-  }
+  };
 
   const SearchSubmit = (data) => {
     ResetForm();
@@ -556,7 +566,6 @@ export default function Prescription(props) {
 
   return (
     <>
-    
       {props.button == undefined && (
         <div className="purchase-card" onClick={registerModalOpener}>
           <div>
@@ -587,31 +596,29 @@ export default function Prescription(props) {
           onRequestClose={registerModalCloser}
         >
           <Modal
-        isOpen={popUpOpen}
-        onRequestClose={popUpCloser}
-        style={popUpStyle}
-      >
-        <>
-        <div className="modal-header">
-              <h3>!خطا</h3>
-              <div className="modal-close-btn" onClick={popUpCloser}>
-                <i className="fa-solid fa-xmark"></i>
+            isOpen={popUpOpen}
+            onRequestClose={popUpCloser}
+            style={popUpStyle}
+          >
+            <>
+              <div className="modal-header">
+                <h3>!خطا</h3>
+                <div className="modal-close-btn" onClick={popUpCloser}>
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
               </div>
-          </div>
-          <div className="alert-box">
-            
-          <div className="alert-text-box">
-            <h4>این دوا قبلا ثبت شده است</h4>
-            <h4>آیا میخواهید به تعداد آن اضافه نمائید؟</h4>
-          </div>
-          <div className="alert-button-box">
-            <button onClick={handleSubmit(MedicineIncluder)}>بله</button>
-            <button onClick={popUpCloser}>نخیر</button>
-          </div>
-          </div>
-
-        </>
-      </Modal>
+              <div className="alert-box">
+                <div className="alert-text-box">
+                  <h4>این دوا قبلا ثبت شده است</h4>
+                  <h4>آیا میخواهید به تعداد آن اضافه نمائید؟</h4>
+                </div>
+                <div className="alert-button-box">
+                  <button onClick={handleSubmit(MedicineIncluder)}>بله</button>
+                  <button onClick={popUpCloser}>نخیر</button>
+                </div>
+              </div>
+            </>
+          </Modal>
           <div className="modal">
             <div className="modal-header">
               <h3>ثبت نسخه</h3>
@@ -837,8 +844,8 @@ export default function Prescription(props) {
                   <label>No</label>
                   <label>قلم</label>
                   <label>قیمت فی</label>
-                  <label>قیمت کل</label>
                   <label>تعداد</label>
+                  <label>قیمت کل</label>
                   <label>حذف</label>
                 </div>
                 <div className="prescription-medicine">
@@ -860,7 +867,6 @@ export default function Prescription(props) {
           </div>
         </Modal>
       )}
-      
     </>
   );
 }
