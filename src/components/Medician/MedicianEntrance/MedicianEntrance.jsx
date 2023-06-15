@@ -116,6 +116,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("brand_name", data.brand_name);
     MedicianForm.append("geniric_name", data.geniric_name);
     MedicianForm.append("no_pocket", data.no_pocket);
+    MedicianForm.append("no_box", data.no_box);
     MedicianForm.append("ml", data.ml);
     MedicianForm.append("weight", data.no_pocket);
     MedicianForm.append("location", data.location);
@@ -239,13 +240,25 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 {...register("brand_name")}
                 defaultValue={medician && medician.brand_name}
               />
-              <label>محلول:</label>
+              <label>ترکیب:</label>
+              <input
+                type="text"
+                {...register("generic_name")}
+                defaultValue={medician && medician.generic_name}
+              />
+              <label>موثریت:</label>
               <input
                 type="text"
                 {...register("ml")}
                 defaultValue={medician && medician.ml}
               />
-              <label>گروپ دوایی:</label>
+                <label>وزن:</label>
+                <input
+                  type="text"
+                  {...register("weight")}
+                  defaultValue={medician && medician.weight}
+                />
+              <label>گروپ_دوایی:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
                   fuseOptions={{ keys: ["name_english", "name_persian"] }}
@@ -265,12 +278,6 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 />
                 <PharmGroup button={2} Update={UpdateFunction} />
               </div>
-              <label>ت.پاکت:</label>
-              <input
-                type="text"
-                {...register("no_pocket")}
-                defaultValue={medician && medician.no_pocket}
-              />
               <label>نوع:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
@@ -291,24 +298,6 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 />
                 <Kind button={2} Update={UpdateFunction} />
               </div>
-              <label>وزن:</label>
-              <input
-                type="text"
-                {...register("weight")}
-                defaultValue={medician && medician.weight}
-              />
-              <label>مکان:</label>
-              <input
-                type="text"
-                {...register("location")}
-                defaultValue={medician && medician.location}
-              />
-              <label>شرکت:</label>
-              <input
-                type="text"
-                {...register("company")}
-                defaultValue={medician && medician.company}
-              />
               <label>کشور:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
@@ -327,11 +316,23 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 />
                 <Country button={2} Update={UpdateFunction} />
               </div>
+                <label>شرکت:</label>
+                <input
+                  type="text"
+                  {...register("company")}
+                  defaultValue={medician && medician.company}
+                />
               <label>قیمت:</label>
               <input
                 type="text"
                 {...register("price")}
                 defaultValue={medician && medician.price}
+              />
+              <label>مکان:</label>
+              <input
+                type="text"
+                {...register("location")}
+                defaultValue={medician && medician.location}
               />
               <label>حداقل:</label>
               <input
@@ -345,12 +346,17 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 {...register("maximum_existence")}
                 defaultValue={medician && medician.maximum_existence}
               />
-              <label>ترکیب:</label>
+              <label>ت.پاکت:</label>
               <input
                 type="text"
-                className="generic-input"
-                {...register("generic_name")}
-                defaultValue={medician && medician.generic_name}
+                {...register("no_pocket")}
+                defaultValue={medician && medician.no_pocket}
+              />
+              <label>ت.قطی:</label>
+              <input
+                type="text"
+                {...register("no_box")}
+                defaultValue={medician && medician.no_box}
               />
               <label>توصیه حتمی:</label>
               <input

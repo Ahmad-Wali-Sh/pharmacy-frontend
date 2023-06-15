@@ -840,18 +840,32 @@ input[type="date"]:disabled {
 .medician-text-field {
   height: 9.5rem;
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 60% 40%;
+  grid-template-rows: 1fr;
   padding: 0.2rem;
-  padding-left: 2rem;
+  padding-left: 1rem;
   font-size: 1rem;
   width: 50%;
+}
+
+.medician-big-text-fields {
+  font-size: 0.7rem;
+  direction: rtl;
+}
+.medician-bix-text-field {
+  direction: rtl;
+  text-align: right;
+  white-space: pre-line;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .medician-text-field-numbers {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
+  direction: ltr;
 }
 
 .medician-text-field-numbers > h4 {
@@ -2163,6 +2177,7 @@ input[type="date"]:disabled {
 .alert-text-box {
   margin-bottom: 1.2rem;
 }
+
 
 .alert-button-box {
   background-color: var(--color-nine);
