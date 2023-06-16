@@ -907,7 +907,7 @@ export default function Entrance(props) {
                 <input
                   type="date"
                   {...register("expire_date")}
-                  className="entrance--inputs"
+                  className="entrance--inputs date--inputs"
                   onChange={(res) => setExpireDate(res.target.value)}
                   value={expireDate}
                 />
@@ -928,7 +928,7 @@ export default function Entrance(props) {
                   onChange={(res) =>
                     setExpireDate(res.target.value.slice(0, 10))
                   }
-                  value={expireDate}
+                  // value={expireDate && expireDate}
                 />
                 <label>بونوس:</label>
                 <input

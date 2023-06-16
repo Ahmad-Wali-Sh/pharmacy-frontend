@@ -106,13 +106,30 @@ export default function SelectMedician({
               </h4>
             </div>
             <h4>ترکیب: {item.generic_name.toString()}</h4>
-          </div>
           <div className="medician-text-field-numbers">
             <h4>مکان: {item.location}</h4>
             <h4>قیمت: {`${item.price}AF`}</h4>
             <h4>تعداد در پاکت: {item.no_pocket}</h4>
+            <h4>تعداد در قطی: {item.no_box}</h4>
             <h4>موجودیت: {item.existence}</h4>
           </div>
+          </div>
+            <div className="medician-big-text-fields">
+                <div className="medician-bix-text-field">
+                  {item.description && <div className="paragraph-big-text">
+                  توضیحات:
+                    {item.description}
+                  </div>}
+                  {item.cautions && <div className="paragraph-big-text">
+                  اخطار:
+                    {item.cautions}
+                  </div>}
+                  {item.usages && <div className="paragraph-big-text">
+                  استفاده:
+                    {item.usages}
+                  </div>}
+                </div>
+            </div>
         </div>
       </div>
     );
