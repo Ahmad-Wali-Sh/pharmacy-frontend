@@ -196,7 +196,7 @@ export default function SelectMedician({
               <ReactSearchAutocomplete
                 items={medician}
                 showIcon={false}
-                fuseOptions={{ keys: ["brand_name"] }}
+                fuseOptions={{ keys: ["brand_name", "barcode"] }}
                 resultStringKeyName="brand_name"
                 styling={AutoCompleteStyle2}
                 showClear={false}
@@ -205,11 +205,9 @@ export default function SelectMedician({
                   axios
                     .get(
                       string != ""
-                        ? MEDICIAN_URL + "?search=" + string
-                        : MEDICIAN_URL + "?search=" + "''"
+                        && MEDICIAN_URL + "?search=" + string
                     )
                     .then((res) => {
-                      setMedician('')
                       setMedician(res.data);
                     });
                 }}
