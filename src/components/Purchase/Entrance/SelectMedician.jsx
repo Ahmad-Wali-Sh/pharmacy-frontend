@@ -50,7 +50,7 @@ export default function SelectMedician({
 
   const formatResult = (item) => {
 
-
+ 
     const pharmImage = pharmGroub.filter((value)=> {
      return (value.id == item.pharm_group) && value.image
     })
