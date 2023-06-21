@@ -11,9 +11,6 @@ import Store from "../Store/Store";
 import FinalRegister from "../FinalRegister/FinalRegister";
 import Currency from "../Currency/Currency";
 import Payment from "../Payment/Payment";
-import DatePicker, { DateObject } from "react-multi-date-picker";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
 import {
   DateTimeInput,
   DateTimeInputSimple,
@@ -63,6 +60,7 @@ export default function Entrance(props) {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -135,6 +133,7 @@ export default function Entrance(props) {
     sell_total: 0,
     purchase_total: 0,
   });
+  const [FactorTotal,setFactorTotal] = React.useState(0)
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -157,6 +156,44 @@ export default function Entrance(props) {
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
+    ResetForm()
+    reset({})
+  }
+
+  const TotalAlertCloser = () => {
+    if (report.grandTotal == FactorTotal) {
+      registerModalCloser()
+    }
+    if (report.grandTotal != FactorTotal) {
+      AlertModalOpener()
+    }
+  }
+
+  const [AlertModalOpen, setAlertModalOpen] = React.useState(false)
+
+  const AlertModalOpener = () => {
+    setAlertModalOpen(true)
+  } 
+  const AlertModalCloser = () => {
+    setAlertModalOpen(false)
+    registerModalCloser()
+
+  } 
+
+  const AlertJustModalCloser = () => {
+    setAlertModalOpen(false)
+  }
+
+
+  const [PriceAlertOpen, setPriceAlertOpen] = React.useState(false)
+
+  const PriceAlertOpener = () => {
+    setPriceAlertOpen(true)
+  }
+
+  const PriceAlertCloser = () => {
+    setPriceAlertOpen(false)
+    setTrigger((prev) => prev + 1);
   }
 
   /* Requests */
@@ -365,6 +402,7 @@ export default function Entrance(props) {
   }
 
 
+
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
     EntranceThrough.append("number_in_factor", data.number_in_factor);
@@ -410,7 +448,17 @@ export default function Entrance(props) {
       .then((data) => {
         setEntranceThrough((prev) => [...prev, data.data]);
         toast.info("New Item Added.");
-        setTrigger((prev) => prev + 1);
+        reset({
+          number_in_factor: "",
+          each_price_factor: "",
+          discount_money: "",
+          discount_percent: "",
+          expire_date: "",
+          interest_money: "",
+          bonus: "",
+          quantity_bonus:"",
+        })
+        PriceCheck(data.data)
       })
       .catch((e) => {
         console.log(e);
@@ -421,7 +469,20 @@ export default function Entrance(props) {
       popUpOpener()
     }
   };
+
+  const PriceCheck = (data) => {
+    console.log(data.each_price)
+      if (data.each_sell_price != autoCompleteData.medician.price) {
+        PriceAlertOpener()
+      }
+      else {
+        setTrigger((prev) => prev + 1);
+      }
+  }
+
+
   const ResetForm = () => {
+    reset({})
     setExatEntrance({
       without_discount: false,
       description: "",
@@ -436,9 +497,7 @@ export default function Entrance(props) {
     setEntranceThrough([]);
     setEntrancePosted(false);
     setSearched(false);
-    registerModalCloser();
-    registerModalOpener();
-    setDatePickerValue("");
+    setFactorTotal(0)
 
     document.getElementsByClassName("entrance--inputs").reset();
   };
@@ -574,9 +633,10 @@ export default function Entrance(props) {
         <Modal
           style={ModalStyles}
           isOpen={registerModalOpen}
-          onRequestClose={registerModalCloser}
+          // onRequestClose={registerModalCloser}
         >
-           <Modal
+      
+      <Modal
         isOpen={popUpOpen}
         onRequestClose={popUpCloser}
         style={popUpStyle}
@@ -602,10 +662,61 @@ export default function Entrance(props) {
 
         </>
       </Modal>
+      <Modal
+        isOpen={PriceAlertOpen}
+        onRequestClose={PriceAlertCloser}
+        style={popUpStyle}
+      >
+        <>
+        <div className="modal-header">
+              <h3>!خطا</h3>
+              <div className="modal-close-btn" onClick={PriceAlertCloser}>
+                <i className="fa-solid fa-xmark"></i>
+              </div>
+          </div>
+          <div className="alert-box">
+            
+          <div className="alert-text-box">
+            <h4>قیمت دوای ثبت شده با قیمت قبلی مطابقت ندارد!</h4>
+          </div>
+          <div className="alert-button-box">
+            <button onClick={PriceAlertCloser}>تایید</button>
+          </div>
+          </div>
+
+        </>
+      </Modal>
+
+      <Modal
+        isOpen={AlertModalOpen}
+        onRequestClose={AlertJustModalCloser}
+        style={popUpStyle}
+      >
+        <>
+        <div className="modal-header">
+              <h3>!خطا</h3>
+              <div className="modal-close-btn" onClick={AlertJustModalCloser}>
+                <i className="fa-solid fa-xmark"></i>
+              </div>
+          </div>
+          <div className="alert-box">
+            
+          <div className="alert-text-box">
+            <h4>مجموع ثبت شده با مجموع فاکتور مطابقت ندارد.</h4>
+            <h4>آیا با بستن صفحه موافقید؟</h4>
+          </div>
+          <div className="alert-button-box">
+            <button onClick={AlertModalCloser}>بله</button>
+            <button onClick={AlertJustModalCloser}>نخیر</button>
+          </div>
+          </div>
+
+        </>
+      </Modal>
           <div className="modal">
             <div className="modal-header">
               <h3>ثبت ورودی</h3>
-              <div className="modal-close-btn" onClick={registerModalCloser}>
+              <div className="modal-close-btn" onClick={TotalAlertCloser}>
                 <i className="fa-solid fa-xmark"></i>
               </div>
             </div>
@@ -628,6 +739,10 @@ export default function Entrance(props) {
                   <div className="entrance-report-map-box">
                     <label>مجموع</label>
                     <label>{report.grandTotal}</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>مجموع فاکتور</label>
+                    <input type='text' onChange={(res) => setFactorTotal(res.target.value)} defaultValue={FactorTotal}/>
                   </div>
                 </div>
               </div>
@@ -942,8 +1057,11 @@ export default function Entrance(props) {
                   {...register("quantity_bonus")}
                   className="entrance--inputs"
                 />
-                <div></div>
-                <input type="submit" value="⤵ Add"></input>
+                <div className="adding-box">
+                  <label>قیمت:</label>
+                <label className="old-price">{autoCompleteData.medician.price} AF</label>
+                <input type="submit" value="⤵ Add" className="add-button"></input>
+                </div>
               </form>
 
               <form className="entrance-medician">
@@ -951,15 +1069,16 @@ export default function Entrance(props) {
                   <label>No</label>
                   <label>قلم</label>
                   <label>تعداد</label>
-                  <label>قیمت فی</label>
+                  <label>فی بونوس</label>
+                  <label>فی خرید</label>
+                  <label>فی فروش</label>
                   <label>ت.د.پاکت</label>
                   <label>تخفیف</label>
                   <label>تخفیف %</label>
                   <label>انقضا</label>
                   <label>فایده</label>
                   <label>فایده %</label>
-                  <label>بونوس </label>
-                  <label>بونوس %</label>
+                  <label>بونوس</label>
                   <label>جمع خرید</label>
                   <label>جمع فایده</label>
                   <label>مجموع</label>
