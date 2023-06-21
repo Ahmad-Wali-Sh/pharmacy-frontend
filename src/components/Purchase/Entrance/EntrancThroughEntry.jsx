@@ -34,17 +34,21 @@ function EntrancThroughEntry({
       .catch((err) => console.log(err));
   }, []);
 
+  const [factorNumber, setInFactorNumber] = React.useState("")
+  const [purchasePrice, setPurchasePrice] = React.useState("")
+
   const MedicianUpdate = (data) => {
     const MedicianUpdateForm = new FormData();
-    MedicianUpdateForm.append("number_in_factor", data.number_in_factor);
-    MedicianUpdateForm.append("each_price_factor", data.each_price_factor);
+    factorNumber && MedicianUpdateForm.append("number_in_factor", factorNumber);
+    purchasePrice && MedicianUpdateForm.append("each_price_factor", purchasePrice);
     MedicianUpdateForm.append("each_quantity", data.each_quantity);
     MedicianUpdateForm.append("discount_money", data.discount_money);
+    MedicianUpdateForm.append("each_price", data.each_price);
     MedicianUpdateForm.append("discount_percent", data.discount_percent);
     MedicianUpdateForm.append("expire_date", data.expire_date);
     MedicianUpdateForm.append("interest_money", data.interest_money);
     MedicianUpdateForm.append("interest_percent", data.interest_percent);
-    MedicianUpdateForm.append("bonus", data.bonus);
+    MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
 
     axios
@@ -105,6 +109,9 @@ function EntrancThroughEntry({
           type="text"
           defaultValue={through.register_quantity}
           {...register("number_in_factor")}
+          onChange={(res) => {
+            setInFactorNumber(res.target.value)
+          }}
         />
         <input
           style={{ display: "none" }}
@@ -114,8 +121,20 @@ function EntrancThroughEntry({
         />
         <input
           type="text"
-          defaultValue={through.each_price_factor}
+          defaultValue={through.each_purchase_price}
           {...register("each_price_factor")}
+          onChange={(res) => {
+            setPurchasePrice(res.target.value)
+          }}
+        />
+        <input
+          type="text"
+          defaultValue={through.each_price}
+          {...register("each_price")}
+        />
+        <input
+          type="text"
+          value={through.each_sell_price}
         />
         <input
           type="text"
@@ -146,11 +165,6 @@ function EntrancThroughEntry({
           type="text"
           defaultValue={through.interest_percent}
           {...register("interest_percent")}
-        />
-        <input
-          type="text"
-          defaultValue={through.bonus}
-          {...register("bonus")}
         />
         <input
           type="text"

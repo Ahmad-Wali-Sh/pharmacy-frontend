@@ -654,8 +654,24 @@ input[type="date"]:disabled {
   padding-left: 0.5rem;
   padding-right: 0.7rem;
   margin-right: auto;
+  
 }
 .entrance-through > input[type="submit"]:hover {
+  background-color: var(--color-eleven);
+}
+
+.add-button {
+  height: 1.5rem;
+  border-radius: 1rem;
+  width: 6rem;
+  text-align: center;
+  border: none;
+  background-color: rgb(62, 81, 62);
+  color: var(--color-ten);
+  margin-right: auto;
+}
+
+.add-button:hover {
   background-color: var(--color-eleven);
 }
 
@@ -686,7 +702,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 3% 20% 4% 6% 6% 5% 6% 10% 4% 5% 5% 5% 6% 6% 5% 5%;
+  grid-template-columns: 3% 20% 4% 6% 6% 6% 5% 4% 6% 6% 4% 5%  5% 6% 6% 5% 5%;
   font-size: 0.9rem;
   direction: rtl;
 }
@@ -704,7 +720,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 3% 20% 4% 6% 6% 5% 6% 10% 4% 5% 5% 5% 6% 6% 5% 5%;
+  grid-template-columns: 3% 20% 4% 6% 6% 6% 5% 4% 6% 6% 4% 5%  5% 6% 6% 5% 5%;
   direction: rtl;
   justify-content: space-between;
 }
@@ -970,6 +986,28 @@ input[type="date"]:disabled {
   justify-content: space-between;
   padding-right: 1rem;
   padding-left: 1rem;
+  direction: ltr;
+}
+
+.entrance-report-map-box > input[type="text"] {
+  width: 5rem;
+  background-color: var(--color-nine);
+  border: none;
+  border-radius: 1rem;
+  color: var(--color-ten);
+  direction: rtl;
+  padding-right:1rem;
+}
+
+.adding-box {
+  display: grid;
+  text-align: right;
+  grid-template-columns: 0.2fr 0.4fr 0.4fr;
+  gap: 1rem;
+  grid-area: 5 / 5 / 7 / 7;
+  width: 100%;
+}
+.old-price {
   direction: ltr;
 }
 
