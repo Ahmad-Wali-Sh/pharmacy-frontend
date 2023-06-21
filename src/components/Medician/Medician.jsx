@@ -12,7 +12,7 @@ function Medician() {
     <div className="purchase">
       <div className="purchase-box">
         <MedicianEntrance title="ثبت دوا" icon="fa-solid fa-tablets" button={1} medician={[]}  />
-        <PharmGroup button={1} title="ثبت گروپ دوایی" icon="fa-solid fa-cannabis" />
+        <PharmGroup button={1} title="گروپ دوایی" icon="fa-solid fa-cannabis" />
         <Kind button={1} title="ثبت نوع" icon="fa-solid fa-prescription-bottle-medical" />
         <Country button={1} title="ثبت کشور" icon="fa-solid fa-earth-asia" />
       </div>
