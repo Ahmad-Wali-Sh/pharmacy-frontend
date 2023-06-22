@@ -161,10 +161,10 @@ export default function Entrance(props) {
   }
 
   const TotalAlertCloser = () => {
-    if (report.grandTotal == FactorTotal) {
+    if (report.purchase_total == FactorTotal) {
       registerModalCloser()
     }
-    if (report.grandTotal != FactorTotal) {
+    if (report.purchase_total != FactorTotal) {
       AlertModalOpener()
     }
   }
@@ -472,7 +472,7 @@ export default function Entrance(props) {
 
   const PriceCheck = (data) => {
     console.log(data.each_price)
-      if (data.each_sell_price != autoCompleteData.medician.price) {
+      if (data.each_price != autoCompleteData.medician.price) {
         PriceAlertOpener()
       }
       else {
