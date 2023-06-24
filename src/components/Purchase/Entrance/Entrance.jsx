@@ -17,6 +17,7 @@ import {
   DateInput,
   DateInputSimple,
 } from "react-hichestan-datetimepicker";
+import Select from "react-select"
 
 export default function Entrance(props) {
   /* Modal */
@@ -253,9 +254,7 @@ export default function Entrance(props) {
     const EntranceForm = new FormData();
     EntranceForm.append(
       "factor_number",
-      data.factor_number != ""
-        ? data.factor_number
-        : exactEntrance.factor_number
+        exactEntrance.factor_number ? exactEntrance : data.factor_number
     );
     EntranceForm.append(
       "factor_date",
@@ -304,6 +303,7 @@ export default function Entrance(props) {
         ? autoCompleteData.store.id
         : exactEntrance.store
     );
+    EntranceForm.append("wholesale", data.wholesale)
 
     if (searched == true) {
       axios
@@ -402,7 +402,6 @@ export default function Entrance(props) {
   }
 
 
-
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
     EntranceThrough.append("number_in_factor", data.number_in_factor);
@@ -458,6 +457,7 @@ export default function Entrance(props) {
           bonus: "",
           quantity_bonus:"",
         })
+        setExpireDate("")
         PriceCheck(data.data)
       })
       .catch((e) => {
@@ -497,7 +497,8 @@ export default function Entrance(props) {
     setEntranceThrough([]);
     setEntrancePosted(false);
     setSearched(false);
-    setFactorTotal(0)
+    setFactorTotal(0);
+    
 
     document.getElementsByClassName("entrance--inputs").reset();
   };
@@ -611,6 +612,7 @@ export default function Entrance(props) {
         .catch((err) => console.log(err));
     }
   }, [registerModalOpen]);
+
 
   return (
     <>
@@ -785,6 +787,14 @@ export default function Entrance(props) {
                         company: item,
                       })
                     }
+                    onSearch= {(search, results) => {
+                      axios
+                          .get(COMPANY_URL + "?search=" + search)
+                          .then((res) => {
+                            setCompany(res.data)
+                          })
+                          
+                    }}
                     styling={AutoCompleteStyle}
                     showClear={false}
                     inputDebounce="10"
@@ -804,6 +814,13 @@ export default function Entrance(props) {
                       setAutoCompleteData({ ...autoCompleteData, store: item })
                     }
                     showClear={false}
+                    onSearch={(search, results) => {
+                      axios
+                        .get(STORE_URL, + "?search=" + search)
+                        .then((res) => {
+                          setStore(res.data)
+                        })
+                    }}
                     inputDebounce="10"
                     placeholder={storeName}
                     showIcon={false}
@@ -897,7 +914,7 @@ export default function Entrance(props) {
                       {currency.map((currency) =>
                         currency.id == exactEntrance.currency
                           ? currency.name
-                          : ""
+                        : ""
                       )}
                     </option>
                     {currency.map((currency) => (
@@ -939,14 +956,21 @@ export default function Entrance(props) {
                   className="entrance--inputs"
                 />
                 <label>
-                  <h5>بدون تخفیف:</h5>
+                  <h5>نوع ورودی:</h5>
                 </label>
-                <input
+                {/* <input
                   type="checkbox"
                   className="checkbox-input entrance--inputs"
                   defaultChecked={exactEntrance.without_discount}
                   {...register("without_discount")}
-                />
+                /> */}
+                <select
+                  value={exactEntrance.wholesale}
+                  {...register("wholesale")}
+                >
+                  <option value={"WHOLESALE"}>عمده</option>
+                  <option value={"SINGULAR"}>پرچون</option>
+                </select>
                 <label>توضیحات:</label>
                 <textarea
                   {...register("description")}

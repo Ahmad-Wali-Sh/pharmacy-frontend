@@ -103,7 +103,7 @@ function EntranceList({ Closer }) {
     axios
       .get(
         ENTRANCE_URL +
-          `?factor_number=${data.factor_number}&factor_date=${data.factor_date}&total_interest=${data.total_interest}&company=${companySelect}&payment_method=${data.payment_method}&final_register=${data.final_register}&store=${data.store}`
+          `?factor_number=${data.factor_number}&factor_date_after=${data.factor_date}&factor_date_before=${data.factor_date}&total_interest=${data.total_interest}&company=${companySelect}&payment_method=${data.payment_method}&final_register=${data.final_register}&store=${data.store}`
       )
       .then((res) => setEntranceList(res.data))
       .catch((err) => console.log(err));
