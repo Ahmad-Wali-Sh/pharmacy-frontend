@@ -500,16 +500,8 @@ export default function Prescription(props) {
           result = Math.ceil(total) + 1 - total;
         }
       }
-      const RoundForm = new FormData();
-      RoundForm.append("rounded_number", result);
-      axios
-        .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-
       return result;
     };
-
     setReport({
       total: Math.round(totalCalculate()),
       number: prescriptionThrough.length,
@@ -517,6 +509,18 @@ export default function Prescription(props) {
       rounded_number: CellingHandler(),
     });
   };
+  
+  React.useEffect(()=> {
+    const RoundForm = new FormData();
+    RoundForm.append("rounded_number", report.rounded_number);
+    prescriptionThrough && prescription.id && (
+      axios
+      .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+    )
+
+  }, [prescriptionThrough])
 
   const tabFormulate = () => {
     document.getElementById("number-in-factor-input").focus();
@@ -730,12 +734,13 @@ export default function Prescription(props) {
                 <div className="flex">
                   <form className="search-form">
                     <input type="text" {...register("number")} />
-                    <div
+                    <button
                       className="search-button-box"
                       onClick={handleSubmit(SearchSubmit)}
+                      type="submit"
                     >
                       <i class="fa-brands fa-searchengin"></i>
-                    </div>
+                    </button>
                   </form>
                 </div>
                 <div></div>

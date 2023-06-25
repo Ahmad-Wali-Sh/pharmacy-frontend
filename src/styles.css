@@ -702,14 +702,9 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 3% 20% 4% 6% 6% 6% 5% 4% 6% 6% 4% 5%  5% 6% 6% 5% 5%;
-  font-size: 0.9rem;
+  grid-template-columns: 2.2% 21% 4% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%;
+  font-size: 0.8rem;
   direction: rtl;
-}
-
-.entrance-map {
-  overflow-y: scroll;
-  height: 85%;
 }
 
 .entrance-medician-map {
@@ -720,10 +715,52 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 3% 20% 4% 6% 6% 6% 5% 4% 6% 6% 4% 5%  5% 6% 6% 5% 5%;
+  grid-template-columns: 2.2% 21% 4% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%;
   direction: rtl;
   justify-content: space-between;
 }
+
+.entrance-map {
+  overflow-y: scroll;
+  height: 85%;
+}
+
+.approving-box {
+  width: 100%;
+  font-size: 0.8rem;
+  display: grid;
+  grid-template-columns: 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr;
+  direction: rtl;
+  gap:0.5rem;
+}
+
+.bar_batch_box {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 2rem 2rem;
+}
+
+.numbers-box-pocket {
+  width: 10rem;
+  display: grid;
+  grid-template-columns: 45% 42.5% 45%;
+  gap: 1rem;
+  font-size: 0.8rem;
+}
+.numbers-box-pocket > input {
+  border-radius: 1rem;
+  border: none;
+  height: 1.5rem;
+  background-color: var(--color-three);
+  padding-right: 1rem;
+  color: var(--color-ten)
+}
+.numbers-box-pocket > input:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+}
+
+
+
 
 .entrance-medician-map-name {
   font-size: 0.8rem;
@@ -1308,6 +1345,25 @@ input[type="date"]:disabled {
   font-size: large;
   color: white;
 }
+
+.bar_batch_box > input[type="text"] {
+  margin-left: 0.6rem;
+  height: 1.7rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-three);
+  position: relative;
+  top: -0.2rem;
+  padding: 0.4rem;
+  padding-right: 1rem;
+  font-size: large;
+  color: white;
+}
+
+.bar_batch_box > input[type="text"]:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+} 
+
 .medician-inter-form > input[type="text"]:focus {
   box-shadow: -4px -4px 4px var(--color-two);
 }

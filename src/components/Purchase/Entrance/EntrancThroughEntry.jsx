@@ -50,6 +50,7 @@ function EntrancThroughEntry({
     MedicianUpdateForm.append("interest_percent", data.interest_percent);
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
+    MedicianUpdateForm.append("no_box", data.no_box);
 
     axios
       .patch(ENTRANCE_THROUGH_URL + through.id + "/", MedicianUpdateForm)
@@ -140,6 +141,11 @@ function EntrancThroughEntry({
           type="text"
           defaultValue={through.each_quantity}
           {...register("each_quantity")}
+        />
+        <input
+          type="text"
+          defaultValue={through.no_box}
+          {...register("no_box")}
         />
         <input
           type="text"
