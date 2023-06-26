@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 import React from "react";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import EntrancThroughEntry from "./EntrancThroughEntry";
@@ -17,7 +17,6 @@ import {
   DateInput,
   DateInputSimple,
 } from "react-hichestan-datetimepicker";
-import Select from "react-select"
 
 export default function Entrance(props) {
   /* Modal */
@@ -38,7 +37,7 @@ export default function Entrance(props) {
 
   const popUpStyle = {
     content: {
-      backgroundColor: "rgb(120,120,120)",
+      backgroundColor: "rgb(140,140,140)",
       border: "none",
       borderRadius: "1rem",
       overflow: "hidden",
@@ -60,7 +59,6 @@ export default function Entrance(props) {
   const {
     register,
     handleSubmit,
-    control,
     reset,
     formState: { errors },
   } = useForm();
@@ -134,7 +132,8 @@ export default function Entrance(props) {
     sell_total: 0,
     purchase_total: 0,
   });
-  const [FactorTotal,setFactorTotal] = React.useState(0)
+  const [FactorTotal, setFactorTotal] = React.useState(report.purchase_total)
+  console.log(report.purchase_total)
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -162,10 +161,19 @@ export default function Entrance(props) {
   }
 
   const TotalAlertCloser = () => {
-    if (report.purchase_total == FactorTotal) {
+    let currency_rate = 1;
+    let result = 1;
+    result = currency.map((cur) => {
+      cur.id == exactEntrance.currency ? currency_rate = cur.rate : 1
+    })
+
+
+    if (report.purchase_total == FactorTotal * currency_rate) {
       registerModalCloser()
     }
-    if (report.purchase_total != FactorTotal) {
+    if (report.purchase_total != FactorTotal * currency_rate) {
+      console.log("currency_rate: ", currency_rate)
+
       AlertModalOpener()
     }
   }
@@ -254,7 +262,7 @@ export default function Entrance(props) {
     const EntranceForm = new FormData();
     EntranceForm.append(
       "factor_number",
-        exactEntrance.factor_number ? exactEntrance : data.factor_number
+        exactEntrance.factor_number ? exactEntrance.factor_number : data.factor_number
     );
     EntranceForm.append(
       "factor_date",
@@ -359,6 +367,7 @@ export default function Entrance(props) {
         setExatEntrance(e.data);
         setSearched(true);
         setDatePickerValue(e.data.factor_date);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -369,6 +378,7 @@ export default function Entrance(props) {
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
       .then((e) => {
         setEntranceThrough(e.data);
+        setFactorTotal(report.purchase_total)
       })
       .catch((e) => console.log(e));
   };
@@ -423,8 +433,12 @@ export default function Entrance(props) {
         ? data.interest_percent
         : exactEntrance.total_interest
     );
-    EntranceThrough.append("bonus", data.bonus);
+    EntranceThrough.append("bonus", 0);
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
+    EntranceThrough.append("no_box",
+    data.no_box != ""
+      ? data.no_box
+      : autoCompleteData.medician.no_box);
     EntranceThrough.append("entrance", exactEntrance.id);
 
     let result = true;
@@ -444,8 +458,8 @@ export default function Entrance(props) {
     if (Conditional() == true){
     axios
       .post(ENTRANCE_THROUGH_URL, EntranceThrough)
-      .then((data) => {
-        setEntranceThrough((prev) => [...prev, data.data]);
+      .then((res) => {
+        setEntranceThrough((prev) => [...prev, res.data]);
         toast.info("New Item Added.");
         reset({
           number_in_factor: "",
@@ -456,9 +470,19 @@ export default function Entrance(props) {
           interest_money: "",
           bonus: "",
           quantity_bonus:"",
+          no_box: ""
         })
         setExpireDate("")
-        PriceCheck(data.data)
+        axios
+          .get(ENTRANCE_THROUGH_URL + "?medician=" + res.data.medician)
+          .then((lastRes) => {
+            PriceCheck(res.data, lastRes.data[lastRes.data.length - 2])
+            setPriceCheckEntranceThrough(lastRes.data[lastRes.data.length - 2])
+            axios 
+              .get(ENTRANCE_URL + lastRes.data[lastRes.data.length - 2].entrance)
+              .then((res) => setPriceCheckEntrance(res.data))
+          })
+        
       })
       .catch((e) => {
         console.log(e);
@@ -470,9 +494,12 @@ export default function Entrance(props) {
     }
   };
 
-  const PriceCheck = (data) => {
-    console.log(data.each_price)
-      if (data.each_price != autoCompleteData.medician.price) {
+  const [priceCheckEntranceThrough, setPriceCheckEntranceThrough] = React.useState({})
+  const [priceCheckEntrance, setPriceCheckEntrance] = React.useState({})
+
+  const PriceCheck = (newData, lastData) => {
+    
+      if ((newData && lastData) && newData.each_price != lastData.each_price) {
         PriceAlertOpener()
       }
       else {
@@ -497,7 +524,7 @@ export default function Entrance(props) {
     setEntranceThrough([]);
     setEntrancePosted(false);
     setSearched(false);
-    setFactorTotal(0);
+    setFactorTotal(report.purchase_total);
     
 
     document.getElementsByClassName("entrance--inputs").reset();
@@ -635,7 +662,7 @@ export default function Entrance(props) {
         <Modal
           style={ModalStyles}
           isOpen={registerModalOpen}
-          // onRequestClose={registerModalCloser}
+          onRequestClose={AlertJustModalCloser}
         >
       
       <Modal
@@ -680,6 +707,7 @@ export default function Entrance(props) {
             
           <div className="alert-text-box">
             <h4>قیمت دوای ثبت شده با قیمت قبلی مطابقت ندارد!</h4>
+            <Entrance button={1} entrance={priceCheckEntrance}/>
           </div>
           <div className="alert-button-box">
             <button onClick={PriceAlertCloser}>تایید</button>
@@ -744,7 +772,7 @@ export default function Entrance(props) {
                   </div>
                   <div className="entrance-report-map-box">
                     <label>مجموع فاکتور</label>
-                    <input type='text' onChange={(res) => setFactorTotal(res.target.value)} defaultValue={FactorTotal}/>
+                    <input type='text' onChange={(res) => setFactorTotal(res.target.value)} defaultValue={FactorTotal} />
                   </div>
                 </div>
               </div>
@@ -830,24 +858,6 @@ export default function Entrance(props) {
                 </div>
                 <label>تاریخ:</label>
 
-                {/* <DatePicker
-                    calendar={persian}
-                    locale={persian_fa}
-                    className="datapicker-class"
-                    style={{
-                      backgroundColor: "rgb(34, 34, 34)",
-                      color: "white",
-                      width: "100%",
-                      border: "none",
-                      borderRadius: "1rem",
-                    }}
-                    onChange={DatePickerHandle}
-                    value={datePickerValue}
-                    format={"YYYY/MM/DD"}
-                    onOpen={() => setDatePickerStatus(false)}
-                    onBlurCapture={() => setDatePickerStatus(false)}
-                    onKeyDown={DateKeyDownsHandle}
-                    /> */}
                 <DateInputSimple
                   onChange={(res) => setDatePickerValue(res.target.value)}
                   value={datePickerValue}
@@ -877,12 +887,13 @@ export default function Entrance(props) {
                       {...register("entrance_search")}
                       tabIndex={-1}
                     />
-                    <div
+                    <button
                       className="search-button-box"
+                      type="submit"
                       onClick={handleSubmit(SearchSubmit)}
                     >
                       <i class="fa-brands fa-searchengin"></i>
-                    </div>
+                    </button>
                   </form>
                 </div>
 
@@ -1024,12 +1035,21 @@ export default function Entrance(props) {
                 <label>
                   <h5> ت.د.پاکت:</h5>
                 </label>
+                <div className="numbers-box-pocket">
                 <input
                   type="text"
                   placeholder={autoCompleteData.medician.no_pocket}
                   {...register("each_quantity")}
                   className="entrance--inputs"
                 />
+                <lable>ت.د.قطی</lable>
+                <input
+                  type="text"
+                  placeholder={autoCompleteData.medician.no_box}
+                  {...register("no_box")}
+                  className="entrance--inputs"
+                />
+                </div>
                 <label>تخفیف:</label>
                 <input
                   type="text"
@@ -1069,13 +1089,13 @@ export default function Entrance(props) {
                   }
                   // value={expireDate && expireDate}
                 />
-                <label>بونوس:</label>
+                {/* <label>بونوس:</label>
                 <input
                   type="text"
                   {...register("bonus")}
                   className="entrance--inputs"
-                />
-                <label>ت.بونوس:</label>
+                /> */}
+                <label>بونوس:</label>
                 <input
                   type="text"
                   {...register("quantity_bonus")}
@@ -1096,7 +1116,8 @@ export default function Entrance(props) {
                   <label>فی بونوس</label>
                   <label>فی خرید</label>
                   <label>فی فروش</label>
-                  <label>ت.د.پاکت</label>
+                  <label>ت.پاکت</label>
+                  <label>ت.قطی</label>
                   <label>تخفیف</label>
                   <label>تخفیف %</label>
                   <label>انقضا</label>
@@ -1106,7 +1127,7 @@ export default function Entrance(props) {
                   <label>جمع خرید</label>
                   <label>جمع فایده</label>
                   <label>مجموع</label>
-                  <label>ذخیره</label>
+                  <label>حذف</label>
                 </div>
                 <div className="entrance-map">
                   {entranceThrough.map((through, key) => (

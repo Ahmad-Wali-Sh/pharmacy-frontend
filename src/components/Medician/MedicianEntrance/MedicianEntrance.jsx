@@ -118,7 +118,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("no_pocket", data.no_pocket);
     MedicianForm.append("no_box", data.no_box);
     MedicianForm.append("ml", data.ml);
-    MedicianForm.append("weight", data.no_pocket);
+    MedicianForm.append("weight", data.weight);
     MedicianForm.append("location", data.location);
     MedicianForm.append("company", data.company);
     MedicianForm.append("minmum_existence", data.minmum_existence);
@@ -137,6 +137,9 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("pharm_group", autoCompleteData.pharm_group);
     MedicianForm.append("kind", autoCompleteData.kind);
     MedicianForm.append("country", autoCompleteData.country);
+    MedicianForm.append("doctor_approved", data.doctor_approved)
+    MedicianForm.append("patient_approved", data.patient_approved)
+    MedicianForm.append("batch_number", data.batch_number)
 
     {
       button == 1 &&
@@ -169,8 +172,8 @@ function MedicianEntrance({ title, icon, button, medician }) {
       button == 3 &&
         axios
           .patch(MEDICIAN_URL + medician.id + "/", MedicianForm)
-          .then((res) => console.log(res.data))
-          .catch((err) => console.log(err));
+          .then((res) => toast.success("Data Updated Successfuly."))
+          .catch((err) => toast.error("Check Your Input And Try Again!"));
     }
   };
 
@@ -358,13 +361,30 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 {...register("no_box")}
                 defaultValue={medician && medician.no_box}
               />
-              <label>توصیه حتمی:</label>
+              <div></div>
+              <div className="approving-box">
+              <label>توصیه_حتمی:</label>
               <input
                 type="checkbox"
                 className="must-advised-input"
                 {...register("must_advised")}
                 defaultChecked={medician && medician.must_advised}
-              />
+                />
+              <label>توصیه_مریض:</label>
+              <input
+                type="checkbox"
+                className="must-advised-input"
+                {...register("patient_approved")}
+                defaultChecked={medician && medician.patient_approved}
+                />
+              <label>توصیه_داکتر:</label>
+              <input
+                type="checkbox"
+                className="must-advised-input"
+                {...register("doctor_approved")}
+                defaultChecked={medician && medician.doctor_approved}
+                />
+              </div>
               <label>اخطاریه:</label>
               <textarea
                 {...register("cautions")}
@@ -391,12 +411,22 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 {...register("dividing_rules")}
                 defaultValue={medician && medician.dividing_rules}
               />
-              <label>بارکد:</label>
+              <div className="bar_batch_box">
+                  <label>بارکد:</label>
+                  <label>بچ نمبر:</label>
+              </div>
+              <div className="bar_batch_box">
               <input
                 type="text"
                 {...register("barcode")}
                 defaultValue={medician && medician.barcode}
               />
+              <input
+                type="text"
+                {...register("batch_number")}
+                defaultValue={medician && medician.batch_number}
+              />
+              </div>
             </div>
             <div className="medician-inter-submit">
               <input
