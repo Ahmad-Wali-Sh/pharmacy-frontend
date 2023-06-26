@@ -806,7 +806,7 @@ export default function Entrance(props) {
                   <FinalRegister Update={UpdateFinals} />
                 </div>
                 <label>شرکت:</label>
-                <div>
+                <div >
                   <ReactSearchAutocomplete
                     items={company}
                     onSelect={(item) =>
@@ -825,6 +825,7 @@ export default function Entrance(props) {
                     }}
                     styling={AutoCompleteStyle}
                     showClear={false}
+                    showItemsOnFocus={true}
                     inputDebounce="10"
                     placeholder={companyName}
                     showIcon={false}

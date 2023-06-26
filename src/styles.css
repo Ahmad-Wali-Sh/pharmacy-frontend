@@ -545,6 +545,12 @@ input[type="date"]:disabled {
   border-bottom-left-radius: 1rem;
 }
 
+.sc-gLDzan {
+  overflow: overlay !important;
+  max-height: 70vh;
+}
+
+
 .sc-gueYoa > div {
   display: none;
 }
