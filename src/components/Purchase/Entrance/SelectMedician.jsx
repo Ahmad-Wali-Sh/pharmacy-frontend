@@ -48,6 +48,8 @@ export default function SelectMedician({
     },
   };
 
+
+
   const formatResult = (item) => {
 
  
@@ -150,7 +152,7 @@ export default function SelectMedician({
     border: "none",
     hoverBackgroundColor: "grey",
     zIndex: "2",
-    overflow: "scroll",
+    minHeight: "10rem"
   };
   const AutoCompleteStyle2 = {
     ...AutoCompleteStyle,
@@ -192,20 +194,33 @@ export default function SelectMedician({
                 <i className="fa-solid fa-xmark"></i>
               </div>
             </div>
-            <div className="medician-select-input-box">
+            <div className="medician-select-input-box" onKeyDown={(e) => {
+                  let scrollNow = document.querySelector('.sc-gLDzan').scrollTop
+                 if (e.key == "ArrowDown") {
+                    document.querySelector(".sc-gLDzan").scroll(scrollNow + 150, scrollNow + 150)
+                    
+                 }
+                 if (e.key == "ArrowUp") {
+                    document.querySelector(".sc-gLDzan").scroll(scrollNow - 150, scrollNow - 150)
+                    
+                 }
+                  
+                }}>
               <ReactSearchAutocomplete
                 items={medician}
                 showIcon={false}
-                fuseOptions={{ keys: ["brand_name", "barcode"] }}
+                fuseOptions={{ keys: ["brand_name", "barcode", "ml"] }}
                 resultStringKeyName="brand_name"
                 styling={AutoCompleteStyle2}
                 showClear={false}
                 inputDebounce="10"
+                showItemsOnFocus={true}
+                
                 onSearch={(string, result) => {
                   axios
                     .get(
-                      string != ""
-                        && MEDICIAN_URL + "?search=" + string
+                      string.slice(0, string.indexOf(" ")) != ""
+                        && MEDICIAN_URL + "?search=" + string.slice(0, string.indexOf(" "))
                     )
                     .then((res) => {
                       setMedician(res.data);
@@ -218,6 +233,7 @@ export default function SelectMedician({
                   setSelectedMedician(item);
                 }}
                 maxResults={20}
+                style={{width: "20rem"}}
                 formatResult={formatResult}
                 autoFocus={true}
                 className="search"
