@@ -216,6 +216,7 @@ export default function Prescription(props) {
         ? prescription.prescription_number
         : data.prescription_number
     );
+    PrescriptionForm.append("image", file ? file : "")
 
     if (submited == false) {
       axios
@@ -413,6 +414,8 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
   }
 
+  const [file,setFile] = React.useState("")
+
   const CreateNewHandle = (data) => {
     console.log(data);
 
@@ -425,6 +428,7 @@ export default function Prescription(props) {
     PrescriptionForm.append("discount_percent", prescription.discount_percent);
     PrescriptionForm.append("zakat", prescription.zakat);
     PrescriptionForm.append("khairat", prescription.khairat);
+    PrescriptionForm.append("image", prescription.image)
 
     axios
       .post(PRESCRIPTION_URL, PrescriptionForm)
@@ -743,8 +747,11 @@ export default function Prescription(props) {
                     </button>
                   </form>
                 </div>
-                <div></div>
-                <div></div>
+                <label>عکس:</label>
+                <input
+                  type="file"
+                  onChange={(e)=> setFile(e.target.files[0])}
+                ></input>
                 <label>تخفیف:</label>
                 <input
                   type="text"
@@ -764,7 +771,7 @@ export default function Prescription(props) {
                   }
                 />
                 <div></div>
-                <div></div>
+                <a href={prescription.image && new URL(prescription.image).pathname.slice(16)} target="_blank" style={{textDecoration: "none", color: "grey"}}>{prescription.image ? "Show_Photo" : ""}</a>
                 <label>ذکات:</label>
                 <input
                   type="text"

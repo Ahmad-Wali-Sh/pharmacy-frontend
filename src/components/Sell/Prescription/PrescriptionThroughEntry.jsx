@@ -70,26 +70,13 @@ function PrescriptionThroughEntry({
         <label>{num + 1}</label>
         <div className="entrance-medician-map-box">
           <h4 className="entrance-medician-map-name">
-            <h4>
-              {country.map(
-                (country) =>
-                  country.id == exactMedician.country && `${country.name} _`
-              )}
-            </h4>
-            <h4>
-              {pharmGroub.map(
-                (pharm) =>
-                  pharm.id == exactMedician.pharm_group &&
-                  `_ ${pharm.name_english} __`
-              )}
-            </h4>
-            {exactMedician ? (
-              " " + exactMedician.brand_name + " " + exactMedician.ml
-            ) : (
-              <div className="loading-medician">
-                <LoadingDNA />
-              </div>
+          <h4>
+            {kind.map((kind) =>
+              kind.id == exactMedician.kind && kind.name_english
             )}
+            {exactMedician &&
+              (". " + exactMedician.brand_name + " " + exactMedician.ml + " " + exactMedician.weight)}
+          </h4>
           </h4>
         </div>
         <h4>{through.each_price}AFG</h4>

@@ -56,11 +56,9 @@ export default function SelectMedician({
     const pharmImage = pharmGroub.filter((value)=> {
      return (value.id == item.pharm_group) && value.image
     })
-    
     const kindImage = kind.filter((value)=> {
       return (value.id == item.kind) && value.image 
     })
-    console.log(kindImage)
     const countryImage = country.filter((value)=> {
       return (value.id == item.country && value.image)
     })
@@ -166,20 +164,11 @@ export default function SelectMedician({
         </div>
         <div className="selected-medician-show">
           <h4>
+            {kind.map((kind) =>
+              kind.id == selectedMedician.kind && kind.name_english
+            )}
             {selectedMedician &&
-              (selectedMedician.brand_name + " " + selectedMedician.ml)}
-          </h4>
-          <h4>
-            &nbsp;
-            {country.map((country) =>
-              country.id == selectedMedician.country ? country.name : ""
-            )}
-          </h4>
-          <h4>
-            &nbsp;
-            {pharmGroub.map((pharm) =>
-              pharm.id == selectedMedician.pharm_group ? pharm.name_english : ""
-            )}
+              (". " + selectedMedician.brand_name + " " + selectedMedician.ml + " " + selectedMedician.weight)}
           </h4>
         </div>
         <Modal
@@ -206,6 +195,9 @@ export default function SelectMedician({
                  }
                   
                 }}>
+                  <div>
+                    Barcode/Brand Name __ ml __ generics __ Kind __ Country __  
+                  </div>
               <ReactSearchAutocomplete
                 items={medician}
                 showIcon={false}

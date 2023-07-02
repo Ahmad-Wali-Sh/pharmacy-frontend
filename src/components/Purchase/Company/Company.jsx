@@ -3,6 +3,8 @@ import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Market from "./Market";
+import City from "./City";
 
 function Company({ button, title, icon, Update }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -35,15 +37,40 @@ function Company({ button, title, icon, Update }) {
   } = useForm();
 
   const COMPANIES_URL = import.meta.env.VITE_PHARM_COMPANIES;
+  const CITY_URL = import.meta.env.VITE_CITY
+  const CITY_MARKET = import.meta.env.VITE_MARKET
 
   const [companyLength, setCompanyLength] = React.useState([]);
+  const [city, setCity] = React.useState([]);
+  const [market, setMarket] = React.useState([]);
 
   React.useEffect(() => {
     axios
       .get(COMPANIES_URL)
       .then((res) => setCompanyLength(res.data.length))
       .catch((err) => console.log(err));
+    axios
+      .get(CITY_URL)
+      .then((res) => setCity(res.data))
+      .catch((err) => console.log(err));
+    axios
+      .get(CITY_MARKET)
+      .then((res) => setMarket(res.data))
+      .catch((err) => console.log(err));
+
+    
   }, []);
+
+  const UpdateUI = () => {
+    axios
+      .get(CITY_URL)
+      .then((res) => setCity(res.data))
+      .catch((err) => console.log(err));
+    axios
+      .get(CITY_MARKET)
+      .then((res) => setMarket(res.data))
+      .catch((err) => console.log(err));
+  }
 
   const SubmitForm = (data) => {
     const CompanyForm = new FormData();
@@ -60,6 +87,8 @@ function Company({ button, title, icon, Update }) {
     CompanyForm.append("company_online", data.company_online);
     CompanyForm.append("address", data.address);
     CompanyForm.append("description", data.description);
+    CompanyForm.append("market", data.market)
+    CompanyForm.append("city", data.city)
 
     axios
       .post(COMPANIES_URL, CompanyForm)
@@ -118,8 +147,20 @@ function Company({ button, title, icon, Update }) {
             <div className="company-form">
               <label>نام شرکت:</label>
               <input type="text" {...register("name")} required />
-              <div></div>
-              <div></div>
+              <label>مارکت:</label>
+              <div className="company-select-box">
+              <select className="select-default" {...register("market")}>
+                <option value="">
+                ...
+                </option>
+                {market.map((market) => (
+                  <option value={market.id}>{market.name}</option>
+                ))}
+              </select>
+              <div>
+                <Market button={2} Update={UpdateUI}/>          
+              </div>
+              </div>
               <label>رئیس:</label>
               <input type="text" {...register("ceo")} />
               <label>تماس رئیس:</label>
@@ -132,12 +173,25 @@ function Company({ button, title, icon, Update }) {
               <input type="text" {...register("visitor")} />
               <label>تماس وزیتور:</label>
               <input type="text" {...register("visitor_phone")} />
-              <label>شرکت ها:</label>
+              <label>کمپنی ها:</label>
               <input
                 type="text"
-                className="compaines-input"
                 {...register("companies")}
               />
+              <label>شهر:</label>
+              <div className="company-select-box">
+              <select className="select-default" {...register("city")}>
+                <option value="">
+                ...
+                </option>
+                {city.map((city)=> (
+                  <option value={city.id}>{city.name}</option>
+                ))}
+              </select>
+              <div>
+                <City button={2} Update={UpdateUI}/>              
+              </div>
+              </div>
               <label>تماس 1:</label>
               <input type="text" {...register("company_phone_1")} />
               <label>تماس 2:</label>

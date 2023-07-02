@@ -735,9 +735,10 @@ input[type="date"]:disabled {
   width: 100%;
   font-size: 0.8rem;
   display: grid;
-  grid-template-columns: 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr;
+  grid-template-columns:1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr;
   direction: rtl;
   gap:0.5rem;
+  grid-area: 5/5/5/7;
 }
 
 .bar_batch_box {
@@ -1146,6 +1147,23 @@ input[type="date"]:disabled {
   font-weight: bold;
 }
 .company-form > input:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+}
+
+.select-default {
+  height: 1.7rem;
+  border: none;
+  background-color: var(--color-three);
+  border-radius: 1rem;
+  padding-right: 1rem;
+  position: relative;
+  margin-left: 9rem;
+  font-size: large;
+  color: white;
+  font-weight: bold;
+}
+
+.select-default:focus {
   box-shadow: -4px -4px 4px var(--color-two);
 }
 
@@ -2300,4 +2318,13 @@ input[type="date"]:disabled {
 .alert-button-box > button:hover {
   background-image: var(--color-five);
   color: var(--color-ten);
+}
+
+.company-select-box {
+  width: 100%;
+  display: grid;
+  direction: ltr;
+  gap: 1rem;
+  grid-template-columns: 90% 20%;
+
 }
