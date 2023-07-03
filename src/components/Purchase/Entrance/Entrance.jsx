@@ -258,6 +258,8 @@ export default function Entrance(props) {
   const [expireDate, setExpireDate] = React.useState("");
   console.log(expireDate);
 
+  const [file, setFile] = React.useState("")
+
   const EntranceSubmit = (data) => {
     const EntranceForm = new FormData();
     EntranceForm.append(
@@ -312,6 +314,7 @@ export default function Entrance(props) {
         : exactEntrance.store
     );
     EntranceForm.append("wholesale", data.wholesale)
+    EntranceForm.append("image", file ? file : "" )
 
     if (searched == true) {
       axios
@@ -440,6 +443,7 @@ export default function Entrance(props) {
       ? data.no_box
       : autoCompleteData.medician.no_box);
     EntranceThrough.append("entrance", exactEntrance.id);
+    EntranceThrough.append("batch_number", data.batch_number)
 
     let result = true;
     const Conditional = () => {entranceThrough.map((prescription) => {
@@ -470,7 +474,8 @@ export default function Entrance(props) {
           interest_money: "",
           bonus: "",
           quantity_bonus:"",
-          no_box: ""
+          no_box: "",
+          batch_number: ""
         })
         setExpireDate("")
         axios
@@ -984,12 +989,17 @@ export default function Entrance(props) {
                   <option value={"SINGULAR"}>پرچون</option>
                 </select>
                 <label>توضیحات:</label>
-                <textarea
+                <input
                   {...register("description")}
                   defaultValue={exactEntrance.description}
                   className="entrance--inputs"
-                ></textarea>
-                <div></div>
+                ></input>
+                <label>عکس:</label>
+                <input
+                  type="file"
+                  onChange={(e) => {setFile(e.target.files[0])}}
+                ></input>
+                <a href={exactEntrance.image && new URL(exactEntrance.image).pathname.slice(16)} target="_blank" style={{textDecoration: "none", color: "grey"}}>{exactEntrance.image ? "Show_Photo" : ""}</a>
                 <div className="entrance-buttons">
                   <input
                     type="reset"
@@ -1101,6 +1111,11 @@ export default function Entrance(props) {
                   type="text"
                   {...register("quantity_bonus")}
                   className="entrance--inputs"
+                />
+                <label>بچ نمبر:</label>
+                <input
+                type="text"
+                {...register("batch_number")}
                 />
                 <div className="adding-box">
                   <label>قیمت:</label>

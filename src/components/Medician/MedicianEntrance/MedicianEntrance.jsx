@@ -140,6 +140,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("doctor_approved", data.doctor_approved)
     MedicianForm.append("patient_approved", data.patient_approved)
     MedicianForm.append("batch_number", data.batch_number)
+    MedicianForm.append("active", data.active)
 
     {
       button == 1 &&
@@ -361,8 +362,15 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 {...register("no_box")}
                 defaultValue={medician && medician.no_box}
               />
-              <div></div>
+              
               <div className="approving-box">
+              <label>فعال:</label>
+              <input
+                type="checkbox"
+                className="must-advised-input"
+                {...register("active")}
+                defaultChecked={medician && medician.active}
+                />
               <label>توصیه_حتمی:</label>
               <input
                 type="checkbox"
@@ -413,18 +421,12 @@ function MedicianEntrance({ title, icon, button, medician }) {
               />
               <div className="bar_batch_box">
                   <label>بارکد:</label>
-                  <label>بچ نمبر:</label>
               </div>
               <div className="bar_batch_box">
               <input
                 type="text"
                 {...register("barcode")}
                 defaultValue={medician && medician.barcode}
-              />
-              <input
-                type="text"
-                {...register("batch_number")}
-                defaultValue={medician && medician.batch_number}
               />
               </div>
             </div>

@@ -8,6 +8,7 @@ import Reports from "./components/Reports/Reports";
 import Sell from "./components/Sell/Sell";
 import Login from "./Login";
 import { useIsAuthenticated } from "react-auth-kit";
+import RevenueDashboard from "./components/Revenue/RevenueDashboard";
 
 function App() {
   const RequireAuth = ({ children }) => {
@@ -79,6 +80,16 @@ function App() {
               <RequireAuth>
                 <PageComponent>
                   <Reports />
+                </PageComponent>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/revenue"
+            element={
+              <RequireAuth>
+                <PageComponent>
+                  <RevenueDashboard />
                 </PageComponent>
               </RequireAuth>
             }

@@ -84,7 +84,7 @@ function EntrancThroughEntry({
         <label>{num + 1}</label>
         <div className="entrance-medician-map-box">
           <h4 className="entrance-medician-map-name">
-            <h4>
+            {/* <h4>
               {country.map(
                 (country) =>
                   country.id == exactMedician.country && `${country.name} _`
@@ -103,7 +103,14 @@ function EntrancThroughEntry({
               <div className="loading-medician">
                 <LoadingDNA />
               </div>
+            )} */}
+            <h4>
+            {kind.map((kind) =>
+              kind.id == exactMedician.kind && kind.name_english
             )}
+            {exactMedician &&
+              (". " + exactMedician.brand_name + " " + exactMedician.ml + " " + exactMedician.weight)}
+          </h4>
           </h4>
         </div>
         <input
