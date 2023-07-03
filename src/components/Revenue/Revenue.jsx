@@ -35,13 +35,19 @@ export default function Revenue(props) {
 
       axios
         .post(REVENUE_THROUGH_URL + "?revenue=" + revenue[0].id, RevneueForm)
-        .then((res) => console.log(res.data))
+        .then((res) => {
+          UpdateUI()
+          console.log(res.data)
+        })
         .catch((err)=> console.log(err))
 
-        UpdateUI()
+        
   }
 
   const ClearPay = (revenue) => {
+      axios
+        .delete(REVENUE_THROUGH_URL + revenue.id)
+        .then(() => UpdateUI())
 
   }
 
@@ -178,9 +184,11 @@ export default function Revenue(props) {
                     through.sold && (
                       <div className="revenue-map-content">
                         <h3>{key + 1}</h3>
-                        <h3>{through.prescription.prescription_number}</h3>
+                        <h3>{through.prescription}</h3>
                         <h3>{through.prescription.grand_total}AF</h3>
-                        <div className="revenue-button">
+                        <div className="revenue-button" onClick={()=>{
+                          ClearPay(through)
+                        }}>
                           <i class="fa-solid fa-angles-right"></i>
                         </div>
                       </div>

@@ -164,11 +164,11 @@ export default function SelectMedician({
         </div>
         <div className="selected-medician-show">
           <h4>
-            {kind.map((kind) =>
-              kind.id == selectedMedician.kind && kind.name_english
-            )}
             {selectedMedician &&
-              (". " + selectedMedician.brand_name + " " + selectedMedician.ml + " " + selectedMedician.weight)}
+              (selectedMedician.brand_name + " " + selectedMedician.ml + " " + selectedMedician.weight)}
+              {kind.map((kind) =>
+                kind.id == selectedMedician.kind && " ." + kind.name_english
+              )}
           </h4>
         </div>
         <Modal
