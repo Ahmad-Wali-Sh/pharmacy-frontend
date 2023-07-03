@@ -110,6 +110,10 @@ body {
 .fa-store {
   font-size: 2.2rem;
 }
+
+.fa-money-bill-transfer{
+  font-size: 2.2rem;
+}
 .fa-feather {
   font-size: 2.2rem;
 }
@@ -2327,4 +2331,99 @@ input[type="date"]:disabled {
   gap: 1rem;
   grid-template-columns: 90% 20%;
 
+}
+
+
+/* Revenue */
+
+.revenue-box {
+ width: 100%;
+ height: 90%;
+ background-color: var(--color-three);
+}
+.revenue-info-header {
+  background-color: var(--color-sex);
+  width: 99%;
+  height: 10%;
+  margin: 0.4rem;
+  margin-top: 0rem;
+  position: relative;
+  top: 0.4rem;
+  border-radius: 1rem;
+}
+.revenue-header {
+  background-color: var(--color-sex);
+  width: 99%;
+  height: 10%;
+  margin: 0.4rem;
+  margin-top: 0rem;
+  position: relative;
+  top: 0.4rem;
+  border-radius: 1rem;
+  direction: rtl;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+.revenue-content {
+  direction: rtl;
+  width: 97.8%;
+  height: 86%;
+  display: grid;
+  grid-template-columns: 20% 40% 40%;
+  gap: 0.4rem;
+  margin: 1.2rem;
+  margin-top: 0.8rem;
+}
+.revneue-content-info {
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+}
+.revneue-content-open {
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+}
+.revneue-content-close {
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+}
+
+.revenue-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid rgba(176, 168, 168, 0.317);
+  border-radius: 20rem;
+  text-align: center;
+  padding: 0.1rem;
+}
+.revenue-button:hover {
+  border: 1px solid var(--color-two);
+  background-image: var(--color-five);
+}
+
+.revenue-select {
+  width: 15rem;
+  direction: ltr;
+  background-color: var(--color-three);
+  border-radius: 1rem;
+  color: var(--color-ten);
+  border: none;
+}
+
+.mini-content-headers {
+  width: 100%;
+  height: 2.5rem;
+  border-radius: 1rem 1rem 0rem 0rem;
+  background-image: var(--color-five);
+  padding: 0.4rem;
+}
+
+.revenue-map-content{
+  display: grid;
+  grid-template-columns: 10% 40% 40% 10%;
+  text-align: right;
+  justify-content: space-between;
+  padding: 0.3rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--color-three);
 }
