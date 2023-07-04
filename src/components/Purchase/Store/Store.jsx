@@ -3,10 +3,13 @@ import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
 
 function Store({title, icon, button, Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
     const [file, setFile] = React.useState("");
+
+    const user = useAuthUser()
 
     function registerModalOpener() {
       setRegisterModalOpen(true);
@@ -47,6 +50,8 @@ function Store({title, icon, button, Update}) {
       StoreForm.append("responsible", data.responsible);
       StoreForm.append("description", data.description);
       StoreForm.append("image", file);
+      StoreForm.append("user", user().id);
+
   
       axios
         .post(STORE_URL, StoreForm)

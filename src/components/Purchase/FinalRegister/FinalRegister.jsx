@@ -3,9 +3,12 @@ import Modal from 'react-modal'
 import { useForm } from 'react-hook-form'
 import axios from 'axios';
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
 
 function FinalRegister({Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+    const user = useAuthUser()
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -43,6 +46,7 @@ function FinalRegister({Update}) {
   const FinalSubmit = (data) => {
       const FinalForm = new FormData()
       FinalForm.append('name', data.name)
+      FinalForm.append('user', user().id)
 
       axios
           .post(FINAL_REGISTER_URL, FinalForm)

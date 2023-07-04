@@ -3,9 +3,14 @@ import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
+
+
 
 function Currency({ Update }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+  const user = useAuthUser()
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -43,6 +48,7 @@ function Currency({ Update }) {
     CurrencyForm.append("name", data.name);
     CurrencyForm.append("rate", data.rate);
     CurrencyForm.append("description", data.description);
+    CurrencyForm.append("user", user().id);
 
     axios
       .post(CURRENCY_URL, CurrencyForm)

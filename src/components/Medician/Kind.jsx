@@ -3,10 +3,14 @@ import Modal from "react-modal";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
 
 function Kind({title, icon, button, Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
     const [file, setFile] = React.useState("");
+
+    const user = useAuthUser()
+
 
     function registerModalOpener() {
       setRegisterModalOpen(true);
@@ -45,6 +49,7 @@ function Kind({title, icon, button, Update}) {
       KindForm.append("name_persian", data.name_persian);
       KindForm.append("description", data.description);
       KindForm.append("image", file);
+      KindForm.append("user", user().id);
   
       axios
         .post(KIND_URL, KindForm)

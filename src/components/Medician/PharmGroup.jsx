@@ -3,10 +3,13 @@ import Modal from "react-modal";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
 
 function PharmGroup({title, icon, button, Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
     const [file, setFile] = React.useState("");
+
+    const user = useAuthUser()
 
     function registerModalOpener() {
       setRegisterModalOpen(true);
@@ -45,6 +48,7 @@ function PharmGroup({title, icon, button, Update}) {
       PharmGroupForm.append("name_persian", data.name_persian);
       PharmGroupForm.append("description", data.description);
       PharmGroupForm.append("image", file);
+      PharmGroupForm.append("user", user().id);
   
       axios
         .post(PHARM_GROUB_URL, PharmGroupForm)

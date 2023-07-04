@@ -3,6 +3,9 @@ import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
+
+
 
 function Doctor({ button, title, icon, Update }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -13,6 +16,8 @@ function Doctor({ button, title, icon, Update }) {
   function registerModalCloser() {
     setRegisterModalOpen(false);
   }
+
+  const user = useAuthUser()
 
   const ModalStyles = {
     content: {
@@ -57,7 +62,7 @@ function Doctor({ button, title, icon, Update }) {
     DoctorForm.append("work_time", data.work_time);
     DoctorForm.append("home_address", data.home_address);
     DoctorForm.append("discription", data.discription);
-    DoctorForm.append("user", 1);
+    DoctorForm.append("user", user().id);
 
     axios
       .post(DOCOTOR_URL, DoctorForm)

@@ -3,10 +3,14 @@ import Modal from "react-modal";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
+
 
 function Country({title, icon, button, Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
     const [file, setFile] = React.useState("");
+
+    const user = useAuthUser()
 
     function registerModalOpener() {
       setRegisterModalOpen(true);
@@ -43,6 +47,7 @@ function Country({title, icon, button, Update}) {
       const CountryForm = new FormData();
       CountryForm.append("name", data.name);
       CountryForm.append("image", file);
+      CountryForm.append("user", user().id);
   
       axios
         .post(COUNTRY_URL, CountryForm)

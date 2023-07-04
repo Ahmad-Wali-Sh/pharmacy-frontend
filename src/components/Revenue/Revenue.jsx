@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import {useAuthUser} from 'react-auth-kit'
 
 export default function Revenue(props) {
   const ModalStyles = {
@@ -18,6 +19,8 @@ export default function Revenue(props) {
     },
   };
 
+  const user = useAuthUser()
+
   const {
     register,
     handleSubmit,
@@ -32,6 +35,7 @@ export default function Revenue(props) {
     RevneueForm.append("revenue", revenue[0].id)
     RevneueForm.append("prescription", prescription.id)
     RevneueForm.append("sold", true)
+    RevneueForm.append("user", user().id)
 
       axios
         .post(REVENUE_THROUGH_URL + "?revenue=" + revenue[0].id, RevneueForm)

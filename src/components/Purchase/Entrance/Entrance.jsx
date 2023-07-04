@@ -17,6 +17,7 @@ import {
   DateInput,
   DateInputSimple,
 } from "react-hichestan-datetimepicker";
+import {useAuthUser} from 'react-auth-kit'
 
 export default function Entrance(props) {
   /* Modal */
@@ -53,6 +54,7 @@ export default function Entrance(props) {
       backgroundColor: "rgba(60,60,60,0.5)",
     },
   }
+  const user = useAuthUser()
 
   /* Form Hook */
 
@@ -315,6 +317,7 @@ export default function Entrance(props) {
     );
     EntranceForm.append("wholesale", data.wholesale)
     EntranceForm.append("image", file ? file : "" )
+    EntranceForm.append("user", user().id )
 
     if (searched == true) {
       axios
@@ -444,6 +447,7 @@ export default function Entrance(props) {
       : autoCompleteData.medician.no_box);
     EntranceThrough.append("entrance", exactEntrance.id);
     EntranceThrough.append("batch_number", data.batch_number)
+    EntranceThrough.append("user", user().id)
 
     let result = true;
     const Conditional = () => {entranceThrough.map((prescription) => {

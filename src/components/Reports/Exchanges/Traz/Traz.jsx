@@ -174,7 +174,7 @@ function Traz({ Closer }) {
                     <h4>{traz.type == "EntranceThrough" ? traz.each_price : ""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.expire_date :""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.company : ""}</h4>
-                    <h4>{"Ahmad"}</h4>
+                    <h4>{traz.username}</h4>
                     <h4>{traz.timestamp.substring(0,10)}</h4>
                     <h4>{traz.timestamp.substring(11, 16)}</h4>
                     <h4>{traz.type == "OutranceThrough" ? "خروجی" : traz.type == "PrescriptionThrough" ? "خروجی" : ""}</h4>

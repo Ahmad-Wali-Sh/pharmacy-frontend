@@ -13,6 +13,9 @@ function Login() {
   const LOGIN_URL = import.meta.env.VITE_LOGIN;
   const ME_URL = import.meta.env.VITE_ME;
 
+
+ 
+
   const onSubmit = (e) => {
     e.preventDefault();
     axios
@@ -37,6 +40,17 @@ function Login() {
           axios.defaults.headers.common[
             "Authorization"
           ] = `Token ${res.data.auth_token}`;
+          
+          // axios.create({
+          //   transformRequest: [(data) => {
+          //     data.append('user', 1)
+          //   }, ...axios.defaults.transformRequest]
+          // })
+
+          // axios.defaults.transformRequest[(data,header) => {
+          //   data.append('user', me_res.data.id)
+          //   return data
+          // }]
         }
       })
       .catch((err) => console.log(err));

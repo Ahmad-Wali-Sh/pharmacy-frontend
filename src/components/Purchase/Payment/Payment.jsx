@@ -3,6 +3,8 @@ import Modal from 'react-modal'
 import { useForm } from 'react-hook-form'
 import axios from 'axios';
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
+
 
 function Payment({Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -13,6 +15,8 @@ function Payment({Update}) {
   function registerModalCloser() {
     setRegisterModalOpen(false);
   }
+
+  const user = useAuthUser()
 
   const ModalStyles = {
     content: {
@@ -43,6 +47,7 @@ function Payment({Update}) {
   const FinalSubmit = (data) => {
       const FinalForm = new FormData()
       FinalForm.append('name', data.name)
+      FinalForm.append('user', user().id)
 
       axios
           .post(PAYMENT_URL, FinalForm)

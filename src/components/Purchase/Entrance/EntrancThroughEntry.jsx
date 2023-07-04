@@ -3,6 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
+import {useAuthUser} from 'react-auth-kit'
 
 function EntrancThroughEntry({
   through,
@@ -23,6 +24,8 @@ function EntrancThroughEntry({
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const user = useAuthUser()
 
   React.useEffect(() => {
     axios
@@ -51,6 +54,8 @@ function EntrancThroughEntry({
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
     MedicianUpdateForm.append("no_box", data.no_box);
+    MedicianUpdateForm.append("user", user().id);
+
 
     axios
       .patch(ENTRANCE_THROUGH_URL + through.id + "/", MedicianUpdateForm)
