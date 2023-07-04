@@ -3,6 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
+import {useAuthUser} from 'react-auth-kit'
 
 function PrescriptionThroughEntry({
   through,
@@ -34,9 +35,12 @@ function PrescriptionThroughEntry({
       .catch((err) => console.log(err));
   }, []);
 
+  const user = useAuthUser()
+
   const MedicianUpdate = (data) => {
     const MedicianUpdateForm = new FormData();
     MedicianUpdateForm.append("quantity", data.quantity);
+    MedicianUpdateForm.append("user", user().id);
 
     axios
       .patch(PRESCRIPTION_THROUGH_URL + through.id + "/", MedicianUpdateForm)

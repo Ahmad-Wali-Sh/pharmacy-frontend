@@ -5,9 +5,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Market from "./Market";
 import City from "./City";
+import {useAuthUser} from 'react-auth-kit'
 
 function Company({ button, title, icon, Update }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+  const user = useAuthUser()
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -89,6 +92,7 @@ function Company({ button, title, icon, Update }) {
     CompanyForm.append("description", data.description);
     CompanyForm.append("market", data.market)
     CompanyForm.append("city", data.city)
+    CompanyForm.append("user", user().id)
 
     axios
       .post(COMPANIES_URL, CompanyForm)

@@ -3,9 +3,12 @@ import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
 
 function Department({ title, icon, button, Update }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+  const user = useAuthUser()
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -46,6 +49,7 @@ function Department({ title, icon, button, Update }) {
     StoreForm.append("discount_money", data.discount_money);
     StoreForm.append("discount_percent", data.discount_percent);
     StoreForm.append("celling_start", data.celling_start);
+    StoreForm.append("user", user().id);
 
     axios
       .post(DEPARTMENT_URL, StoreForm)

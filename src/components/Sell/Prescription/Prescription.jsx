@@ -9,6 +9,7 @@ import SelectMedician from "../../Purchase/Entrance/SelectMedician";
 import PrescriptionThroughEntry from "./PrescriptionThroughEntry";
 import Doctor from "./Doctor";
 import Patient from "./Patient";
+import {useAuthUser} from 'react-auth-kit'
 
 export default function Prescription(props) {
   /* Modal */
@@ -27,6 +28,8 @@ export default function Prescription(props) {
       backgroundColor: "rgba(60,60,60,0.5)",
     },
   };
+
+  const user = useAuthUser()
 
   const popUpStyle = {
     content: {
@@ -217,6 +220,7 @@ export default function Prescription(props) {
         : data.prescription_number
     );
     PrescriptionForm.append("image", file ? file : "")
+    PrescriptionForm.append("user", user().id)
 
     if (submited == false) {
       axios
@@ -263,6 +267,7 @@ export default function Prescription(props) {
     );
     PrescritptionThroughForm.append("medician", autoCompleteData.medician.id);
     PrescritptionThroughForm.append("prescription", prescription.id);
+    PrescritptionThroughForm.append("user", user().id);
 
     let result = true;
     const Conditional = () => {
@@ -429,6 +434,7 @@ export default function Prescription(props) {
     PrescriptionForm.append("zakat", prescription.zakat);
     PrescriptionForm.append("khairat", prescription.khairat);
     PrescriptionForm.append("image", prescription.image)
+    PrescriptionForm.append("user", user().id)
 
     axios
       .post(PRESCRIPTION_URL, PrescriptionForm)
@@ -541,6 +547,9 @@ export default function Prescription(props) {
       DepartmentForm.append("discount_percent", res.data.discount_percent);
       DepartmentForm.append("zakat", "");
       DepartmentForm.append("khairat", "");
+      DepartmentForm.append("user", user().id);
+
+
       axios
         .post(PRESCRIPTION_URL, DepartmentForm)
         .then((res) => {

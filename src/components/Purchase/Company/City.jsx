@@ -3,9 +3,13 @@ import Modal from "react-modal";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import {useAuthUser} from 'react-auth-kit'
+
 
 function City({title, icon, button, Update}) {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+    const user = useAuthUser()
 
     function registerModalOpener() {
       setRegisterModalOpen(true);
@@ -41,6 +45,7 @@ function City({title, icon, button, Update}) {
     const SubmitForm = (data) => {
       const CountryForm = new FormData();
       CountryForm.append("name", data.name);
+      CountryForm.append("user", user().id);
   
       axios
         .post(COUNTRY_URL, CountryForm)

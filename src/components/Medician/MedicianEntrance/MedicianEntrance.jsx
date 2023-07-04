@@ -8,9 +8,12 @@ import { toast } from "react-toastify";
 import Kind from "../Kind";
 import PharmGroup from "../PharmGroup";
 import Country from "../Country";
+import {useAuthUser} from 'react-auth-kit'
 
 function MedicianEntrance({ title, icon, button, medician }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+  const user = useAuthUser()
 
   function registerModalOpener() {
     UpdateFunction();
@@ -141,6 +144,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("patient_approved", data.patient_approved)
     MedicianForm.append("batch_number", data.batch_number)
     MedicianForm.append("active", data.active)
+    MedicianForm.append("user", user().id)
 
     {
       button == 1 &&

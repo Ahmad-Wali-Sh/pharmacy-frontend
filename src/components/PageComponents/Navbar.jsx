@@ -22,7 +22,7 @@ function Navbar() {
           />
         </div>
         <div className="profile">
-          <img className="profile-image" src="./images/pic.jpg" />
+          <img className="profile-image" src={auth().image ? new URL(auth().image).pathname.slice(16) : "./images/pic.jpg"} />
           <div className="profile-text">
             <h5>{(auth().username)}</h5>
             <h6>{auth().email}</h6>
