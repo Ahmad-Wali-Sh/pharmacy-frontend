@@ -99,6 +99,10 @@ body {
   color: var(--color-four);
 }
 
+.fa-brands {
+  color: var(--color-four);
+}
+
 .fa-cart-arrow-down {
   font-size: 2.2rem;
 }
@@ -127,6 +131,9 @@ body {
 
 .fa-clipboard-list {
   font-size: 2.2rem;
+}
+.fa-circle-plus {
+  font-size: 200%;
 }
 
 .fa-arrow-right-from-bracket {
@@ -2366,7 +2373,7 @@ input[type="date"]:disabled {
   width: 97.8%;
   height: 86%;
   display: grid;
-  grid-template-columns: 20% 40% 40%;
+  grid-template-columns: 50% 50.5%;
   gap: 0.4rem;
   margin: 1.2rem;
   margin-top: 0.8rem;
@@ -2416,7 +2423,7 @@ input[type="date"]:disabled {
 
 .revenue-map-content {
   display: grid;
-  grid-template-columns: 10% 40% 40% 10%;
+  grid-template-columns: 10% 20% 20% 20% 20% 10%;
   text-align: right;
   justify-content: space-between;
   padding: 0.3rem;
@@ -2436,7 +2443,7 @@ input[type="date"]:disabled {
 
 .revenue-manager-filters {
   width: 99%;
-  height: 30%;
+  height: 25%;
   position: relative;
   margin: 0.4rem;
   background-color: var(--color-sex);
@@ -2455,6 +2462,35 @@ input[type="date"]:disabled {
   background-color: var(--color-two);
   border-radius: 1rem;
   margin-left: 0.4rem;
+  display: grid;
+  direction: rtl;
+  padding-right: 1rem;
+  grid-template-columns: 0.1fr 0.4fr 0.6fr 0.6fr 1fr 1fr 0.7fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.4fr;
+}
+.revenue-info-content-header {
+  width: 99%;
+  height: 5%;
+  background-color: var(--color-two);
+  border-radius: 1rem;
+  margin-left: 0.4rem;
+  display: grid;
+  direction: rtl;
+  padding-right: 1rem;
+  margin-top: 0.7rem;
+  text-align: right;
+  grid-template-columns: 0.1fr 0.4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  font-size: 0.9rem;
+}
+
+.revenue-info-map {
+  display: grid;
+  grid-template-columns: 0.1fr 0.4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  direction: rtl;
+  padding-right: 0.1rem;
+  height: 2.5rem;
+  border-bottom: 1px solid var(--color-three);
+  padding-top: 0.5rem;
+  color: var(--color-ten)
 }
 
 .revenue-manager-content {
@@ -2463,6 +2499,15 @@ input[type="date"]:disabled {
   background-color: var(--color-sex);
   border-radius: 1rem;
   margin: 0.4rem;
+  overflow-y: scroll;
+}
+.revenue-info-content {
+  width: 99%;
+  height: 90%;
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  margin: 0.4rem;
+  overflow-y: scroll;
 }
 
 .revenue-manager-inputs {
@@ -2479,3 +2524,73 @@ input[type="date"]:disabled {
 .revenue-manager-inputs:focus {
   box-shadow: -4px -4px 4px var(--color-two);
 }
+
+.revenue-manager-buttons-box {
+  width: 100%;
+  height: 2.4rem;
+  grid-area: 2 / 1 / 2 / 9;
+  border-radius: 1rem;
+  background-color: var(--color-nine);
+  padding: 0.45rem;
+  direction: rtl;
+  text-align: right;
+  display: flex;
+  gap: 1rem;
+}
+
+.revenue-manager-buttons {
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 1rem;
+  background-color: var(--color-sex);
+  padding: 0.1rem;
+}
+.revenue-manager-buttons:hover {
+  background-color: var(--color-two);
+}
+.revenue-manager-buttons-map {
+  width: 2rem;
+  height: 1.5rem;
+  border-radius: 1rem;
+  background-color: var(--color-sex);
+  padding: 0.1rem;
+  border: none;
+}
+.revenue-manager-buttons-map:hover {
+  background-color: var(--color-two);
+}
+
+.revenue-manager-map {
+  display: grid;
+  grid-template-columns: 0.1fr 0.4fr 0.6fr 0.6fr 1fr 1fr 0.7fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.4fr;
+  direction: rtl;
+  padding-right: 0.1rem;
+  height: 2.5rem;
+  border-bottom: 1px solid var(--color-three);
+  padding-top: 0.5rem;
+  color: var(--color-ten)
+}
+
+
+.revenue-manager-select-active {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 1rem;
+  height: 2rem;
+  width: 3rem;
+  border: none;
+  position: relative;
+  top: -0.3rem;
+  color:rgb(72, 161, 72)
+}
+
+.revenue-manager-select-deactive {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 1rem;
+  height: 2rem;
+  width: 3rem;
+  border: none;
+  position: relative;
+  top: -0.3rem;
+  color:rgb(168, 78, 78)
+}
+
