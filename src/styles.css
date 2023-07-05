@@ -111,7 +111,11 @@ body {
   font-size: 2.2rem;
 }
 
-.fa-money-bill-transfer{
+.fa-landmark {
+  font-size: 2.2rem;
+}
+
+.fa-money-bill-transfer {
   font-size: 2.2rem;
 }
 .fa-feather {
@@ -554,7 +558,6 @@ input[type="date"]:disabled {
   max-height: 70vh;
 }
 
-
 .sc-gueYoa > div {
   display: none;
 }
@@ -664,7 +667,6 @@ input[type="date"]:disabled {
   padding-left: 0.5rem;
   padding-right: 0.7rem;
   margin-right: auto;
-  
 }
 .entrance-through > input[type="submit"]:hover {
   background-color: var(--color-eleven);
@@ -739,9 +741,9 @@ input[type="date"]:disabled {
   width: 100%;
   font-size: 0.8rem;
   display: grid;
-  grid-template-columns:1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr;
+  grid-template-columns: 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr;
   direction: rtl;
-  gap:0.5rem;
+  gap: 0.5rem;
   grid-area: 5/5/5/7;
 }
 
@@ -764,14 +766,11 @@ input[type="date"]:disabled {
   height: 1.5rem;
   background-color: var(--color-three);
   padding-right: 1rem;
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
 .numbers-box-pocket > input:focus {
   box-shadow: -4px -4px 4px var(--color-two);
 }
-
-
-
 
 .entrance-medician-map-name {
   font-size: 0.8rem;
@@ -1044,7 +1043,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   color: var(--color-ten);
   direction: rtl;
-  padding-right:1rem;
+  padding-right: 1rem;
 }
 
 .adding-box {
@@ -1390,7 +1389,7 @@ input[type="date"]:disabled {
 
 .bar_batch_box > input[type="text"]:focus {
   box-shadow: -4px -4px 4px var(--color-two);
-} 
+}
 
 .medician-inter-form > input[type="text"]:focus {
   box-shadow: -4px -4px 4px var(--color-two);
@@ -2300,7 +2299,6 @@ input[type="date"]:disabled {
   margin-bottom: 1.2rem;
 }
 
-
 .alert-button-box {
   background-color: var(--color-nine);
   height: 40%;
@@ -2330,16 +2328,14 @@ input[type="date"]:disabled {
   direction: ltr;
   gap: 1rem;
   grid-template-columns: 90% 20%;
-
 }
-
 
 /* Revenue */
 
 .revenue-box {
- width: 100%;
- height: 90%;
- background-color: var(--color-three);
+  width: 100%;
+  height: 90%;
+  background-color: var(--color-three);
 }
 .revenue-info-header {
   background-color: var(--color-sex);
@@ -2418,7 +2414,7 @@ input[type="date"]:disabled {
   padding: 0.4rem;
 }
 
-.revenue-map-content{
+.revenue-map-content {
   display: grid;
   grid-template-columns: 10% 40% 40% 10%;
   text-align: right;
@@ -2426,4 +2422,60 @@ input[type="date"]:disabled {
   padding: 0.3rem;
   font-size: 0.9rem;
   border-bottom: 1px solid var(--color-three);
+}
+
+/* Revenue Manager */
+
+.revenue-manager-box {
+  width: 100%;
+  height: 90%;
+  background-color: var(--color-three);
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-manager-filters {
+  width: 99%;
+  height: 30%;
+  position: relative;
+  margin: 0.4rem;
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  direction: rtl;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
+  gap: 1rem;
+  text-align: left;
+}
+
+.revenue-manager-content-header {
+  width: 99%;
+  height: 5%;
+  background-color: var(--color-two);
+  border-radius: 1rem;
+  margin-left: 0.4rem;
+}
+
+.revenue-manager-content {
+  width: 99%;
+  height: 64%;
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  margin: 0.4rem;
+}
+
+.revenue-manager-inputs {
+  height: 1.7rem;
+  border: none;
+  background-color: var(--color-three);
+  border-radius: 1rem;
+  font-size: large;
+  color: white;
+  padding-right:1rem;
+  font-weight: bold;
+}
+
+.revenue-manager-inputs:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
 }
