@@ -171,7 +171,7 @@ function Traz({ Closer }) {
                     <h4>{traz.type == "EntranceThrough" ? "ورودی" : ""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.entrance : ""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.register_quantity : ""}</h4>
-                    <h4>{traz.type == "EntranceThrough" ? traz.each_price : ""}</h4>
+                    <h4>{traz.type == "EntranceThrough" ? traz.total_purchaseـafghani : ""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.expire_date :""}</h4>
                     <h4>{traz.type == "EntranceThrough" ? traz.company : ""}</h4>
                     <h4>{traz.username}</h4>
