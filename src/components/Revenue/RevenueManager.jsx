@@ -50,11 +50,11 @@ export default function RevenueManager(props) {
   const [revenueTrough, setRevenueThrough] = React.useState([]);
 
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
 
     axios.get(USERS_URL).then((res) => setUsers(res.data))
 
-  },[])
+  }, [])
 
 
 
@@ -112,13 +112,13 @@ export default function RevenueManager(props) {
               <label>نسخه:</label>
               <input className="revenue-manager-inputs" {...register('revenue_through')}></input>
               <div className="revenue-manager-buttons-box">
-                  <button type="button" className="revenue-manager-buttons" onClick={handleSubmit(RevenueSearch)}>
+                <button type="button" className="revenue-manager-buttons" onClick={handleSubmit(RevenueSearch)}>
                   <i class="fa-brands fa-searchengin"></i>
-                  </button>
-                  <NewRevenue users={users}/>
-                  <button type="button" className="revenue-manager-buttons">
+                </button>
+                <NewRevenue users={users} />
+                <button type="button" className="revenue-manager-buttons">
                   <i class="fa-solid fa-file-excel"></i>
-                  </button>
+                </button>
               </div>
             </div>
             <div className="revenue-manager-content-header">
@@ -140,35 +140,42 @@ export default function RevenueManager(props) {
             </div>
             <div className="revenue-manager-content">
               {
-                revenue.map((revenue, key)=>
+                revenue.map((revenue, key) =>
                   <div className="revenue-manager-map">
                     <h4></h4>
                     <h4>{key + 1}</h4>
                     <h4>{revenue.id}</h4>
                     <select defaultValue={revenue.active} className={revenue.active ? "revenue-manager-select-active" : "revenue-manager-select-deactive"}
-                    onChange={(res) => {
-                        const RevenueForm = new FormData()
-                        RevenueForm.append("active", res.target.value)
-                        axios.patch(REVENUE_URL + revenue.id + "/", RevenueForm)
-                            .then((res) => {
+                      onChange={(res) => {
+                        if (res.target.value === true) {
+                          alert("باز شدن صندوق های بسته شده امکان پذیر نیست.")
+                        }
+                        else {
+                          const RevenueForm = new FormData()
+                          RevenueForm.append("active", false)
+
+                          axios.patch(REVENUE_URL + revenue.id + "/", RevenueForm)
+                            .then(() => {
                               handleSubmit(RevenueSearch)
                             })
-                    }}
+
+                        }
+                      }}
                     >
                       <option value="true">باز</option>
                       <option value='false'>بسته</option>
                     </select>
                     <h4>{revenue.employee_name}</h4>
                     <h4>{revenue.username}</h4>
-                    <h5>{(revenue.created).slice(0,10)}</h5>
-                    <h5>{revenue.start_time && (revenue.start_time).slice(0,5)}</h5>
-                    <h5>{revenue.start_end && (revenue.start_end).slice(0,5)}</h5>
+                    <h5>{(revenue.created).slice(0, 10)}</h5>
+                    <h5>{revenue.start_time && (revenue.start_time).slice(0, 5)}</h5>
+                    <h5>{revenue.start_end && (revenue.start_end).slice(0, 5)}</h5>
                     <h4>{revenue.total}</h4>
                     <h4>{revenue.discount}</h4>
                     <h4>{revenue.khairat}</h4>
                     <h4>{revenue.zakat}</h4>
                     <h4>{revenue.rounded}</h4>
-                    <RevenueInfo revenue={revenue}/>
+                    <RevenueInfo revenue={revenue} />
                   </div>
                 )
               }
