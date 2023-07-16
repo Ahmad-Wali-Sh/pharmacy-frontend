@@ -10,7 +10,7 @@ function RevenueDashboard() {
     <div className="purchase">
       <div className="purchase-box">
         <RevenueManager title="مدیریت صندوق ها" icon="fa-solid fa-landmark" />
-        <Revenue title="صندوق" icon="fa-solid fa-money-bill-transfer" />
+        <Revenue title="صندوق" icon="fa-solid fa-money-bill-transfer" button={1} />
       </div>
       <div className="purchase-form"></div>
     </div>

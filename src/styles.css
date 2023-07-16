@@ -1067,12 +1067,12 @@ input[type="date"]:disabled {
 
 .serahcer {
   width: 15rem;
-  background-color: #600f0f;
+  background-color: var(--color-one);
   border: none;
 }
 
 .serahcer option {
-  background-color: #b8390e;
+  background-color: var(--color-two);
   padding: 10rem 10rem 10rem 10rem;
 }
 
@@ -1234,7 +1234,7 @@ input[type="date"]:disabled {
   border: none;
   width: 10%;
   height: 90%;
-  background-color: #b8390e;
+  background-color: var(--color-two);
   color: white;
 }
 
@@ -1310,7 +1310,7 @@ input[type="date"]:disabled {
   border: none;
   width: 20%;
   height: 95%;
-  background-color: #b8390e;
+  background-color: var(--color-two);
   color: white;
 }
 .store-submit > input:hover {
@@ -1751,7 +1751,7 @@ input[type="date"]:disabled {
 }
 
 .datapicker-class {
-  background-color: #533855;
+  background-color: var(--color-one);
   color: yellow;
 }
 

@@ -461,13 +461,17 @@ export default function Entrance(props) {
     entranceThrough.includes(autoCompleteData.medician.id)
   }
 
-  console.log(ConditionalInclude())
+
 
     if (Conditional() == true){
     axios
       .post(ENTRANCE_THROUGH_URL, EntranceThrough)
       .then((res) => {
         setEntranceThrough((prev) => [...prev, res.data]);
+        console.log(res.data)
+        if (res.data.total_purchaseـafghani > res.data.total_sell) {
+          alert('قیمت خرید از قیمت فروش بیشتر است!')
+        }
         toast.info("New Item Added.");
         reset({
           number_in_factor: "",
@@ -482,6 +486,7 @@ export default function Entrance(props) {
           batch_number: ""
         })
         setExpireDate("")
+        
         axios
           .get(ENTRANCE_THROUGH_URL + "?medician=" + res.data.medician)
           .then((lastRes) => {
