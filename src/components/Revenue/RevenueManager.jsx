@@ -5,6 +5,7 @@ import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
 import NewRevenue from "./NewRevenue";
 import RevenueInfo from "./RevenueInfo";
+import Revenue from "./Revenue";
 
 export default function RevenueManager(props) {
   const ModalStyles = {
@@ -119,6 +120,7 @@ export default function RevenueManager(props) {
                 <button type="button" className="revenue-manager-buttons">
                   <i class="fa-solid fa-file-excel"></i>
                 </button>
+                <Revenue button={2} title="صندوق" icon="fa-solid fa-money-bill-transfer" />
               </div>
             </div>
             <div className="revenue-manager-content-header">
