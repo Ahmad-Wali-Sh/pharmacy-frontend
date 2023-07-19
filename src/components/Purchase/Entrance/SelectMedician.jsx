@@ -215,7 +215,7 @@ export default function SelectMedician({
                         && MEDICIAN_URL + "?search=" + string.slice(0, string.indexOf(" "))
                     )
                     .then((res) => {
-                      setMedician(res.data);
+                      setMedician(res.data.results);
                     });
                 }}
                 onSelect={(item) => {
