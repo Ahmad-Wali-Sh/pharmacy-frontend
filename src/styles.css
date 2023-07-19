@@ -509,6 +509,7 @@ input[type="date"]:disabled {
   background-color: var(--color-sex);
   border-radius: 1rem;
   grid-area: 1 / 1 / 3 / 2;
+  height: 100%;
 }
 .entrance-entrance {
   background-color: var(--color-sex);
@@ -533,6 +534,28 @@ input[type="date"]:disabled {
   padding-left: 0.5rem;
   padding-right: 0.7rem;
 }
+
+.entrance-report-footer {
+  background-color: var(--color-nine);
+  height: 2.2rem;
+  border-radius: 1rem;
+  margin: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.entrance-report-button {
+  border-radius: 1rem;
+  margin: 0.3rem;
+  background-color: var(--color-one);
+
+}
+.entrance-report-button:hover {
+  border-radius: 1rem;
+  margin: 0.3rem;
+  background-color: var(--color-two);
+}
+
 
 .entrance-entrance > input {
   height: 1.47rem;
@@ -1024,9 +1047,11 @@ input[type="date"]:disabled {
 
 .entrance-report-body {
   width: 100%;
-  height: 100%;
+  height:75%;
   background-color: var(--color-seven);
   direction: rtl;
+  display: flex;
+  flex-direction: column;
 }
 
 .entrance-report-map-box {

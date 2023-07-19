@@ -46,13 +46,14 @@ function EntrancThroughEntry({
     purchasePrice && MedicianUpdateForm.append("each_price_factor", purchasePrice);
     MedicianUpdateForm.append("each_quantity", data.each_quantity);
     MedicianUpdateForm.append("discount_money", data.discount_money);
-    MedicianUpdateForm.append("each_price", data.each_price);
+    // MedicianUpdateForm.append("each_price", data.each_price);
     MedicianUpdateForm.append("discount_percent", data.discount_percent);
     MedicianUpdateForm.append("expire_date", data.expire_date);
-    MedicianUpdateForm.append("interest_money", data.interest_money);
+    // MedicianUpdateForm.append("interest_money", data.interest_money);
     MedicianUpdateForm.append("interest_percent", data.interest_percent);
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
+    MedicianUpdateForm.append("each_sell_price", data.each_sell_price);
     MedicianUpdateForm.append("no_box", data.no_box);
     MedicianUpdateForm.append("user", user().id);
 
@@ -140,14 +141,15 @@ function EntrancThroughEntry({
             setPurchasePrice(res.target.value)
           }}
         />
-        <input
+        {/* <input
           type="text"
           defaultValue={through.each_price}
           {...register("each_price")}
-        />
+          /> */}
         <input
           type="text"
-          value={through.each_sell_price}
+          defaultValue={through.each_sell_price}
+          {...register("each_sell_price")}
         />
         <input
           type="text"
@@ -174,11 +176,11 @@ function EntrancThroughEntry({
           defaultValue={through.expire_date}
           {...register("expire_date")}
         />
-        <input
+        {/* <input
           type="text"
           defaultValue={through.interest_money}
           {...register("interest_money")}
-        />
+        /> */}
         <input
           type="text"
           defaultValue={through.interest_percent}
