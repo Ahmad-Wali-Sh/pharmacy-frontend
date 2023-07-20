@@ -821,6 +821,7 @@ export default function Prescription(props) {
                       selectAutoCompleteData={AutoCompleteHandle}
                       trigger={selectTrigger}
                       tabFormulate={tabFormulate}
+                      department={props.department}
                     />
                   )}
                   {props.button == 1 && (
@@ -831,6 +832,7 @@ export default function Prescription(props) {
                       selectAutoCompleteData={AutoCompleteHandle}
                       trigger={selectTrigger}
                       tabFormulate={tabFormulate}
+                      department={props.department}
                     />
                   )}
                   {props.button == 2 && (
@@ -841,6 +843,7 @@ export default function Prescription(props) {
                       selectAutoCompleteData={AutoCompleteHandle}
                       tabFormulate={tabFormulate}
                       trigger={selectTrigger}
+                      department={props.department}
                     />
                   )}
                 </div>

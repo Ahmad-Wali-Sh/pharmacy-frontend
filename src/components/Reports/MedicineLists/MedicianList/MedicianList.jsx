@@ -130,7 +130,7 @@ function MedicianList({ Closer }) {
           autoCompleteData.country + 
           "&ordering=id"
       )
-      .then((res) => setMedicianList(res.data));
+      .then((res) => setMedicianList(res.data.results));
   };
 
   
