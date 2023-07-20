@@ -64,12 +64,14 @@ function MedicianEntrance({ title, icon, button, medician }) {
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
   const KIND_URL = import.meta.env.VITE_KIND;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
 
   const [country, setCountry] = React.useState([]);
   const [pharmGroup, setPharmGroup] = React.useState([]);
   const [kind, setKind] = React.useState([]);
   const [file, setFile] = React.useState("");
   const [kindName, setKindName] = React.useState("");
+  const [department, setDepartment] = React.useState([]);
   const [pharmGroupName, setPharmGroupName] = React.useState("");
   const [countryName, setCountryName] = React.useState("");
   const [autoCompleteData, setAutoCompleteData] = React.useState({
@@ -77,6 +79,10 @@ function MedicianEntrance({ title, icon, button, medician }) {
     pharm_group: medician && medician.pharm_group ? medician.pharm_group : "",
     kind: medician && medician.kind ? medician.kind : "",
   });
+  const [multipleSelected, setMultipleSelect] = React.useState([])
+
+
+  console.log(multipleSelected)
 
   React.useEffect(() => {
     axios
@@ -91,7 +97,13 @@ function MedicianEntrance({ title, icon, button, medician }) {
       .get(KIND_URL)
       .then((res) => setKind(res.data))
       .catch((err) => console.log(err));
+    axios
+      .get(DEPARTMENT_URL)
+      .then((res) => setDepartment(res.data))
+      .catch((err) => console.log(err));
   }, []);
+
+  console.log(department)
 
   React.useEffect(() => {
     kind.map(
@@ -142,6 +154,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("country", autoCompleteData.country);
     MedicianForm.append("doctor_approved", data.doctor_approved)
     MedicianForm.append("patient_approved", data.patient_approved)
+    MedicianForm.append("department", data.department)
     MedicianForm.append("batch_number", data.batch_number)
     MedicianForm.append("active", data.active)
     MedicianForm.append("user", user().id)
@@ -177,7 +190,10 @@ function MedicianEntrance({ title, icon, button, medician }) {
       button == 3 &&
         axios
           .patch(MEDICIAN_URL + medician.id + "/", MedicianForm)
-          .then((res) => toast.success("Data Updated Successfuly."))
+          .then((res) => {
+            toast.success("Data Updated Successfuly.")
+            console.log(res)
+          })
           .catch((err) => toast.error("Check Your Input And Try Again!"));
     }
   };
@@ -407,12 +423,31 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 {...register("usages")}
                 defaultValue={medician && medician.usages}
               />
+              <div>
               <label>عکس:</label>
+              <br />
+              <br />
+              <label>دیپارتمنت:</label>
+              </div>
+              <div>
               <input
                 type="file"
                 className="medician-image-field"
                 onChange={(e) => setFile(e.target.files[0])}
               />
+              <br />
+              <br />
+              <select className="medicine-department-select" {...register('department')} 
+              // onChange={(e) => {
+              //   setMultipleSelect( [...e.target.selectedOptions].map((o) => parseInt(o.value)))
+              // }}
+              >
+                <option></option>
+                {department.map((depart) => (
+                <option selected={(medician && medician.department) && medician.department == depart.id ? "selected" : ""} value={depart.id}>{depart.name}</option>
+              ))}
+              </select>
+              </div>
               <label>توضیحات:</label>
               <textarea
                 {...register("description")}

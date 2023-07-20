@@ -708,11 +708,10 @@ export default function Entrance(props) {
     })
   }
 
+
+  const LAST_ENTRANCE_URL = import.meta.env.VITE_LAST_ENTRANCE
+
   const BackEntrance = () => {
-    setExatEntrance({
-      without_discount: false,
-      description: "",
-    });
     setAutoCompleteData({
       company: "",
       store: "",
@@ -726,8 +725,8 @@ export default function Entrance(props) {
     setDatePickerValue("");
 
 
-
-    axios
+    exactEntrance.id ? (
+      axios
       .get(ENTRANCE_URL + (exactEntrance.id + 1) + "/")
       .then((e) => {
         setExatEntrance(e.data);
@@ -737,12 +736,34 @@ export default function Entrance(props) {
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Check Your Input And Try Again!");
         setExatEntrance({id: exactEntrance.id})
-      });
+        toast.error("Check Your Input And Try Again!");
+      })
+    ) : (
+      axios
+        .get(LAST_ENTRANCE_URL)
+        .then((e) => {
+          setExatEntrance(e.data[0]);
+          setSearched(true);
+          setDatePickerValue(e.data[0].factor_date);
+          setInterest(e.data[0].total_interest)
+          axios
+          .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
+          .then((e) => {
+            setEntranceThrough(e.data);
+            setFactorTotal(report.purchase_total)
+          })
+          .catch((e) => console.log(e));
+        })
+        .catch((err) => {
+          console.log(err);
+          setExatEntrance({id: exactEntrance.id})
+          toast.error("Check Your Input And Try Again!");
+        })
+    )
 
     axios
-      .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id + 1) )
+      .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id + 1))
       .then((e) => {
         setEntranceThrough(e.data);
         setFactorTotal(report.purchase_total)
@@ -764,9 +785,9 @@ export default function Entrance(props) {
     setSearched(false);
     setDatePickerValue("");
 
-    console.log(exactEntrance)
 
-    axios
+    exactEntrance.id ? (
+      axios
       .get(ENTRANCE_URL + (exactEntrance.id - 1) + "/")
       .then((e) => {
         setExatEntrance(e.data);
@@ -778,7 +799,31 @@ export default function Entrance(props) {
         console.log(err);
         setExatEntrance({id: exactEntrance.id})
         toast.error("Check Your Input And Try Again!");
-      });
+      })
+    ) : (
+      axios
+        .get(LAST_ENTRANCE_URL)
+        .then((e) => {
+          setExatEntrance(e.data[0]);
+          setSearched(true);
+          setDatePickerValue(e.data[0].factor_date);
+          setInterest(e.data[0].total_interest)
+          axios
+          .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
+          .then((e) => {
+            setEntranceThrough(e.data);
+            setFactorTotal(report.purchase_total)
+          })
+          .catch((e) => console.log(e));
+        })
+        .catch((err) => {
+          console.log(err);
+          setExatEntrance({id: exactEntrance.id})
+          toast.error("Check Your Input And Try Again!");
+        })
+    )
+
+
 
     axios
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id - 1))
