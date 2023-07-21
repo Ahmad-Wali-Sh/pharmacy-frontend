@@ -9,40 +9,40 @@ export default function SelectMedician({
   country,
   pharmGroub,
   selectAutoCompleteData,
-  trigger, 
+  trigger,
   tabFormulate,
-  department
+  department,
 }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [selectedMedician, setSelectedMedician] = React.useState("");
 
   function registerModalOpener() {
-   {tabFormulate != undefined && tabFormulate()}
+    {
+      tabFormulate != undefined && tabFormulate();
+    }
     setRegisterModalOpen(true);
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
   }
 
-
-  const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([])
+  const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([]);
 
   React.useEffect(() => {
-    department && axios
+    department &&
+      axios
         .get(MEDICIAN_URL + "?department=" + department.id)
         .then((res) => setBookmarkedMedicine(res.data.results))
-        .catch((err) => console.log(err))
-  }, [])
-  
+        .catch((err) => console.log(err));
+  }, []);
 
-  console.log(bookmarkedMedicine)
-  
-  React.useEffect(()=> {
-    if (trigger != 0){
-      registerModalOpener()
+  console.log(bookmarkedMedicine);
+
+  React.useEffect(() => {
+    if (trigger != 0) {
+      registerModalOpener();
     }
-    
-  },[trigger])
+  }, [trigger]);
 
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
 
@@ -61,44 +61,56 @@ export default function SelectMedician({
     },
   };
 
-
-
   const formatResult = (item) => {
-
- 
-    const pharmImage = pharmGroub.filter((value)=> {
-     return (value.id == item.pharm_group) && value.image
-    })
-    const kindImage = kind.filter((value)=> {
-      return (value.id == item.kind) && value.image 
-    })
-    const countryImage = country.filter((value)=> {
-      return (value.id == item.country && value.image)
-    })
+    const pharmImage = pharmGroub.filter((value) => {
+      return value.id == item.pharm_group && value.image;
+    });
+    const kindImage = kind.filter((value) => {
+      return value.id == item.kind && value.image;
+    });
+    const countryImage = country.filter((value) => {
+      return value.id == item.country && value.image;
+    });
     return (
       <div className="medician-format">
         <div className="medician-image">
           <img
             className="medician-image"
-            src={item.image ? new URL(item.image).pathname.slice(16) : "./images/nophoto.jpg"}
+            src={
+              item.image
+                ? new URL(item.image).pathname.slice(16)
+                : "./images/nophoto.jpg"
+            }
           />
         </div>
         <div className="medician-image">
           <img
             className="medician-image"
-            src={pharmImage[0] && pharmImage[0].image ?  new URL(pharmImage[0].image).pathname.slice(16) : "./images/nophoto.jpg"}
+            src={
+              pharmImage[0] && pharmImage[0].image
+                ? new URL(pharmImage[0].image).pathname.slice(16)
+                : "./images/nophoto.jpg"
+            }
           />
         </div>
         <div className="medician-image">
           <img
             className="medician-image"
-            src={kindImage[0] && kindImage[0].image ? new URL(kindImage[0].image).pathname.slice(16) : "./images/nophoto.jpg"}
+            src={
+              kindImage[0] && kindImage[0].image
+                ? new URL(kindImage[0].image).pathname.slice(16)
+                : "./images/nophoto.jpg"
+            }
           />
         </div>
         <div className="medician-image">
           <img
             className="medician-image"
-          src={countryImage[0] && countryImage[0].image ?  new URL(countryImage[0].image).pathname.slice(16) : "./images/nophoto.jpg" }
+            src={
+              countryImage[0] && countryImage[0].image
+                ? new URL(countryImage[0].image).pathname.slice(16)
+                : "./images/nophoto.jpg"
+            }
           />
         </div>
         <div className="medician-text-field">
@@ -119,40 +131,46 @@ export default function SelectMedician({
               </h4>
             </div>
             <h4>ترکیب: {item.generic_name.toString()}</h4>
-          <div className="medician-text-field-numbers">
-            <h4>مکان: {item.location}</h4>
-            <h4>قیمت: {`${item.price}AF`}</h4>
-            <h4>تعداد در پاکت: {item.no_pocket}</h4>
-            <h4>تعداد در قطی: {item.no_box}</h4>
-            <h4>موجودیت: {item.existence}</h4>
-          </div>
-          </div>
-            <div className="medician-big-text-fields">
-                <div className="medician-bix-text-field">
-                  {item.description && <div className="paragraph-big-text">
-                  توضیحات:
-                    {item.description}
-                  </div>}
-                  {item.cautions && <div className="paragraph-big-text">
-                  اخطار:
-                    {item.cautions}
-                  </div>}
-                  {item.usages && <div className="paragraph-big-text">
-                  استفاده:
-                    {item.usages}
-                  </div>}
-                </div>
+            <div className="medician-text-field-numbers">
+              <h4>مکان: {item.location}</h4>
+              <h4>قیمت: {`${item.price}AF`}</h4>
+              <h4>تعداد در پاکت: {item.no_pocket}</h4>
+              <h4>تعداد در قطی: {item.no_box}</h4>
+              <h4>موجودیت: {item.existence}</h4>
             </div>
+          </div>
+          <div className="medician-big-text-fields">
+            <div className="medician-bix-text-field">
+              {item.description && (
+                <div className="paragraph-big-text">
+                  توضیحات:
+                  {item.description}
+                </div>
+              )}
+              {item.cautions && (
+                <div className="paragraph-big-text">
+                  اخطار:
+                  {item.cautions}
+                </div>
+              )}
+              {item.usages && (
+                <div className="paragraph-big-text">
+                  استفاده:
+                  {item.usages}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     );
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter'){
-      registerModalOpener()
+    if (event.key === "Enter") {
+      registerModalOpener();
     }
-  }
+  };
 
   const AutoCompleteStyle = {
     height: "1.5rem",
@@ -163,7 +181,7 @@ export default function SelectMedician({
     border: "none",
     hoverBackgroundColor: "grey",
     zIndex: "2",
-    minHeight: "10rem"
+    minHeight: "10rem",
   };
   const AutoCompleteStyle2 = {
     ...AutoCompleteStyle,
@@ -172,16 +190,26 @@ export default function SelectMedician({
   return (
     <>
       <div className="select-medician">
-        <div className="select-medician-button" onClick={registerModalOpener} onKeyDown={handleKeyDown} tabIndex={0}>
+        <div
+          className="select-medician-button"
+          onClick={registerModalOpener}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+        >
           انتخاب دارو
         </div>
         <div className="selected-medician-show">
           <h4>
             {selectedMedician &&
-              (selectedMedician.brand_name + " " + selectedMedician.ml + " " + selectedMedician.weight)}
-              {kind.map((kind) =>
+              selectedMedician.brand_name +
+                " " +
+                selectedMedician.ml +
+                " " +
+                selectedMedician.weight}
+            {kind.map(
+              (kind) =>
                 kind.id == selectedMedician.kind && " ." + kind.name_english
-              )}
+            )}
           </h4>
         </div>
         <Modal
@@ -196,21 +224,25 @@ export default function SelectMedician({
                 <i className="fa-solid fa-xmark"></i>
               </div>
             </div>
-            <div className="medician-select-input-box" onKeyDown={(e) => {
-                  let scrollNow = document.querySelector('.sc-gLDzan').scrollTop
-                 if (e.key == "ArrowDown") {
-                    document.querySelector(".sc-gLDzan").scroll(scrollNow + 150, scrollNow + 150)
-                    
-                 }
-                 if (e.key == "ArrowUp") {
-                    document.querySelector(".sc-gLDzan").scroll(scrollNow - 150, scrollNow - 150)
-                    
-                 }
-                  
-                }}>
-                  <div>
-                    Barcode/Brand Name __ ml __ generics __ Kind __ Country __  
-                  </div>
+            <div
+              className="medician-select-input-box"
+              onKeyDown={(e) => {
+                let scrollNow = document.querySelector(".sc-gLDzan").scrollTop;
+                if (e.key == "ArrowDown") {
+                  document
+                    .querySelector(".sc-gLDzan")
+                    .scroll(scrollNow + 150, scrollNow + 150);
+                }
+                if (e.key == "ArrowUp") {
+                  document
+                    .querySelector(".sc-gLDzan")
+                    .scroll(scrollNow - 150, scrollNow - 150);
+                }
+              }}
+            >
+              <div>
+                Barcode/Brand Name __ ml __ generics __ Kind __ Country __
+              </div>
               <ReactSearchAutocomplete
                 items={medician}
                 showIcon={false}
@@ -220,12 +252,13 @@ export default function SelectMedician({
                 showClear={false}
                 inputDebounce="10"
                 showItemsOnFocus={true}
-                
                 onSearch={(string, result) => {
                   axios
                     .get(
-                      string.slice(0, string.indexOf(" ")) != ""
-                        && MEDICIAN_URL + "?search=" + string.slice(0, string.indexOf(" "))
+                      string.slice(0, string.indexOf(" ")) != "" &&
+                        MEDICIAN_URL +
+                          "?search=" +
+                          string.slice(0, string.indexOf(" "))
                     )
                     .then((res) => {
                       setMedician(res.data.results);
@@ -233,34 +266,41 @@ export default function SelectMedician({
                 }}
                 onSelect={(item) => {
                   selectAutoCompleteData(item);
-                  
+
                   registerModalCloser();
                   setSelectedMedician(item);
                 }}
                 maxResults={20}
-                style={{width: "20rem"}}
+                style={{ width: "20rem" }}
                 formatResult={formatResult}
                 autoFocus={true}
                 className="search"
               />
-              <MedicianEntrance button={2}/>
+              <MedicianEntrance button={2} />
               <div className="bookmarks-box">
-
                 {bookmarkedMedicine.map((medicine) => (
-                <div className="bookmark-card" onClick={() => {
-                  selectAutoCompleteData(medicine);
-                  
-                  registerModalCloser();
-                  setSelectedMedician(medicine);
-                }}>
-                    <img  className='bookmark-image' src={medicine.image ? new URL(medicine.image).pathname.slice(16) : "./images/nophoto.jpg"}/>
+                  <div
+                    className="bookmark-card"
+                    onClick={() => {
+                      selectAutoCompleteData(medicine);
+
+                      registerModalCloser();
+                      setSelectedMedician(medicine);
+                    }}
+                  >
+                    <img
+                      className="bookmark-image"
+                      src={
+                        medicine.image
+                          ? new URL(medicine.image).pathname.slice(16)
+                          : "./images/nophoto.jpg"
+                      }
+                    />
                     <h4>{medicine.brand_name}</h4>
                     <h5>{medicine.generic_name}</h5>
                     <h4>{medicine.ml}</h4>
-                </div>
+                  </div>
                 ))}
-
-                
               </div>
             </div>
           </div>

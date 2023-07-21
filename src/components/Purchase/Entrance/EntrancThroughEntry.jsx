@@ -3,7 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
-import {useAuthUser} from 'react-auth-kit'
+import { useAuthUser } from "react-auth-kit";
 
 function EntrancThroughEntry({
   through,
@@ -25,7 +25,7 @@ function EntrancThroughEntry({
     formState: { errors },
   } = useForm();
 
-  const user = useAuthUser()
+  const user = useAuthUser();
 
   React.useEffect(() => {
     axios
@@ -37,14 +37,58 @@ function EntrancThroughEntry({
       .catch((err) => console.log(err));
   }, []);
 
-  const [factorNumber, setInFactorNumber] = React.useState("")
-  const [purchasePrice, setPurchasePrice] = React.useState("")
+  const [factorNumber, setInFactorNumber] = React.useState("");
+  const [purchasePrice, setPurchasePrice] = React.useState("");
 
   const MedicianUpdate = (data) => {
+    const interest_percent = (
+      (100 * (data.each_sell_price * data.no_box - data.each_price_factor)) /
+      data.each_price_factor
+    ).toFixed(0);
+
     const MedicianUpdateForm = new FormData();
     factorNumber && MedicianUpdateForm.append("number_in_factor", factorNumber);
-    purchasePrice && MedicianUpdateForm.append("each_price_factor", purchasePrice);
-    MedicianUpdateForm.append("each_quantity", data.each_quantity);
+    purchasePrice &&
+      MedicianUpdateForm.append("each_price_factor", purchasePrice);
+    // MedicianUpdateForm.append("each_quantity", data.each_quantity);
+    MedicianUpdateForm.append("discount_money", data.discount_money);
+    // MedicianUpdateForm.append("each_price", data.each_price);
+    MedicianUpdateForm.append("discount_percent", data.discount_percent);
+    MedicianUpdateForm.append("expire_date", data.expire_date);
+    // MedicianUpdateForm.append("interest_money", data.interest_money);
+    MedicianUpdateForm.append("interest_percent", interest_percent);
+    MedicianUpdateForm.append("bonus", 0);
+    MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
+    MedicianUpdateForm.append("each_sell_price", data.each_sell_price);
+    // MedicianUpdateForm.append("no_box", data.no_box);
+    MedicianUpdateForm.append("lease", data.lease);
+    MedicianUpdateForm.append("user", user().id);
+
+    axios
+      .patch(ENTRANCE_THROUGH_URL + through.id + "/", MedicianUpdateForm)
+      .then(() => {
+        toast.success("Data Updated Successfuly.");
+        UpdateChunk();
+        UpdateUI();
+      })
+      .catch(() => toast.error("Check Your Input And Try Again!"));
+  };
+
+  const MedicianInterestUpdate = (data) => {
+    const eachSellPrice = (
+      (parseInt(data.each_price_factor) +
+        (parseInt(data.interest_percent) * parseInt(data.each_price_factor)) /
+          100) /
+      data.no_box
+    ).toFixed(1);
+
+    console.log(eachSellPrice);
+
+    const MedicianUpdateForm = new FormData();
+    factorNumber && MedicianUpdateForm.append("number_in_factor", factorNumber);
+    purchasePrice &&
+      MedicianUpdateForm.append("each_price_factor", purchasePrice);
+    // MedicianUpdateForm.append("each_quantity", data.each_quantity);
     MedicianUpdateForm.append("discount_money", data.discount_money);
     // MedicianUpdateForm.append("each_price", data.each_price);
     MedicianUpdateForm.append("discount_percent", data.discount_percent);
@@ -53,10 +97,10 @@ function EntrancThroughEntry({
     MedicianUpdateForm.append("interest_percent", data.interest_percent);
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
-    MedicianUpdateForm.append("each_sell_price", data.each_sell_price);
-    MedicianUpdateForm.append("no_box", data.no_box);
+    MedicianUpdateForm.append("each_sell_price", eachSellPrice);
+    // MedicianUpdateForm.append("no_box", data.no_box);
+    MedicianUpdateForm.append("lease", data.lease);
     MedicianUpdateForm.append("user", user().id);
-
 
     axios
       .patch(ENTRANCE_THROUGH_URL + through.id + "/", MedicianUpdateForm)
@@ -85,7 +129,7 @@ function EntrancThroughEntry({
     <form>
       <div
         className="entrance-medician-map"
-        onBlurCapture={handleSubmit(MedicianUpdate)}
+        // onBlurCapture={handleSubmit(MedicianUpdate)}
       >
         <label>{num + 1}</label>
         <div className="entrance-medician-map-box">
@@ -111,12 +155,17 @@ function EntrancThroughEntry({
               </div>
             )} */}
             <h4>
-            {kind.map((kind) =>
-              kind.id == exactMedician.kind && kind.name_english
-            )}
-            {exactMedician &&
-              (". " + exactMedician.brand_name + " " + exactMedician.ml + " " + exactMedician.weight)}
-          </h4>
+              {kind.map(
+                (kind) => kind.id == exactMedician.kind && kind.name_english
+              )}
+              {exactMedician &&
+                ". " +
+                  exactMedician.brand_name +
+                  " " +
+                  exactMedician.ml +
+                  " " +
+                  exactMedician.weight}
+            </h4>
           </h4>
         </div>
         <input
@@ -124,22 +173,25 @@ function EntrancThroughEntry({
           defaultValue={through.register_quantity}
           {...register("number_in_factor")}
           onChange={(res) => {
-            setInFactorNumber(res.target.value)
+            setInFactorNumber(res.target.value);
           }}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
         />
         <input
           style={{ display: "none" }}
           type="text"
           value={through.id}
           {...register("entrance_through_id")}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
         />
         <input
           type="text"
           defaultValue={through.each_purchase_price}
           {...register("each_price_factor")}
           onChange={(res) => {
-            setPurchasePrice(res.target.value)
+            setPurchasePrice(res.target.value);
           }}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
         />
         {/* <input
           type="text"
@@ -150,49 +202,57 @@ function EntrancThroughEntry({
           type="text"
           defaultValue={through.each_sell_price}
           {...register("each_sell_price")}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
         />
         <input
           type="text"
-          defaultValue={through.each_quantity}
+          value={through.each_quantity}
           {...register("each_quantity")}
         />
-        <input
-          type="text"
-          defaultValue={through.no_box}
-          {...register("no_box")}
-        />
+        <input type="text" value={through.no_box} {...register("no_box")} />
         <input
           type="text"
           defaultValue={through.discount_money}
           {...register("discount_money")}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
         />
         <input
           type="text"
           defaultValue={through.discount_percent}
           {...register("discount_percent")}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
         />
         <input
           type="date"
           defaultValue={through.expire_date}
           {...register("expire_date")}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
         />
-        {/* <input
-          type="text"
-          defaultValue={through.interest_money}
-          {...register("interest_money")}
-        /> */}
+        <input
+          type="checkbox"
+          defaultChecked={through.lease}
+          {...register("lease")}
+          style={{ width: "1rem", marginRight: "1rem" }}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
+        />
         <input
           type="text"
           defaultValue={through.interest_percent}
           {...register("interest_percent")}
+          onBlurCapture={handleSubmit(MedicianInterestUpdate)}
         />
         <input
           type="text"
           defaultValue={through.quantity_bonus}
           {...register("quantity_bonus")}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
         />
         <h4>{through.total_purchaseـafghani}</h4>
-        <h4>{through.total_interest}</h4>
+        <h4>
+          {through.total_purchaseـafghani -
+            (through.total_purchaseـafghani / 100) * through.discount_percent -
+            through.discount_money}
+        </h4>
         <h4>{through.total_sell}</h4>
         <div className="medician-map-buttons">
           <div onClick={handleSubmit(MedicianDelete)}>

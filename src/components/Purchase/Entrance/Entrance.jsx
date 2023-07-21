@@ -17,7 +17,7 @@ import {
   DateInput,
   DateInputSimple,
 } from "react-hichestan-datetimepicker";
-import {useAuthUser} from 'react-auth-kit'
+import { useAuthUser } from "react-auth-kit";
 
 export default function Entrance(props) {
   /* Modal */
@@ -47,14 +47,14 @@ export default function Entrance(props) {
       zIndex: "100",
       width: "30%",
       height: "30%",
-      top:"30%",
-      left:"35%"
+      top: "30%",
+      left: "35%",
     },
     overlay: {
       backgroundColor: "rgba(60,60,60,0.5)",
     },
-  }
-  const user = useAuthUser()
+  };
+  const user = useAuthUser();
 
   /* Form Hook */
 
@@ -134,8 +134,8 @@ export default function Entrance(props) {
     sell_total: 0,
     purchase_total: 0,
   });
-  const [FactorTotal, setFactorTotal] = React.useState(report.purchase_total)
-  console.log(report.purchase_total)
+  const [FactorTotal, setFactorTotal] = React.useState(report.purchase_total);
+  console.log(report.purchase_total);
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -158,54 +158,78 @@ export default function Entrance(props) {
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
-    ResetForm()
-    reset({})
+    ResetForm();
+    reset({});
   }
+
+  const [PriceAppliedVerify, setPriceAppliedVerify] = React.useState(false);
+
+  const PriceAppliedVerifyCloser = () => {
+    setPriceAppliedVerify(false);
+    registerModalCloser();
+  };
+
+  const PriceAppliedVerifyOpener = () => {
+    setPriceAppliedVerify(true);
+  };
+
+  const JustPriceAppliedVerifyCloser = () => {
+    setPriceAppliedVerify(false);
+  };
 
   const TotalAlertCloser = () => {
     let currency_rate = 1;
     let result = 1;
     result = currency.map((cur) => {
-      cur.id == exactEntrance.currency ? currency_rate = cur.rate : 1
-    })
-
+      cur.id == exactEntrance.currency ? (currency_rate = cur.rate) : 1;
+    });
 
     if (report.purchase_total == FactorTotal * currency_rate) {
-      registerModalCloser()
+      if (priceApplied == false) {
+        entranceThrough.length >= 1
+          ? PriceAppliedVerifyOpener()
+          : registerModalCloser();
+      } else {
+        registerModalCloser();
+      }
     }
     if (report.purchase_total != FactorTotal * currency_rate) {
-      console.log("currency_rate: ", currency_rate)
-
-      AlertModalOpener()
+      AlertModalOpener();
     }
-  }
+  };
 
-  const [AlertModalOpen, setAlertModalOpen] = React.useState(false)
+  const [AlertModalOpen, setAlertModalOpen] = React.useState(false);
+  const [priceApplied, setPriceApplied] = React.useState(false);
 
   const AlertModalOpener = () => {
-    setAlertModalOpen(true)
-  } 
+    setAlertModalOpen(true);
+  };
   const AlertModalCloser = () => {
-    setAlertModalOpen(false)
-    registerModalCloser()
+    setAlertModalOpen(false);
 
-  } 
+    if (priceApplied == false) {
+      entranceThrough.length >= 1
+        ? PriceAppliedVerifyOpener()
+        : registerModalCloser();
+    } else {
+      registerModalCloser();
+    }
+  };
 
   const AlertJustModalCloser = () => {
-    setAlertModalOpen(false)
-  }
+    setAlertModalOpen(false);
+  };
 
-
-  const [PriceAlertOpen, setPriceAlertOpen] = React.useState(false)
+  const [PriceAlertOpen, setPriceAlertOpen] = React.useState(false);
 
   const PriceAlertOpener = () => {
-    setPriceAlertOpen(true)
-  }
+    setPriceAlertOpen(true);
+  };
 
   const PriceAlertCloser = () => {
-    setPriceAlertOpen(false)
+    setPriceAlertOpen(false);
     setTrigger((prev) => prev + 1);
-  }
+  };
 
   /* Requests */
 
@@ -260,13 +284,15 @@ export default function Entrance(props) {
   const [expireDate, setExpireDate] = React.useState("");
   console.log(expireDate);
 
-  const [file, setFile] = React.useState("")
+  const [file, setFile] = React.useState("");
 
   const EntranceSubmit = (data) => {
     const EntranceForm = new FormData();
     EntranceForm.append(
       "factor_number",
-        exactEntrance.factor_number ? exactEntrance.factor_number : data.factor_number
+      exactEntrance.factor_number
+        ? exactEntrance.factor_number
+        : data.factor_number
     );
     EntranceForm.append(
       "factor_date",
@@ -315,9 +341,9 @@ export default function Entrance(props) {
         ? autoCompleteData.store.id
         : exactEntrance.store
     );
-    EntranceForm.append("wholesale", data.wholesale)
-    EntranceForm.append("image", file ? file : "" )
-    EntranceForm.append("user", user().id )
+    EntranceForm.append("wholesale", data.wholesale);
+    EntranceForm.append("image", file ? file : "");
+    EntranceForm.append("user", user().id);
 
     if (searched == true) {
       axios
@@ -325,7 +351,7 @@ export default function Entrance(props) {
         .then((e) => {
           toast.success("Data Updated Successfuly.");
           setExatEntrance(e.data);
-          setInterest(e.data.total_interest)
+          setInterest(e.data.total_interest);
         })
         .catch((e) => {
           toast.error("Check Your Input And Try Again!");
@@ -341,7 +367,7 @@ export default function Entrance(props) {
           toast.success("Entrance Saved Successfuly.");
           setExatEntrance(data.data);
           setSearched(true);
-          setInterest(data.data.total_interest)
+          setInterest(data.data.total_interest);
           setTrigger((prev) => prev + 1);
         })
         .catch((e) => {
@@ -369,14 +395,13 @@ export default function Entrance(props) {
     setSearched(false);
     setDatePickerValue("");
 
-
     axios
       .get(ENTRANCE_URL + data.entrance_search + "/")
       .then((e) => {
         setExatEntrance(e.data);
         setSearched(true);
         setDatePickerValue(e.data.factor_date);
-        setInterest(e.data.total_interest)
+        setInterest(e.data.total_interest);
       })
       .catch((err) => {
         console.log(err);
@@ -387,57 +412,59 @@ export default function Entrance(props) {
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
       .then((e) => {
         setEntranceThrough(e.data);
-        setFactorTotal(report.purchase_total)
+        setFactorTotal(report.purchase_total);
       })
       .catch((e) => console.log(e));
   };
 
-  
-  const [popUpOpen, setpopUpOpen] = React.useState(false)
-  const [excatTrough, setExactThrough] = React.useState("")
+  const [popUpOpen, setpopUpOpen] = React.useState(false);
+  const [excatTrough, setExactThrough] = React.useState("");
 
   const popUpCloser = () => {
-    setpopUpOpen(false)
-  }
+    setpopUpOpen(false);
+  };
   const popUpOpener = () => {
-    setpopUpOpen(true)
-  }
-
-
+    setpopUpOpen(true);
+  };
 
   const MedicineIncluder = (data) => {
-
     const MedicianUpdateForm = new FormData();
-    MedicianUpdateForm.append("number_in_factor", excatTrough && parseInt(excatTrough.number_in_factor) + parseInt(data.number_in_factor));
+    MedicianUpdateForm.append(
+      "number_in_factor",
+      excatTrough &&
+        parseInt(excatTrough.number_in_factor) + parseInt(data.number_in_factor)
+    );
 
     axios
       .patch(ENTRANCE_THROUGH_URL + excatTrough.id + "/", MedicianUpdateForm)
       .then(() => {
         toast.success("Data Updated Successfuly.");
         UpdateChunk();
-        UpdateUI()
-        popUpCloser()
+        UpdateUI();
+        popUpCloser();
       })
       .catch(() => toast.error("Check Your Input And Try Again!"));
+  };
+  const [interest, setInterest] = React.useState(0);
+  const [purchasePrice, setPurchasePrice] = React.useState(0);
+  const [quantity, setQuantity] = React.useState(0);
 
-  }
-  const [interest, setInterest] = React.useState(0)
-  const [purchasePrice, setPurchasePrice] = React.useState(0)
-  const [quantity, setQuantity] = React.useState(0)
+  const [sellPrice, setSellPrice] = React.useState(0);
 
-  const [sellPrice, setSellPrice] = React.useState(0)
+  React.useEffect(() => {
+    setPurchasePrice(autoCompleteData.medician.last_purchased);
+  }, [autoCompleteData]);
 
+  React.useEffect(() => {
+    setSellPrice(
+      (
+        (parseInt(purchasePrice) +
+          (parseInt(interest) * parseInt(purchasePrice)) / 100) /
+        autoCompleteData.medician.no_box
+      ).toFixed(1)
+    );
+  }, [interest, purchasePrice, quantity]);
 
-  React.useEffect(()=> {
-    setPurchasePrice(autoCompleteData.medician.last_purchased)
-  }, [autoCompleteData])
-
-
-  React.useEffect(()=> {
-    setSellPrice((parseInt(purchasePrice) + ((parseInt(interest) * parseInt(purchasePrice) )/ 100)).toFixed(1))
-  }, [interest,purchasePrice,quantity])
-
-  console.log(interest)
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
     EntranceThrough.append("number_in_factor", data.number_in_factor);
@@ -461,96 +488,97 @@ export default function Entrance(props) {
     );
     EntranceThrough.append("bonus", 0);
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
-    EntranceThrough.append("no_box",
-    data.no_box != ""
-      ? data.no_box
-      : autoCompleteData.medician.no_box);
+    EntranceThrough.append(
+      "no_box",
+      data.no_box != "" ? data.no_box : autoCompleteData.medician.no_box
+    );
     EntranceThrough.append("entrance", exactEntrance.id);
-    EntranceThrough.append("batch_number", data.batch_number)
-    EntranceThrough.append("user", user().id)
+    EntranceThrough.append("batch_number", data.batch_number);
+    EntranceThrough.append("user", user().id);
     EntranceThrough.append("each_sell_price", data.each_sell_price);
+    EntranceThrough.append("lease", data.lease);
 
     let result = true;
-    const Conditional = () => {entranceThrough.map((prescription) => {
-      prescription.medician == autoCompleteData.medician.id && (result = false, setExactThrough(prescription))
-      return result
-    })
-    return result
-  } 
+    const Conditional = () => {
+      entranceThrough.map((prescription) => {
+        prescription.medician == autoCompleteData.medician.id &&
+          ((result = false), setExactThrough(prescription));
+        return result;
+      });
+      return result;
+    };
 
-  const ConditionalInclude = () => {
-    entranceThrough.includes(autoCompleteData.medician.id)
-  }
+    const ConditionalInclude = () => {
+      entranceThrough.includes(autoCompleteData.medician.id);
+    };
 
+    if (Conditional() == true) {
+      axios
+        .post(ENTRANCE_THROUGH_URL, EntranceThrough)
+        .then((res) => {
+          setEntranceThrough((prev) => [...prev, res.data]);
+          console.log(res.data);
+          if (res.data.total_purchaseـafghani > res.data.total_sell) {
+            alert("قیمت خرید از قیمت فروش بیشتر است!");
+          }
+          toast.info("New Item Added.");
+          reset({
+            number_in_factor: "",
+            each_price_factor: "",
+            discount_money: "",
+            discount_percent: "",
+            expire_date: "",
+            interest_money: "",
+            bonus: "",
+            quantity_bonus: "",
+            no_box: "",
+            batch_number: "",
+            each_sell_price: "",
+            interest_percent: "",
+          });
+          setExpireDate("");
+          setSellPrice("");
+          setPurchasePrice("");
 
-
-    if (Conditional() == true){
-    axios
-      .post(ENTRANCE_THROUGH_URL, EntranceThrough)
-      .then((res) => {
-        setEntranceThrough((prev) => [...prev, res.data]);
-        console.log(res.data)
-        if (res.data.total_purchaseـafghani > res.data.total_sell) {
-          alert('قیمت خرید از قیمت فروش بیشتر است!')
-        }
-        toast.info("New Item Added.");
-        reset({
-          number_in_factor: "",
-          each_price_factor: "",
-          discount_money: "",
-          discount_percent: "",
-          expire_date: "",
-          interest_money: "",
-          bonus: "",
-          quantity_bonus:"",
-          no_box: "",
-          batch_number: "",
-          each_sell_price: "",
-          interest_percent: "",
+          axios
+            .get(ENTRANCE_THROUGH_URL + "?medician=" + res.data.medician)
+            .then((lastRes) => {
+              PriceCheck(res.data, lastRes.data[lastRes.data.length - 2]);
+              setPriceCheckEntranceThrough(
+                lastRes.data[lastRes.data.length - 2]
+              );
+              axios
+                .get(
+                  ENTRANCE_URL + lastRes.data[lastRes.data.length - 2].entrance
+                )
+                .then((res) => setPriceCheckEntrance(res.data));
+            });
         })
-        setExpireDate("")
-        setSellPrice("")
-        setPurchasePrice("")
-
-
-        
-        axios
-          .get(ENTRANCE_THROUGH_URL + "?medician=" + res.data.medician)
-          .then((lastRes) => {
-            PriceCheck(res.data, lastRes.data[lastRes.data.length - 2])
-            setPriceCheckEntranceThrough(lastRes.data[lastRes.data.length - 2])
-            axios 
-              .get(ENTRANCE_URL + lastRes.data[lastRes.data.length - 2].entrance)
-              .then((res) => setPriceCheckEntrance(res.data))
-          })
-        
-      })
-      .catch((e) => {
-        console.log(e);
-        toast.error("Check Your Input And Try Again! ");
-      });}
+        .catch((e) => {
+          console.log(e);
+          toast.error("Check Your Input And Try Again! ");
+        });
+    }
 
     if (Conditional() == false) {
-      popUpOpener()
+      popUpOpener();
     }
   };
 
-  const [priceCheckEntranceThrough, setPriceCheckEntranceThrough] = React.useState({})
-  const [priceCheckEntrance, setPriceCheckEntrance] = React.useState({})
+  const [priceCheckEntranceThrough, setPriceCheckEntranceThrough] =
+    React.useState({});
+  const [priceCheckEntrance, setPriceCheckEntrance] = React.useState({});
 
   const PriceCheck = (newData, lastData) => {
-    
-      if ((newData && lastData) && newData.each_price != lastData.each_price) {
-        PriceAlertOpener()
-      }
-      else {
-        setTrigger((prev) => prev + 1);
-      }
-  }
-
+    if (newData && lastData && newData.each_price != lastData.each_price) {
+      PriceAlertOpener();
+    } else {
+      setTrigger((prev) => prev + 1);
+    }
+  };
 
   const ResetForm = () => {
-    reset({})
+    reset({});
     setExatEntrance({
       without_discount: false,
       description: "",
@@ -566,12 +594,12 @@ export default function Entrance(props) {
     setEntrancePosted(false);
     setSearched(false);
     setFactorTotal(report.purchase_total);
-    setExpireDate("")
-    setSellPrice("")
-    setPurchasePrice("")
-    setInterest("")
-    setQuantity("")
-    
+    setExpireDate("");
+    setSellPrice("");
+    setPurchasePrice("");
+    setInterest("");
+    setQuantity("");
+    setPriceApplied(false);
 
     document.getElementsByClassName("entrance--inputs").reset();
   };
@@ -583,7 +611,7 @@ export default function Entrance(props) {
     const totalInterest = () => {
       let result = 0;
       entranceThrough.map((through) => {
-        result += through.total_interest;
+        result += through.total_interest * through.no_box;
         console.log(result);
         return result;
       });
@@ -599,20 +627,31 @@ export default function Entrance(props) {
 
     const totalDiscount = () => {
       const result = entranceThrough.reduce((total, currentValue) => {
-        return total + (currentValue.total_purchaseـafghani * currentValue.discount_percent / 100)
-      }, 0)
-      return result
-    }
+        return (
+          total +
+          (currentValue.total_purchaseـafghani *
+            currentValue.discount_percent) /
+            100 -
+          currentValue.discount_money
+        );
+      }, 0);
+      return result;
+    };
 
     const grandTotal = () => {};
 
     setReport({
       total: 0,
       total_interest: totalInterest(),
+      total_interest_percent: (
+        (100 * totalInterest()) /
+        totalPurchase()
+      ).toFixed(1),
       number: entranceThrough.length,
       sell_total: 0,
-      total_discount: totalDiscount(),
+      total_discount: totalDiscount().toFixed(1),
       purchase_total: totalPurchase(),
+      purchase_after_discount: totalPurchase() - totalDiscount(),
       grandTotal: totalInterest() + totalPurchase(),
     });
   };
@@ -694,22 +733,25 @@ export default function Entrance(props) {
     }
   }, [registerModalOpen]);
 
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN
+  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
 
   const PriceApply = () => {
     entranceThrough.map((through) => {
-      
-      const PriceForm = new FormData()
-      PriceForm.append("price", through.each_sell_price)
+      const PriceForm = new FormData();
+      PriceForm.append("price", through.each_sell_price);
       axios
-          .patch(MEDICIAN_URL + through.medician + "/", PriceForm)
-          .then((res) => toast.info(`Medicine Price Changed to: ${through.each_sell_price}AFG`))
-          .catch((res) => toast.error("New Item Added."))
-    })
-  }
+        .patch(MEDICIAN_URL + through.medician + "/", PriceForm)
+        .then((res) => {
+          toast.info(
+            `Medicine Price Changed to: ${through.each_sell_price}AFG`
+          );
+          setPriceApplied(true);
+        })
+        .catch((res) => toast.error("New Item Added."));
+    });
+  };
 
-
-  const LAST_ENTRANCE_URL = import.meta.env.VITE_LAST_ENTRANCE
+  const LAST_ENTRANCE_URL = import.meta.env.VITE_LAST_ENTRANCE;
 
   const BackEntrance = () => {
     setAutoCompleteData({
@@ -724,55 +766,51 @@ export default function Entrance(props) {
     setSearched(false);
     setDatePickerValue("");
 
-
-    exactEntrance.id ? (
-      axios
-      .get(ENTRANCE_URL + (exactEntrance.id + 1) + "/")
-      .then((e) => {
-        setExatEntrance(e.data);
-        setSearched(true);
-        setDatePickerValue(e.data.factor_date);
-        setInterest(e.data.total_interest)
-      })
-      .catch((err) => {
-        console.log(err);
-        setExatEntrance({id: exactEntrance.id})
-        toast.error("Check Your Input And Try Again!");
-      })
-    ) : (
-      axios
-        .get(LAST_ENTRANCE_URL)
-        .then((e) => {
-          setExatEntrance(e.data[0]);
-          setSearched(true);
-          setDatePickerValue(e.data[0].factor_date);
-          setInterest(e.data[0].total_interest)
-          axios
-          .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
+    exactEntrance.id
+      ? axios
+          .get(ENTRANCE_URL + (exactEntrance.id + 1) + "/")
           .then((e) => {
-            setEntranceThrough(e.data);
-            setFactorTotal(report.purchase_total)
+            setExatEntrance(e.data);
+            setSearched(true);
+            setDatePickerValue(e.data.factor_date);
+            setInterest(e.data.total_interest);
           })
-          .catch((e) => console.log(e));
-        })
-        .catch((err) => {
-          console.log(err);
-          setExatEntrance({id: exactEntrance.id})
-          toast.error("Check Your Input And Try Again!");
-        })
-    )
+          .catch((err) => {
+            console.log(err);
+            setExatEntrance({ id: exactEntrance.id });
+            toast.error("Check Your Input And Try Again!");
+          })
+      : axios
+          .get(LAST_ENTRANCE_URL)
+          .then((e) => {
+            setExatEntrance(e.data[0]);
+            setSearched(true);
+            setDatePickerValue(e.data[0].factor_date);
+            setInterest(e.data[0].total_interest);
+            axios
+              .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
+              .then((e) => {
+                setEntranceThrough(e.data);
+                setFactorTotal(report.purchase_total);
+              })
+              .catch((e) => console.log(e));
+          })
+          .catch((err) => {
+            console.log(err);
+            setExatEntrance({ id: exactEntrance.id });
+            toast.error("Check Your Input And Try Again!");
+          });
 
     axios
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id + 1))
       .then((e) => {
         setEntranceThrough(e.data);
-        setFactorTotal(report.purchase_total)
+        setFactorTotal(report.purchase_total);
       })
       .catch((e) => console.log(e));
-  }
+  };
 
   const FrontEntrance = () => {
-    
     setAutoCompleteData({
       company: "",
       store: "",
@@ -785,55 +823,49 @@ export default function Entrance(props) {
     setSearched(false);
     setDatePickerValue("");
 
-
-    exactEntrance.id ? (
-      axios
-      .get(ENTRANCE_URL + (exactEntrance.id - 1) + "/")
-      .then((e) => {
-        setExatEntrance(e.data);
-        setSearched(true);
-        setDatePickerValue(e.data.factor_date);
-        setInterest(e.data.total_interest)
-      })
-      .catch((err) => {
-        console.log(err);
-        setExatEntrance({id: exactEntrance.id})
-        toast.error("Check Your Input And Try Again!");
-      })
-    ) : (
-      axios
-        .get(LAST_ENTRANCE_URL)
-        .then((e) => {
-          setExatEntrance(e.data[0]);
-          setSearched(true);
-          setDatePickerValue(e.data[0].factor_date);
-          setInterest(e.data[0].total_interest)
-          axios
-          .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
+    exactEntrance.id
+      ? axios
+          .get(ENTRANCE_URL + (exactEntrance.id - 1) + "/")
           .then((e) => {
-            setEntranceThrough(e.data);
-            setFactorTotal(report.purchase_total)
+            setExatEntrance(e.data);
+            setSearched(true);
+            setDatePickerValue(e.data.factor_date);
+            setInterest(e.data.total_interest);
           })
-          .catch((e) => console.log(e));
-        })
-        .catch((err) => {
-          console.log(err);
-          setExatEntrance({id: exactEntrance.id})
-          toast.error("Check Your Input And Try Again!");
-        })
-    )
-
-
+          .catch((err) => {
+            console.log(err);
+            setExatEntrance({ id: exactEntrance.id });
+            toast.error("Check Your Input And Try Again!");
+          })
+      : axios
+          .get(LAST_ENTRANCE_URL)
+          .then((e) => {
+            setExatEntrance(e.data[0]);
+            setSearched(true);
+            setDatePickerValue(e.data[0].factor_date);
+            setInterest(e.data[0].total_interest);
+            axios
+              .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
+              .then((e) => {
+                setEntranceThrough(e.data);
+                setFactorTotal(report.purchase_total);
+              })
+              .catch((e) => console.log(e));
+          })
+          .catch((err) => {
+            console.log(err);
+            setExatEntrance({ id: exactEntrance.id });
+            toast.error("Check Your Input And Try Again!");
+          });
 
     axios
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id - 1))
       .then((e) => {
         setEntranceThrough(e.data);
-        setFactorTotal(report.purchase_total)
+        setFactorTotal(report.purchase_total);
       })
       .catch((e) => console.log(e));
-  }
-
+  };
 
   return (
     <>
@@ -858,85 +890,104 @@ export default function Entrance(props) {
           isOpen={registerModalOpen}
           onRequestClose={AlertJustModalCloser}
         >
-      
-      <Modal
-        isOpen={popUpOpen}
-        onRequestClose={popUpCloser}
-        style={popUpStyle}
-      >
-        <>
-        <div className="modal-header">
-              <h3>!خطا</h3>
-              <div className="modal-close-btn" onClick={popUpCloser}>
-                <i className="fa-solid fa-xmark"></i>
+          <Modal
+            isOpen={popUpOpen}
+            onRequestClose={popUpCloser}
+            style={popUpStyle}
+          >
+            <>
+              <div className="modal-header">
+                <h3>!خطا</h3>
+                <div className="modal-close-btn" onClick={popUpCloser}>
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
               </div>
-          </div>
-          <div className="alert-box">
-            
-          <div className="alert-text-box">
-            <h4>این دوا قبلا ثبت شده است</h4>
-            <h4>آیا میخواهید به تعداد آن اضافه نمائید؟</h4>
-          </div>
-          <div className="alert-button-box">
-            <button onClick={handleSubmit(MedicineIncluder)}>بله</button>
-            <button onClick={popUpCloser}>نخیر</button>
-          </div>
-          </div>
-
-        </>
-      </Modal>
-      <Modal
-        isOpen={PriceAlertOpen}
-        onRequestClose={PriceAlertCloser}
-        style={popUpStyle}
-      >
-        <>
-        <div className="modal-header">
-              <h3>!خطا</h3>
-              <div className="modal-close-btn" onClick={PriceAlertCloser}>
-                <i className="fa-solid fa-xmark"></i>
+              <div className="alert-box">
+                <div className="alert-text-box">
+                  <h4>این دوا قبلا ثبت شده است</h4>
+                  <h4>آیا میخواهید به تعداد آن اضافه نمائید؟</h4>
+                </div>
+                <div className="alert-button-box">
+                  <button onClick={handleSubmit(MedicineIncluder)}>بله</button>
+                  <button onClick={popUpCloser}>نخیر</button>
+                </div>
               </div>
-          </div>
-          <div className="alert-box">
-            
-          <div className="alert-text-box">
-            <h4>قیمت دوای ثبت شده با قیمت قبلی مطابقت ندارد!</h4>
-            <Entrance button={1} entrance={priceCheckEntrance}/>
-          </div>
-          <div className="alert-button-box">
-            <button onClick={PriceAlertCloser}>تایید</button>
-          </div>
-          </div>
-
-        </>
-      </Modal>
-
-      <Modal
-        isOpen={AlertModalOpen}
-        onRequestClose={AlertJustModalCloser}
-        style={popUpStyle}
-      >
-        <>
-        <div className="modal-header">
-              <h3>!خطا</h3>
-              <div className="modal-close-btn" onClick={AlertJustModalCloser}>
-                <i className="fa-solid fa-xmark"></i>
+            </>
+          </Modal>
+          <Modal
+            isOpen={PriceAlertOpen}
+            onRequestClose={PriceAlertCloser}
+            style={popUpStyle}
+          >
+            <>
+              <div className="modal-header">
+                <h3>!خطا</h3>
+                <div className="modal-close-btn" onClick={PriceAlertCloser}>
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
               </div>
-          </div>
-          <div className="alert-box">
-            
-          <div className="alert-text-box">
-            <h4>مجموع ثبت شده با مجموع فاکتور مطابقت ندارد.</h4>
-            <h4>آیا با بستن صفحه موافقید؟</h4>
-          </div>
-          <div className="alert-button-box">
-            <button onClick={AlertModalCloser}>بله</button>
-            <button onClick={AlertJustModalCloser}>نخیر</button>
-          </div>
-          </div>
+              <div className="alert-box">
+                <div className="alert-text-box">
+                  <h4>قیمت دوای ثبت شده با قیمت قبلی مطابقت ندارد!</h4>
+                  <Entrance button={1} entrance={priceCheckEntrance} />
+                </div>
+                <div className="alert-button-box">
+                  <button onClick={PriceAlertCloser}>تایید</button>
+                </div>
+              </div>
+            </>
+          </Modal>
 
-        </>
-      </Modal>
+          <Modal
+            isOpen={AlertModalOpen}
+            onRequestClose={AlertJustModalCloser}
+            style={popUpStyle}
+          >
+            <>
+              <div className="modal-header">
+                <h3>!خطا</h3>
+                <div className="modal-close-btn" onClick={AlertJustModalCloser}>
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
+              </div>
+              <div className="alert-box">
+                <div className="alert-text-box">
+                  <h4>مجموع ثبت شده با مجموع فاکتور مطابقت ندارد.</h4>
+                  <h4>آیا با بستن صفحه موافقید؟</h4>
+                </div>
+                <div className="alert-button-box">
+                  <button onClick={AlertModalCloser}>بله</button>
+                  <button onClick={AlertJustModalCloser}>نخیر</button>
+                </div>
+              </div>
+            </>
+          </Modal>
+
+          <Modal
+            isOpen={PriceAppliedVerify}
+            onRequestClose={PriceAppliedVerifyCloser}
+            style={popUpStyle}
+          >
+            <>
+              <div className="modal-header">
+                <h3>!خطا</h3>
+                <div className="modal-close-btn" onClick={AlertJustModalCloser}>
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
+              </div>
+              <div className="alert-box">
+                <div className="alert-text-box">
+                  <h4>قیمت ها برای این ورودی اعمال نشده است.</h4>
+                  <h4>آیا با بستن موافقید؟</h4>
+                </div>
+                <div className="alert-button-box">
+                  <button onClick={PriceAppliedVerifyCloser}>بله</button>
+                  <button onClick={JustPriceAppliedVerifyCloser}>نخیر</button>
+                </div>
+              </div>
+            </>
+          </Modal>
+
           <div className="modal">
             <div className="modal-header">
               <h3>ثبت ورودی</h3>
@@ -957,7 +1008,12 @@ export default function Entrance(props) {
                     <label>{report.purchase_total}</label>
                   </div>
                   <div className="entrance-report-map-box">
+                    <label>خرید بعد از تخفیف </label>
+                    <label>{report.purchase_after_discount}</label>
+                  </div>
+                  <div className="entrance-report-map-box">
                     <label>مجموع فایده </label>
+                    <label>{report.total_interest_percent}</label>
                     <label>{report.total_interest}</label>
                   </div>
                   <div className="entrance-report-map-box">
@@ -970,18 +1026,31 @@ export default function Entrance(props) {
                   </div>
                   <div className="entrance-report-map-box">
                     <label>مجموع فاکتور</label>
-                    <input type='text' onChange={(res) => setFactorTotal(res.target.value)} defaultValue={FactorTotal} />
+                    <input
+                      type="text"
+                      onChange={(res) => setFactorTotal(res.target.value)}
+                      defaultValue={FactorTotal}
+                    />
                   </div>
                 </div>
                 <div className="entrance-report-footer">
-                  <button className="entrance-report-button" onClick={FrontEntrance}>
-                  <i class="fa-solid fa-left-long"></i>
+                  <button
+                    className="entrance-report-button"
+                    onClick={FrontEntrance}
+                  >
+                    <i class="fa-solid fa-left-long"></i>
                   </button>
-                  <button className="entrance-report-button" onClick={PriceApply}>
-                  <i class="fa-solid fa-comments-dollar"></i>
+                  <button
+                    className="entrance-report-button"
+                    onClick={PriceApply}
+                  >
+                    <i class="fa-solid fa-comments-dollar"></i>
                   </button>
-                  <button className="entrance-report-button" onClick={BackEntrance}>
-                  <i class="fa-solid fa-right-long"></i>
+                  <button
+                    className="entrance-report-button"
+                    onClick={BackEntrance}
+                  >
+                    <i class="fa-solid fa-right-long"></i>
                   </button>
                 </div>
               </div>
@@ -1015,7 +1084,7 @@ export default function Entrance(props) {
                   <FinalRegister Update={UpdateFinals} />
                 </div>
                 <label>شرکت:</label>
-                <div >
+                <div>
                   <ReactSearchAutocomplete
                     items={company}
                     onSelect={(item) =>
@@ -1024,13 +1093,12 @@ export default function Entrance(props) {
                         company: item,
                       })
                     }
-                    onSearch= {(search, results) => {
+                    onSearch={(search, results) => {
                       axios
-                          .get(COMPANY_URL + "?search=" + search)
-                          .then((res) => {
-                            setCompany(res.data)
-                          })
-                          
+                        .get(COMPANY_URL + "?search=" + search)
+                        .then((res) => {
+                          setCompany(res.data);
+                        });
                     }}
                     styling={AutoCompleteStyle}
                     showClear={false}
@@ -1039,7 +1107,6 @@ export default function Entrance(props) {
                     placeholder={companyName}
                     showIcon={false}
                     className="autoComplete entrance--inputs"
-                    
                   />
                   <Company button={2} Update={UpdateCompanies} />
                 </div>
@@ -1053,11 +1120,9 @@ export default function Entrance(props) {
                     }
                     showClear={false}
                     onSearch={(search, results) => {
-                      axios
-                        .get(STORE_URL, + "?search=" + search)
-                        .then((res) => {
-                          setStore(res.data)
-                        })
+                      axios.get(STORE_URL, +"?search=" + search).then((res) => {
+                        setStore(res.data);
+                      });
                     }}
                     inputDebounce="10"
                     placeholder={storeName}
@@ -1135,7 +1200,7 @@ export default function Entrance(props) {
                       {currency.map((currency) =>
                         currency.id == exactEntrance.currency
                           ? currency.name
-                        : ""
+                          : ""
                       )}
                     </option>
                     {currency.map((currency) => (
@@ -1201,9 +1266,20 @@ export default function Entrance(props) {
                 <label>عکس:</label>
                 <input
                   type="file"
-                  onChange={(e) => {setFile(e.target.files[0])}}
+                  onChange={(e) => {
+                    setFile(e.target.files[0]);
+                  }}
                 ></input>
-                <a href={exactEntrance.image && new URL(exactEntrance.image).pathname.slice(16)} target="_blank" style={{textDecoration: "none", color: "grey"}}>{exactEntrance.image ? "Show_Photo" : ""}</a>
+                <a
+                  href={
+                    exactEntrance.image &&
+                    new URL(exactEntrance.image).pathname.slice(16)
+                  }
+                  target="_blank"
+                  style={{ textDecoration: "none", color: "grey" }}
+                >
+                  {exactEntrance.image ? "Show_Photo" : ""}
+                </a>
                 <div className="entrance-buttons">
                   <input
                     type="reset"
@@ -1241,7 +1317,7 @@ export default function Entrance(props) {
                   id="number-in-factor-input"
                   className="entrance--inputs"
                   onChange={(e) => {
-                    setQuantity(e.target.value)
+                    setQuantity(e.target.value);
                   }}
                 />
                 <label>قیمت فی:</label>
@@ -1249,8 +1325,8 @@ export default function Entrance(props) {
                   type="text"
                   {...register("each_price_factor")}
                   className="entrance--inputs"
-                  onChange={(e)=> {
-                    setPurchasePrice(e.target.value)
+                  onChange={(e) => {
+                    setPurchasePrice(e.target.value);
                   }}
                   value={purchasePrice}
                 />
@@ -1258,19 +1334,21 @@ export default function Entrance(props) {
                   <h5> ت.د.پاکت:</h5>
                 </label>
                 <div className="numbers-box-pocket">
-                <input
-                  type="text"
-                  placeholder={autoCompleteData.medician.no_pocket}
-                  {...register("each_quantity")}
-                  className="entrance--inputs"
-                />
-                <lable>ت.د.قطی</lable>
-                <input
-                  type="text"
-                  placeholder={autoCompleteData.medician.no_box}
-                  {...register("no_box")}
-                  className="entrance--inputs"
-                />
+                  <input
+                    type="text"
+                    value={autoCompleteData.medician.no_pocket}
+                    {...register("each_quantity")}
+                    className="entrance--inputs"
+                    tabIndex={-1}
+                  />
+                  <lable>ت.د.قطی</lable>
+                  <input
+                    type="text"
+                    value={autoCompleteData.medician.no_box}
+                    {...register("no_box")}
+                    className="entrance--inputs"
+                    tabIndex={-1}
+                  />
                 </div>
                 <label>فایده٪:</label>
                 <input
@@ -1278,7 +1356,7 @@ export default function Entrance(props) {
                   {...register("interest_percent")}
                   className="entrance--inputs"
                   onChange={(e) => {
-                    setInterest(e.target.value)
+                    setInterest(e.target.value);
                   }}
                   value={interest}
                 />
@@ -1288,19 +1366,43 @@ export default function Entrance(props) {
                   {...register("each_sell_price")}
                   className="entrance--inputs"
                   value={sellPrice}
-                  onChange={(e) =>{
-                    setSellPrice(e.target.value)
+                  onChange={(e) => {
+                    setSellPrice(e.target.value);
                   }}
-
+                  onBlurCapture={(e) => {
+                    setInterest(
+                      (
+                        (100 *
+                          (e.target.value * autoCompleteData.medician.no_box -
+                            purchasePrice)) /
+                        purchasePrice
+                      ).toFixed(0)
+                    );
+                  }}
                 />
-                <label>بونوس:</label>
+                {/* <label>بونوس:</label>
                 <input
                   type="text"
                   {...register("quantity_bonus")}
                   className="entrance--inputs"
-                />
-                
-                
+                /> */}
+                <label>
+                  <h5> بونوس:</h5>
+                </label>
+                <div className="numbers-box-pocket">
+                  <input
+                    type="text"
+                    {...register("quantity_bonus")}
+                    className="entrance--inputs"
+                  />
+                  <lable>قرضه:</lable>
+                  <input
+                    type="checkbox"
+                    {...register("lease")}
+                    style={{ width: "1rem" }}
+                  />
+                </div>
+
                 <label>انقضا.م:</label>
                 <input
                   type="date"
@@ -1323,10 +1425,7 @@ export default function Entrance(props) {
                 className="entrance--inputs"
               /> */}
                 <label>بچ نمبر:</label>
-                <input
-                type="text"
-                {...register("batch_number")}
-                />
+                <input type="text" {...register("batch_number")} />
                 <label>تخفیف:</label>
                 <input
                   type="text"
@@ -1341,8 +1440,14 @@ export default function Entrance(props) {
                 />
                 <div className="adding-box">
                   <label>خرید.ق:</label>
-                <label className="old-price">{autoCompleteData.medician.last_purchased} AF</label>
-                <input type="submit" value="⤵ Add" className="add-button"></input>
+                  <label className="old-price">
+                    {autoCompleteData.medician.last_purchased} AF
+                  </label>
+                  <input
+                    type="submit"
+                    value="⤵ Add"
+                    className="add-button"
+                  ></input>
                 </div>
               </form>
 
@@ -1352,19 +1457,18 @@ export default function Entrance(props) {
                   <label>قلم</label>
                   <label>تعداد</label>
                   <label>فی خرید</label>
-                  {/* <label>فی خرید</label> */}
                   <label>فی فروش</label>
                   <label>ت.پاکت</label>
                   <label>ت.قطی</label>
                   <label>تخفیف</label>
                   <label>تخفیف %</label>
                   <label>انقضا</label>
-                  {/* <label>فایده</label> */}
+                  <label>قرضه</label>
                   <label>فایده %</label>
                   <label>بونوس</label>
                   <label>جمع خرید</label>
-                  <label>جمع فایده</label>
-                  <label>مجموع</label>
+                  <label>با تخفیف</label>
+                  <label>جمع فروش</label>
                   <label>حذف</label>
                 </div>
                 <div className="entrance-map">
