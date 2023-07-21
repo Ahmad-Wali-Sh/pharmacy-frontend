@@ -11,6 +11,7 @@ export default function SelectMedician({
   selectAutoCompleteData,
   trigger,
   tabFormulate,
+  department,
 }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [selectedMedician, setSelectedMedician] = React.useState("");
@@ -24,6 +25,18 @@ export default function SelectMedician({
   function registerModalCloser() {
     setRegisterModalOpen(false);
   }
+
+  const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([]);
+
+  React.useEffect(() => {
+    department &&
+      axios
+        .get(MEDICIAN_URL + "?department=" + department.id)
+        .then((res) => setBookmarkedMedicine(res.data.results))
+        .catch((err) => console.log(err));
+  }, []);
+
+  console.log(bookmarkedMedicine);
 
   React.useEffect(() => {
     if (trigger != 0) {
@@ -264,6 +277,31 @@ export default function SelectMedician({
                 className="search"
               />
               <MedicianEntrance button={2} />
+              <div className="bookmarks-box">
+                {bookmarkedMedicine.map((medicine) => (
+                  <div
+                    className="bookmark-card"
+                    onClick={() => {
+                      selectAutoCompleteData(medicine);
+
+                      registerModalCloser();
+                      setSelectedMedician(medicine);
+                    }}
+                  >
+                    <img
+                      className="bookmark-image"
+                      src={
+                        medicine.image
+                          ? new URL(medicine.image).pathname.slice(16)
+                          : "./images/nophoto.jpg"
+                      }
+                    />
+                    <h4>{medicine.brand_name}</h4>
+                    <h5>{medicine.generic_name}</h5>
+                    <h4>{medicine.ml}</h4>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </Modal>
