@@ -556,6 +556,27 @@ input[type="date"]:disabled {
   background-color: var(--color-two);
 }
 
+.loading-page-modal{
+  background-image: var(--color-seven);
+  height: 90vh;
+  width: 100%;
+}
+
+.loading-dna-box {
+  background-color: var(--color-three);
+  width: 10rem;
+  height: 10rem;
+  position: relative;
+  left: 43%;
+  top: 30%;
+  border-radius: 3rem;
+  padding-top: 3rem;
+  padding-right: 0.7rem;
+  box-shadow: 1px 1px 10px grey;
+  color:var(--color-ten);
+  direction: rtl;
+}
+
 
 .entrance-entrance > input {
   height: 1.47rem;
@@ -2430,10 +2451,12 @@ input[type="date"]:disabled {
 .revneue-content-open {
   background-color: var(--color-sex);
   border-radius: 1rem;
+  overflow-y: scroll;
 }
 .revneue-content-close {
   background-color: var(--color-sex);
   border-radius: 1rem;
+  overflow-y: scroll;
 }
 
 .revenue-button {

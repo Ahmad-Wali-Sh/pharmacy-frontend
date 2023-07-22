@@ -305,7 +305,7 @@ export default function Entrance(props) {
         ? data.total_interest
         : exactEntrance.total_interest
     );
-    EntranceForm.append("discount_percent", data.discount_percent_entrance != "" ? data.discount_percent_entrance : exactEntrance.discount_percent)
+    EntranceForm.append("discount_percent", data.discount_percent_entrance != undefined ? data.discount_percent_entrance : exactEntrance.discount_percent)
     EntranceForm.append("deliver_by", data.deliver_by);
     EntranceForm.append("recived_by", data.recived_by);
     EntranceForm.append("description", data.description);
@@ -457,15 +457,15 @@ export default function Entrance(props) {
   const [sellPrice, setSellPrice] = React.useState(0);
 
   React.useEffect(() => {
-    setPurchasePrice(autoCompleteData.medician.last_purchased);
+    setPurchasePrice(autoCompleteData.medician.last_purchased / exactEntrance.currency_rate);
   }, [autoCompleteData]);
 
   React.useEffect(() => {
     setSellPrice(
       (
-        (parseInt(purchasePrice) +
+        ((parseInt(purchasePrice) +
           (parseInt(interest) * parseInt(purchasePrice)) / 100) /
-        autoCompleteData.medician.no_box
+        autoCompleteData.medician.no_box) * exactEntrance.currency_rate
       ).toFixed(1)
     );
   }, [interest, purchasePrice, quantity]);
@@ -1026,7 +1026,7 @@ export default function Entrance(props) {
                   </div>
                   <div className="entrance-report-map-box">
                     <label>مجموع فایده </label>
-                    <label>{report.total_interest_percent}</label>
+                    <label>{report.total_interest_percent}%</label>
                     <label>{report.total_interest}</label>
                   </div>
                   <div className="entrance-report-map-box">
@@ -1043,7 +1043,8 @@ export default function Entrance(props) {
                       type="text"
                       onChange={(res) => setFactorTotal(res.target.value)}
                       defaultValue={FactorTotal}
-                    />
+                      />
+                      <label style={{fontSize:"0.6rem"}}>{exactEntrance.currency_name}</label>
                   </div>
                 </div>
                 <div className="entrance-report-footer">
@@ -1404,10 +1405,10 @@ export default function Entrance(props) {
                   onBlurCapture={(e) => {
                     setInterest(
                       (
-                        (100 *
-                          (e.target.value * autoCompleteData.medician.no_box -
+                        ((100 *
+                          ((e.target.value / exactEntrance.currency_rate) * autoCompleteData.medician.no_box -
                             purchasePrice)) /
-                        purchasePrice
+                        purchasePrice) 
                       ).toFixed(0)
                     );
                   }}

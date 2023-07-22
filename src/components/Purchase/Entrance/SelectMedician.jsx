@@ -12,6 +12,7 @@ export default function SelectMedician({
   trigger,
   tabFormulate,
   department,
+  results
 }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [selectedMedician, setSelectedMedician] = React.useState("");
@@ -25,6 +26,12 @@ export default function SelectMedician({
   function registerModalCloser() {
     setRegisterModalOpen(false);
   }
+
+  console.log(results)
+
+  React.useEffect(() => {
+    setMedician(results)
+  },[results])
 
   const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([]);
 
@@ -266,7 +273,7 @@ export default function SelectMedician({
                 }}
                 onSelect={(item) => {
                   selectAutoCompleteData(item);
-
+                  setMedician(results)
                   registerModalCloser();
                   setSelectedMedician(item);
                 }}
