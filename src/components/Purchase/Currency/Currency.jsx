@@ -58,7 +58,6 @@ function Currency({ Update }) {
         toast.success("Data Updated Successfuly.");
         console.log(e.data);
       })
-
       .catch((err) => {
         console.log(err);
         toast.error("Check Your Input And Try Again!");
@@ -67,11 +66,16 @@ function Currency({ Update }) {
 
   return (
     <>
-      <div className="plus-box-currency" onClick={registerModalOpener}>
+      {/* <div className="plus-box-currency" onClick={registerModalOpener}>
         <div className="plus">
           <i class="fa-solid fa-plus"></i>
         </div>
-      </div>
+      </div> */}
+      <input
+                type="button"
+                value="جدید"
+                onClick={registerModalOpener}
+              />
       <Modal
         style={ModalStyles}
         isOpen={registerModalOpen}

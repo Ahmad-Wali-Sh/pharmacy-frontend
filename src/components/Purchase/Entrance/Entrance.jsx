@@ -18,6 +18,7 @@ import {
   DateInputSimple,
 } from "react-hichestan-datetimepicker";
 import { useAuthUser } from "react-auth-kit";
+import CurrencyList from "../Currency/CurrencyList";
 
 export default function Entrance(props) {
   /* Modal */
@@ -184,7 +185,7 @@ export default function Entrance(props) {
       cur.id == exactEntrance.currency ? (currency_rate = cur.rate) : 1;
     });
 
-    if (report.purchase_total == FactorTotal * currency_rate) {
+    if (report.purchase_after_discount == FactorTotal * currency_rate) {
       if (priceApplied == false) {
         entranceThrough.length >= 1
           ? PriceAppliedVerifyOpener()
@@ -193,7 +194,7 @@ export default function Entrance(props) {
         registerModalCloser();
       }
     }
-    if (report.purchase_total != FactorTotal * currency_rate) {
+    if (report.purchase_after_discount != FactorTotal * currency_rate) {
       AlertModalOpener();
     }
   };
@@ -304,6 +305,7 @@ export default function Entrance(props) {
         ? data.total_interest
         : exactEntrance.total_interest
     );
+    EntranceForm.append("discount_percent", data.discount_percent_entrance != "" ? data.discount_percent_entrance : exactEntrance.discount_percent)
     EntranceForm.append("deliver_by", data.deliver_by);
     EntranceForm.append("recived_by", data.recived_by);
     EntranceForm.append("description", data.description);
@@ -351,6 +353,7 @@ export default function Entrance(props) {
         .then((e) => {
           toast.success("Data Updated Successfuly.");
           setExatEntrance(e.data);
+          setDiscountPercent(e.data.discount_percent)
           setInterest(e.data.total_interest);
         })
         .catch((e) => {
@@ -366,6 +369,7 @@ export default function Entrance(props) {
           setEntrancePosted(true);
           toast.success("Entrance Saved Successfuly.");
           setExatEntrance(data.data);
+          setDiscountPercent(data.data.discount_percent)
           setSearched(true);
           setInterest(data.data.total_interest);
           setTrigger((prev) => prev + 1);
@@ -399,6 +403,7 @@ export default function Entrance(props) {
       .get(ENTRANCE_URL + data.entrance_search + "/")
       .then((e) => {
         setExatEntrance(e.data);
+        setDiscountPercent(e.data.discount_percent)
         setSearched(true);
         setDatePickerValue(e.data.factor_date);
         setInterest(e.data.total_interest);
@@ -465,6 +470,8 @@ export default function Entrance(props) {
     );
   }, [interest, purchasePrice, quantity]);
 
+  const [discountPercent, setDiscountPercent] = React.useState(exactEntrance.discount_percent)
+
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
     EntranceThrough.append("number_in_factor", data.number_in_factor);
@@ -477,7 +484,7 @@ export default function Entrance(props) {
         : autoCompleteData.medician.no_pocket
     );
     EntranceThrough.append("discount_money", data.discount_money);
-    EntranceThrough.append("discount_percent", data.discount_percent);
+    EntranceThrough.append("discount_percent", data.discount_percent != "" ? data.discount_percent : exactEntrance.discount_percent);
     EntranceThrough.append("expire_date", expireDate);
     // EntranceThrough.append("interest_money", data.interest_money);
     EntranceThrough.append(
@@ -486,6 +493,7 @@ export default function Entrance(props) {
         ? data.interest_percent
         : exactEntrance.total_interest
     );
+
     EntranceThrough.append("bonus", 0);
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
     EntranceThrough.append(
@@ -723,6 +731,7 @@ export default function Entrance(props) {
         .get(ENTRANCE_URL + props.entrance.id)
         .then((res) => {
           setExatEntrance(res.data);
+          setDiscountPercent(res.data.discount_percent)
           setSearched(true);
           axios
             .get(ENTRANCE_THROUGH_URL + "?entrance=" + res.data.id)
@@ -771,6 +780,7 @@ export default function Entrance(props) {
           .get(ENTRANCE_URL + (exactEntrance.id + 1) + "/")
           .then((e) => {
             setExatEntrance(e.data);
+            setDiscountPercent(e.data.discount_percent)
             setSearched(true);
             setDatePickerValue(e.data.factor_date);
             setInterest(e.data.total_interest);
@@ -787,6 +797,7 @@ export default function Entrance(props) {
             setSearched(true);
             setDatePickerValue(e.data[0].factor_date);
             setInterest(e.data[0].total_interest);
+            setDiscountPercent(e.data[0].discount_percent)
             axios
               .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
               .then((e) => {
@@ -831,6 +842,7 @@ export default function Entrance(props) {
             setSearched(true);
             setDatePickerValue(e.data.factor_date);
             setInterest(e.data.total_interest);
+            setDiscountPercent(e.data.discount_percent)
           })
           .catch((err) => {
             console.log(err);
@@ -844,6 +856,7 @@ export default function Entrance(props) {
             setSearched(true);
             setDatePickerValue(e.data[0].factor_date);
             setInterest(e.data[0].total_interest);
+            setDiscountPercent(e.data[0].discount_percent)
             axios
               .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
               .then((e) => {
@@ -1199,17 +1212,18 @@ export default function Entrance(props) {
                     <option value={exactEntrance.currency} selected hidden>
                       {currency.map((currency) =>
                         currency.id == exactEntrance.currency
-                          ? currency.name
+                          ? currency.name + `(${currency.rate})`
                           : ""
                       )}
                     </option>
                     {currency.map((currency) => (
                       <option key={currency.id} value={currency.id}>
-                        {currency.name}
+                        {currency.name}{`(${currency.rate})`}
                       </option>
                     ))}
                   </select>
-                  <Currency Update={CurrencyUpdate} />
+                  {/* <Currency Update={CurrencyUpdate} /> */}
+                  <CurrencyList Update={CurrencyUpdate}/>
                 </div>
                 <label>پرداخت:</label>
                 <div className="final-register-box">
@@ -1234,13 +1248,31 @@ export default function Entrance(props) {
                   </select>
                   <Payment Update={PaymentUpdate} />
                 </div>
-                <label>فایده ٪:</label>
+                {/* <label>فایده ٪:</label>
                 <input
                   type="text"
                   {...register("total_interest")}
                   defaultValue={exactEntrance.total_interest}
                   className="entrance--inputs"
-                />
+                /> */}
+                <label>
+                  <h5>فایده%:</h5>
+                </label>
+                <div className="numbers-box-pocket-1">
+                  <input
+                    type="text"
+                    defaultValue={exactEntrance.total_interest}
+                    {...register("total_interest")}
+                    className="entrance--inputs"
+                  />
+                  <lable>تخفیف%:</lable>
+                  <input
+                    type="text"
+                    defaultValue={exactEntrance.discount_percent}
+                    {...register("discount_percent_entrance")}
+                    className="entrance--inputs"
+                  />
+                </div>
                 <label>
                   <h5>نوع ورودی:</h5>
                 </label>
@@ -1437,6 +1469,10 @@ export default function Entrance(props) {
                   type="text"
                   {...register("discount_percent")}
                   className="entrance--inputs"
+                  value={discountPercent}
+                  onChange={(e) => {
+                    setDiscountPercent(e.target.value)
+                  }}
                 />
                 <div className="adding-box">
                   <label>خرید.ق:</label>
