@@ -790,6 +790,26 @@ input[type="date"]:disabled {
   gap: 1rem;
   font-size: 0.8rem;
 }
+
+.numbers-box-pocket-1 {
+  width: 10rem;
+  display: grid;
+  grid-template-columns: 45% 28% 45%;
+  gap: 1rem;
+  font-size: 0.8rem;
+}
+
+.numbers-box-pocket-1 > input {
+  border-radius: 1rem;
+  border: none;
+  height: 1.5rem;
+  background-color: var(--color-three);
+  padding-right: 1rem;
+  color: var(--color-ten);
+}
+.numbers-box-pocket-1 > input:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+}
 .numbers-box-pocket > input {
   border-radius: 1rem;
   border: none;
@@ -2673,5 +2693,63 @@ input[type="date"]:disabled {
   width: 7rem;
   height: 7rem;
   border-radius: 1rem;
+}
+
+.currency-list-map-header{
+  display: grid;
+  gap: 2rem;
+  justify-content: space-around;
+  direction: rtl;
+  background-image: var(--color-five);
+  border-radius: 1rem;
+  height: 2rem;
+  align-items: center;
+  margin-top: 0.2rem;
+  padding-right: 3.5rem;
+  grid-template-columns: 20% 20% 20% 20%;
+  text-align: right;
+}
+
+.currency-rate-input {
+  background-color: var(--color-three);
+  border: none;
+  border-radius: 1rem;
+  text-align: center;
+  width: 4rem;
+  color: var(--color-ten);
+  margin-right: -1rem;
+}
+.currency-list-map {
+  display: grid;
+  gap: 2rem;
+  justify-content: space-around;
+  direction: rtl;
+  background-color: var(--color-sex);
+  color: var(--color-ten);
+  border-radius: 1rem;
+  height: 2rem;
+  align-items: center;
+  margin-top: 0.2rem;
+  padding-right: 3.5rem;
+  grid-template-columns: 20% 20% 20% 20%;
+  text-align: right;
+}
+
+.currency-list{
+  background-color: var(--color-three);
+  width: 100%;
+  height: 76%;
+  padding: 1.5rem;
+}
+
+.medician-map-buttons-1 {
+  background-color: var(--color-four);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 1rem;
+  padding: 0.3rem;
+}
+.medician-map-buttons-1:hover {
+  box-shadow: 1px 1px 10px black;
 }
 
