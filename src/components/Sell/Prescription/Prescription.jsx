@@ -9,7 +9,7 @@ import SelectMedician from "../../Purchase/Entrance/SelectMedician";
 import PrescriptionThroughEntry from "./PrescriptionThroughEntry";
 import Doctor from "./Doctor";
 import Patient from "./Patient";
-import {useAuthUser} from 'react-auth-kit'
+import { useAuthUser } from "react-auth-kit";
 
 export default function Prescription(props) {
   /* Modal */
@@ -29,7 +29,7 @@ export default function Prescription(props) {
     },
   };
 
-  const user = useAuthUser()
+  const user = useAuthUser();
 
   const popUpStyle = {
     content: {
@@ -98,6 +98,7 @@ export default function Prescription(props) {
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const KIND_URL = import.meta.env.VITE_KIND;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
+  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN
 
   /* States */
 
@@ -157,7 +158,9 @@ export default function Prescription(props) {
       .catch((e) => console.log(e));
     axios
       .get(KIND_URL)
-      .then((result) => setKind(result.data))
+      .then((result) => {
+        setKind(result.data);
+      })
       .catch((e) => console.log(e));
     axios
       .get(PHARM_GROUB_URL)
@@ -175,7 +178,9 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
     axios
       .get(DOCTOR_URL)
-      .then((res) => setDoctor(res.data))
+      .then((res) => {
+        setDoctor(res.data);
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -219,8 +224,8 @@ export default function Prescription(props) {
         ? prescription.prescription_number
         : data.prescription_number
     );
-    PrescriptionForm.append("image", file ? file : "")
-    PrescriptionForm.append("user", user().id)
+    PrescriptionForm.append("image", file ? file : "");
+    PrescriptionForm.append("user", user().id);
 
     if (submited == false) {
       axios
@@ -258,6 +263,11 @@ export default function Prescription(props) {
 
   const [excatTrough, setExactThrough] = React.useState("");
 
+  const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH
+  const [medicianWith, setMedicineWith] = React.useState([]);
+
+  console.log(medicianWith)
+
   const PrescriptionThrough = (data) => {
     const PrescritptionThroughForm = new FormData();
     PrescritptionThroughForm.append("quantity", data.quantity);
@@ -288,6 +298,15 @@ export default function Prescription(props) {
           setPrescriptionThrough((prev) => [...prev, res.data]);
           toast.info("Item Added.");
           setTrigger((prev) => prev + 1);
+          axios
+            .get(MEDICIAN_WITH_URL + "?medicine=" + res.data.medician)
+            .then((res2) => {
+              axios
+                  .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
+                  .then((res3) => {
+                    setMedicineWith(res3.data.results)
+                  })
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -419,7 +438,7 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
   }
 
-  const [file,setFile] = React.useState("")
+  const [file, setFile] = React.useState("");
 
   const CreateNewHandle = (data) => {
     console.log(data);
@@ -433,8 +452,11 @@ export default function Prescription(props) {
     PrescriptionForm.append("discount_percent", prescription.discount_percent);
     PrescriptionForm.append("zakat", prescription.zakat);
     PrescriptionForm.append("khairat", prescription.khairat);
-    PrescriptionForm.append("image", prescription.image)
-    PrescriptionForm.append("user", user().id)
+    PrescriptionForm.append(
+      "image",
+      prescription.image ? prescription.image : ""
+    );
+    PrescriptionForm.append("user", user().id);
 
     axios
       .post(PRESCRIPTION_URL, PrescriptionForm)
@@ -447,6 +469,7 @@ export default function Prescription(props) {
           PrescriptionThroughForm.append("each_price", item.each_price);
           PrescriptionThroughForm.append("medician", item.medician);
           PrescriptionThroughForm.append("prescription", res.data.id);
+          PrescriptionThroughForm.append("user", user().id);
           setPrescriptionThrough([]);
           axios
             .post(PRESCRIPTION_THOURGH_URL, PrescriptionThroughForm)
@@ -519,18 +542,17 @@ export default function Prescription(props) {
       rounded_number: CellingHandler(),
     });
   };
-  
-  React.useEffect(()=> {
+
+  React.useEffect(() => {
     const RoundForm = new FormData();
     RoundForm.append("rounded_number", report.rounded_number);
-    prescriptionThrough && prescription.id && (
+    prescriptionThrough &&
+      prescription.id &&
       axios
-      .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-    )
-
-  }, [prescriptionThrough])
+        .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+  }, [prescriptionThrough]);
 
   const tabFormulate = () => {
     document.getElementById("number-in-factor-input").focus();
@@ -549,14 +571,15 @@ export default function Prescription(props) {
       DepartmentForm.append("khairat", "");
       DepartmentForm.append("user", user().id);
 
-
       axios
         .post(PRESCRIPTION_URL, DepartmentForm)
         .then((res) => {
           console.log(res.data);
           setPrescription(res.data);
           setSubmited(true);
+          setLoading(true);
           toast.success("Data Submited Successfuly.");
+
           axios
             .get(DEPARTMENT_URL + props.department.id)
             .then((res) => setDepartmentSelected(res.data))
@@ -581,10 +604,18 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
   };
 
+  const [loading, setLoading] = React.useState(false);
+
   return (
     <>
       {props.button == undefined && (
-        <div className="purchase-card" onClick={registerModalOpener}>
+        <div
+          className="purchase-card"
+          onClick={() => {
+            registerModalOpener();
+            setLoading(true);
+          }}
+        >
           <div>
             <h3>{props.title}</h3>
             <div>
@@ -636,259 +667,284 @@ export default function Prescription(props) {
               </div>
             </>
           </Modal>
-          <div className="modal">
-            <div className="modal-header">
-              <h3>ثبت نسخه</h3>
-              <div className="modal-close-btn" onClick={registerModalCloser}>
-                <i className="fa-solid fa-xmark"></i>
-              </div>
-            </div>
-            <div className="prescription-box">
-              <div className="entrance-report">
-                <div className="entrance-report-header">راپور</div>
-                <div className="entrance-report-body">
-                  <div className="entrance-report-map-box">
-                    <label>{report.number}</label>
-                    <label>:تعداد اقلام</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>{report.total}</label>
-                    <label>:مجموع فروش</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>
-                      {prescription.discount_money +
-                        (report.total * prescription.discount_percent) / 100}
-                    </label>
-                    <label>:تخفیف</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>{prescription.khairat}</label>
-                    <label>:خیرات</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>{prescription.zakat}</label>
-                    <label>:ذکات</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>{report.total_to_sale}</label>
-                    <label>:قابل پرداخت</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>{report.rounded_number}</label>
-                    <label>:مقدار روند شده </label>
-                  </div>
+          {loading ? (
+            <div className="modal">
+              <div className="modal-header">
+                <h3>ثبت نسخه</h3>
+                <div className="modal-close-btn" onClick={registerModalCloser}>
+                  <i className="fa-solid fa-xmark"></i>
                 </div>
               </div>
-              <form className="prescription-prescription" id="Myform">
-                <label>نوع نسخه:</label>
-                <select
-                  {...register("department")}
-                  defaultValue={prescription.id}
-                  onChange={(res) => {
-                    DepartmentHandler(res.target.value);
-                  }}
-                >
-                  <option value={prescription.department} selected hidden>
-                    {department.map(
-                      (depart) =>
-                        depart.id == prescription.department && depart.name
-                    )}
-                  </option>
-                  {department.map((depart) => (
-                    <option value={depart.id}>{depart.name}</option>
-                  ))}
-                </select>
-                <label>نام مریض:</label>
-                <div>
-                  <ReactSearchAutocomplete
-                    items={patient}
-                    onSelect={(item) =>
-                      setAutoCompleteData({
-                        ...autoCompleteData,
-                        patient: item.id,
-                      })
-                    }
-                    styling={AutoCompleteStyle}
-                    showClear={false}
-                    inputDebounce="10"
-                    showIcon={false}
-                    className="autoComplete"
-                    placeholder={patientName}
-                  />
-                  <Patient button={2} Update={UpdateDoctorsPatient} />
+              <div className="prescription-box">
+                <div className="entrance-report">
+                  <div className="entrance-report-header">راپور</div>
+                  <div className="entrance-report-body">
+                    <div className="entrance-report-map-box">
+                      <label>{report.number}</label>
+                      <label>:تعداد اقلام</label>
+                    </div>
+                    <div className="entrance-report-map-box">
+                      <label>{report.total}</label>
+                      <label>:مجموع فروش</label>
+                    </div>
+                    <div className="entrance-report-map-box">
+                      <label>
+                        {prescription.discount_money +
+                          (report.total * prescription.discount_percent) / 100}
+                      </label>
+                      <label>:تخفیف</label>
+                    </div>
+                    <div className="entrance-report-map-box">
+                      <label>{prescription.khairat}</label>
+                      <label>:خیرات</label>
+                    </div>
+                    <div className="entrance-report-map-box">
+                      <label>{prescription.zakat}</label>
+                      <label>:ذکات</label>
+                    </div>
+                    <div className="entrance-report-map-box">
+                      <label>{report.total_to_sale}</label>
+                      <label>:قابل پرداخت</label>
+                    </div>
+                    <div className="entrance-report-map-box">
+                      <label>{report.rounded_number}</label>
+                      <label>:مقدار روند شده </label>
+                    </div>
+                  </div>
                 </div>
-                <label>نام داکتر:</label>
-                <div>
-                  <ReactSearchAutocomplete
-                    items={doctor}
-                    styling={AutoCompleteStyle}
-                    onSelect={(item) =>
-                      setAutoCompleteData({
-                        ...autoCompleteData,
-                        doctor: item.id,
-                      })
-                    }
-                    showClear={false}
-                    inputDebounce="10"
-                    showIcon={false}
-                    placeholder={doctorName}
+                <form className="prescription-prescription" id="Myform">
+                  <label>نوع نسخه:</label>
+                  <select
+                    {...register("department")}
+                    defaultValue={prescription.id}
+                    onChange={(res) => {
+                      DepartmentHandler(res.target.value);
+                    }}
+                  >
+                    <option value={prescription.department} selected hidden>
+                      {department.map(
+                        (depart) =>
+                          depart.id == prescription.department && depart.name
+                      )}
+                    </option>
+                    {department.map((depart) => (
+                      <option value={depart.id}>{depart.name}</option>
+                    ))}
+                  </select>
+                  <label>نام مریض:</label>
+                  <div>
+                    <ReactSearchAutocomplete
+                      items={patient}
+                      onSelect={(item) =>
+                        setAutoCompleteData({
+                          ...autoCompleteData,
+                          patient: item.id,
+                        })
+                      }
+                      styling={AutoCompleteStyle}
+                      showClear={false}
+                      inputDebounce="10"
+                      showIcon={false}
+                      className="autoComplete"
+                      placeholder={patientName}
+                    />
+                    <Patient button={2} Update={UpdateDoctorsPatient} />
+                  </div>
+                  <label>نام داکتر:</label>
+                  <div>
+                    <ReactSearchAutocomplete
+                      items={doctor}
+                      styling={AutoCompleteStyle}
+                      onSelect={(item) =>
+                        setAutoCompleteData({
+                          ...autoCompleteData,
+                          doctor: item.id,
+                        })
+                      }
+                      showClear={false}
+                      inputDebounce="10"
+                      showIcon={false}
+                      placeholder={doctorName}
+                    />
+                    <Doctor button={2} Update={UpdateDoctorsPatient} />
+                  </div>
+                  <label>شماره:</label>
+                  <input
+                    required
+                    type="text"
+                    {...register("prescription_number")}
+                    defaultValue={prescription.prescription_number}
                   />
-                  <Doctor button={2} Update={UpdateDoctorsPatient} />
-                </div>
-                <label>شماره:</label>
-                <input
-                  required
-                  type="text"
-                  {...register("prescription_number")}
-                  defaultValue={prescription.prescription_number}
-                />
-                <label>جستوجو:</label>
-                <div className="flex">
-                  <form className="search-form">
-                    <input type="text" {...register("number")} />
-                    <button
-                      className="search-button-box"
-                      onClick={handleSubmit(SearchSubmit)}
+                  <label>جستوجو:</label>
+                  <div className="flex">
+                    <form className="search-form">
+                      <input type="text" {...register("number")} />
+                      <button
+                        className="search-button-box"
+                        onClick={handleSubmit(SearchSubmit)}
+                        type="submit"
+                      >
+                        <i class="fa-brands fa-searchengin"></i>
+                      </button>
+                    </form>
+                  </div>
+                  <label>عکس:</label>
+                  <input
+                    type="file"
+                    onChange={(e) => setFile(e.target.files[0])}
+                  ></input>
+                  <label>تخفیف:</label>
+                  <input
+                    type="text"
+                    {...register("discount_money")}
+                    defaultValue={
+                      prescription.discount_money ||
+                      departmentSelected.discount_money
+                    }
+                  />
+                  <label>تخفیف %:</label>
+                  <input
+                    type="text"
+                    {...register("discount_percent")}
+                    defaultValue={
+                      prescription.discount_percent ||
+                      departmentSelected.discount_percent
+                    }
+                  />
+                  <div></div>
+                  <a
+                    href={
+                      prescription.image &&
+                      new URL(prescription.image).pathname.slice(16)
+                    }
+                    target="_blank"
+                    style={{ textDecoration: "none", color: "grey" }}
+                  >
+                    {prescription.image ? "Show_Photo" : ""}
+                  </a>
+                  <label>ذکات:</label>
+                  <input
+                    type="text"
+                    {...register("zakat")}
+                    defaultValue={prescription.zakat}
+                  />
+                  <label>خیرات:</label>
+                  <input
+                    type="text"
+                    {...register("khairat")}
+                    defaultValue={prescription.khairat}
+                  />
+                  <div></div>
+                  <div className="entrance-buttons">
+                    <input
+                      type="reset"
+                      value="Reset"
+                      onClick={ResetForm}
+                    ></input>
+                    <input
                       type="submit"
-                    >
-                      <i class="fa-brands fa-searchengin"></i>
-                    </button>
-                  </form>
-                </div>
-                <label>عکس:</label>
-                <input
-                  type="file"
-                  onChange={(e)=> setFile(e.target.files[0])}
-                ></input>
-                <label>تخفیف:</label>
-                <input
-                  type="text"
-                  {...register("discount_money")}
-                  defaultValue={
-                    prescription.discount_money ||
-                    departmentSelected.discount_money
-                  }
-                />
-                <label>تخفیف %:</label>
-                <input
-                  type="text"
-                  {...register("discount_percent")}
-                  defaultValue={
-                    prescription.discount_percent ||
-                    departmentSelected.discount_percent
-                  }
-                />
-                <div></div>
-                <a href={prescription.image && new URL(prescription.image).pathname.slice(16)} target="_blank" style={{textDecoration: "none", color: "grey"}}>{prescription.image ? "Show_Photo" : ""}</a>
-                <label>ذکات:</label>
-                <input
-                  type="text"
-                  {...register("zakat")}
-                  defaultValue={prescription.zakat}
-                />
-                <label>خیرات:</label>
-                <input
-                  type="text"
-                  {...register("khairat")}
-                  defaultValue={prescription.khairat}
-                />
-                <div></div>
-                <div className="entrance-buttons">
-                  <input type="reset" value="Reset" onClick={ResetForm}></input>
-                  <input
-                    type="submit"
-                    value={submited ? "Update" : "Submit"}
-                    onClick={handleSubmit(PrescriptionSubmit)}
-                  ></input>
-                  <input
-                    type="button"
-                    value="Create New"
-                    className="prescription-create-button"
-                    onClick={handleSubmit(CreateNewHandle)}
-                  ></input>
-                </div>
-              </form>
+                      value={submited ? "Update" : "Submit"}
+                      onClick={handleSubmit(PrescriptionSubmit)}
+                    ></input>
+                    <input
+                      type="button"
+                      value="Create New"
+                      className="prescription-create-button"
+                      onClick={handleSubmit(CreateNewHandle)}
+                    ></input>
+                  </div>
+                </form>
 
-              <form className="prescription-through">
-                <label>قلم:</label>
-                <div className="entrance-through-medician-input">
-                  {props.button != 1 && props.button != 2 && (
-                    <SelectMedician
-                      kind={kind}
-                      country={country}
-                      pharmGroub={pharmGroub}
-                      selectAutoCompleteData={AutoCompleteHandle}
-                      trigger={selectTrigger}
-                      tabFormulate={tabFormulate}
-                      department={props.department}
-                    />
-                  )}
-                  {props.button == 1 && (
-                    <SelectMedician
-                      kind={kind}
-                      country={country}
-                      pharmGroub={pharmGroub}
-                      selectAutoCompleteData={AutoCompleteHandle}
-                      trigger={selectTrigger}
-                      tabFormulate={tabFormulate}
-                      department={props.department}
-                    />
-                  )}
-                  {props.button == 2 && (
-                    <SelectMedician
-                      kind={kind}
-                      country={country}
-                      pharmGroub={pharmGroub}
-                      selectAutoCompleteData={AutoCompleteHandle}
-                      tabFormulate={tabFormulate}
-                      trigger={selectTrigger}
-                      department={props.department}
-                    />
-                  )}
-                </div>
-                <label>تعداد:</label>
-                <input
-                  type="text"
-                  {...register("quantity")}
-                  id="number-in-factor-input"
-                />
-                <div className="prescription-button">
+                <form className="prescription-through">
+                  <label>قلم:</label>
+                  <div className="entrance-through-medician-input">
+                    {props.button != 1 && props.button != 2 && (
+                      <SelectMedician
+                        kind={kind}
+                        country={country}
+                        pharmGroub={pharmGroub}
+                        selectAutoCompleteData={AutoCompleteHandle}
+                        trigger={selectTrigger}
+                        tabFormulate={tabFormulate}
+                        department={props.department}
+                        results={medicianWith}
+                      />
+                    )}
+                    {props.button == 1 && (
+                      <SelectMedician
+                        kind={kind}
+                        country={country}
+                        pharmGroub={pharmGroub}
+                        selectAutoCompleteData={AutoCompleteHandle}
+                        trigger={selectTrigger}
+                        tabFormulate={tabFormulate}
+                        department={props.department}
+                        results={medicianWith}
+                      />
+                    )}
+                    {props.button == 2 && (
+                      <SelectMedician
+                        kind={kind}
+                        country={country}
+                        pharmGroub={pharmGroub}
+                        selectAutoCompleteData={AutoCompleteHandle}
+                        tabFormulate={tabFormulate}
+                        trigger={selectTrigger}
+                        department={props.department}
+                        results={medicianWith}
+                      />
+                    )}
+                  </div>
+                  <label>تعداد:</label>
                   <input
-                    type="submit"
-                    value="⤵ Add"
-                    className="prescription-add-button"
-                    onClick={handleSubmit(PrescriptionThrough)}
-                  ></input>
-                </div>
-              </form>
+                    type="text"
+                    {...register("quantity")}
+                    id="number-in-factor-input"
+                  />
+                  <div className="prescription-button">
+                    <input
+                      type="submit"
+                      value="⤵ Add"
+                      className="prescription-add-button"
+                      onClick={handleSubmit(PrescriptionThrough)}
+                    ></input>
+                  </div>
+                </form>
 
-              <form className="prescription-medician-map">
-                <div className="prescription-medician-header">
-                  <label>No</label>
-                  <label>قلم</label>
-                  <label>قیمت فی</label>
-                  <label>تعداد</label>
-                  <label>قیمت کل</label>
-                  <label>حذف</label>
-                </div>
-                <div className="prescription-medicine">
-                  {prescriptionThrough.map((through, key) => (
-                    <PrescriptionThroughEntry
-                      through={through}
-                      keyValue={through.id}
-                      num={key}
-                      kind={kind}
-                      country={country}
-                      pharmGroub={pharmGroub}
-                      UpdateUI={UpdateUI}
-                      UpdateChunk={UpdateChunk}
-                    />
-                  ))}
-                </div>
-              </form>
+                <form className="prescription-medician-map">
+                  <div className="prescription-medician-header">
+                    <label>No</label>
+                    <label>قلم</label>
+                    <label>قیمت فی</label>
+                    <label>تعداد</label>
+                    <label>قیمت کل</label>
+                    <label>حذف</label>
+                  </div>
+                  <div className="prescription-medicine">
+                    {prescriptionThrough.map((through, key) => (
+                      <PrescriptionThroughEntry
+                        through={through}
+                        keyValue={through.id}
+                        num={key}
+                        kind={kind}
+                        country={country}
+                        pharmGroub={pharmGroub}
+                        UpdateUI={UpdateUI}
+                        UpdateChunk={UpdateChunk}
+                      />
+                    ))}
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="loading-page-modal">
+              <div className="loading-dna-box">
+                <LoadingDNA />
+                <h3>لطفا منتظر باشید...</h3>
+              </div>
+            </div>
+          )}
         </Modal>
       )}
     </>
