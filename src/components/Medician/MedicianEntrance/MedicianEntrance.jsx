@@ -8,21 +8,9 @@ import { toast } from "react-toastify";
 import Kind from "../Kind";
 import PharmGroup from "../PharmGroup";
 import Country from "../Country";
-import {useAuthUser} from 'react-auth-kit'
+import { useAuthUser } from "react-auth-kit";
 
 function MedicianEntrance({ title, icon, button, medician }) {
-  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-
-  const user = useAuthUser()
-
-  function registerModalOpener() {
-    UpdateFunction();
-    setRegisterModalOpen(true);
-  }
-  function registerModalCloser() {
-    setRegisterModalOpen(false);
-  }
-
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(30,30,30)",
@@ -36,12 +24,6 @@ function MedicianEntrance({ title, icon, button, medician }) {
       backgroundColor: "rgba(60,60,60,0.5)",
     },
   };
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
   const AutoCompleteStyle = {
     height: "1.7rem",
@@ -65,7 +47,14 @@ function MedicianEntrance({ title, icon, button, medician }) {
   const KIND_URL = import.meta.env.VITE_KIND;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
+  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+  const user = useAuthUser();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [country, setCountry] = React.useState([]);
   const [pharmGroup, setPharmGroup] = React.useState([]);
   const [kind, setKind] = React.useState([]);
@@ -79,10 +68,6 @@ function MedicianEntrance({ title, icon, button, medician }) {
     pharm_group: medician && medician.pharm_group ? medician.pharm_group : "",
     kind: medician && medician.kind ? medician.kind : "",
   });
-  const [multipleSelected, setMultipleSelect] = React.useState([])
-
-
-  console.log(multipleSelected)
 
   React.useEffect(() => {
     axios
@@ -102,8 +87,6 @@ function MedicianEntrance({ title, icon, button, medician }) {
       .then((res) => setDepartment(res.data))
       .catch((err) => console.log(err));
   }, []);
-
-  console.log(department)
 
   React.useEffect(() => {
     kind.map(
@@ -125,6 +108,14 @@ function MedicianEntrance({ title, icon, button, medician }) {
         setCountryName(country.name)
     );
   }, [country]);
+
+  function registerModalOpener() {
+    UpdateFunction();
+    setRegisterModalOpen(true);
+  }
+  function registerModalCloser() {
+    setRegisterModalOpen(false);
+  }
 
   const SubmitMedician = (data) => {
     const MedicianForm = new FormData();
@@ -152,19 +143,18 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("pharm_group", autoCompleteData.pharm_group);
     MedicianForm.append("kind", autoCompleteData.kind);
     MedicianForm.append("country", autoCompleteData.country);
-    MedicianForm.append("doctor_approved", data.doctor_approved)
-    MedicianForm.append("patient_approved", data.patient_approved)
-    MedicianForm.append("department", data.department)
-    MedicianForm.append("batch_number", data.batch_number)
-    MedicianForm.append("active", data.active)
-    MedicianForm.append("user", user().id)
+    MedicianForm.append("doctor_approved", data.doctor_approved);
+    MedicianForm.append("patient_approved", data.patient_approved);
+    MedicianForm.append("department", data.department);
+    MedicianForm.append("batch_number", data.batch_number);
+    MedicianForm.append("active", data.active);
+    MedicianForm.append("user", user().id);
 
     {
       button == 1 &&
         axios
           .post(MEDICIAN_URL, MedicianForm)
           .then((res) => {
-            console.log(res.data);
             toast.success("Data Updated Successfuly.");
           })
           .catch((err) => {
@@ -177,7 +167,6 @@ function MedicianEntrance({ title, icon, button, medician }) {
         axios
           .post(MEDICIAN_URL, MedicianForm)
           .then((res) => {
-            console.log(res.data);
             toast.success("Data Updated Successfuly.");
           })
           .catch((err) => {
@@ -191,8 +180,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
         axios
           .patch(MEDICIAN_URL + medician.id + "/", MedicianForm)
           .then((res) => {
-            toast.success("Data Updated Successfuly.")
-            console.log(res)
+            toast.success("Data Updated Successfuly.");
           })
           .catch((err) => toast.error("Check Your Input And Try Again!"));
     }
@@ -276,12 +264,12 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 {...register("ml")}
                 defaultValue={medician && medician.ml}
               />
-                <label>وزن:</label>
-                <input
-                  type="text"
-                  {...register("weight")}
-                  defaultValue={medician && medician.weight}
-                />
+              <label>وزن:</label>
+              <input
+                type="text"
+                {...register("weight")}
+                defaultValue={medician && medician.weight}
+              />
               <label>گروپ_دوایی:</label>
               <div style={{ marginLeft: "0.5rem" }}>
                 <ReactSearchAutocomplete
@@ -340,12 +328,12 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 />
                 <Country button={2} Update={UpdateFunction} />
               </div>
-                <label>شرکت:</label>
-                <input
-                  type="text"
-                  {...register("company")}
-                  defaultValue={medician && medician.company}
-                />
+              <label>شرکت:</label>
+              <input
+                type="text"
+                {...register("company")}
+                defaultValue={medician && medician.company}
+              />
               <label>قیمت:</label>
               <input
                 type="text"
@@ -382,35 +370,35 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 {...register("no_box")}
                 defaultValue={medician && medician.no_box}
               />
-              
+
               <div className="approving-box">
-              <label>فعال:</label>
-              <input
-                type="checkbox"
-                className="must-advised-input"
-                {...register("active")}
-                defaultChecked={medician && medician.active}
+                <label>فعال:</label>
+                <input
+                  type="checkbox"
+                  className="must-advised-input"
+                  {...register("active")}
+                  defaultChecked={medician && medician.active}
                 />
-              <label>توصیه_حتمی:</label>
-              <input
-                type="checkbox"
-                className="must-advised-input"
-                {...register("must_advised")}
-                defaultChecked={medician && medician.must_advised}
+                <label>توصیه_حتمی:</label>
+                <input
+                  type="checkbox"
+                  className="must-advised-input"
+                  {...register("must_advised")}
+                  defaultChecked={medician && medician.must_advised}
                 />
-              <label>توصیه_مریض:</label>
-              <input
-                type="checkbox"
-                className="must-advised-input"
-                {...register("patient_approved")}
-                defaultChecked={medician && medician.patient_approved}
+                <label>توصیه_مریض:</label>
+                <input
+                  type="checkbox"
+                  className="must-advised-input"
+                  {...register("patient_approved")}
+                  defaultChecked={medician && medician.patient_approved}
                 />
-              <label>توصیه_داکتر:</label>
-              <input
-                type="checkbox"
-                className="must-advised-input"
-                {...register("doctor_approved")}
-                defaultChecked={medician && medician.doctor_approved}
+                <label>توصیه_داکتر:</label>
+                <input
+                  type="checkbox"
+                  className="must-advised-input"
+                  {...register("doctor_approved")}
+                  defaultChecked={medician && medician.doctor_approved}
                 />
               </div>
               <label>اخطاریه:</label>
@@ -424,29 +412,39 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 defaultValue={medician && medician.usages}
               />
               <div>
-              <label>عکس:</label>
-              <br />
-              <br />
-              <label>دیپارتمنت:</label>
+                <label>عکس:</label>
+                <br />
+                <br />
+                <label>دیپارتمنت:</label>
               </div>
               <div>
-              <input
-                type="file"
-                className="medician-image-field"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
-              <br />
-              <br />
-              <select className="medicine-department-select" {...register('department')} 
-              // onChange={(e) => {
-              //   setMultipleSelect( [...e.target.selectedOptions].map((o) => parseInt(o.value)))
-              // }}
-              >
-                <option></option>
-                {department.map((depart) => (
-                <option selected={(medician && medician.department) && medician.department == depart.id ? "selected" : ""} value={depart.id}>{depart.name}</option>
-              ))}
-              </select>
+                <input
+                  type="file"
+                  className="medician-image-field"
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+                <br />
+                <br />
+                <select
+                  className="medicine-department-select"
+                  {...register("department")}
+                >
+                  <option></option>
+                  {department.map((depart) => (
+                    <option
+                      selected={
+                        medician &&
+                        medician.department &&
+                        medician.department == depart.id
+                          ? "selected"
+                          : ""
+                      }
+                      value={depart.id}
+                    >
+                      {depart.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <label>توضیحات:</label>
               <textarea
@@ -459,14 +457,14 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 defaultValue={medician && medician.dividing_rules}
               />
               <div className="bar_batch_box">
-                  <label>بارکد:</label>
+                <label>بارکد:</label>
               </div>
               <div className="bar_batch_box">
-              <input
-                type="text"
-                {...register("barcode")}
-                defaultValue={medician && medician.barcode}
-              />
+                <input
+                  type="text"
+                  {...register("barcode")}
+                  defaultValue={medician && medician.barcode}
+                />
               </div>
             </div>
             <div className="medician-inter-submit">

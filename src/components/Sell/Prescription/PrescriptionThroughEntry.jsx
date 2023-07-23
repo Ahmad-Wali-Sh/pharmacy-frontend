@@ -2,21 +2,19 @@ import React from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import LoadingDNA from "../../PageComponents/LoadingDNA";
-import {useAuthUser} from 'react-auth-kit'
+import { useAuthUser } from "react-auth-kit";
 
 function PrescriptionThroughEntry({
   through,
   keyValue,
   num,
-  country,
-  pharmGroub,
   kind,
   UpdateUI,
   UpdateChunk,
 }) {
   const PRESCRIPTION_THROUGH_URL = import.meta.env.VITE_PRESCRIPTION_THROUGH;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const user = useAuthUser();
 
   const [exactMedician, setExactMedician] = React.useState("");
   const {
@@ -30,12 +28,9 @@ function PrescriptionThroughEntry({
       .get(MEDICIAN_URL + through.medician)
       .then((res) => {
         setExactMedician(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
-
-  const user = useAuthUser()
 
   const MedicianUpdate = (data) => {
     const MedicianUpdateForm = new FormData();
@@ -74,13 +69,18 @@ function PrescriptionThroughEntry({
         <label>{num + 1}</label>
         <div className="entrance-medician-map-box">
           <h4 className="entrance-medician-map-name">
-          <h4>
-            {kind.map((kind) =>
-              kind.id == exactMedician.kind && kind.name_english
-            )}
-            {exactMedician &&
-              (". " + exactMedician.brand_name + " " + exactMedician.ml + " " + exactMedician.weight)}
-          </h4>
+            <h4>
+              {kind.map(
+                (kind) => kind.id == exactMedician.kind && kind.name_english
+              )}
+              {exactMedician &&
+                ". " +
+                  exactMedician.brand_name +
+                  " " +
+                  exactMedician.ml +
+                  " " +
+                  exactMedician.weight}
+            </h4>
           </h4>
         </div>
         <h4>{through.each_price}AFG</h4>

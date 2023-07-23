@@ -12,8 +12,6 @@ import Patient from "./Patient";
 import { useAuthUser } from "react-auth-kit";
 
 export default function Prescription(props) {
-  /* Modal */
-
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(60,60,60)",
@@ -29,7 +27,17 @@ export default function Prescription(props) {
     },
   };
 
-  const user = useAuthUser();
+  const AutoCompleteStyle = {
+    height: "1.5rem",
+    borderRadius: "1rem",
+    fontSize: "14px",
+    backgroundColor: "rgb(34, 34, 34)",
+    color: "white",
+    border: "none",
+    hoverBackgroundColor: "grey",
+    zIndex: "2",
+    overflow: "scroll",
+  };
 
   const popUpStyle = {
     content: {
@@ -50,46 +58,6 @@ export default function Prescription(props) {
     },
   };
 
-  /* Form Hook */
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-
-  /* AutoComplete Search */
-
-  const AutoCompleteStyle = {
-    height: "1.5rem",
-    borderRadius: "1rem",
-    fontSize: "14px",
-    backgroundColor: "rgb(34, 34, 34)",
-    color: "white",
-    border: "none",
-    hoverBackgroundColor: "grey",
-    zIndex: "2",
-    overflow: "scroll",
-  };
-
-  const [autoCompleteData, setAutoCompleteData] = React.useState({
-    patient: "",
-    doctor: "",
-    medician: [],
-  });
-
-  function AutoCompleteHandle(data) {
-    setAutoCompleteData({
-      ...autoCompleteData,
-      medician: data,
-    });
-  }
-
-  /* CRUD */
-
-  /* Links */
-
   const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
   const PRESCRIPTION_THOURGH_URL = import.meta.env.VITE_PRESCRIPTION_THROUGH;
   const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
@@ -98,10 +66,25 @@ export default function Prescription(props) {
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const KIND_URL = import.meta.env.VITE_KIND;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN
+  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
+  const user = useAuthUser();
 
-  /* States */
-
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const [report, setReport] = React.useState({
+    total: 0,
+    number: 0,
+  });
+  const [autoCompleteData, setAutoCompleteData] = React.useState({
+    patient: "",
+    doctor: "",
+    medician: [],
+  });
   const [country, setCountry] = React.useState([]);
   const [kind, setKind] = React.useState([]);
   const [pharmGroub, setPharmGroub] = React.useState([]);
@@ -114,30 +97,13 @@ export default function Prescription(props) {
   const [prescription, setPrescription] = React.useState([]);
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [prescriptionThrough, setPrescriptionThrough] = React.useState([]);
-  const [report, setReport] = React.useState({
-    total: 0,
-    number: 0,
-  });
   const [departmentSelected, setDepartmentSelected] = React.useState("");
-
-  function registerModalOpener() {
-    ResetForm();
-    reset({});
-    setRegisterModalOpen(true);
-    axios
-      .get(PATIENT_URL)
-      .then((res) => setPatient(res.data))
-      .catch((err) => console.log(err));
-    axios
-      .get(DOCTOR_URL)
-      .then((res) => setDoctor(res.data))
-      .catch((err) => console.log(err));
-  }
-
-  function registerModalCloser() {
-    ResetForm();
-    setRegisterModalOpen(false);
-  }
+  const [popUpOpen, setpopUpOpen] = React.useState(false);
+  const [medicianWith, setMedicineWith] = React.useState([]);
+  const [excatTrough, setExactThrough] = React.useState("");
+  const [selectTrigger, setTrigger] = React.useState(1);
+  const [file, setFile] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     doctor.map((doctor) =>
@@ -148,8 +114,6 @@ export default function Prescription(props) {
       patient.id == prescription.name ? setPatientName(patient.name) : ""
     );
   }, [prescription]);
-
-  /* Requests */
 
   React.useEffect(() => {
     axios
@@ -184,9 +148,70 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
   }, []);
 
-  /* Handlers and Submiting */
+  React.useEffect(() => {
+    if (props.trigger) {
+      registerModalOpener();
+    }
+    ResetForm();
+    if (props.button == 1 && registerModalOpen) {
+      axios
+        .get(
+          PRESCRIPTION_URL +
+            "?prescription_number=" +
+            props.prescription.prescription_number
+        )
+        .then((res) => {
+          setPrescription(res.data[0] ? res.data[0] : []);
+          setSubmited(true);
+          {
+            res.data[0] ? toast.success("Search Was Successful.") : "";
+          }
+          axios
+            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
+            .then((res) => {
+              setPrescriptionThrough(res.data);
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Check Your Input And Try Again!");
+        });
+    }
+  }, [registerModalOpen, props.trigger]);
 
-  const [popUpOpen, setpopUpOpen] = React.useState(false);
+  React.useEffect(() => {
+    Reporting();
+  }, [prescriptionThrough]);
+
+  React.useEffect(() => {
+    const RoundForm = new FormData();
+    RoundForm.append("rounded_number", report.rounded_number);
+    prescriptionThrough &&
+      prescription.id &&
+      axios
+        .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
+        .catch((err) => console.log(err));
+  }, [prescriptionThrough]);
+
+  function registerModalOpener() {
+    ResetForm();
+    reset({});
+    setRegisterModalOpen(true);
+    axios
+      .get(PATIENT_URL)
+      .then((res) => setPatient(res.data))
+      .catch((err) => console.log(err));
+    axios
+      .get(DOCTOR_URL)
+      .then((res) => setDoctor(res.data))
+      .catch((err) => console.log(err));
+  }
+
+  function registerModalCloser() {
+    ResetForm();
+    setRegisterModalOpen(false);
+  }
 
   const popUpCloser = () => {
     setpopUpOpen(false);
@@ -194,6 +219,13 @@ export default function Prescription(props) {
   const popUpOpener = () => {
     setpopUpOpen(true);
   };
+
+  function AutoCompleteHandle(data) {
+    setAutoCompleteData({
+      ...autoCompleteData,
+      medician: data,
+    });
+  }
 
   const PrescriptionSubmit = (data) => {
     const PrescriptionForm = new FormData();
@@ -231,7 +263,6 @@ export default function Prescription(props) {
       axios
         .post(PRESCRIPTION_URL, PrescriptionForm)
         .then((res) => {
-          console.log(res.data);
           setPrescription(res.data);
           setSubmited(true);
           toast.success("Data Submited Successfuly.");
@@ -243,7 +274,6 @@ export default function Prescription(props) {
     }
 
     if (submited == true) {
-      console.log(data.discount_percent);
       axios
         .patch(PRESCRIPTION_URL + prescription.id + "/", PrescriptionForm)
         .then((res) => {
@@ -251,8 +281,6 @@ export default function Prescription(props) {
           toast.success("Data Updated Successfuly.");
           UpdateChunk();
           UpdateUI();
-          console.log(res.data);
-          console.log(PrescriptionForm);
         })
         .catch((err) => {
           console.log(err);
@@ -260,13 +288,6 @@ export default function Prescription(props) {
         });
     }
   };
-
-  const [excatTrough, setExactThrough] = React.useState("");
-
-  const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH
-  const [medicianWith, setMedicineWith] = React.useState([]);
-
-  console.log(medicianWith)
 
   const PrescriptionThrough = (data) => {
     const PrescritptionThroughForm = new FormData();
@@ -294,7 +315,6 @@ export default function Prescription(props) {
       axios
         .post(PRESCRIPTION_THOURGH_URL, PrescritptionThroughForm)
         .then((res) => {
-          console.log(res.data);
           setPrescriptionThrough((prev) => [...prev, res.data]);
           toast.info("Item Added.");
           setTrigger((prev) => prev + 1);
@@ -302,11 +322,11 @@ export default function Prescription(props) {
             .get(MEDICIAN_WITH_URL + "?medicine=" + res.data.medician)
             .then((res2) => {
               axios
-                  .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
-                  .then((res3) => {
-                    setMedicineWith(res3.data.results)
-                  })
-          });
+                .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
+                .then((res3) => {
+                  setMedicineWith(res3.data.results);
+                });
+            });
         })
         .catch((err) => {
           console.log(err);
@@ -345,7 +365,6 @@ export default function Prescription(props) {
       .get(PRESCRIPTION_URL + "?prescription_number=" + data.number)
       .then((res) => {
         setPrescription(res.data[0] ? res.data[0] : []);
-        console.log(res.data);
         setSubmited(true);
         {
           res.data[0] ? toast.success("Search Was Successful.") : "";
@@ -358,7 +377,6 @@ export default function Prescription(props) {
           .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
           .then((res) => {
             setPrescriptionThrough(res.data);
-            console.log(res);
           })
           .catch((err) => console.log(err));
       })
@@ -367,40 +385,6 @@ export default function Prescription(props) {
         toast.error("Check Your Input And Try Again!");
       });
   };
-
-  const [selectTrigger, setTrigger] = React.useState(1);
-
-  React.useEffect(() => {
-    if (props.trigger) {
-      registerModalOpener();
-    }
-    ResetForm();
-    if (props.button == 1 && registerModalOpen) {
-      axios
-        .get(
-          PRESCRIPTION_URL +
-            "?prescription_number=" +
-            props.prescription.prescription_number
-        )
-        .then((res) => {
-          setPrescription(res.data[0] ? res.data[0] : []);
-          setSubmited(true);
-          {
-            res.data[0] ? toast.success("Search Was Successful.") : "";
-          }
-          axios
-            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
-            .then((res) => {
-              setPrescriptionThrough(res.data);
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("Check Your Input And Try Again!");
-        });
-    }
-  }, [registerModalOpen, props.trigger]);
 
   const ResetForm = () => {
     setPrescription([]);
@@ -438,11 +422,7 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
   }
 
-  const [file, setFile] = React.useState("");
-
-  const CreateNewHandle = (data) => {
-    console.log(data);
-
+  const CreateNewHandle = () => {
     const PrescriptionForm = new FormData();
     PrescriptionForm.append("name", autoCompleteData.patient);
     PrescriptionForm.append("doctor", autoCompleteData.doctor);
@@ -461,7 +441,6 @@ export default function Prescription(props) {
     axios
       .post(PRESCRIPTION_URL, PrescriptionForm)
       .then((res) => {
-        console.log(res.data);
         setPrescription(res.data);
         prescriptionThrough.map((item) => {
           const PrescriptionThroughForm = new FormData();
@@ -474,7 +453,6 @@ export default function Prescription(props) {
           axios
             .post(PRESCRIPTION_THOURGH_URL, PrescriptionThroughForm)
             .then((res) => {
-              console.log(res.data);
               setPrescriptionThrough((prev) => [...prev, res.data]);
             })
             .catch((err) => console.log(err));
@@ -482,9 +460,6 @@ export default function Prescription(props) {
       })
       .catch((err) => console.log(err));
   };
-  React.useEffect(() => {
-    Reporting();
-  }, [prescriptionThrough]);
 
   const Reporting = () => {
     const totalCalculate = () => {
@@ -543,17 +518,6 @@ export default function Prescription(props) {
     });
   };
 
-  React.useEffect(() => {
-    const RoundForm = new FormData();
-    RoundForm.append("rounded_number", report.rounded_number);
-    prescriptionThrough &&
-      prescription.id &&
-      axios
-        .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-  }, [prescriptionThrough]);
-
   const tabFormulate = () => {
     document.getElementById("number-in-factor-input").focus();
   };
@@ -574,7 +538,6 @@ export default function Prescription(props) {
       axios
         .post(PRESCRIPTION_URL, DepartmentForm)
         .then((res) => {
-          console.log(res.data);
           setPrescription(res.data);
           setSubmited(true);
           setLoading(true);
@@ -603,8 +566,6 @@ export default function Prescription(props) {
       })
       .catch((err) => console.log(err));
   };
-
-  const [loading, setLoading] = React.useState(false);
 
   return (
     <>

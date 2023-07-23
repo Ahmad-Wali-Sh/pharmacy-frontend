@@ -12,49 +12,8 @@ export default function SelectMedician({
   trigger,
   tabFormulate,
   department,
-  results
+  results,
 }) {
-  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-  const [selectedMedician, setSelectedMedician] = React.useState("");
-
-  function registerModalOpener() {
-    {
-      tabFormulate != undefined && tabFormulate();
-    }
-    setRegisterModalOpen(true);
-  }
-  function registerModalCloser() {
-    setRegisterModalOpen(false);
-  }
-
-  console.log(results)
-
-  React.useEffect(() => {
-    setMedician(results)
-  },[results])
-
-  const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([]);
-
-  React.useEffect(() => {
-    department &&
-      axios
-        .get(MEDICIAN_URL + "?department=" + department.id)
-        .then((res) => setBookmarkedMedicine(res.data.results))
-        .catch((err) => console.log(err));
-  }, []);
-
-  console.log(bookmarkedMedicine);
-
-  React.useEffect(() => {
-    if (trigger != 0) {
-      registerModalOpener();
-    }
-  }, [trigger]);
-
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
-
-  const [medician, setMedician] = React.useState([]);
-
   const customStyles = {
     content: {
       backgroundColor: "rgb(60,60,60)",
@@ -66,6 +25,22 @@ export default function SelectMedician({
     overlay: {
       backgroundColor: "rgba(60,60,60,0.5)",
     },
+  };
+
+  const AutoCompleteStyle = {
+    height: "1.5rem",
+    borderRadius: "1rem",
+    fontSize: "14px",
+    backgroundColor: "rgb(34, 34, 34)",
+    color: "white",
+    border: "none",
+    hoverBackgroundColor: "grey",
+    zIndex: "2",
+    minHeight: "10rem",
+  };
+  const AutoCompleteStyle2 = {
+    ...AutoCompleteStyle,
+    zIndex: "1",
   };
 
   const formatResult = (item) => {
@@ -173,27 +148,47 @@ export default function SelectMedician({
     );
   };
 
+  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+
+  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+  const [selectedMedician, setSelectedMedician] = React.useState("");
+  const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([]);
+  const [medician, setMedician] = React.useState([]);
+
+  React.useEffect(() => {
+    setMedician(results);
+  }, [results]);
+
+  React.useEffect(() => {
+    department &&
+      axios
+        .get(MEDICIAN_URL + "?department=" + department.id)
+        .then((res) => setBookmarkedMedicine(res.data.results))
+        .catch((err) => console.log(err));
+  }, []);
+
+  React.useEffect(() => {
+    if (trigger != 0) {
+      registerModalOpener();
+    }
+  }, [trigger]);
+
+  function registerModalOpener() {
+    {
+      tabFormulate != undefined && tabFormulate();
+    }
+    setRegisterModalOpen(true);
+  }
+  function registerModalCloser() {
+    setRegisterModalOpen(false);
+  }
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       registerModalOpener();
     }
   };
 
-  const AutoCompleteStyle = {
-    height: "1.5rem",
-    borderRadius: "1rem",
-    fontSize: "14px",
-    backgroundColor: "rgb(34, 34, 34)",
-    color: "white",
-    border: "none",
-    hoverBackgroundColor: "grey",
-    zIndex: "2",
-    minHeight: "10rem",
-  };
-  const AutoCompleteStyle2 = {
-    ...AutoCompleteStyle,
-    zIndex: "1",
-  };
   return (
     <>
       <div className="select-medician">
@@ -273,7 +268,7 @@ export default function SelectMedician({
                 }}
                 onSelect={(item) => {
                   selectAutoCompleteData(item);
-                  setMedician(results)
+                  setMedician(results);
                   registerModalCloser();
                   setSelectedMedician(item);
                 }}

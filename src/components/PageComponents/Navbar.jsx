@@ -5,13 +5,12 @@ import axios from "axios";
 
 function Navbar() {
   const auth = useAuthUser();
-  console.log(auth());
-  
+
   if (localStorage._auth) {
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Token ${localStorage._auth}`
-    }
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Token ${localStorage._auth}`;
+  }
   return (
     <div className="navbar">
       <div className="navbar-elements">
@@ -22,9 +21,16 @@ function Navbar() {
           />
         </div>
         <div className="profile">
-          <img className="profile-image" src={auth().image ? new URL(auth().image).pathname.slice(16) : "./images/pic.jpg"} />
+          <img
+            className="profile-image"
+            src={
+              auth().image
+                ? new URL(auth().image).pathname.slice(16)
+                : "./images/pic.jpg"
+            }
+          />
           <div className="profile-text">
-            <h5>{(auth().username)}</h5>
+            <h5>{auth().username}</h5>
             <h6>{auth().email}</h6>
           </div>
         </div>

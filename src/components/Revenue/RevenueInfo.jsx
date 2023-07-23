@@ -1,10 +1,8 @@
 import Modal from "react-modal";
 import React from "react";
-import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useAuthUser } from "react-auth-kit";
 
-export default function RevenueInfo({revenue}) {
+export default function RevenueInfo({ revenue }) {
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(60,60,60)",
@@ -19,49 +17,34 @@ export default function RevenueInfo({revenue}) {
     },
   };
 
-  const user = useAuthUser();
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const REVENUE_THROUGH_URL = import.meta.env.VITE_REVENUE_THROUGH;
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+  const [revenueTrough, setRevenueThrough] = React.useState([]);
 
   function registerModalOpener() {
-      setRegisterModalOpen(true);
-      RevenueSearch()
+    setRegisterModalOpen(true);
+    RevenueSearch();
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
   }
 
-  const REVENUE_URL = import.meta.env.VITE_REVENUE;
-  const USERS_URL = import.meta.env.VITE_USERS;
-  const REVENUE_THROUGH_URL = import.meta.env.VITE_REVENUE_THROUGH;
-  const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
-
-  const [users, setUsers] = React.useState([]);
-  const [prescription, setPrescription] = React.useState([]);
-  const [revenueTrough, setRevenueThrough] = React.useState([]);
-
-  console.log(revenue.id)
-
   const RevenueSearch = () => {
     axios
-        .get(REVENUE_THROUGH_URL + "?revenue=" + revenue.id)
-        .then((res) => setRevenueThrough(res.data))
-  }
-
-  console.log(revenueTrough)
+      .get(REVENUE_THROUGH_URL + "?revenue=" + revenue.id)
+      .then((res) => setRevenueThrough(res.data));
+  };
 
   return (
     <>
-      <button type="button" className="revenue-manager-buttons-map" onClick={()=> {
-          registerModalOpener()
-      }}>
+      <button
+        type="button"
+        className="revenue-manager-buttons-map"
+        onClick={() => {
+          registerModalOpener();
+        }}
+      >
         <i class="fa-solid fa-circle-info"></i>
       </button>
       <Modal
@@ -100,15 +83,14 @@ export default function RevenueInfo({revenue}) {
                   <h4>{revenuethrough.prescription_number}</h4>
                   <h4>{revenuethrough.prescription_user}</h4>
                   <h4>{revenuethrough.department}</h4>
-                  <h4>{revenuethrough.created.slice(0,10)}</h4>
-                  <h4>{revenuethrough.created.slice(11,16)}</h4>
+                  <h4>{revenuethrough.created.slice(0, 10)}</h4>
+                  <h4>{revenuethrough.created.slice(11, 16)}</h4>
                   <h4>{revenuethrough.grand_total}AF</h4>
                   <h4>{revenue.username}</h4>
                   <h4>{revenuethrough.discount}</h4>
                   <h4>{revenuethrough.khairat}</h4>
                   <h4>{revenuethrough.zakat}</h4>
                   <h4>{revenuethrough.rounded}</h4>
-                  
                 </div>
               ))}
             </div>

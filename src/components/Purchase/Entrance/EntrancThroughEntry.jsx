@@ -2,43 +2,37 @@ import React from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import LoadingDNA from "../../PageComponents/LoadingDNA";
 import { useAuthUser } from "react-auth-kit";
 
 function EntrancThroughEntry({
   through,
   keyValue,
   num,
-  country,
-  pharmGroub,
   kind,
   UpdateUI,
   UpdateChunk,
 }) {
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const user = useAuthUser();
 
-  const [exactMedician, setExactMedician] = React.useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const user = useAuthUser();
+  const [exactMedician, setExactMedician] = React.useState("");
+  const [factorNumber, setInFactorNumber] = React.useState("");
+  const [purchasePrice, setPurchasePrice] = React.useState("");
 
   React.useEffect(() => {
     axios
       .get(MEDICIAN_URL + through.medician)
       .then((res) => {
         setExactMedician(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
-
-  const [factorNumber, setInFactorNumber] = React.useState("");
-  const [purchasePrice, setPurchasePrice] = React.useState("");
 
   const MedicianUpdate = (data) => {
     const interest_percent = (
@@ -50,17 +44,13 @@ function EntrancThroughEntry({
     factorNumber && MedicianUpdateForm.append("number_in_factor", factorNumber);
     purchasePrice &&
       MedicianUpdateForm.append("each_price_factor", purchasePrice);
-    // MedicianUpdateForm.append("each_quantity", data.each_quantity);
     MedicianUpdateForm.append("discount_money", data.discount_money);
-    // MedicianUpdateForm.append("each_price", data.each_price);
     MedicianUpdateForm.append("discount_percent", data.discount_percent);
     MedicianUpdateForm.append("expire_date", data.expire_date);
-    // MedicianUpdateForm.append("interest_money", data.interest_money);
     MedicianUpdateForm.append("interest_percent", interest_percent);
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
     MedicianUpdateForm.append("each_sell_price", data.each_sell_price);
-    // MedicianUpdateForm.append("no_box", data.no_box);
     MedicianUpdateForm.append("lease", data.lease);
     MedicianUpdateForm.append("user", user().id);
 
@@ -82,23 +72,17 @@ function EntrancThroughEntry({
       data.no_box
     ).toFixed(1);
 
-    console.log(eachSellPrice);
-
     const MedicianUpdateForm = new FormData();
     factorNumber && MedicianUpdateForm.append("number_in_factor", factorNumber);
     purchasePrice &&
       MedicianUpdateForm.append("each_price_factor", purchasePrice);
-    // MedicianUpdateForm.append("each_quantity", data.each_quantity);
     MedicianUpdateForm.append("discount_money", data.discount_money);
-    // MedicianUpdateForm.append("each_price", data.each_price);
     MedicianUpdateForm.append("discount_percent", data.discount_percent);
     MedicianUpdateForm.append("expire_date", data.expire_date);
-    // MedicianUpdateForm.append("interest_money", data.interest_money);
     MedicianUpdateForm.append("interest_percent", data.interest_percent);
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
     MedicianUpdateForm.append("each_sell_price", eachSellPrice);
-    // MedicianUpdateForm.append("no_box", data.no_box);
     MedicianUpdateForm.append("lease", data.lease);
     MedicianUpdateForm.append("user", user().id);
 
@@ -127,33 +111,10 @@ function EntrancThroughEntry({
 
   return (
     <form>
-      <div
-        className="entrance-medician-map"
-        // onBlurCapture={handleSubmit(MedicianUpdate)}
-      >
+      <div className="entrance-medician-map">
         <label>{num + 1}</label>
         <div className="entrance-medician-map-box">
           <h4 className="entrance-medician-map-name">
-            {/* <h4>
-              {country.map(
-                (country) =>
-                  country.id == exactMedician.country && `${country.name} _`
-              )}
-            </h4>
-            <h4>
-              {pharmGroub.map(
-                (pharm) =>
-                  pharm.id == exactMedician.pharm_group &&
-                  `_ ${pharm.name_english} __`
-              )}
-            </h4>
-            {exactMedician ? (
-              " " + exactMedician.brand_name + " " + exactMedician.ml
-            ) : (
-              <div className="loading-medician">
-                <LoadingDNA />
-              </div>
-            )} */}
             <h4>
               {kind.map(
                 (kind) => kind.id == exactMedician.kind && kind.name_english
@@ -193,11 +154,6 @@ function EntrancThroughEntry({
           }}
           onBlurCapture={handleSubmit(MedicianUpdate)}
         />
-        {/* <input
-          type="text"
-          defaultValue={through.each_price}
-          {...register("each_price")}
-          /> */}
         <input
           type="text"
           defaultValue={through.each_sell_price}

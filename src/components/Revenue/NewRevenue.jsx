@@ -6,16 +6,6 @@ import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
 
 function NewRevenue({ users }) {
-  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-
-  const user = useAuthUser();
-
-  function registerModalOpener() {
-    setRegisterModalOpen(true);
-  }
-  function registerModalCloser() {
-    setRegisterModalOpen(false);
-  }
 
   const ModalStyles = {
     content: {
@@ -33,13 +23,22 @@ function NewRevenue({ users }) {
     },
   };
 
+  const user = useAuthUser();
+  const REVENUE_URL = import.meta.env.VITE_REVENUE;
+
+  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const REVENUE_URL = import.meta.env.VITE_REVENUE;
+  function registerModalOpener() {
+    setRegisterModalOpen(true);
+  }
+  function registerModalCloser() {
+    setRegisterModalOpen(false);
+  }
 
   const RevenueSubmit = (data) => {
     const RevenueForm = new FormData();
@@ -47,7 +46,10 @@ function NewRevenue({ users }) {
     RevenueForm.append("employee", data.employee);
     RevenueForm.append("active", true);
 
-    axios.post(REVENUE_URL, RevenueForm).then((res) => console.log(res.data));
+    axios.post(REVENUE_URL, RevenueForm).then((res) => {
+      toast.success("Data Submited Succesfully");
+      registerModalCloser();
+    });
   };
 
   return (
