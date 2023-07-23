@@ -957,14 +957,14 @@ export default function Entrance(props) {
                 <div className="alert-text-box">
                   <h4>قیمت ها برای این ورودی اعمال نشده است.</h4>
                   <h4>آیا با بستن موافقید؟</h4>
-                </div>                                              
+                </div>
                 <div className="alert-button-box">
                   <button onClick={PriceAppliedVerifyCloser}>بله</button>
                   <button onClick={JustPriceAppliedVerifyCloser}>نخیر</button>
                 </div>
               </div>
             </>
-          </Modal>  
+          </Modal>
 
           <div className="modal">
             <div className="modal-header">
