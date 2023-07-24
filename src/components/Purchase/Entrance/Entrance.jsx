@@ -9,14 +9,8 @@ import SelectMedician from "./SelectMedician";
 import Company from "../Company/Company";
 import Store from "../Store/Store";
 import FinalRegister from "../FinalRegister/FinalRegister";
-import Currency from "../Currency/Currency";
 import Payment from "../Payment/Payment";
-import {
-  DateTimeInput,
-  DateTimeInputSimple,
-  DateInput,
-  DateInputSimple,
-} from "react-hichestan-datetimepicker";
+import { DateInputSimple } from "react-hichestan-datetimepicker";
 import { useAuthUser } from "react-auth-kit";
 import CurrencyList from "../Currency/CurrencyList";
 
@@ -37,6 +31,18 @@ export default function Entrance(props) {
     },
   };
 
+  const AutoCompleteStyle = {
+    height: "1.5rem",
+    borderRadius: "1rem",
+    fontSize: "14px",
+    backgroundColor: "rgb(34, 34, 34)",
+    color: "white",
+    border: "none",
+    hoverBackgroundColor: "grey",
+    zIndex: "2",
+    overflow: "scroll",
+  };
+
   const popUpStyle = {
     content: {
       backgroundColor: "rgb(140,140,140)",
@@ -55,47 +61,6 @@ export default function Entrance(props) {
       backgroundColor: "rgba(60,60,60,0.5)",
     },
   };
-  const user = useAuthUser();
-
-  /* Form Hook */
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-
-  /* AutoComplete Search */
-
-  const AutoCompleteStyle = {
-    height: "1.5rem",
-    borderRadius: "1rem",
-    fontSize: "14px",
-    backgroundColor: "rgb(34, 34, 34)",
-    color: "white",
-    border: "none",
-    hoverBackgroundColor: "grey",
-    zIndex: "2",
-    overflow: "scroll",
-  };
-
-  const [autoCompleteData, setAutoCompleteData] = React.useState({
-    company: "",
-    store: "",
-    medician: [],
-  });
-
-  function AutoCompleteHandle(data) {
-    setAutoCompleteData({
-      ...autoCompleteData,
-      medician: data,
-    });
-  }
-
-  /* CRUD */
-
-  /* Links */
 
   const ENTRANCE_URL = import.meta.env.VITE_ENTRANCE;
   const FINAL_REGISTER_URL = import.meta.env.VITE_FINAL_REGISTER;
@@ -107,9 +72,38 @@ export default function Entrance(props) {
   const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
   const KIND_URL = import.meta.env.VITE_KIND;
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
+  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const LAST_ENTRANCE_URL = import.meta.env.VITE_LAST_ENTRANCE;
+  const user = useAuthUser();
 
-  /* States */
-
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const [autoCompleteData, setAutoCompleteData] = React.useState({
+    company: "",
+    store: "",
+    medician: [],
+  });
+  const [exactEntrance, setExatEntrance] = React.useState({
+    without_discount: false,
+    description: "",
+  });
+  const [report, setReport] = React.useState({
+    total: 0,
+    total_interest: 0,
+    number: 0,
+    sell_total: 0,
+    purchase_total: 0,
+  });
+  const [datePickerValue, setDatePickerValue] = React.useState(
+    new Date().toISOString()
+  );
+  const [discountPercent, setDiscountPercent] = React.useState(
+    exactEntrance.discount_percent
+  );
   const [finalRegister, setFinalRegister] = React.useState([]);
   const [company, setCompany] = React.useState([]);
   const [store, setStore] = React.useState([]);
@@ -124,115 +118,21 @@ export default function Entrance(props) {
   const [storeName, setStoreName] = React.useState("");
   const [companyName, setCompanyName] = React.useState("");
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-  const [exactEntrance, setExatEntrance] = React.useState({
-    without_discount: false,
-    description: "",
-  });
-  const [report, setReport] = React.useState({
-    total: 0,
-    total_interest: 0,
-    number: 0,
-    sell_total: 0,
-    purchase_total: 0,
-  });
   const [FactorTotal, setFactorTotal] = React.useState(report.purchase_total);
-  console.log(report.purchase_total);
-
-  function registerModalOpener() {
-    setRegisterModalOpen(true);
-    setTrigger(0);
-
-    axios
-      .get(COMPANY_URL)
-      .then((result) => setCompany(result.data))
-      .catch((e) => console.log(e));
-
-    axios
-      .get(STORE_URL)
-      .then((result) => setStore(result.data))
-      .catch((e) => console.log(e));
-
-    axios
-      .get(FINAL_REGISTER_URL)
-      .then((result) => setFinalRegister(result.data))
-      .catch((e) => console.log(e));
-  }
-  function registerModalCloser() {
-    setRegisterModalOpen(false);
-    ResetForm();
-    reset({});
-  }
-
   const [PriceAppliedVerify, setPriceAppliedVerify] = React.useState(false);
-
-  const PriceAppliedVerifyCloser = () => {
-    setPriceAppliedVerify(false);
-    registerModalCloser();
-  };
-
-  const PriceAppliedVerifyOpener = () => {
-    setPriceAppliedVerify(true);
-  };
-
-  const JustPriceAppliedVerifyCloser = () => {
-    setPriceAppliedVerify(false);
-  };
-
-  const TotalAlertCloser = () => {
-    let currency_rate = 1;
-    let result = 1;
-    result = currency.map((cur) => {
-      cur.id == exactEntrance.currency ? (currency_rate = cur.rate) : 1;
-    });
-
-    if (report.purchase_after_discount == FactorTotal * currency_rate) {
-      if (priceApplied == false) {
-        entranceThrough.length >= 1
-          ? PriceAppliedVerifyOpener()
-          : registerModalCloser();
-      } else {
-        registerModalCloser();
-      }
-    }
-    if (report.purchase_after_discount != FactorTotal * currency_rate) {
-      AlertModalOpener();
-    }
-  };
-
   const [AlertModalOpen, setAlertModalOpen] = React.useState(false);
   const [priceApplied, setPriceApplied] = React.useState(false);
-
-  const AlertModalOpener = () => {
-    setAlertModalOpen(true);
-  };
-  const AlertModalCloser = () => {
-    setAlertModalOpen(false);
-
-    if (priceApplied == false) {
-      entranceThrough.length >= 1
-        ? PriceAppliedVerifyOpener()
-        : registerModalCloser();
-    } else {
-      registerModalCloser();
-    }
-  };
-
-  const AlertJustModalCloser = () => {
-    setAlertModalOpen(false);
-  };
-
   const [PriceAlertOpen, setPriceAlertOpen] = React.useState(false);
-
-  const PriceAlertOpener = () => {
-    setPriceAlertOpen(true);
-  };
-
-  const PriceAlertCloser = () => {
-    setPriceAlertOpen(false);
-    setTrigger((prev) => prev + 1);
-  };
-
-  /* Requests */
+  const [expireDate, setExpireDate] = React.useState("");
+  const [file, setFile] = React.useState("");
+  const [selectTrigger, setTrigger] = React.useState(0);
+  const [popUpOpen, setpopUpOpen] = React.useState(false);
+  const [excatTrough, setExactThrough] = React.useState("");
+  const [priceCheckEntrance, setPriceCheckEntrance] = React.useState({});
+  const [interest, setInterest] = React.useState(0);
+  const [purchasePrice, setPurchasePrice] = React.useState(0);
+  const [quantity, setQuantity] = React.useState(0);
+  const [sellPrice, setSellPrice] = React.useState(0);
 
   React.useEffect(() => {
     if (props.trigger) {
@@ -277,15 +177,149 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   }, [props.trigger]);
 
-  /* Handlers and Submiting */
+  React.useEffect(() => {
+    store.map((store) =>
+      store.id == exactEntrance.store ? setStoreName(store.name) : ""
+    );
+    company.map((company) =>
+      company.id == exactEntrance.company ? setCompanyName(company.name) : ""
+    );
+  }, [exactEntrance]);
 
-  const [datePickerValue, setDatePickerValue] = React.useState(
-    new Date().toISOString()
-  );
-  const [expireDate, setExpireDate] = React.useState("");
-  console.log(expireDate);
+  React.useEffect(() => {
+    Reporting();
+  }, [entranceThrough]);
 
-  const [file, setFile] = React.useState("");
+  const tabFormulate = () => {
+    document.getElementById("number-in-factor-input").focus();
+  };
+
+  React.useEffect(() => {
+    setPurchasePrice(
+      autoCompleteData.medician.last_purchased / exactEntrance.currency_rate
+    );
+  }, [autoCompleteData]);
+
+  React.useEffect(() => {
+    setSellPrice(
+      (
+        ((parseInt(purchasePrice) +
+          (parseInt(interest) * parseInt(purchasePrice)) / 100) /
+          autoCompleteData.medician.no_box) *
+        exactEntrance.currency_rate
+      ).toFixed(1)
+    );
+  }, [interest, purchasePrice, quantity]);
+
+  React.useEffect(() => {
+    if (props.button == 1 && registerModalOpen) {
+      axios
+        .get(ENTRANCE_URL + props.entrance.id)
+        .then((res) => {
+          setExatEntrance(res.data);
+          setDiscountPercent(res.data.discount_percent);
+          setSearched(true);
+          axios
+            .get(ENTRANCE_THROUGH_URL + "?entrance=" + res.data.id)
+            .then((res) => setEntranceThrough(res.data))
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [registerModalOpen]);
+
+  function registerModalOpener() {
+    setRegisterModalOpen(true);
+    setTrigger(0);
+
+    axios
+      .get(COMPANY_URL)
+      .then((result) => setCompany(result.data))
+      .catch((e) => console.log(e));
+
+    axios
+      .get(STORE_URL)
+      .then((result) => setStore(result.data))
+      .catch((e) => console.log(e));
+
+    axios
+      .get(FINAL_REGISTER_URL)
+      .then((result) => setFinalRegister(result.data))
+      .catch((e) => console.log(e));
+  }
+  function registerModalCloser() {
+    setRegisterModalOpen(false);
+    ResetForm();
+    reset({});
+  }
+
+  const PriceAppliedVerifyCloser = () => {
+    setPriceAppliedVerify(false);
+    registerModalCloser();
+  };
+
+  const PriceAppliedVerifyOpener = () => {
+    setPriceAppliedVerify(true);
+  };
+
+  const JustPriceAppliedVerifyCloser = () => {
+    setPriceAppliedVerify(false);
+  };
+
+  function AutoCompleteHandle(data) {
+    setAutoCompleteData({
+      ...autoCompleteData,
+      medician: data,
+    });
+  }
+
+  const TotalAlertCloser = () => {
+    let currency_rate = 1;
+    let result = 1;
+    result = currency.map((cur) => {
+      cur.id == exactEntrance.currency ? (currency_rate = cur.rate) : 1;
+    });
+
+    if (report.purchase_after_discount == FactorTotal * currency_rate) {
+      if (priceApplied == false) {
+        entranceThrough.length >= 1
+          ? PriceAppliedVerifyOpener()
+          : registerModalCloser();
+      } else {
+        registerModalCloser();
+      }
+    }
+    if (report.purchase_after_discount != FactorTotal * currency_rate) {
+      AlertModalOpener();
+    }
+  };
+  const AlertModalOpener = () => {
+    setAlertModalOpen(true);
+  };
+  const AlertModalCloser = () => {
+    setAlertModalOpen(false);
+
+    if (priceApplied == false) {
+      entranceThrough.length >= 1
+        ? PriceAppliedVerifyOpener()
+        : registerModalCloser();
+    } else {
+      registerModalCloser();
+    }
+  };
+
+  const AlertJustModalCloser = () => {
+    setAlertModalOpen(false);
+  };
+
+  const PriceAlertOpener = () => {
+    setPriceAlertOpen(true);
+  };
+
+  const PriceAlertCloser = () => {
+    setPriceAlertOpen(false);
+    setTrigger((prev) => prev + 1);
+  };
 
   const EntranceSubmit = (data) => {
     const EntranceForm = new FormData();
@@ -305,7 +339,12 @@ export default function Entrance(props) {
         ? data.total_interest
         : exactEntrance.total_interest
     );
-    EntranceForm.append("discount_percent", data.discount_percent_entrance != undefined ? data.discount_percent_entrance : exactEntrance.discount_percent)
+    EntranceForm.append(
+      "discount_percent",
+      data.discount_percent_entrance != undefined
+        ? data.discount_percent_entrance
+        : exactEntrance.discount_percent
+    );
     EntranceForm.append("deliver_by", data.deliver_by);
     EntranceForm.append("recived_by", data.recived_by);
     EntranceForm.append("description", data.description);
@@ -353,7 +392,7 @@ export default function Entrance(props) {
         .then((e) => {
           toast.success("Data Updated Successfuly.");
           setExatEntrance(e.data);
-          setDiscountPercent(e.data.discount_percent)
+          setDiscountPercent(e.data.discount_percent);
           setInterest(e.data.total_interest);
         })
         .catch((e) => {
@@ -369,7 +408,7 @@ export default function Entrance(props) {
           setEntrancePosted(true);
           toast.success("Entrance Saved Successfuly.");
           setExatEntrance(data.data);
-          setDiscountPercent(data.data.discount_percent)
+          setDiscountPercent(data.data.discount_percent);
           setSearched(true);
           setInterest(data.data.total_interest);
           setTrigger((prev) => prev + 1);
@@ -380,7 +419,6 @@ export default function Entrance(props) {
         });
     }
   };
-  const [selectTrigger, setTrigger] = React.useState(0);
 
   const SearchSubmit = (data) => {
     setExatEntrance({
@@ -403,7 +441,7 @@ export default function Entrance(props) {
       .get(ENTRANCE_URL + data.entrance_search + "/")
       .then((e) => {
         setExatEntrance(e.data);
-        setDiscountPercent(e.data.discount_percent)
+        setDiscountPercent(e.data.discount_percent);
         setSearched(true);
         setDatePickerValue(e.data.factor_date);
         setInterest(e.data.total_interest);
@@ -421,9 +459,6 @@ export default function Entrance(props) {
       })
       .catch((e) => console.log(e));
   };
-
-  const [popUpOpen, setpopUpOpen] = React.useState(false);
-  const [excatTrough, setExactThrough] = React.useState("");
 
   const popUpCloser = () => {
     setpopUpOpen(false);
@@ -450,27 +485,6 @@ export default function Entrance(props) {
       })
       .catch(() => toast.error("Check Your Input And Try Again!"));
   };
-  const [interest, setInterest] = React.useState(0);
-  const [purchasePrice, setPurchasePrice] = React.useState(0);
-  const [quantity, setQuantity] = React.useState(0);
-
-  const [sellPrice, setSellPrice] = React.useState(0);
-
-  React.useEffect(() => {
-    setPurchasePrice(autoCompleteData.medician.last_purchased / exactEntrance.currency_rate);
-  }, [autoCompleteData]);
-
-  React.useEffect(() => {
-    setSellPrice(
-      (
-        ((parseInt(purchasePrice) +
-          (parseInt(interest) * parseInt(purchasePrice)) / 100) /
-        autoCompleteData.medician.no_box) * exactEntrance.currency_rate
-      ).toFixed(1)
-    );
-  }, [interest, purchasePrice, quantity]);
-
-  const [discountPercent, setDiscountPercent] = React.useState(exactEntrance.discount_percent)
 
   const EntranceThroughSubmit = (data) => {
     const EntranceThrough = new FormData();
@@ -484,9 +498,13 @@ export default function Entrance(props) {
         : autoCompleteData.medician.no_pocket
     );
     EntranceThrough.append("discount_money", data.discount_money);
-    EntranceThrough.append("discount_percent", data.discount_percent != "" ? data.discount_percent : exactEntrance.discount_percent);
+    EntranceThrough.append(
+      "discount_percent",
+      data.discount_percent != ""
+        ? data.discount_percent
+        : exactEntrance.discount_percent
+    );
     EntranceThrough.append("expire_date", expireDate);
-    // EntranceThrough.append("interest_money", data.interest_money);
     EntranceThrough.append(
       "interest_percent",
       data.interest_percent != ""
@@ -516,16 +534,11 @@ export default function Entrance(props) {
       return result;
     };
 
-    const ConditionalInclude = () => {
-      entranceThrough.includes(autoCompleteData.medician.id);
-    };
-
     if (Conditional() == true) {
       axios
         .post(ENTRANCE_THROUGH_URL, EntranceThrough)
         .then((res) => {
           setEntranceThrough((prev) => [...prev, res.data]);
-          console.log(res.data);
           if (res.data.total_purchaseـafghani > res.data.total_sell) {
             alert("قیمت خرید از قیمت فروش بیشتر است!");
           }
@@ -552,9 +565,7 @@ export default function Entrance(props) {
             .get(ENTRANCE_THROUGH_URL + "?medician=" + res.data.medician)
             .then((lastRes) => {
               PriceCheck(res.data, lastRes.data[lastRes.data.length - 2]);
-              setPriceCheckEntranceThrough(
-                lastRes.data[lastRes.data.length - 2]
-              );
+
               axios
                 .get(
                   ENTRANCE_URL + lastRes.data[lastRes.data.length - 2].entrance
@@ -572,10 +583,6 @@ export default function Entrance(props) {
       popUpOpener();
     }
   };
-
-  const [priceCheckEntranceThrough, setPriceCheckEntranceThrough] =
-    React.useState({});
-  const [priceCheckEntrance, setPriceCheckEntrance] = React.useState({});
 
   const PriceCheck = (newData, lastData) => {
     if (newData && lastData && newData.each_price != lastData.each_price) {
@@ -608,19 +615,13 @@ export default function Entrance(props) {
     setInterest("");
     setQuantity("");
     setPriceApplied(false);
-
-    document.getElementsByClassName("entrance--inputs").reset();
   };
-  React.useEffect(() => {
-    Reporting();
-  }, [entranceThrough]);
 
   const Reporting = () => {
     const totalInterest = () => {
       let result = 0;
       entranceThrough.map((through) => {
         result += through.total_interest * through.no_box;
-        console.log(result);
         return result;
       });
       return result;
@@ -645,9 +646,6 @@ export default function Entrance(props) {
       }, 0);
       return result;
     };
-
-    const grandTotal = () => {};
-
     setReport({
       total: 0,
       total_interest: totalInterest(),
@@ -712,38 +710,6 @@ export default function Entrance(props) {
       .catch((err) => console.log(e));
   }
 
-  React.useEffect(() => {
-    store.map((store) =>
-      store.id == exactEntrance.store ? setStoreName(store.name) : ""
-    );
-    company.map((company) =>
-      company.id == exactEntrance.company ? setCompanyName(company.name) : ""
-    );
-  }, [exactEntrance]);
-
-  const tabFormulate = () => {
-    document.getElementById("number-in-factor-input").focus();
-  };
-
-  React.useEffect(() => {
-    if (props.button == 1 && registerModalOpen) {
-      axios
-        .get(ENTRANCE_URL + props.entrance.id)
-        .then((res) => {
-          setExatEntrance(res.data);
-          setDiscountPercent(res.data.discount_percent)
-          setSearched(true);
-          axios
-            .get(ENTRANCE_THROUGH_URL + "?entrance=" + res.data.id)
-            .then((res) => setEntranceThrough(res.data))
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [registerModalOpen]);
-
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
-
   const PriceApply = () => {
     entranceThrough.map((through) => {
       const PriceForm = new FormData();
@@ -759,8 +725,6 @@ export default function Entrance(props) {
         .catch((res) => toast.error("New Item Added."));
     });
   };
-
-  const LAST_ENTRANCE_URL = import.meta.env.VITE_LAST_ENTRANCE;
 
   const BackEntrance = () => {
     setAutoCompleteData({
@@ -780,7 +744,7 @@ export default function Entrance(props) {
           .get(ENTRANCE_URL + (exactEntrance.id + 1) + "/")
           .then((e) => {
             setExatEntrance(e.data);
-            setDiscountPercent(e.data.discount_percent)
+            setDiscountPercent(e.data.discount_percent);
             setSearched(true);
             setDatePickerValue(e.data.factor_date);
             setInterest(e.data.total_interest);
@@ -797,7 +761,7 @@ export default function Entrance(props) {
             setSearched(true);
             setDatePickerValue(e.data[0].factor_date);
             setInterest(e.data[0].total_interest);
-            setDiscountPercent(e.data[0].discount_percent)
+            setDiscountPercent(e.data[0].discount_percent);
             axios
               .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
               .then((e) => {
@@ -812,13 +776,14 @@ export default function Entrance(props) {
             toast.error("Check Your Input And Try Again!");
           });
 
-    axios
-      .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id + 1))
-      .then((e) => {
-        setEntranceThrough(e.data);
-        setFactorTotal(report.purchase_total);
-      })
-      .catch((e) => console.log(e));
+    exactEntrance.id &&
+      axios
+        .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id + 1))
+        .then((e) => {
+          setEntranceThrough(e.data);
+          setFactorTotal(report.purchase_total);
+        })
+        .catch((e) => console.log(e));
   };
 
   const FrontEntrance = () => {
@@ -842,7 +807,7 @@ export default function Entrance(props) {
             setSearched(true);
             setDatePickerValue(e.data.factor_date);
             setInterest(e.data.total_interest);
-            setDiscountPercent(e.data.discount_percent)
+            setDiscountPercent(e.data.discount_percent);
           })
           .catch((err) => {
             console.log(err);
@@ -856,7 +821,7 @@ export default function Entrance(props) {
             setSearched(true);
             setDatePickerValue(e.data[0].factor_date);
             setInterest(e.data[0].total_interest);
-            setDiscountPercent(e.data[0].discount_percent)
+            setDiscountPercent(e.data[0].discount_percent);
             axios
               .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
               .then((e) => {
@@ -1043,8 +1008,10 @@ export default function Entrance(props) {
                       type="text"
                       onChange={(res) => setFactorTotal(res.target.value)}
                       defaultValue={FactorTotal}
-                      />
-                      <label style={{fontSize:"0.6rem"}}>{exactEntrance.currency_name}</label>
+                    />
+                    <label style={{ fontSize: "0.6rem" }}>
+                      {exactEntrance.currency_name}
+                    </label>
                   </div>
                 </div>
                 <div className="entrance-report-footer">
@@ -1219,12 +1186,12 @@ export default function Entrance(props) {
                     </option>
                     {currency.map((currency) => (
                       <option key={currency.id} value={currency.id}>
-                        {currency.name}{`(${currency.rate})`}
+                        {currency.name}
+                        {`(${currency.rate})`}
                       </option>
                     ))}
                   </select>
-                  {/* <Currency Update={CurrencyUpdate} /> */}
-                  <CurrencyList Update={CurrencyUpdate}/>
+                  <CurrencyList Update={CurrencyUpdate} />
                 </div>
                 <label>پرداخت:</label>
                 <div className="final-register-box">
@@ -1249,13 +1216,6 @@ export default function Entrance(props) {
                   </select>
                   <Payment Update={PaymentUpdate} />
                 </div>
-                {/* <label>فایده ٪:</label>
-                <input
-                  type="text"
-                  {...register("total_interest")}
-                  defaultValue={exactEntrance.total_interest}
-                  className="entrance--inputs"
-                /> */}
                 <label>
                   <h5>فایده%:</h5>
                 </label>
@@ -1277,12 +1237,6 @@ export default function Entrance(props) {
                 <label>
                   <h5>نوع ورودی:</h5>
                 </label>
-                {/* <input
-                  type="checkbox"
-                  className="checkbox-input entrance--inputs"
-                  defaultChecked={exactEntrance.without_discount}
-                  {...register("without_discount")}
-                /> */}
                 <select
                   value={exactEntrance.wholesale}
                   {...register("wholesale")}
@@ -1405,20 +1359,15 @@ export default function Entrance(props) {
                   onBlurCapture={(e) => {
                     setInterest(
                       (
-                        ((100 *
-                          ((e.target.value / exactEntrance.currency_rate) * autoCompleteData.medician.no_box -
+                        (100 *
+                          ((e.target.value / exactEntrance.currency_rate) *
+                            autoCompleteData.medician.no_box -
                             purchasePrice)) /
-                        purchasePrice) 
+                        purchasePrice
                       ).toFixed(0)
                     );
                   }}
                 />
-                {/* <label>بونوس:</label>
-                <input
-                  type="text"
-                  {...register("quantity_bonus")}
-                  className="entrance--inputs"
-                /> */}
                 <label>
                   <h5> بونوس:</h5>
                 </label>
@@ -1449,14 +1398,7 @@ export default function Entrance(props) {
                   onChange={(res) =>
                     setExpireDate(res.target.value.slice(0, 10))
                   }
-                  // value={expireDate && expireDate}
                 />
-                {/* <label>بونوس:</label>
-                <input
-                type="text"
-                {...register("bonus")}
-                className="entrance--inputs"
-              /> */}
                 <label>بچ نمبر:</label>
                 <input type="text" {...register("batch_number")} />
                 <label>تخفیف:</label>
@@ -1472,7 +1414,7 @@ export default function Entrance(props) {
                   className="entrance--inputs"
                   value={discountPercent}
                   onChange={(e) => {
-                    setDiscountPercent(e.target.value)
+                    setDiscountPercent(e.target.value);
                   }}
                 />
                 <div className="adding-box">

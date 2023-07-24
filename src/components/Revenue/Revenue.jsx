@@ -1,6 +1,5 @@
 import Modal from "react-modal";
 import React from "react";
-import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
 
@@ -19,16 +18,24 @@ export default function Revenue(props) {
     },
   };
 
+  const REVENUE_URL = import.meta.env.VITE_REVENUE;
+  const REVENUE_THROUGH_URL = import.meta.env.VITE_REVENUE_THROUGH;
+  const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
   const user = useAuthUser();
+  let today = new Date().toISOString().slice(0, 10);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-
+  const [revenue, setRevenue] = React.useState([]);
+  const [prescription, setPrescription] = React.useState([]);
+  const [revenueTrough, setRevenueThrough] = React.useState([]);
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+  function registerModalOpener() {
+    UpdateUI();
+    setRegisterModalOpen(true);
+  }
+  function registerModalCloser() {
+    setRegisterModalOpen(false);
+  }
 
   const PayCheck = (prescription) => {
     const RevneueForm = new FormData();
@@ -41,7 +48,6 @@ export default function Revenue(props) {
       .post(REVENUE_THROUGH_URL + "?revenue=" + revenue.id, RevneueForm)
       .then((res) => {
         UpdateUI();
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -67,7 +73,6 @@ export default function Revenue(props) {
           axios
             .get(REVENUE_THROUGH_URL + "?revenue=" + res.data[0].id)
             .then((resthroug) => {
-              console.log(resthroug.data);
               setRevenueThrough(resthroug.data);
             });
       });
@@ -83,25 +88,6 @@ export default function Revenue(props) {
       )
       .then((res) => setPrescription(res.data));
   };
-
-  function registerModalOpener() {
-    UpdateUI();
-    setRegisterModalOpen(true);
-  }
-  function registerModalCloser() {
-    setRegisterModalOpen(false);
-  }
-
-  const REVENUE_URL = import.meta.env.VITE_REVENUE;
-  const REVENUE_THROUGH_URL = import.meta.env.VITE_REVENUE_THROUGH;
-  const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
-
-  const [revenue, setRevenue] = React.useState([]);
-  const [prescription, setPrescription] = React.useState([]);
-  const [revenueTrough, setRevenueThrough] = React.useState([]);
-
-  let today = new Date().toISOString().slice(0, 10);
-  console.log(revenueTrough);
 
   React.useEffect(() => {
     axios
@@ -120,7 +106,6 @@ export default function Revenue(props) {
           axios
             .get(REVENUE_THROUGH_URL + "?revenue=" + res.data[0].id)
             .then((resthroug) => {
-              console.log(resthroug.data);
               setRevenueThrough(resthroug.data);
             });
       });
@@ -136,8 +121,6 @@ export default function Revenue(props) {
       )
       .then((res) => setPrescription(res.data));
   }, []);
-
-  console.log(revenue);
 
   return (
     <>
