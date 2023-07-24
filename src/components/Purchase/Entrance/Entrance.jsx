@@ -209,8 +209,7 @@ export default function Entrance(props) {
       (
         ((parseFloat(purchasePrice) +
           (parseFloat(interest) * parseFloat(purchasePrice)) / 100) /
-          autoCompleteData.medician.no_box) *
-        exactEntrance.currency_rate
+          autoCompleteData.medician.no_box) 
       ).toFixed(1)
     );
   }, [interest, purchasePrice, quantity]);
@@ -284,7 +283,7 @@ export default function Entrance(props) {
       cur.id == exactEntrance.currency ? (currency_rate = cur.rate) : 1;
     });
 
-    if (report.grandTotal == FactorTotal * currency_rate) {
+    if (report.grandTotal == FactorTotal ) {
       if (priceApplied == false) {
         entranceThrough.length >= 1
           ? PriceAppliedVerifyOpener()
@@ -293,7 +292,7 @@ export default function Entrance(props) {
         registerModalCloser();
       }
     }
-    if (report.grandTotal != FactorTotal * currency_rate) {
+    if (report.grandTotal != FactorTotal) {
       AlertModalOpener();
     }
   };
@@ -1353,7 +1352,7 @@ export default function Entrance(props) {
                     setInterest(
                       (
                         (100 *
-                          ((e.target.value / exactEntrance.currency_rate) *
+                          ((e.target.value ) *
                             autoCompleteData.medician.no_box -
                             purchasePrice)) /
                         purchasePrice
