@@ -15,7 +15,7 @@ import { useAuthUser } from "react-auth-kit";
 import CurrencyList from "../Currency/CurrencyList";
 
 export default function Entrance(props) {
-  /* Modal */
+
 
   const ModalStyles = {
     content: {
@@ -92,10 +92,14 @@ export default function Entrance(props) {
     description: "",
   });
   const [report, setReport] = React.useState({
+    number: 0,
+    total_before_discount: 0,
+    total_discount: 0,
+    total_bonous_value: 0,
+    sell_total: 0,
     total: 0,
     total_interest: 0,
-    number: 0,
-    sell_total: 0,
+    net_profit: 0,
     purchase_total: 0,
   });
   const [datePickerValue, setDatePickerValue] = React.useState(
@@ -118,7 +122,7 @@ export default function Entrance(props) {
   const [storeName, setStoreName] = React.useState("");
   const [companyName, setCompanyName] = React.useState("");
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-  const [FactorTotal, setFactorTotal] = React.useState(report.purchase_total);
+  const [FactorTotal, setFactorTotal] = React.useState(report.grandTotal);
   const [PriceAppliedVerify, setPriceAppliedVerify] = React.useState(false);
   const [AlertModalOpen, setAlertModalOpen] = React.useState(false);
   const [priceApplied, setPriceApplied] = React.useState(false);
@@ -203,8 +207,8 @@ export default function Entrance(props) {
   React.useEffect(() => {
     setSellPrice(
       (
-        ((parseInt(purchasePrice) +
-          (parseInt(interest) * parseInt(purchasePrice)) / 100) /
+        ((parseFloat(purchasePrice) +
+          (parseFloat(interest) * parseFloat(purchasePrice)) / 100) /
           autoCompleteData.medician.no_box) *
         exactEntrance.currency_rate
       ).toFixed(1)
@@ -280,7 +284,7 @@ export default function Entrance(props) {
       cur.id == exactEntrance.currency ? (currency_rate = cur.rate) : 1;
     });
 
-    if (report.purchase_after_discount == FactorTotal * currency_rate) {
+    if (report.grandTotal == FactorTotal * currency_rate) {
       if (priceApplied == false) {
         entranceThrough.length >= 1
           ? PriceAppliedVerifyOpener()
@@ -289,7 +293,7 @@ export default function Entrance(props) {
         registerModalCloser();
       }
     }
-    if (report.purchase_after_discount != FactorTotal * currency_rate) {
+    if (report.grandTotal != FactorTotal * currency_rate) {
       AlertModalOpener();
     }
   };
@@ -455,7 +459,7 @@ export default function Entrance(props) {
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + data.entrance_search)
       .then((e) => {
         setEntranceThrough(e.data);
-        setFactorTotal(report.purchase_total);
+        setFactorTotal(report.grandTotal);
       })
       .catch((e) => console.log(e));
   };
@@ -491,33 +495,14 @@ export default function Entrance(props) {
     EntranceThrough.append("number_in_factor", data.number_in_factor);
     EntranceThrough.append("medician", autoCompleteData.medician.id);
     EntranceThrough.append("each_price_factor", data.each_price_factor);
-    EntranceThrough.append(
-      "each_quantity",
-      data.each_quantity != ""
-        ? data.each_quantity
-        : autoCompleteData.medician.no_pocket
-    );
+    EntranceThrough.append("each_quantity", autoCompleteData.medician.no_pocket);
     EntranceThrough.append("discount_money", data.discount_money);
-    EntranceThrough.append(
-      "discount_percent",
-      data.discount_percent != ""
-        ? data.discount_percent
-        : exactEntrance.discount_percent
-    );
+    EntranceThrough.append("discount_percent", data.discount_percent);
     EntranceThrough.append("expire_date", expireDate);
-    EntranceThrough.append(
-      "interest_percent",
-      data.interest_percent != ""
-        ? data.interest_percent
-        : exactEntrance.total_interest
-    );
-
+    EntranceThrough.append("interest_percent", interest);
     EntranceThrough.append("bonus", 0);
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
-    EntranceThrough.append(
-      "no_box",
-      data.no_box != "" ? data.no_box : autoCompleteData.medician.no_box
-    );
+    EntranceThrough.append("no_box",autoCompleteData.medician.no_box);
     EntranceThrough.append("entrance", exactEntrance.id);
     EntranceThrough.append("batch_number", data.batch_number);
     EntranceThrough.append("user", user().id);
@@ -525,7 +510,7 @@ export default function Entrance(props) {
     EntranceThrough.append("lease", data.lease);
 
     let result = true;
-    const Conditional = () => {
+    const IfMedicineSubmitedBeforeCheck = () => {
       entranceThrough.map((prescription) => {
         prescription.medician == autoCompleteData.medician.id &&
           ((result = false), setExactThrough(prescription));
@@ -534,38 +519,20 @@ export default function Entrance(props) {
       return result;
     };
 
-    if (Conditional() == true) {
+    if (IfMedicineSubmitedBeforeCheck() == true) {
       axios
         .post(ENTRANCE_THROUGH_URL, EntranceThrough)
         .then((res) => {
           setEntranceThrough((prev) => [...prev, res.data]);
-          if (res.data.total_purchaseـafghani > res.data.total_sell) {
+          if (res.data.total_purchaseـafghani * autoCompleteData.medician.no_box > res.data.total_sell) {
             alert("قیمت خرید از قیمت فروش بیشتر است!");
           }
           toast.info("New Item Added.");
-          reset({
-            number_in_factor: "",
-            each_price_factor: "",
-            discount_money: "",
-            discount_percent: "",
-            expire_date: "",
-            interest_money: "",
-            bonus: "",
-            quantity_bonus: "",
-            no_box: "",
-            batch_number: "",
-            each_sell_price: "",
-            interest_percent: "",
-          });
-          setExpireDate("");
-          setSellPrice("");
-          setPurchasePrice("");
-
+          ResetEntranceThroughEntries()
           axios
             .get(ENTRANCE_THROUGH_URL + "?medician=" + res.data.medician)
             .then((lastRes) => {
               PriceCheck(res.data, lastRes.data[lastRes.data.length - 2]);
-
               axios
                 .get(
                   ENTRANCE_URL + lastRes.data[lastRes.data.length - 2].entrance
@@ -579,7 +546,7 @@ export default function Entrance(props) {
         });
     }
 
-    if (Conditional() == false) {
+    if (IfMedicineSubmitedBeforeCheck() == false) {
       popUpOpener();
     }
   };
@@ -608,7 +575,7 @@ export default function Entrance(props) {
     setEntranceThrough([]);
     setEntrancePosted(false);
     setSearched(false);
-    setFactorTotal(report.purchase_total);
+    setFactorTotal(report.grandTotal);
     setExpireDate("");
     setSellPrice("");
     setPurchasePrice("");
@@ -617,7 +584,29 @@ export default function Entrance(props) {
     setPriceApplied(false);
   };
 
+  const ResetEntranceThroughEntries = () => {
+    reset({
+      number_in_factor: "",
+      each_price_factor: "",
+      discount_money: "",
+      discount_percent: "",
+      expire_date: "",
+      interest_money: "",
+      bonus: "",
+      quantity_bonus: "",
+      no_box: "",
+      batch_number: "",
+      each_sell_price: "",
+      interest_percent: "",
+    });
+    setExpireDate("");
+    setSellPrice("");
+    setPurchasePrice("");
+    setPriceApplied(false)
+  }
+
   const Reporting = () => {
+
     const totalInterest = () => {
       let result = 0;
       entranceThrough.map((through) => {
@@ -634,31 +623,51 @@ export default function Entrance(props) {
       return result;
     };
 
+    const totalBeforeDiscount = () => {
+      const result = entranceThrough.reduce((total, current) => {
+        return total + current.total_purchase_currency_before
+      }, 0)
+      return result
+    }
+
     const totalDiscount = () => {
       const result = entranceThrough.reduce((total, currentValue) => {
         return (
-          total +
-          (currentValue.total_purchaseـafghani *
-            currentValue.discount_percent) /
-            100 -
-          currentValue.discount_money
+          total + currentValue.discount_value
         );
       }, 0);
       return result;
     };
+    const totalBonusValue = () => {
+      const result = entranceThrough.reduce((total, currentValue) => {
+        return (
+          total + currentValue.bonus_value
+        );
+      }, 0);
+      return result;
+    };
+    const totalSell = () => {
+      const result = entranceThrough.reduce((total, currentValue) => {
+        return (
+          total + currentValue.total_sell
+        );
+      }, 0);
+      return result;
+    };
+
+    const totalInterester = (totalSell() + totalBonusValue() + totalDiscount() - totalBeforeDiscount()).toFixed(1)
     setReport({
-      total: 0,
-      total_interest: totalInterest(),
-      total_interest_percent: (
-        (100 * totalInterest()) /
-        totalPurchase()
-      ).toFixed(1),
       number: entranceThrough.length,
-      sell_total: 0,
+      total_before_discount: totalBeforeDiscount().toFixed(1),
       total_discount: totalDiscount().toFixed(1),
+      total: 0,
+      total_bonous_value: totalBonusValue().toFixed(1),
+      total_interest: totalInterester,
+      total_interest_percent: (totalInterester / totalBeforeDiscount() * 100).toFixed(1),
+      sell_total: totalSell(),
       purchase_total: totalPurchase(),
       purchase_after_discount: totalPurchase() - totalDiscount(),
-      grandTotal: totalInterest() + totalPurchase(),
+      grandTotal: totalBeforeDiscount() - totalDiscount(),
     });
   };
 
@@ -727,17 +736,7 @@ export default function Entrance(props) {
   };
 
   const BackEntrance = () => {
-    setAutoCompleteData({
-      company: "",
-      store: "",
-      medician: [],
-    });
-    setCompanyName("");
-    setStoreName("");
-    setEntranceThrough([]);
-    setEntrancePosted(false);
-    setSearched(false);
-    setDatePickerValue("");
+    ResetForm()
 
     exactEntrance.id
       ? axios
@@ -766,7 +765,7 @@ export default function Entrance(props) {
               .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
               .then((e) => {
                 setEntranceThrough(e.data);
-                setFactorTotal(report.purchase_total);
+                setFactorTotal(report.grandTotal);
               })
               .catch((e) => console.log(e));
           })
@@ -781,23 +780,13 @@ export default function Entrance(props) {
         .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id + 1))
         .then((e) => {
           setEntranceThrough(e.data);
-          setFactorTotal(report.purchase_total);
+          setFactorTotal(report.grandTotal);
         })
         .catch((e) => console.log(e));
   };
 
   const FrontEntrance = () => {
-    setAutoCompleteData({
-      company: "",
-      store: "",
-      medician: [],
-    });
-    setCompanyName("");
-    setStoreName("");
-    setEntranceThrough([]);
-    setEntrancePosted(false);
-    setSearched(false);
-    setDatePickerValue("");
+    ResetForm()
 
     exactEntrance.id
       ? axios
@@ -826,7 +815,7 @@ export default function Entrance(props) {
               .get(ENTRANCE_THROUGH_URL + "?entrance=" + e.data[0].id)
               .then((e) => {
                 setEntranceThrough(e.data);
-                setFactorTotal(report.purchase_total);
+                setFactorTotal(report.grandTotal);
               })
               .catch((e) => console.log(e));
           })
@@ -840,7 +829,7 @@ export default function Entrance(props) {
       .get(ENTRANCE_THROUGH_URL + "?entrance=" + (exactEntrance.id - 1))
       .then((e) => {
         setEntranceThrough(e.data);
-        setFactorTotal(report.purchase_total);
+        setFactorTotal(report.grandTotal);
       })
       .catch((e) => console.log(e));
   };
@@ -982,25 +971,29 @@ export default function Entrance(props) {
                     <label>{report.number}</label>
                   </div>
                   <div className="entrance-report-map-box">
-                    <label>مجموع خرید </label>
-                    <label>{report.purchase_total}</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>خرید بعد از تخفیف </label>
-                    <label>{report.purchase_after_discount}</label>
-                  </div>
-                  <div className="entrance-report-map-box">
-                    <label>مجموع فایده </label>
-                    <label>{report.total_interest_percent}%</label>
-                    <label>{report.total_interest}</label>
+                    <label>مجموع قبل از تخفیف</label>
+                    <label>{report.total_before_discount}</label>
                   </div>
                   <div className="entrance-report-map-box">
                     <label>مجموع تخفیفات</label>
                     <label>{report.total_discount}</label>
                   </div>
                   <div className="entrance-report-map-box">
+                    <label>مجموع عاید بونوس</label>
+                    <label>{report.total_bonous_value}</label>
+                  </div>
+                  <div className="entrance-report-map-box">
                     <label>مجموع فروش</label>
-                    <label>{report.grandTotal}</label>
+                    <label>{report.sell_total}</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>مجموع فایده </label>
+                    <label>{report.total_interest_percent}%</label>
+                    <label>{(report.total_interest)}</label>
+                  </div>
+                  <div className="entrance-report-map-box">
+                    <label>مجموعه</label>
+                    <label>{(report.grandTotal)}</label>
                   </div>
                   <div className="entrance-report-map-box">
                     <label>مجموع فاکتور</label>
@@ -1364,7 +1357,7 @@ export default function Entrance(props) {
                             autoCompleteData.medician.no_box -
                             purchasePrice)) /
                         purchasePrice
-                      ).toFixed(0)
+                      ).toFixed(2)
                     );
                   }}
                 />
@@ -1435,19 +1428,21 @@ export default function Entrance(props) {
                   <label>No</label>
                   <label>قلم</label>
                   <label>تعداد</label>
-                  <label>فی خرید</label>
-                  <label>فی فروش</label>
-                  <label>ت.پاکت</label>
-                  <label>ت.قطی</label>
+                  <label>قیمت</label>
                   <label>تخفیف</label>
                   <label>تخفیف %</label>
-                  <label>انقضا</label>
-                  <label>قرضه</label>
-                  <label>فایده %</label>
+                  <label>ت.قطی</label>
+                  <label>جمع.خرید</label>
+                  <label>بعد.تخفیف</label>
+                  <label>م.تخفیف</label>
                   <label>بونوس</label>
-                  <label>جمع خرید</label>
-                  <label>با تخفیف</label>
-                  <label>جمع فروش</label>
+                  <label>م.بونوس</label>
+                  <label>کمبود</label>
+                  <label>امانتی</label>
+                  <label>فی.خرید</label>
+                  <label>فایده٪</label>
+                  <label>فی.فروش</label>
+                  <label>جمع.فروش</label>
                   <label>حذف</label>
                 </div>
                 <div className="entrance-map">
