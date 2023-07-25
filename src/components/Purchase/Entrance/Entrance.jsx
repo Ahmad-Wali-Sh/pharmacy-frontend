@@ -999,7 +999,7 @@ export default function Entrance(props) {
                     <input
                       type="text"
                       onChange={(res) => setFactorTotal(res.target.value)}
-                      defaultValue={FactorTotal}
+                      value={FactorTotal}
                     />
                     <label style={{ fontSize: "0.9rem" }}>
                       {exactEntrance.currency_name}
