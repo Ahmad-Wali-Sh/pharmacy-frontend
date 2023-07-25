@@ -38,6 +38,8 @@
   --color-twelve: rgb(111, 63, 119);
   --input-focus: 1px 1px 10px var(var(--color-two));
   --color-thirth: rgb(93, 93, 93);
+  --color-fourth: rgb(100, 50, 50);
+  --color-fifth: rgb(255, 21, 0);
 }
 
 body {
@@ -765,7 +767,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 2.2% 20% 4% 4% 4.6% 4.6% 4.6% 5% 6% 4.6% 4.6% 4.6% 4% 4% 4.6% 4.6% 5% 6% 4.6%;
+  grid-template-columns: 2.2% 20% 4% 4% 4.6% 5% 4% 6% 6% 4% 6% 4% 4% 5% 4.6% 6% 6% 6% 4.6%;
   font-size: 0.8rem;
   direction: rtl;
 }
@@ -778,11 +780,26 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 2.2% 20% 4% 4% 4.6% 4.6% 4.6% 5% 6% 4.6% 4.6% 4.6% 4% 4% 4.6% 4.6% 5% 6% 4.6%;
+  grid-template-columns: 2.2% 20% 4% 4% 4.6% 5% 4% 6% 6% 4% 6% 4% 4% 5% 4.6% 6% 6% 6% 4.6%;
   direction: rtl;
   justify-content: space-between;
 }
 .entrance-medician-map >input {
+  font-size: 0.75rem;
+}
+.entrance-medician-map-alert {
+  background-color: var(--color-fourth);
+  border-bottom: 1px solid black;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 0.1rem;
+  padding-right: 1rem;
+  display: grid;
+  grid-template-columns: 2.2% 20% 4% 4% 4.6% 5% 4% 6% 6% 4% 6% 4% 4% 5% 4.6% 6% 6% 6% 4.6%;
+  direction: rtl;
+  justify-content: space-between;
+}
+.entrance-medician-map-alert >input {
   font-size: 0.75rem;
 }
 
@@ -889,6 +906,24 @@ input[type="date"]:disabled {
 }
 
 .entrance-medician-map > input[type="submit"]:hover {
+  background-color: var(--color-twelve);
+}
+.entrance-medician-map-alert > input {
+  width: 70%;
+  background-color: var(--color-fourth);
+  border: none;
+}
+.entrance-medician-map-alert > input[type="submit"] {
+  width: 70%;
+  background-color: var(--color-eleven);
+  color: white;
+  border-radius: 1rem;
+  padding: 0.2rem;
+  font-size: smaller;
+  border: none;
+}
+
+.entrance-medician-map-alert > input[type="submit"]:hover {
   background-color: var(--color-twelve);
 }
 
@@ -2783,5 +2818,52 @@ input[type="date"]:disabled {
 }
 .medician-map-buttons-1:hover {
   box-shadow: 1px 1px 10px black;
+}
+
+.currency-span {
+  position: absolute; 
+  margin-left: 1px; 
+  margin-top: 6px;
+  font-size: 0.55rem;
+}
+
+.transparent-inputs {
+  width: 100%;
+  padding-right: 17px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+}
+.transparent-inputs-alert {
+  width: 100%;
+  padding-right: 17px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  color: var(--color-fifth);
+}
+
+.transparent-inputs-percent {
+  width: 100%;
+  padding-right: 9px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  font-size: 0.8rem;
+}
+.transparent-inputs-percent-alert {
+  width: 100%;
+  padding-right: 9px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  font-size: 0.8rem;
+  color: var(--color-fifth);
+}
+.transparent-inputs-date-alert {
+  color: var(--color-fifth);
+}
+
+.currency-span-percent {
+  position: absolute; 
+  margin-left: 1px; 
+  margin-top: 2px;
+  font-size: 0.8rem;
 }
 
