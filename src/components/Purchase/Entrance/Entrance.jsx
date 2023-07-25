@@ -200,16 +200,16 @@ export default function Entrance(props) {
 
   React.useEffect(() => {
     setPurchasePrice(
-      autoCompleteData.medician.last_purchased / exactEntrance.currency_rate
+      autoCompleteData.medician.last_purchased
     );
-  }, [autoCompleteData]);
+  }, [autoCompleteData.medician]);
 
   React.useEffect(() => {
     setSellPrice(
       (
         ((parseFloat(purchasePrice) +
           (parseFloat(interest) * parseFloat(purchasePrice)) / 100) /
-          autoCompleteData.medician.no_box) 
+          autoCompleteData.medician.no_box) * exactEntrance.currency_rate
       ).toFixed(1)
     );
   }, [interest, purchasePrice, quantity]);
@@ -505,7 +505,7 @@ export default function Entrance(props) {
     EntranceThrough.append("entrance", exactEntrance.id);
     EntranceThrough.append("batch_number", data.batch_number);
     EntranceThrough.append("user", user().id);
-    EntranceThrough.append("each_sell_price", data.each_sell_price);
+    EntranceThrough.append("each_sell_price_afg", data.each_sell_price_afg);
     EntranceThrough.append("lease", data.lease);
 
     let result = true;
@@ -721,12 +721,12 @@ export default function Entrance(props) {
   const PriceApply = () => {
     entranceThrough.map((through) => {
       const PriceForm = new FormData();
-      PriceForm.append("price", through.each_sell_price);
+      PriceForm.append("price", through.each_sell_price_afg);
       axios
         .patch(MEDICIAN_URL + through.medician + "/", PriceForm)
         .then((res) => {
           toast.info(
-            `Medicine Price Changed to: ${through.each_sell_price}AFG`
+            `Medicine Price Changed to: ${through.each_sell_price_afg}AFG`
           );
           setPriceApplied(true);
         })
@@ -1001,7 +1001,7 @@ export default function Entrance(props) {
                       onChange={(res) => setFactorTotal(res.target.value)}
                       defaultValue={FactorTotal}
                     />
-                    <label style={{ fontSize: "0.6rem" }}>
+                    <label style={{ fontSize: "0.9rem" }}>
                       {exactEntrance.currency_name}
                     </label>
                   </div>
@@ -1304,10 +1304,10 @@ export default function Entrance(props) {
                   type="text"
                   {...register("each_price_factor")}
                   className="entrance--inputs"
-                  onChange={(e) => {
-                    setPurchasePrice(e.target.value);
-                  }}
                   value={purchasePrice}
+                  onChange={(e) => {
+                    setPurchasePrice(e.target.value)
+                  }}
                 />
                 <label>
                   <h5> ت.د.پاکت:</h5>
@@ -1342,7 +1342,7 @@ export default function Entrance(props) {
                 <label>فی_فروش:</label>
                 <input
                   type="text"
-                  {...register("each_sell_price")}
+                  {...register("each_sell_price_afg")}
                   className="entrance--inputs"
                   value={sellPrice}
                   onChange={(e) => {
@@ -1352,7 +1352,7 @@ export default function Entrance(props) {
                     setInterest(
                       (
                         (100 *
-                          ((e.target.value ) *
+                          ((e.target.value / exactEntrance.currency_rate ) *
                             autoCompleteData.medician.no_box -
                             purchasePrice)) /
                         purchasePrice
@@ -1369,14 +1369,13 @@ export default function Entrance(props) {
                     {...register("quantity_bonus")}
                     className="entrance--inputs"
                   />
-                  <lable>قرضه:</lable>
+                  <lable>امانتی:</lable>
                   <input
                     type="checkbox"
                     {...register("lease")}
                     style={{ width: "1rem" }}
                   />
                 </div>
-
                 <label>انقضا.م:</label>
                 <input
                   type="date"
@@ -1433,15 +1432,14 @@ export default function Entrance(props) {
                   <label>ت.قطی</label>
                   <label>جمع.خرید</label>
                   <label>بعد.تخفیف</label>
-                  <label>م.تخفیف</label>
                   <label>بونوس</label>
-                  <label>م.بونوس</label>
+                  <label>تاریخ</label>
                   <label>کمبود</label>
                   <label>امانتی</label>
                   <label>فی.خرید</label>
                   <label>فایده٪</label>
                   <label>فی.فروش</label>
-                  <label>جمع.فروش</label>
+                  <label>به.افغانی</label>
                   <label>حذف</label>
                 </div>
                 <div className="entrance-map">

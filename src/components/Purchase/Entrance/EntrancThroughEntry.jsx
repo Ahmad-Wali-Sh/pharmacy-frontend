@@ -36,21 +36,22 @@ function EntrancThroughEntry({
 
   const MedicianUpdate = (data) => {
     const interest_percent = (
-      (100 * (data.each_sell_price * data.no_box - data.each_price_factor)) /
+      (100 * ((data.each_sell_price_afg / through.rate) * data.no_box - data.each_price_factor)) /
       data.each_price_factor
     ).toFixed(2);
 
+    
     const MedicianUpdateForm = new FormData();
     factorNumber && MedicianUpdateForm.append("number_in_factor", factorNumber);
-    purchasePrice &&
-      MedicianUpdateForm.append("each_price_factor", purchasePrice);
+    MedicianUpdateForm.append("each_price_factor", data.each_price_factor);
     MedicianUpdateForm.append("discount_money", data.discount_money);
     MedicianUpdateForm.append("discount_percent", data.discount_percent);
-    // MedicianUpdateForm.append("expire_date", data.expire_date);
+    MedicianUpdateForm.append("expire_date", data.expire_date);
     MedicianUpdateForm.append("interest_percent", interest_percent);
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
-    MedicianUpdateForm.append("each_sell_price", data.each_sell_price);
+    // MedicianUpdateForm.append("each_sell_price", data.each_sell_price);
+    MedicianUpdateForm.append("each_sell_price_afg", data.each_sell_price_afg);
     MedicianUpdateForm.append("lease", data.lease);
     MedicianUpdateForm.append("user", user().id);
     MedicianUpdateForm.append("shortage", data.shortage);
@@ -67,16 +68,16 @@ function EntrancThroughEntry({
 
   const MedicianInterestUpdate = (data) => {
     const eachSellPrice = (
-      (parseFloat(data.each_price_factor) +
+      ((parseFloat(data.each_price_factor) +
         (parseFloat(data.interest_percent) * parseFloat(data.each_price_factor)) /
           100) /
-      data.no_box
+      data.no_box) * through.rate
     ).toFixed(2);
 
     const MedicianUpdateForm = new FormData();
     factorNumber && MedicianUpdateForm.append("number_in_factor", factorNumber);
     purchasePrice &&
-      MedicianUpdateForm.append("each_price_factor", purchasePrice);
+      MedicianUpdateForm.append("each_price_factor", data.each_price_factor);
     MedicianUpdateForm.append("discount_money", data.discount_money);
     MedicianUpdateForm.append("discount_percent", data.discount_percent);
     // MedicianUpdateForm.append("expire_date", data.expire_date);
@@ -84,7 +85,7 @@ function EntrancThroughEntry({
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
     MedicianUpdateForm.append("shortage", data.shortage);
-    MedicianUpdateForm.append("each_sell_price", eachSellPrice);
+    MedicianUpdateForm.append("each_sell_price_afg", eachSellPrice);
     MedicianUpdateForm.append("lease", data.lease);
     MedicianUpdateForm.append("user", user().id);
     
@@ -112,9 +113,22 @@ function EntrancThroughEntry({
       });
   };
 
+  const DateComprision = (date) => {
+    return new Date(date).getFullYear() + (new Date(date).getMonth()) / 12 > new Date().getFullYear() + ((new Date().getMonth() + 6) / 12)
+  }
+
+  const AlertHighlighter = () => {
+    if (DateComprision(through.expire_date) && through.interest_percent > 0 && through.interest_percent <= 100) {
+      return true
+    }
+    else 
+      return false
+     
+  }
+
   return (
     <form>
-      <div className="entrance-medician-map">
+      <div className={AlertHighlighter() ? "entrance-medician-map" : "entrance-medician-map-alert"}>
         <label>{num + 1}</label>
         <div className="entrance-medician-map-box">
           <h4 className="entrance-medician-map-name">
@@ -148,49 +162,69 @@ function EntrancThroughEntry({
           {...register("entrance_through_id")}
           onBlurCapture={handleSubmit(MedicianUpdate)}
         />
+        <div>
+          <span className="currency-span">{through.rate_name}</span>
         <input
           type="text"
           defaultValue={through.each_price_factor}
+          className="transparent-inputs"
           {...register("each_price_factor")}
-          onChange={(res) => {
-            setPurchasePrice(res.target.value);
-          }}
           onBlurCapture={handleSubmit(MedicianUpdate)}
         />
+        </div>
+        <div>
+          <span className="currency-span">{through.rate_name}</span>
         <input
           type="text"
           defaultValue={through.discount_money}
           {...register("discount_money")}
           onBlurCapture={handleSubmit(MedicianUpdate)}
+          className="transparent-inputs"
         />
+        </div>
+        <div>
+        <span className="currency-span-percent">%</span>
         <input
           type="text"
           defaultValue={through.discount_percent}
           {...register("discount_percent")}
+          className="transparent-inputs-percent"
           onBlurCapture={handleSubmit(MedicianUpdate)}
         />
-        <input type="text" value={through.no_box} {...register("no_box")} />
+        </div>
+        <input type="text" value={through.no_box} style={{cursor:"default"}} {...register("no_box")} />
+        <div>
+          <span className="currency-span"
+          style={{cursor:"default"}}
+          >{through.rate_name}</span>
         <input
           type="text"
           value={through.total_purchase_currency_before}
+          className="transparent-inputs"
+          style={{cursor:"default"}}
         />
+        </div>
+        <div>
+          <span className="currency-span" style={{cursor:"default"}}>{through.rate_name}</span>
         <input
           type="text"
           value={through.total_purchaseـcurrency}
-        />
-        <input
-          type="text"
-          value={through.discount_value}
-        />
+          className="transparent-inputs"
+          style={{cursor:"default"}}
+          />
+          </div>
           <input
             type="text"
             defaultValue={through.quantity_bonus}
             {...register("quantity_bonus")}
             onBlurCapture={handleSubmit(MedicianUpdate)}
-          />
+            />
           <input
-            type="text"
-            value={through.bonus_value}
+            type="date"
+            defaultValue={through.expire_date}
+            {...register("expire_date")}
+            className={DateComprision(through.expire_date) ? "" : "transparent-inputs-date-alert"}
+            onBlurCapture={handleSubmit(MedicianUpdate)}
           />
           <input
             type="text"
@@ -204,24 +238,51 @@ function EntrancThroughEntry({
           {...register("lease")}
           style={{ width: "1rem", marginRight: "0rem" }}
           onBlurCapture={handleSubmit(MedicianUpdate)}
-        />
+          />
+          <div>
+          <span className="currency-span" style={{cursor:"default"}}>{through.rate_name}</span>
         <input
           type="text"
           value={through.each_purchase_price}
+          className="transparent-inputs"
+          style={{cursor:"default"}}
         />
+        </div>
+        <div>
+        <span className={"currency-span-percent"}>%</span>
         <input
           type="text"
           defaultValue={through.interest_percent}
           {...register("interest_percent")}
+          className={through.interest_percent > 0 && through.interest_percent <= 100 ? "transparent-inputs-percent" : "transparent-inputs-percent-alert"}
           onBlurCapture={handleSubmit(MedicianInterestUpdate)}
-        />
+          />
+        </div>
+        <div>
+        <span className="currency-span"
+        style={{cursor:"default"}}
+        >{through.rate_name}</span>
         <input
           type="text"
-          defaultValue={through.each_sell_price}
+          className="transparent-inputs"
+          value={through.each_sell_price}
           {...register("each_sell_price")}
-          onBlurCapture={handleSubmit(MedicianUpdate)}
+          style={{cursor:"default"}}
         />
-        <h4>{through.total_sell}</h4>
+        </div>
+        <div>
+        <span className="currency-span"
+        style={{cursor:"default"}}
+        >AFG</span>
+        <input
+          type="text"
+          defaultValue={through.each_sell_price_afg}
+          className="transparent-inputs"
+          {...register('each_sell_price_afg')}
+          onBlurCapture={handleSubmit(MedicianUpdate)}
+          style={{cursor:"default"}}
+        />
+        </div>
         <div className="medician-map-buttons">
           <div onClick={handleSubmit(MedicianDelete)}>
             <i className="fa-solid fa-trash"></i>
