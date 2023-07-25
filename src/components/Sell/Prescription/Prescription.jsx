@@ -68,6 +68,7 @@ export default function Prescription(props) {
   const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
+  const LAST_PRESCRIPTION_URL = import.meta.env.VITE_LAST_PRESCRIPTION;
   const user = useAuthUser();
 
   const {
@@ -273,9 +274,35 @@ export default function Prescription(props) {
         });
     }
 
+    const PrescriptionUpdate = new FormData();
+    PrescriptionUpdate.append("name", autoCompleteData.patient);
+    PrescriptionUpdate.append("doctor", autoCompleteData.doctor);
+    PrescriptionUpdate.append("department", prescription.department);
+    PrescriptionUpdate.append("round_number", data.round_number);
+    PrescriptionUpdate.append(
+      "discount_money",
+      data.discount_money ? data.discount_money : prescription.discount_money
+    );
+    PrescriptionUpdate.append(
+      "discount_percent",
+      data.discount_percent
+        ? data.discount_percent
+        : prescription.discount_percent
+    );
+    PrescriptionUpdate.append("zakat", data.zakat);
+    PrescriptionUpdate.append("khairat", data.khairat);
+    PrescriptionUpdate.append(
+      "prescription_number",
+      prescription.prescription_number
+        ? prescription.prescription_number
+        : data.prescription_number
+    );
+    PrescriptionUpdate.append("image", file ? file : "");
+    PrescriptionUpdate.append("user", user().id);
+
     if (submited == true) {
       axios
-        .patch(PRESCRIPTION_URL + prescription.id + "/", PrescriptionForm)
+        .patch(PRESCRIPTION_URL + prescription.id + "/", PrescriptionUpdate)
         .then((res) => {
           setPrescription(res.data);
           toast.success("Data Updated Successfuly.");
@@ -567,6 +594,56 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
   };
 
+  const BackPrescription = () => {
+    prescription == ""
+      ? axios.get(LAST_PRESCRIPTION_URL).then((res) => {
+          setPrescription([]);
+          setSubmited(true);
+          setPrescription(res.data[0]);
+          axios
+            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
+            .then((res) => {
+              setPrescriptionThrough([]);
+              setPrescriptionThrough(res.data);
+            });
+        })
+      : axios.get(PRESCRIPTION_URL + (prescription.id - 1)).then((res) => {
+          setPrescription([]);
+          setSubmited(true);
+          setPrescription(res.data);
+          axios
+            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data.id)
+            .then((res) => {
+              setPrescriptionThrough([]);
+              setPrescriptionThrough(res.data);
+            });
+        });
+  };
+
+  const FrontPrescription = () => {
+    prescription == ""
+      ? axios.get(LAST_PRESCRIPTION_URL).then((res) => {
+          setPrescription([]);
+          setPrescription(res.data[0]);
+          axios
+            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
+            .then((res) => {
+              setPrescriptionThrough([]);
+              setPrescriptionThrough(res.data);
+            });
+        })
+      : axios.get(PRESCRIPTION_URL + (prescription.id + 1)).then((res) => {
+          setPrescription([]);
+          setPrescription(res.data);
+          axios
+            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data.id)
+            .then((res) => {
+              setPrescriptionThrough([]);
+              setPrescriptionThrough(res.data);
+            });
+        });
+  };
+
   return (
     <>
       {props.button == undefined && (
@@ -672,6 +749,26 @@ export default function Prescription(props) {
                       <label>:مقدار روند شده </label>
                     </div>
                   </div>
+                  <div className="entrance-report-footer">
+                    <button
+                      className="entrance-report-button"
+                      onClick={BackPrescription}
+                    >
+                      <i class="fa-solid fa-left-long"></i>
+                    </button>
+                    <button
+                      className="entrance-report-button"
+                      onClick={BackPrescription}
+                    >
+                      <i class="fa-solid fa-comments-dollar"></i>
+                    </button>
+                    <button
+                      className="entrance-report-button"
+                      onClick={FrontPrescription}
+                    >
+                      <i class="fa-solid fa-right-long"></i>
+                    </button>
+                  </div>
                 </div>
                 <form className="prescription-prescription" id="Myform">
                   <label>نوع نسخه:</label>
@@ -734,7 +831,7 @@ export default function Prescription(props) {
                     required
                     type="text"
                     {...register("prescription_number")}
-                    defaultValue={prescription.prescription_number}
+                    value={prescription.prescription_number}
                   />
                   <label>جستوجو:</label>
                   <div className="flex">
@@ -758,16 +855,17 @@ export default function Prescription(props) {
                   <input
                     type="text"
                     {...register("discount_money")}
-                    defaultValue={
+                    value={
                       prescription.discount_money ||
                       departmentSelected.discount_money
                     }
+                    onChange={(e) => {}}
                   />
                   <label>تخفیف %:</label>
                   <input
                     type="text"
                     {...register("discount_percent")}
-                    defaultValue={
+                    value={
                       prescription.discount_percent ||
                       departmentSelected.discount_percent
                     }

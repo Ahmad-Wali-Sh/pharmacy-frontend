@@ -230,15 +230,19 @@ export default function SelectMedician({
               className="medician-select-input-box"
               onKeyDown={(e) => {
                 let scrollNow = document.querySelector(".sc-gLDzan").scrollTop;
+                console.log(scrollNow);
                 if (e.key == "ArrowDown") {
                   document
                     .querySelector(".sc-gLDzan")
-                    .scroll(scrollNow + 150, scrollNow + 150);
+                    .scroll(
+                      scrollNow == 0 ? 1 : scrollNow + 160,
+                      scrollNow == 0 ? 1 : scrollNow + 160
+                    );
                 }
                 if (e.key == "ArrowUp") {
                   document
                     .querySelector(".sc-gLDzan")
-                    .scroll(scrollNow - 150, scrollNow - 150);
+                    .scroll(scrollNow - 160, scrollNow - 160);
                 }
               }}
             >

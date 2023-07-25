@@ -550,7 +550,6 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   margin: 0.3rem;
   background-color: var(--color-one);
-
 }
 .entrance-report-button:hover {
   border-radius: 1rem;
@@ -558,7 +557,7 @@ input[type="date"]:disabled {
   background-color: var(--color-two);
 }
 
-.loading-page-modal{
+.loading-page-modal {
   background-image: var(--color-seven);
   height: 90vh;
   width: 100%;
@@ -575,10 +574,9 @@ input[type="date"]:disabled {
   padding-top: 3rem;
   padding-right: 0.7rem;
   box-shadow: 1px 1px 10px grey;
-  color:var(--color-ten);
+  color: var(--color-ten);
   direction: rtl;
 }
-
 
 .entrance-entrance > input {
   height: 1.47rem;
@@ -784,7 +782,7 @@ input[type="date"]:disabled {
   direction: rtl;
   justify-content: space-between;
 }
-.entrance-medician-map >input {
+.entrance-medician-map > input {
   font-size: 0.75rem;
 }
 .entrance-medician-map-alert {
@@ -799,7 +797,7 @@ input[type="date"]:disabled {
   direction: rtl;
   justify-content: space-between;
 }
-.entrance-medician-map-alert >input {
+.entrance-medician-map-alert > input {
   font-size: 0.75rem;
 }
 
@@ -1132,7 +1130,7 @@ input[type="date"]:disabled {
 
 .entrance-report-body {
   width: 100%;
-  height:75%;
+  height: 75%;
   background-color: var(--color-seven);
   direction: rtl;
   display: flex;
@@ -2602,7 +2600,7 @@ input[type="date"]:disabled {
   height: 2.5rem;
   border-bottom: 1px solid var(--color-three);
   padding-top: 0.5rem;
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
 
 .revenue-manager-content {
@@ -2629,7 +2627,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   font-size: large;
   color: white;
-  padding-right:1rem;
+  padding-right: 1rem;
   font-weight: bold;
 }
 
@@ -2680,9 +2678,8 @@ input[type="date"]:disabled {
   height: 2.5rem;
   border-bottom: 1px solid var(--color-three);
   padding-top: 0.5rem;
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
-
 
 .revenue-manager-select-active {
   background-color: rgba(0, 0, 0, 0);
@@ -2692,7 +2689,7 @@ input[type="date"]:disabled {
   border: none;
   position: relative;
   top: -0.3rem;
-  color:rgb(72, 161, 72)
+  color: rgb(72, 161, 72);
 }
 
 .revenue-manager-select-deactive {
@@ -2703,7 +2700,7 @@ input[type="date"]:disabled {
   border: none;
   position: relative;
   top: -0.3rem;
-  color:rgb(168, 78, 78)
+  color: rgb(168, 78, 78);
 }
 
 .bookmarks-box {
@@ -2728,7 +2725,7 @@ input[type="date"]:disabled {
   box-shadow: 1px 1px 5px black;
 }
 
-.medicine-department-select{
+.medicine-department-select {
   width: 100%;
   height: 2rem;
   border-radius: 1rem;
@@ -2736,7 +2733,7 @@ input[type="date"]:disabled {
   top: -1rem;
   background-color: var(--color-three);
   border: none;
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
 
 .bookmark-card > h5 {
@@ -2754,15 +2751,14 @@ input[type="date"]:disabled {
 .bookmark-card:hover {
   background-image: var(--color-five);
   cursor: pointer;
-
 }
-.bookmark-image{
+.bookmark-image {
   width: 7rem;
   height: 7rem;
   border-radius: 1rem;
 }
 
-.currency-list-map-header{
+.currency-list-map-header {
   display: grid;
   gap: 2rem;
   justify-content: space-around;
@@ -2802,7 +2798,7 @@ input[type="date"]:disabled {
   text-align: right;
 }
 
-.currency-list{
+.currency-list {
   background-color: var(--color-three);
   width: 100%;
   height: 76%;
@@ -2821,8 +2817,8 @@ input[type="date"]:disabled {
 }
 
 .currency-span {
-  position: absolute; 
-  margin-left: 1px; 
+  position: absolute;
+  margin-left: 1px;
   margin-top: 6px;
   font-size: 0.55rem;
 }
@@ -2861,9 +2857,8 @@ input[type="date"]:disabled {
 }
 
 .currency-span-percent {
-  position: absolute; 
-  margin-left: 1px; 
+  position: absolute;
+  margin-left: 1px;
   margin-top: 2px;
   font-size: 0.8rem;
 }
-
