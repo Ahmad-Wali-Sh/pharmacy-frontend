@@ -40,6 +40,7 @@
   --color-thirth: rgb(93, 93, 93);
   --color-fourth: rgb(100, 50, 50);
   --color-fifth: rgb(255, 21, 0);
+  --color-sixth: rgb(38, 174, 38);
 }
 
 body {
@@ -476,9 +477,11 @@ input[type="date"]:disabled {
   display: flex;
   justify-content: left;
   gap: 0.3rem;
+  position: relative;
+  top: -0.5rem;
 }
 .entrance-buttons > input[type="submit"] {
-  height: 1.5rem;
+  height: 2rem;
   border-radius: 1rem;
   width: 7rem;
   text-align: center;
@@ -487,7 +490,7 @@ input[type="date"]:disabled {
   color: var(--color-ten);
 }
 .entrance-buttons > input[type="reset"] {
-  height: 1.5rem;
+  height: 2.1rem;
   border-radius: 1rem;
   width: 6rem;
   text-align: center;
@@ -497,6 +500,19 @@ input[type="date"]:disabled {
   color: var(--color-ten);
   padding-left: 0.5rem;
   padding-right: 0.7rem;
+}
+
+.min-expire-date-input {
+  position: relative;
+  top: -1rem;
+  width: 100%;
+  padding-right: 1rem;
+  color: var(--color-ten);
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-three);
+  height: 1.6rem;
 }
 
 .entrance-buttons > input[type="submit"]:hover {
@@ -1722,8 +1738,8 @@ input[type="date"]:disabled {
 .prescription-create-button {
   border-radius: 1rem;
   border: none;
-  width: 5rem;
-  height: 1.4rem;
+  width: 7rem;
+  height: 2rem;
   margin-left: 0.2rem;
   background-color: var(--color-thirth);
   color: white;
@@ -2861,4 +2877,9 @@ input[type="date"]:disabled {
   margin-left: 1px;
   margin-top: 2px;
   font-size: 0.8rem;
+}
+
+.on {
+  color: var(--color-sixth);
+  font-size: 1.1rem;
 }

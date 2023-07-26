@@ -136,6 +136,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("cautions", data.cautions);
     MedicianForm.append("usages", data.usages);
     MedicianForm.append("description", data.description);
+    MedicianForm.append("min_expire_date", data.min_expire_date);
     MedicianForm.append("barcode", data.barcode);
     {
       file && MedicianForm.append("image", file);
@@ -416,6 +417,9 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 <br />
                 <br />
                 <label>دیپارتمنت:</label>
+                <br />
+                <br />
+                <label>حداقل_انقضا:</label>
               </div>
               <div>
                 <input
@@ -445,6 +449,9 @@ function MedicianEntrance({ title, icon, button, medician }) {
                     </option>
                   ))}
                 </select>
+                <br />
+                <br />
+                <input type="text" className="min-expire-date-input" {...register("min_expire_date")} defaultValue={medician && medician.min_expire_date}/>
               </div>
               <label>توضیحات:</label>
               <textarea
@@ -457,9 +464,11 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 defaultValue={medician && medician.dividing_rules}
               />
               <div className="bar_batch_box">
+                <br />
                 <label>بارکد:</label>
               </div>
               <div className="bar_batch_box">
+                <br />
                 <input
                   type="text"
                   {...register("barcode")}

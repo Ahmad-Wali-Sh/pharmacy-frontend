@@ -114,7 +114,7 @@ function EntrancThroughEntry({
   };
 
   const DateComprision = (date) => {
-    return new Date(date).getFullYear() + (new Date(date).getMonth()) / 12 > new Date().getFullYear() + ((new Date().getMonth() + 6) / 12)
+    return new Date(date).getFullYear() + (new Date(date).getMonth()) / 12 > new Date().getFullYear() + ((new Date().getMonth() + exactMedician.min_expire_date) / 12)
   }
 
   const AlertHighlighter = () => {

@@ -154,6 +154,13 @@ export default function SelectMedician({
   const [selectedMedician, setSelectedMedician] = React.useState("");
   const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([]);
   const [medician, setMedician] = React.useState([]);
+  const [textHighlight, setTextHighlight] = React.useState({
+    barcode: "on",
+    generic: "",
+    ml: "",
+    kind: "",
+    country: ""
+  })
 
   React.useEffect(() => {
     setMedician(results);
@@ -188,6 +195,10 @@ export default function SelectMedician({
       registerModalOpener();
     }
   };
+
+  {
+
+  }
 
   return (
     <>
@@ -247,32 +258,34 @@ export default function SelectMedician({
               }}
             >
               <div>
-                Barcode/Brand Name __ ml __ generics __ Kind __ Country __
+               <span className={textHighlight.country}>کشور</span> | <span className={textHighlight.kind}>نوع</span> | <span className={textHighlight.generic}>ترکیب</span> | <span className={textHighlight.ml}>میزان موثریت</span> | <span className={textHighlight.barcode}>بارکد/نام برند</span>
               </div>
               <ReactSearchAutocomplete
                 items={medician}
                 showIcon={false}
-                fuseOptions={{ keys: ["brand_name", "barcode", "ml"] }}
-                resultStringKeyName="brand_name"
+                fuseOptions={{
+                  threshold: 10,
+                  keys: ["brand_name", "barcode", "ml", "generic_name" ,"kind_name", "country_name"]}}
+                resultStringKeyName="kind_name"
                 styling={AutoCompleteStyle2}
                 showClear={false}
                 inputDebounce="10"
                 showItemsOnFocus={true}
                 onSearch={(string, result) => {
+                  let stringArray = string.split("  ")
                   axios
                     .get(
-                      string.slice(0, string.indexOf(" ")) != "" &&
-                        MEDICIAN_URL +
-                          "?search=" +
-                          string.slice(0, string.indexOf(" "))
+                      MEDICIAN_URL + "?brand_name=" + stringArray[0] + "&ml=" + (stringArray[1] ? stringArray[1] : "") + "&generic_name=" + (stringArray[2] ? stringArray[2] : "") + "&kind__name_english=" + (stringArray[3] ? stringArray[3] : "") + "&country__name=" + (stringArray[4] ? stringArray[4] : "")
                     )
                     .then((res) => {
-                      setMedician(res.data.results);
+                      result = res.data.results
+                      setMedician(res.data.results)
+                      console.log(res.data.results)
                     });
                 }}
                 onSelect={(item) => {
                   selectAutoCompleteData(item);
-                  setMedician(results);
+                  setMedician([]);
                   registerModalCloser();
                   setSelectedMedician(item);
                 }}
