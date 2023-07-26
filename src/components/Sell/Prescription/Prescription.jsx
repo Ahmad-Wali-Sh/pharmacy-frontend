@@ -117,36 +117,36 @@ export default function Prescription(props) {
   }, [prescription]);
 
   React.useEffect(() => {
-    axios
-      .get(COUNTRY_URL)
-      .then((result) => setCountry(result.data))
-      .catch((e) => console.log(e));
-    axios
-      .get(KIND_URL)
-      .then((result) => {
-        setKind(result.data);
-      })
-      .catch((e) => console.log(e));
-    axios
-      .get(PHARM_GROUB_URL)
-      .then((result) => setPharmGroub(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(COUNTRY_URL)
+    //   .then((result) => setCountry(result.data))
+    //   .catch((e) => console.log(e));
+    // axios
+    //   .get(KIND_URL)
+    //   .then((result) => {
+    //     setKind(result.data);
+    //   })
+    //   .catch((e) => console.log(e));
+    // axios
+    //   .get(PHARM_GROUB_URL)
+    //   .then((result) => setPharmGroub(result.data))
+    //   .catch((e) => console.log(e));
 
     axios
       .get(DEPARTMENT_URL)
       .then((res) => setDepartment(res.data))
       .catch((err) => console.log(err));
 
-    axios
-      .get(PATIENT_URL)
-      .then((res) => setPatient(res.data))
-      .catch((err) => console.log(err));
-    axios
-      .get(DOCTOR_URL)
-      .then((res) => {
-        setDoctor(res.data);
-      })
-      .catch((err) => console.log(err));
+    // axios
+    //   .get(PATIENT_URL)
+    //   .then((res) => setPatient(res.data))
+    //   .catch((err) => console.log(err));
+    // axios
+    //   .get(DOCTOR_URL)
+    //   .then((res) => {
+    //     setDoctor(res.data);
+    //   })
+    //   .catch((err) => console.log(err));
   }, []);
 
   React.useEffect(() => {
@@ -275,22 +275,18 @@ export default function Prescription(props) {
     }
 
     const PrescriptionUpdate = new FormData();
-    PrescriptionUpdate.append("name", autoCompleteData.patient);
-    PrescriptionUpdate.append("doctor", autoCompleteData.doctor);
-    PrescriptionUpdate.append("department", prescription.department);
+    PrescriptionUpdate.append("name", data.patient ? data.patient : autoCompleteData.patient);
+    PrescriptionUpdate.append("doctor", data.doctor ? data.doctor : autoCompleteData.doctor);
+    PrescriptionUpdate.append("department", data.department ? data.department : prescription.department);
     PrescriptionUpdate.append("round_number", data.round_number);
-    PrescriptionUpdate.append(
-      "discount_money",
-      data.discount_money ? data.discount_money : prescription.discount_money
-    );
-    PrescriptionUpdate.append(
-      "discount_percent",
+    PrescriptionUpdate.append("discount_money", data.discount_money ? data.discount_money : prescription.discount_money);
+    PrescriptionUpdate.append("discount_percent",
       data.discount_percent
         ? data.discount_percent
         : prescription.discount_percent
     );
-    PrescriptionUpdate.append("zakat", data.zakat);
-    PrescriptionUpdate.append("khairat", data.khairat);
+    PrescriptionUpdate.append("zakat", data.zakat ? data.zakat : prescription.zakat);
+    PrescriptionUpdate.append("khairat", data.khairat ? data.khairat : prescription.khairat);
     PrescriptionUpdate.append(
       "prescription_number",
       prescription.prescription_number
@@ -345,6 +341,9 @@ export default function Prescription(props) {
           setPrescriptionThrough((prev) => [...prev, res.data]);
           toast.info("Item Added.");
           setTrigger((prev) => prev + 1);
+          reset({
+            quantity: ""
+          })
           axios
             .get(MEDICIAN_WITH_URL + "?medicine=" + res.data.medician)
             .then((res2) => {
@@ -393,6 +392,12 @@ export default function Prescription(props) {
       .then((res) => {
         setPrescription(res.data[0] ? res.data[0] : []);
         setSubmited(true);
+        reset({
+          discount_money: res.data[0].discount_money,
+          discount_percent : res.data[0].discount_percent,
+          zakat: res.data[0].zakat,
+          khairat: res.data[0].khairat
+        })
         {
           res.data[0] ? toast.success("Search Was Successful.") : "";
         }
@@ -449,7 +454,7 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
   }
 
-  const CreateNewHandle = () => {
+  const DuplicatePrescription = () => {
     const PrescriptionForm = new FormData();
     PrescriptionForm.append("name", autoCompleteData.patient);
     PrescriptionForm.append("doctor", autoCompleteData.doctor);
@@ -566,6 +571,7 @@ export default function Prescription(props) {
         .post(PRESCRIPTION_URL, DepartmentForm)
         .then((res) => {
           setPrescription(res.data);
+          
           setSubmited(true);
           setLoading(true);
           toast.success("Data Submited Successfuly.");
@@ -580,7 +586,6 @@ export default function Prescription(props) {
           toast.error("Check Your Input And Try Again!");
         });
     });
-    reset({});
   };
 
   const DepartmentHandler = (department) => {
@@ -599,7 +604,15 @@ export default function Prescription(props) {
       ? axios.get(LAST_PRESCRIPTION_URL).then((res) => {
           setPrescription([]);
           setSubmited(true);
+          setDoctorName("")
+          setPatientName("")
           setPrescription(res.data[0]);
+          reset({
+            discount_money: res.data.discount_money,
+            discount_percent : res.data.discount_percent,
+            zakat: res.data.zakat,
+            khairat: res.data.khairat
+          })
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
             .then((res) => {
@@ -610,7 +623,15 @@ export default function Prescription(props) {
       : axios.get(PRESCRIPTION_URL + (prescription.id - 1)).then((res) => {
           setPrescription([]);
           setSubmited(true);
+          setDoctorName("")
+          setPatientName("")
           setPrescription(res.data);
+          reset({
+            discount_money: res.data.discount_money,
+            discount_percent : res.data.discount_percent,
+            zakat: res.data.zakat,
+            khairat: res.data.khairat
+          })
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data.id)
             .then((res) => {
@@ -622,19 +643,37 @@ export default function Prescription(props) {
 
   const FrontPrescription = () => {
     prescription == ""
-      ? axios.get(LAST_PRESCRIPTION_URL).then((res) => {
-          setPrescription([]);
-          setPrescription(res.data[0]);
-          axios
-            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
-            .then((res) => {
-              setPrescriptionThrough([]);
-              setPrescriptionThrough(res.data);
-            });
-        })
-      : axios.get(PRESCRIPTION_URL + (prescription.id + 1)).then((res) => {
-          setPrescription([]);
-          setPrescription(res.data);
+    ? axios.get(LAST_PRESCRIPTION_URL).then((res) => {
+      setPrescription([]);
+      setPrescription(res.data[0]);
+      setDoctorName("")
+      setPatientName("")
+      reset({
+        discount_money: res.data.discount_money,
+        discount_percent : res.data.discount_percent,
+        zakat: res.data.zakat,
+        khairat: res.data.khairat,
+        number: ""
+      })
+      axios
+      .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
+      .then((res) => {
+        setPrescriptionThrough([]);
+        setPrescriptionThrough(res.data);
+      });
+    })
+    : axios.get(PRESCRIPTION_URL + (prescription.id + 1)).then((res) => {
+      setPrescription([]);
+      setPrescription(res.data);
+      reset({
+        discount_money: res.data.discount_money,
+        discount_percent : res.data.discount_percent,
+        zakat: res.data.zakat,
+        khairat: res.data.khairat,
+        number: ""
+      })
+          setDoctorName("")
+          setPatientName("")
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data.id)
             .then((res) => {
@@ -643,6 +682,22 @@ export default function Prescription(props) {
             });
         });
   };
+
+
+  const CreateNewPrescription = () => {
+    ResetForm()
+    reset({
+      discount_percent: "",
+      discount_money: "",
+      quantity: "",
+      prescription_number: "",
+      zakat: "",
+      khairat: "",
+      number: ""
+    })
+    departmentSubmit()
+    setTrigger((prev) => prev + 1);
+  }
 
   return (
     <>
@@ -855,9 +910,8 @@ export default function Prescription(props) {
                   <input
                     type="text"
                     {...register("discount_money")}
-                    value={
-                      prescription.discount_money ||
-                      departmentSelected.discount_money
+                    defaultValue={
+                      prescription.discount_money
                     }
                     onChange={(e) => {}}
                   />
@@ -865,7 +919,7 @@ export default function Prescription(props) {
                   <input
                     type="text"
                     {...register("discount_percent")}
-                    value={
+                    defaultValue={
                       prescription.discount_percent ||
                       departmentSelected.discount_percent
                     }
@@ -897,19 +951,25 @@ export default function Prescription(props) {
                   <div className="entrance-buttons">
                     <input
                       type="reset"
-                      value="Reset"
+                      value="ریسیت"
                       onClick={ResetForm}
                     ></input>
+                      <input
+                        type="button"
+                        value="کپی نسخه"
+                        className="prescription-create-button"
+                        onClick={handleSubmit(DuplicatePrescription)}
+                      ></input>
+                      <input
+                        type="button"
+                        value="جدید"
+                        className="prescription-create-button"
+                        onClick={handleSubmit(CreateNewPrescription)}
+                      ></input>
                     <input
                       type="submit"
-                      value={submited ? "Update" : "Submit"}
+                      value={submited ? "آپدیت" : "ثبت"}
                       onClick={handleSubmit(PrescriptionSubmit)}
-                    ></input>
-                    <input
-                      type="button"
-                      value="Create New"
-                      className="prescription-create-button"
-                      onClick={handleSubmit(CreateNewHandle)}
                     ></input>
                   </div>
                 </form>
