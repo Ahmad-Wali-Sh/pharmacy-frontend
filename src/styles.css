@@ -2872,6 +2872,15 @@ input[type="date"]:disabled {
   color: var(--color-fifth);
 }
 
+.big-company-select{
+  border-radius: 1rem;
+  border: none;
+  background-color: var(--color-three);
+  color: var(--color-ten);
+  height: 1.7rem;
+  width: 98%;
+}
+
 .currency-span-percent {
   position: absolute;
   margin-left: 1px;

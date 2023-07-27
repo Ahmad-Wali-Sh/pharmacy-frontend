@@ -47,6 +47,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
   const KIND_URL = import.meta.env.VITE_KIND;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
+  const BIG_COMPANY_URL = import.meta.env.VITE_BIG_COMPANY;
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const user = useAuthUser();
 
@@ -63,6 +64,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
   const [department, setDepartment] = React.useState([]);
   const [pharmGroupName, setPharmGroupName] = React.useState("");
   const [countryName, setCountryName] = React.useState("");
+  const [bigCompany, setBigCompany] = React.useState([]);
   const [autoCompleteData, setAutoCompleteData] = React.useState({
     country: medician && medician.country ? medician.country : "",
     pharm_group: medician && medician.pharm_group ? medician.pharm_group : "",
@@ -85,6 +87,10 @@ function MedicianEntrance({ title, icon, button, medician }) {
     axios
       .get(DEPARTMENT_URL)
       .then((res) => setDepartment(res.data))
+      .catch((err) => console.log(err));
+    axios
+      .get(BIG_COMPANY_URL)
+      .then((res) => setBigCompany(res.data))
       .catch((err) => console.log(err));
   }, []);
 
@@ -126,7 +132,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
     MedicianForm.append("ml", data.ml);
     MedicianForm.append("weight", data.weight);
     MedicianForm.append("location", data.location);
-    MedicianForm.append("company", data.company);
+    MedicianForm.append("big_company", data.company);
     MedicianForm.append("minmum_existence", data.minmum_existence);
     MedicianForm.append("maximum_existence", data.maximum_existence);
     MedicianForm.append("must_advised", data.must_advised);
@@ -329,12 +335,26 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 />
                 <Country button={2} Update={UpdateFunction} />
               </div>
-              <label>شرکت:</label>
-              <input
-                type="text"
-                {...register("company")}
-                defaultValue={medician && medician.company}
-              />
+              <label>کمپنی:</label>
+              <select className="big-company-select"
+                  {...register("company")}
+                >
+                  <option></option>
+                  {bigCompany.map((company) => (
+                    <option
+                      selected={
+                        medician &&
+                        medician.big_company &&
+                        medician.big_company == company.id
+                          ? "selected"
+                          : ""
+                      }
+                      value={company.id}
+                    >
+                      {company.name}
+                    </option>
+                  ))}
+                </select>
               <label>قیمت:</label>
               <input
                 type="text"
