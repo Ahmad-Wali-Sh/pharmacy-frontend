@@ -159,8 +159,9 @@ export default function SelectMedician({
     generic: "",
     ml: "",
     kind: "",
-    country: ""
-  })
+    country: "",
+    company: "",
+  });
 
   React.useEffect(() => {
     setMedician(results);
@@ -188,6 +189,7 @@ export default function SelectMedician({
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
+    setMedician([]);
   }
 
   const handleKeyDown = (event) => {
@@ -196,9 +198,26 @@ export default function SelectMedician({
     }
   };
 
-  {
+  const [stringArray, setStringArray] = React.useState([]);
+  React.useEffect(() => {
+    stringArray.length == 1
+      ? setTextHighlight({ barcode: "on" })
+      : stringArray.length == 2
+      ? setTextHighlight({ ml: "on" })
+      : stringArray.length == 3
+      ? setTextHighlight({ generic: "on" })
+      : stringArray.length == 4
+      ? setTextHighlight({ kind: "on" })
+      : stringArray.length == 5
+      ? setTextHighlight({ country: "on" })
+      : stringArray.length == 6
+      ? setTextHighlight({ company: "on" })
+      : stringArray.length == 7
+      ? setTextHighlight({ company: "" })
+      : "";
 
-  }
+  }, [stringArray]);
+
 
   return (
     <>
@@ -258,30 +277,88 @@ export default function SelectMedician({
               }}
             >
               <div>
-               <span className={textHighlight.country}>کشور</span> | <span className={textHighlight.kind}>نوع</span> | <span className={textHighlight.generic}>ترکیب</span> | <span className={textHighlight.ml}>میزان موثریت</span> | <span className={textHighlight.barcode}>بارکد/نام برند</span>
+                <span
+                  className={textHighlight.company && textHighlight.company}
+                >
+                  کمپنی
+                </span>{" "}
+                |{" "}
+                <span
+                  className={textHighlight.country && textHighlight.country}
+                >
+                  کشور
+                </span>{" "}
+                |{" "}
+                <span className={textHighlight.kind && textHighlight.kind}>
+                  نوع
+                </span>{" "}
+                |{" "}
+                <span
+                  className={textHighlight.generic && textHighlight.generic}
+                >
+                  ترکیب
+                </span>{" "}
+                | <span className={textHighlight.ml}>میزان موثریت</span> |{" "}
+                <span
+                  className={textHighlight.barcode && textHighlight.barcode}
+                >
+                  بارکد/نام برند
+                </span>
               </div>
               <ReactSearchAutocomplete
                 items={medician}
                 showIcon={false}
                 fuseOptions={{
                   threshold: 10,
-                  keys: ["brand_name", "barcode", "ml", "generic_name" ,"kind_name", "country_name"]}}
-                resultStringKeyName="kind_name"
+                  keys: [
+                    "brand_name",
+                    "barcode",
+                    "ml",
+                    "generic_name",
+                    "kind_name",
+                    "country_name",
+                  ],
+                }}
+                resultStringKeyName="brand_name"
                 styling={AutoCompleteStyle2}
                 showClear={false}
                 inputDebounce="10"
                 showItemsOnFocus={true}
                 onSearch={(string, result) => {
-                  let stringArray = string.split("  ")
-                  axios
-                    .get(
-                      MEDICIAN_URL + "?brand_name=" + stringArray[0] + "&ml=" + (stringArray[1] ? stringArray[1] : "") + "&generic_name=" + (stringArray[2] ? stringArray[2] : "") + "&kind__name_english=" + (stringArray[3] ? stringArray[3] : "") + "&country__name=" + (stringArray[4] ? stringArray[4] : "")
-                    )
-                    .then((res) => {
-                      result = res.data.results
-                      setMedician(res.data.results)
-                      console.log(res.data.results)
+                  let stringArray = string.split("  ");
+                  setStringArray(stringArray);
+                  if (string != "" && isNaN(string)) {
+                    axios
+                      .get(
+                        MEDICIAN_URL +
+                          "?brand_name=" +
+                          stringArray[0] +
+                          "&ml=" +
+                          (stringArray[1] ? stringArray[1] : "") +
+                          "&search=" +
+                          (stringArray[2] ? stringArray[2] : "") +
+                          "&kind__name_english=" +
+                          (stringArray[3] ? stringArray[3] : "") +
+                          "&country__name=" +
+                          (stringArray[4] ? stringArray[4] : "") +
+                          "&big_company__name=" + 
+                          (stringArray[5] ? stringArray[5] : "")
+                      )
+                      .then((res) => {
+                        setMedician(res.data.results);
+                        if (string == false) {
+                          setMedician([])
+                        }
+                      });
+                  }
+                  if (string != "" && !isNaN(string)) {
+                    axios.get(MEDICIAN_URL + "?barcode=" + string).then((res) => {
+                      setMedician(res.data.results);
                     });
+                  }
+                  if (string == "") {
+                    setMedician([])
+                  }
                 }}
                 onSelect={(item) => {
                   selectAutoCompleteData(item);
