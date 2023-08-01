@@ -41,6 +41,7 @@
   --color-fourth: rgb(100, 50, 50);
   --color-fifth: rgb(255, 21, 0);
   --color-sixth: rgb(38, 174, 38);
+  --color-seventh: #962f2f;
 }
 
 body {
@@ -1041,7 +1042,7 @@ input[type="date"]:disabled {
 }
 
 .medician-big-text-fields {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   direction: rtl;
 }
 .medician-bix-text-field {
@@ -1669,7 +1670,10 @@ input[type="date"]:disabled {
   padding-right: 0.7rem;
 }
 .prescription-button {
-  grid-area: 3 / 6;
+  grid-area: 2 / 6;
+  display: grid;
+  direction: ltr;
+  gap: 1rem;
 }
 
 .prescription-add-button {
@@ -2892,3 +2896,42 @@ input[type="date"]:disabled {
   color: var(--color-sixth);
   font-size: 1.1rem;
 }
+
+.prescription-alert-button {
+  width: 2rem;
+  height: 2rem;
+  margin-left: 1rem;
+  border-radius: 1rem;
+  background-color: var(--color-seventh);
+}
+
+.expires-log-box {
+  width: 100%;
+  height: 90%;
+  padding: 0.2rem;
+  overflow-y: scroll;
+}
+
+.expires-medicine-select {
+  background-color: var(--color-three);
+  border-radius: 0.2rem;
+  color: var(--color-ten)
+}
+.expires-medicine-select:hover {
+  background-color: var(--color-seven);
+  box-shadow: 1px 1px 10px grey;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
+
+.expires-box {
+  display: flex;
+  gap: 1rem;
+  overflow: visible;
+  width: 30rem;
+}
+
+.selected-color-medicine {
+  color: var(--color-ten)
+}
+

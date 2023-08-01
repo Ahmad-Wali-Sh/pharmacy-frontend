@@ -13,6 +13,7 @@ export default function SelectMedician({
   tabFormulate,
   department,
   results,
+  ExpiresMedicine,
 }) {
   const customStyles = {
     content: {
@@ -149,6 +150,7 @@ export default function SelectMedician({
   };
 
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const ENTRANCE_TRHGOUH_EXPIRES_URL = import.meta.env.VITE_ENTRANCE_TRHGOUH_EXPIRES_URL
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [selectedMedician, setSelectedMedician] = React.useState("");
@@ -215,9 +217,7 @@ export default function SelectMedician({
       : stringArray.length == 7
       ? setTextHighlight({ company: "" })
       : "";
-
   }, [stringArray]);
-
 
   return (
     <>
@@ -341,23 +341,25 @@ export default function SelectMedician({
                           (stringArray[3] ? stringArray[3] : "") +
                           "&country__name=" +
                           (stringArray[4] ? stringArray[4] : "") +
-                          "&big_company__name=" + 
+                          "&big_company__name=" +
                           (stringArray[5] ? stringArray[5] : "")
                       )
                       .then((res) => {
                         setMedician(res.data.results);
                         if (string == false) {
-                          setMedician([])
+                          setMedician([]);
                         }
                       });
                   }
                   if (string != "" && !isNaN(string)) {
-                    axios.get(MEDICIAN_URL + "?barcode=" + string).then((res) => {
-                      setMedician(res.data.results);
-                    });
+                    axios
+                      .get(MEDICIAN_URL + "?barcode=" + string)
+                      .then((res) => {
+                        setMedician(res.data.results);
+                      });
                   }
                   if (string == "") {
-                    setMedician([])
+                    setMedician([]);
                   }
                 }}
                 onSelect={(item) => {
@@ -365,6 +367,17 @@ export default function SelectMedician({
                   setMedician([]);
                   registerModalCloser();
                   setSelectedMedician(item);
+                  console.log(item.generic_name);
+                  if (item.generic_name != "") {
+                    axios
+                      .get(ENTRANCE_TRHGOUH_EXPIRES_URL + "?search=" + item.generic_name + "&medician__ml=" + item.ml.match(/\d+/)[0])
+                      .then((res) => {
+                        ExpiresMedicine(res.data);
+                      })
+                  }
+                  else {
+                    ExpiresMedicine([])
+                  }
                 }}
                 maxResults={20}
                 style={{ width: "20rem" }}
