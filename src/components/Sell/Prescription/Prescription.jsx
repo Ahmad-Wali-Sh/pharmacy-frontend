@@ -69,6 +69,7 @@ export default function Prescription(props) {
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
   const LAST_PRESCRIPTION_URL = import.meta.env.VITE_LAST_PRESCRIPTION;
+  const MEDICINE_CONFLICT_URL = import.meta.env.VITE_MEDICIAN_CONFLICT;
   const user = useAuthUser();
 
   const {
@@ -104,6 +105,7 @@ export default function Prescription(props) {
   const [excatTrough, setExactThrough] = React.useState("");
   const [selectTrigger, setTrigger] = React.useState(1);
   const [file, setFile] = React.useState("");
+  const [medicineConflict, setMedicineConflict] = React.useState([])
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -135,6 +137,11 @@ export default function Prescription(props) {
     axios
       .get(DEPARTMENT_URL)
       .then((res) => setDepartment(res.data))
+      .catch((err) => console.log(err));
+
+    axios
+      .get(MEDICINE_CONFLICT_URL)
+      .then((res) => setMedicineConflict(res.data))
       .catch((err) => console.log(err));
 
     // axios
@@ -193,7 +200,9 @@ export default function Prescription(props) {
       axios
         .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
         .catch((err) => console.log(err));
+
   }, [prescriptionThrough]);
+
 
   function registerModalOpener() {
     ResetForm();
@@ -1284,6 +1293,8 @@ export default function Prescription(props) {
                         pharmGroub={pharmGroub}
                         UpdateUI={UpdateUI}
                         UpdateChunk={UpdateChunk}
+                        prescriptionThroughs={prescriptionThrough}
+                        conflicts={medicineConflict}
                       />
                     ))}
                   </div>

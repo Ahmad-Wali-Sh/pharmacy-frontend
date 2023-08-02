@@ -11,17 +11,32 @@ function PrescriptionThroughEntry({
   kind,
   UpdateUI,
   UpdateChunk,
+  prescriptionThroughs,
+  conflicts
 }) {
   const PRESCRIPTION_THROUGH_URL = import.meta.env.VITE_PRESCRIPTION_THROUGH;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const user = useAuthUser();
 
+  const [alert, setAlert] = React.useState("")
   const [exactMedician, setExactMedician] = React.useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+
+
+  React.useEffect(()=> {
+    let conflicts_with = conflicts.map((conflict) => {
+      return conflict.medicine_1 === through.medician ? conflict.medicine_2 : conflict.medicine_2 === through.medician ? conflict.medicine_1 : ""
+    })
+    console.log(conflicts_with)
+    let result = prescriptionThroughs.some((other) => other.medician === conflicts_with[0])
+    console.log(result)
+    result ? setAlert("alert_on") : setAlert("")
+  }, [prescriptionThroughs])
 
   React.useEffect(() => {
     axios
@@ -63,7 +78,7 @@ function PrescriptionThroughEntry({
   return (
     <form>
       <div
-        className="prescription-through-map"
+        className={`prescription-through-map ${alert}`}
         onBlurCapture={handleSubmit(MedicianUpdate)}
       >
         <label>{num + 1}</label>

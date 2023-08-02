@@ -150,7 +150,9 @@ export default function SelectMedician({
   };
 
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
-  const ENTRANCE_TRHGOUH_EXPIRES_URL = import.meta.env.VITE_ENTRANCE_TRHGOUH_EXPIRES_URL
+  const ENTRANCE_TRHGOUH_EXPIRES_URL = import.meta.env
+    .VITE_ENTRANCE_TRHGOUH_EXPIRES_URL;
+  const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [selectedMedician, setSelectedMedician] = React.useState("");
@@ -164,10 +166,6 @@ export default function SelectMedician({
     country: "",
     company: "",
   });
-
-  React.useEffect(() => {
-    setMedician(results);
-  }, [results]);
 
   React.useEffect(() => {
     department &&
@@ -188,6 +186,7 @@ export default function SelectMedician({
       tabFormulate != undefined && tabFormulate();
     }
     setRegisterModalOpen(true);
+    setMedician(medicianWith)
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
@@ -218,6 +217,10 @@ export default function SelectMedician({
       ? setTextHighlight({ company: "" })
       : "";
   }, [stringArray]);
+
+  const [medicianWith, setMedicineWith] = React.useState([])
+
+
 
   return (
     <>
@@ -325,6 +328,7 @@ export default function SelectMedician({
                 inputDebounce="10"
                 showItemsOnFocus={true}
                 onSearch={(string, result) => {
+                  setMedicineWith([])
                   let stringArray = string.split("  ");
                   setStringArray(stringArray);
                   if (string != "" && isNaN(string)) {
@@ -367,16 +371,38 @@ export default function SelectMedician({
                   setMedician([]);
                   registerModalCloser();
                   setSelectedMedician(item);
-                  console.log(item.generic_name);
+                  let result = []
+                  axios
+                    .get(MEDICIAN_WITH_URL + "?medicine=" + item.id)
+                    .then((res2) => {
+                      if (res2.data && res2.data[0]) {
+                        axios
+                          .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
+                          .then((res3) => {
+                            res3.data.results.length > 0 ? setMedicineWith(res3.data.results) : setMedicineWith(result)
+                          });
+                      }
+                      else {
+                        medicianWith.map((medicineWith) => (
+                          medicineWith.id != item.id && result.push(medicineWith)
+                        ))
+                        setMedicineWith(result)
+                      }
+                    });
                   if (item.generic_name != "") {
                     axios
-                      .get(ENTRANCE_TRHGOUH_EXPIRES_URL + "?search=" + item.generic_name + "&medician__ml=" + item.ml.match(/\d+/)[0])
+                      .get(
+                        ENTRANCE_TRHGOUH_EXPIRES_URL +
+                          "?search=" +
+                          item.generic_name +
+                          "&medician__ml=" +
+                          item.ml.match(/\d+/)[0]
+                      )
                       .then((res) => {
                         ExpiresMedicine(res.data);
-                      })
-                  }
-                  else {
-                    ExpiresMedicine([])
+                      });
+                  } else {
+                    ExpiresMedicine([]);
                   }
                 }}
                 maxResults={20}
