@@ -663,7 +663,7 @@ export default function Entrance(props) {
       total_bonous_value: totalBonusValue().toFixed(1),
       total_interest: totalInterester,
       total_interest_percent: (totalInterester / totalBeforeDiscount() * 100).toFixed(1),
-      sell_total: totalSell(),
+      sell_total: totalSell().toFixed(1),
       purchase_total: totalPurchase(),
       purchase_after_discount: totalPurchase() - totalDiscount(),
       grandTotal: totalBeforeDiscount() - totalDiscount(),
@@ -1438,7 +1438,6 @@ export default function Entrance(props) {
                   <label>امانتی</label>
                   <label>فی.خرید</label>
                   <label>فایده٪</label>
-                  <label>فی.فروش</label>
                   <label>به.افغانی</label>
                   <label>حذف</label>
                 </div>

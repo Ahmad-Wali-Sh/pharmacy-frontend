@@ -49,6 +49,21 @@ body {
   --jb-date-input-bgcolor: var(--color-sex);
 }
 
+.date-picker-expire {
+  border: none !important;
+  width: 1rem;
+}
+
+.react-calendar {
+  width: 1rem;
+  border: none !important;
+}
+
+.react-date-picker {
+  width: 1rem;
+  border: none !important;
+}
+
 /* Modals */
 .ReactModal__Overlay {
   opacity: 0;
@@ -782,11 +797,10 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 2.2% 20% 4% 4% 4.6% 5% 4% 6% 6% 4% 6% 4% 4% 5% 4.6% 6% 6% 6% 4.6%;
+  grid-template-columns: 2.4% 20% 4% 4.6% 4.6% 5% 5% 6% 6% 4% 7% 5% 5% 6% 5% 7% 7% 7% 4.6%;
   font-size: 0.8rem;
   direction: rtl;
 }
-
 .entrance-medician-map {
   background-color: var(--color-four);
   border-bottom: 1px solid black;
@@ -795,12 +809,9 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 2.2% 20% 4% 4% 4.6% 5% 4% 6% 6% 4% 6% 4% 4% 5% 4.6% 6% 6% 6% 4.6%;
+  grid-template-columns: 2.4% 20% 4% 4.6% 4.6% 5% 5% 6% 6% 3.5% 7.5% 5% 5% 6% 5% 7% 7% 7% 4.6%;
   direction: rtl;
   justify-content: space-between;
-}
-.entrance-medician-map > input {
-  font-size: 0.75rem;
 }
 .entrance-medician-map-alert {
   background-color: var(--color-fourth);
@@ -810,9 +821,19 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 2.2% 20% 4% 4% 4.6% 5% 4% 6% 6% 4% 6% 4% 4% 5% 4.6% 6% 6% 6% 4.6%;
+  grid-template-columns: 2.4% 20% 4% 4.6% 4.6% 5% 5% 6% 6% 3.5% 7.5% 5% 5% 6% 5% 7% 7% 7% 4.6%;
   direction: rtl;
+  text-align: right;
   justify-content: space-between;
+}
+
+.transparent-inputs-date-alert {
+  color: var(--color-fifth);
+  direction: rtl;
+}
+
+.entrance-medician-map > input {
+  font-size: 0.75rem;
 }
 .entrance-medician-map-alert > input {
   font-size: 0.75rem;
@@ -1707,9 +1728,35 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 4% 62% 10% 10% 10% 10%;
+  grid-template-columns: 0% 3% 25%  20% 1% 20.7% 9% 7% 10% 10%;
   direction: rtl;
   justify-content: space-between;
+  align-items: center;
+}
+
+.popovers-h5 {
+  overflow: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.popover-box {
+  width: 15rem;
+  background-color: var(--color-three);
+  border-radius: 0.6rem;
+  direction: rtl;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--color-ten)
+}
+
+.prescription-through-map > h5 {
+  overflow: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .prescription-medician-header {
@@ -1719,7 +1766,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 4% 62% 11% 9% 10% 10%;
+  grid-template-columns: 1% 3% 25% 20% 1% 20% 9% 7% 10% 10%;
   font-size: 0.9rem;
   direction: rtl;
 }
@@ -2837,10 +2884,25 @@ input[type="date"]:disabled {
 }
 
 .currency-span {
-  position: absolute;
-  margin-left: 1px;
-  margin-top: 6px;
+  position: relative;
   font-size: 0.55rem;
+  right: 1rem;
+}
+
+.currency-span-percent {
+  position: relative;
+  font-size: 0.55rem;
+  right: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.input-with-currency {
+  position: relative;
+  left:0.5rem;
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
+  align-items: center;
+  text-align: right;
 }
 
 .transparent-inputs {
@@ -2872,9 +2934,7 @@ input[type="date"]:disabled {
   font-size: 0.8rem;
   color: var(--color-fifth);
 }
-.transparent-inputs-date-alert {
-  color: var(--color-fifth);
-}
+
 
 .big-company-select{
   border-radius: 1rem;
@@ -2885,12 +2945,7 @@ input[type="date"]:disabled {
   width: 98%;
 }
 
-.currency-span-percent {
-  position: absolute;
-  margin-left: 1px;
-  margin-top: 2px;
-  font-size: 0.8rem;
-}
+
 
 .on {
   color: var(--color-sixth);

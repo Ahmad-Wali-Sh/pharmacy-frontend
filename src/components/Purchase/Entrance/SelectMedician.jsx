@@ -235,16 +235,7 @@ export default function SelectMedician({
         </div>
         <div className="selected-medician-show">
           <h4>
-            {selectedMedician &&
-              selectedMedician.brand_name +
-                " " +
-                selectedMedician.ml +
-                " " +
-                selectedMedician.weight}
-            {kind.map(
-              (kind) =>
-                kind.id == selectedMedician.kind && " ." + kind.name_english
-            )}
+            {selectedMedician && selectedMedician.medicine_full}
           </h4>
         </div>
         <Modal
