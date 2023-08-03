@@ -69,6 +69,7 @@ export default function Prescription(props) {
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
   const LAST_PRESCRIPTION_URL = import.meta.env.VITE_LAST_PRESCRIPTION;
+  const MEDICINE_CONFLICT_URL = import.meta.env.VITE_MEDICIAN_CONFLICT;
   const user = useAuthUser();
 
   const {
@@ -104,6 +105,7 @@ export default function Prescription(props) {
   const [excatTrough, setExactThrough] = React.useState("");
   const [selectTrigger, setTrigger] = React.useState(1);
   const [file, setFile] = React.useState("");
+  const [medicineConflict, setMedicineConflict] = React.useState([])
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -117,24 +119,29 @@ export default function Prescription(props) {
   }, [prescription]);
 
   React.useEffect(() => {
-    // axios
-    //   .get(COUNTRY_URL)
-    //   .then((result) => setCountry(result.data))
-    //   .catch((e) => console.log(e));
-    // axios
-    //   .get(KIND_URL)
-    //   .then((result) => {
-    //     setKind(result.data);
-    //   })
-    //   .catch((e) => console.log(e));
-    // axios
-    //   .get(PHARM_GROUB_URL)
-    //   .then((result) => setPharmGroub(result.data))
-    //   .catch((e) => console.log(e));
+    axios
+      .get(COUNTRY_URL)
+      .then((result) => setCountry(result.data))
+      .catch((e) => console.log(e));
+    axios
+      .get(KIND_URL)
+      .then((result) => {
+        setKind(result.data);
+      })
+      .catch((e) => console.log(e));
+    axios
+      .get(PHARM_GROUB_URL)
+      .then((result) => setPharmGroub(result.data))
+      .catch((e) => console.log(e));
 
     axios
       .get(DEPARTMENT_URL)
       .then((res) => setDepartment(res.data))
+      .catch((err) => console.log(err));
+
+    axios
+      .get(MEDICINE_CONFLICT_URL)
+      .then((res) => setMedicineConflict(res.data))
       .catch((err) => console.log(err));
 
     // axios
@@ -193,7 +200,9 @@ export default function Prescription(props) {
       axios
         .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
         .catch((err) => console.log(err));
+
   }, [prescriptionThrough]);
+
 
   function registerModalOpener() {
     ResetForm();
@@ -275,18 +284,37 @@ export default function Prescription(props) {
     }
 
     const PrescriptionUpdate = new FormData();
-    PrescriptionUpdate.append("name", data.patient ? data.patient : autoCompleteData.patient);
-    PrescriptionUpdate.append("doctor", data.doctor ? data.doctor : autoCompleteData.doctor);
-    PrescriptionUpdate.append("department", data.department ? data.department : prescription.department);
+    PrescriptionUpdate.append(
+      "name",
+      data.patient ? data.patient : autoCompleteData.patient
+    );
+    PrescriptionUpdate.append(
+      "doctor",
+      data.doctor ? data.doctor : autoCompleteData.doctor
+    );
+    PrescriptionUpdate.append(
+      "department",
+      data.department ? data.department : prescription.department
+    );
     PrescriptionUpdate.append("round_number", data.round_number);
-    PrescriptionUpdate.append("discount_money", data.discount_money ? data.discount_money : prescription.discount_money);
-    PrescriptionUpdate.append("discount_percent",
+    PrescriptionUpdate.append(
+      "discount_money",
+      data.discount_money ? data.discount_money : prescription.discount_money
+    );
+    PrescriptionUpdate.append(
+      "discount_percent",
       data.discount_percent
         ? data.discount_percent
         : prescription.discount_percent
     );
-    PrescriptionUpdate.append("zakat", data.zakat ? data.zakat : prescription.zakat);
-    PrescriptionUpdate.append("khairat", data.khairat ? data.khairat : prescription.khairat);
+    PrescriptionUpdate.append(
+      "zakat",
+      data.zakat ? data.zakat : prescription.zakat
+    );
+    PrescriptionUpdate.append(
+      "khairat",
+      data.khairat ? data.khairat : prescription.khairat
+    );
     PrescriptionUpdate.append(
       "prescription_number",
       prescription.prescription_number
@@ -342,8 +370,8 @@ export default function Prescription(props) {
           toast.info("Item Added.");
           setTrigger((prev) => prev + 1);
           reset({
-            quantity: ""
-          })
+            quantity: "",
+          });
           axios
             .get(MEDICIAN_WITH_URL + "?medicine=" + res.data.medician)
             .then((res2) => {
@@ -394,10 +422,10 @@ export default function Prescription(props) {
         setSubmited(true);
         reset({
           discount_money: res.data[0].discount_money,
-          discount_percent : res.data[0].discount_percent,
+          discount_percent: res.data[0].discount_percent,
           zakat: res.data[0].zakat,
-          khairat: res.data[0].khairat
-        })
+          khairat: res.data[0].khairat,
+        });
         {
           res.data[0] ? toast.success("Search Was Successful.") : "";
         }
@@ -571,7 +599,7 @@ export default function Prescription(props) {
         .post(PRESCRIPTION_URL, DepartmentForm)
         .then((res) => {
           setPrescription(res.data);
-          
+
           setSubmited(true);
           setLoading(true);
           toast.success("Data Submited Successfuly.");
@@ -600,19 +628,33 @@ export default function Prescription(props) {
   };
 
   const BackPrescription = () => {
+    let next, next_pres;
+    if (prescription.prescription_number) {
+      next =
+        parseInt(
+          prescription.prescription_number.slice(
+            prescription.prescription_number.lastIndexOf("-")
+          )
+        ) + 1;
+      next_pres =
+        prescription.prescription_number.slice(
+          0,
+          prescription.prescription_number.lastIndexOf("-")
+        ) + next;
+    }
     prescription == ""
       ? axios.get(LAST_PRESCRIPTION_URL).then((res) => {
           setPrescription([]);
-          setSubmited(true);
-          setDoctorName("")
-          setPatientName("")
           setPrescription(res.data[0]);
+          setDoctorName("");
+          setPatientName("");
           reset({
             discount_money: res.data.discount_money,
-            discount_percent : res.data.discount_percent,
+            discount_percent: res.data.discount_percent,
             zakat: res.data.zakat,
-            khairat: res.data.khairat
-          })
+            khairat: res.data.khairat,
+            number: "",
+          });
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
             .then((res) => {
@@ -620,72 +662,97 @@ export default function Prescription(props) {
               setPrescriptionThrough(res.data);
             });
         })
-      : axios.get(PRESCRIPTION_URL + (prescription.id - 1)).then((res) => {
-          setPrescription([]);
-          setSubmited(true);
-          setDoctorName("")
-          setPatientName("")
-          setPrescription(res.data);
-          reset({
-            discount_money: res.data.discount_money,
-            discount_percent : res.data.discount_percent,
-            zakat: res.data.zakat,
-            khairat: res.data.khairat
-          })
-          axios
-            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data.id)
-            .then((res) => {
-              setPrescriptionThrough([]);
-              setPrescriptionThrough(res.data);
+      : axios
+          .get(PRESCRIPTION_URL + "?prescription_number=" + next_pres)
+          .then((res) => {
+            setPrescription([]);
+            res.data[0] && setPrescription(res.data[0]);
+            console.log(next_pres);
+            reset({
+              discount_money: res.data.discount_money,
+              discount_percent: res.data.discount_percent,
+              zakat: res.data.zakat,
+              khairat: res.data.khairat,
+              number: "",
             });
-        });
+            setDoctorName("");
+            setPatientName("");
+            res.data[0] &&
+              axios
+                .get(
+                  PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id
+                )
+                .then((res) => {
+                  setPrescriptionThrough([]);
+                  setPrescriptionThrough(res.data);
+                });
+          });
   };
 
   const FrontPrescription = () => {
+    let next, next_pres;
+    if (prescription.prescription_number) {
+      next =
+        parseInt(
+          prescription.prescription_number.slice(
+            prescription.prescription_number.lastIndexOf("-")
+          )
+        ) - 1;
+      next_pres =
+        prescription.prescription_number.slice(
+          0,
+          prescription.prescription_number.lastIndexOf("-")
+        ) + next;
+    }
     prescription == ""
-    ? axios.get(LAST_PRESCRIPTION_URL).then((res) => {
-      setPrescription([]);
-      setPrescription(res.data[0]);
-      setDoctorName("")
-      setPatientName("")
-      reset({
-        discount_money: res.data.discount_money,
-        discount_percent : res.data.discount_percent,
-        zakat: res.data.zakat,
-        khairat: res.data.khairat,
-        number: ""
-      })
-      axios
-      .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
-      .then((res) => {
-        setPrescriptionThrough([]);
-        setPrescriptionThrough(res.data);
-      });
-    })
-    : axios.get(PRESCRIPTION_URL + (prescription.id + 1)).then((res) => {
-      setPrescription([]);
-      setPrescription(res.data);
-      reset({
-        discount_money: res.data.discount_money,
-        discount_percent : res.data.discount_percent,
-        zakat: res.data.zakat,
-        khairat: res.data.khairat,
-        number: ""
-      })
-          setDoctorName("")
-          setPatientName("")
+      ? axios.get(LAST_PRESCRIPTION_URL).then((res) => {
+          setPrescription([]);
+          setPrescription(res.data[0]);
+          setDoctorName("");
+          setPatientName("");
+          reset({
+            discount_money: res.data.discount_money,
+            discount_percent: res.data.discount_percent,
+            zakat: res.data.zakat,
+            khairat: res.data.khairat,
+            number: "",
+          });
           axios
-            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data.id)
+            .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
             .then((res) => {
               setPrescriptionThrough([]);
               setPrescriptionThrough(res.data);
             });
-        });
+        })
+      : axios
+          .get(PRESCRIPTION_URL + "?prescription_number=" + next_pres)
+          .then((res) => {
+            setPrescription([]);
+            res.data[0] && setPrescription(res.data[0]);
+            console.log(next_pres);
+            reset({
+              discount_money: res.data.discount_money,
+              discount_percent: res.data.discount_percent,
+              zakat: res.data.zakat,
+              khairat: res.data.khairat,
+              number: "",
+            });
+            setDoctorName("");
+            setPatientName("");
+            res.data[0] &&
+              axios
+                .get(
+                  PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id
+                )
+                .then((res) => {
+                  setPrescriptionThrough([]);
+                  setPrescriptionThrough(res.data);
+                });
+          });
   };
 
-
   const CreateNewPrescription = () => {
-    ResetForm()
+    ResetForm();
     reset({
       discount_percent: "",
       discount_money: "",
@@ -693,11 +760,51 @@ export default function Prescription(props) {
       prescription_number: "",
       zakat: "",
       khairat: "",
-      number: ""
-    })
-    departmentSubmit()
+      number: "",
+    });
+    departmentSubmit();
     setTrigger((prev) => prev + 1);
-  }
+  };
+
+  const DeletePrescription = () => {
+    if (prescription.sold == false) {
+      axios
+        .delete(PRESCRIPTION_URL + prescription.id)
+        .then((res) => {
+          console.log(res.data);
+          ResetForm();
+          reset({
+            prescription_number: "",
+          });
+          toast.success("Deleted Succesfully.");
+        })
+        .catch((err) => {
+          ResetForm();
+          reset({
+            prescription_number: "",
+          });
+        });
+    } else {
+      prescription
+        ? toast.error("No Prescription to Remove!")
+        : toast.error("This Prescription Can't be deleted!");
+    }
+  };
+
+  const [expiresMedicine, setExpiresMedician] = React.useState([]);
+  const [expiresMedicineLog, setExpiresMedicianLog] = React.useState(false);
+
+  const expiresMedicineLogCloser = () => {
+    setExpiresMedicianLog(false);
+  };
+  const expiresMedicineLogOpener = () => {
+    tabFormulate()
+    setExpiresMedicianLog(true);
+  };
+
+  const ExpiresMedicine = (data) => {
+    setExpiresMedician(data);
+  };
 
   return (
     <>
@@ -760,6 +867,131 @@ export default function Prescription(props) {
               </div>
             </>
           </Modal>
+          <Modal
+            isOpen={expiresMedicineLog}
+            onRequestClose={expiresMedicineLogCloser}
+            style={ModalStyles}
+          >
+            <div className="modal">
+            <div className="modal-header">
+                <h3>دوا های تاریخ کم</h3>
+                <div className="modal-close-btn" onClick={expiresMedicineLogCloser}>
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
+              </div>
+              <div className="expires-log-box">
+                  {expiresMedicine.map((medicine) => {
+                    const pharmImage = pharmGroub.filter((value) => {
+                      return value.id == medicine.medician.pharm_group && value.image;
+                    });
+                    const kindImage = kind.filter((value) => {
+                      return value.id == medicine.medician.kind && value.image;
+                    });
+                    const countryImage = country.filter((value) => {
+                      return value.id == medicine.medician.country && value.image;
+                    });
+                    return ( 
+                    <div className="expires-medicine-select" onClick={() => {
+                      AutoCompleteHandle(medicine.medician)
+                      expiresMedicineLogCloser()
+                    }}>
+                    <div className="medician-format">
+                    <div className="medician-image">
+                      <img
+                        className="medician-image"
+                        src={
+                          medicine.medician.image
+                            ? new URL(medicine.medician.image).pathname.slice(16)
+                            : "./images/nophoto.jpg"
+                        }
+                      />
+                    </div>
+                    <div className="medician-image">
+                      <img
+                        className="medician-image"
+                        src={
+                          pharmImage[0] && pharmImage[0].image
+                            ? new URL(pharmImage[0].image).pathname.slice(16)
+                            : "./images/nophoto.jpg"
+                        }
+                      />
+                    </div>
+                    <div className="medician-image">
+                      <img
+                        className="medician-image"
+                        src={
+                          kindImage[0] && kindImage[0].image
+                            ? new URL(kindImage[0].image).pathname.slice(16)
+                            : "./images/nophoto.jpg"
+                        }
+                      />
+                    </div>
+                    <div className="medician-image">
+                      <img
+                        className="medician-image"
+                        src={
+                          countryImage[0] && countryImage[0].image
+                            ? new URL(countryImage[0].image).pathname.slice(16)
+                            : "./images/nophoto.jpg"
+                        }
+                      />
+                    </div>
+                    <div className="medician-text-field">
+                      <div>
+                        <div className="medician-select-information">
+                          <h4>{medicine.medician.brand_name + " " + (medicine.medician.ml ? medicine.medician.ml : " ")}</h4>
+                          <h4>
+                            &nbsp;
+                            {country.map(
+                              (country) => country.id == medicine.medician.country && country.name
+                            )}
+                          </h4>
+                          <h4>
+                            &nbsp;
+                            {pharmGroub.map(
+                              (pharm) => pharm.id == medicine.medician.pharm_group && pharm.name_english
+                            )}
+                          </h4>
+                        </div>
+                        <h4>ترکیب: {medicine.medician.generic_name.toString()}</h4>
+                        <div className="medician-text-field-numbers">
+                          <h4>مکان: {medicine.medician.location}</h4>
+                          <h4>قیمت: {`${medicine.medician.price}AF`}</h4>
+                          <h4>تعداد در پاکت: {medicine.medician.no_pocket}</h4>
+                          <h4>تعداد در قطی: {medicine.medician.no_box}</h4>
+                          <h4>موجودیت: {medicine.medician.existence}</h4>
+                        </div>
+                      </div>
+                      <div className="medician-big-text-fields">
+                        <div className="medician-bix-text-field">
+                          {medicine.medician.description && (
+                            <div className="paragraph-big-text">
+                              توضیحات:
+                              {medicine.medician.description}
+                            </div>
+                          )}
+                          {medicine.medician.cautions && (
+                            <div className="paragraph-big-text">
+                              اخطار:
+                              {medicine.medician.cautions}
+                            </div>
+                          )}
+                          {medicine.medician.usages && (
+                            <div className="paragraph-big-text">
+                              استفاده:
+                              {medicine.medician.usages}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>)
+                  } 
+                  )}
+              </div>
+            </div>
+          </Modal>
           {loading ? (
             <div className="modal">
               <div className="modal-header">
@@ -811,10 +1043,7 @@ export default function Prescription(props) {
                     >
                       <i class="fa-solid fa-left-long"></i>
                     </button>
-                    <button
-                      className="entrance-report-button"
-                      onClick={BackPrescription}
-                    >
+                    <button className="entrance-report-button">
                       <i class="fa-solid fa-comments-dollar"></i>
                     </button>
                     <button
@@ -910,9 +1139,7 @@ export default function Prescription(props) {
                   <input
                     type="text"
                     {...register("discount_money")}
-                    defaultValue={
-                      prescription.discount_money
-                    }
+                    defaultValue={prescription.discount_money}
                     onChange={(e) => {}}
                   />
                   <label>تخفیف %:</label>
@@ -952,20 +1179,20 @@ export default function Prescription(props) {
                     <input
                       type="reset"
                       value="ریسیت"
-                      onClick={ResetForm}
+                      onClick={DeletePrescription}
                     ></input>
-                      <input
-                        type="button"
-                        value="کپی نسخه"
-                        className="prescription-create-button"
-                        onClick={handleSubmit(DuplicatePrescription)}
-                      ></input>
-                      <input
-                        type="button"
-                        value="جدید"
-                        className="prescription-create-button"
-                        onClick={handleSubmit(CreateNewPrescription)}
-                      ></input>
+                    <input
+                      type="button"
+                      value="کپی نسخه"
+                      className="prescription-create-button"
+                      onClick={handleSubmit(DuplicatePrescription)}
+                    ></input>
+                    <input
+                      type="button"
+                      value="جدید"
+                      className="prescription-create-button"
+                      onClick={handleSubmit(CreateNewPrescription)}
+                    ></input>
                     <input
                       type="submit"
                       value={submited ? "آپدیت" : "ثبت"}
@@ -987,6 +1214,7 @@ export default function Prescription(props) {
                         tabFormulate={tabFormulate}
                         department={props.department}
                         results={medicianWith}
+                        ExpiresMedicine={ExpiresMedicine}
                       />
                     )}
                     {props.button == 1 && (
@@ -999,6 +1227,7 @@ export default function Prescription(props) {
                         tabFormulate={tabFormulate}
                         department={props.department}
                         results={medicianWith}
+                        ExpiresMedicine={ExpiresMedicine}
                       />
                     )}
                     {props.button == 2 && (
@@ -1011,6 +1240,7 @@ export default function Prescription(props) {
                         trigger={selectTrigger}
                         department={props.department}
                         results={medicianWith}
+                        ExpiresMedicine={ExpiresMedicine}
                       />
                     )}
                   </div>
@@ -1021,6 +1251,19 @@ export default function Prescription(props) {
                     id="number-in-factor-input"
                   />
                   <div className="prescription-button">
+                    {expiresMedicine != "" && (
+                      <div className="expires-box">
+                      <input className="prescription-alert-button"
+                      onClick={expiresMedicineLogOpener}
+                      type="button"
+                      onSubmit={handleSubmit(PrescriptionThrough)}
+                      tabIndex={-1}
+                      value="!"
+                      >
+                      </input>
+                      <p className="selected-color-medicine">Now: {autoCompleteData.medician.brand_name}</p>
+                      </div>
+                    )} 
                     <input
                       type="submit"
                       value="⤵ Add"
@@ -1032,8 +1275,12 @@ export default function Prescription(props) {
 
                 <form className="prescription-medician-map">
                   <div className="prescription-medician-header">
+                    <label></label>
                     <label>No</label>
                     <label>قلم</label>
+                    <label>طرز.استفاده</label>
+                    <label>هشدار</label>
+                    <label></label>
                     <label>قیمت فی</label>
                     <label>تعداد</label>
                     <label>قیمت کل</label>
@@ -1050,6 +1297,8 @@ export default function Prescription(props) {
                         pharmGroub={pharmGroub}
                         UpdateUI={UpdateUI}
                         UpdateChunk={UpdateChunk}
+                        prescriptionThroughs={prescriptionThrough}
+                        conflicts={medicineConflict}
                       />
                     ))}
                   </div>

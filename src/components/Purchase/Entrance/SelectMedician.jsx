@@ -13,6 +13,7 @@ export default function SelectMedician({
   tabFormulate,
   department,
   results,
+  ExpiresMedicine,
 }) {
   const customStyles = {
     content: {
@@ -149,6 +150,9 @@ export default function SelectMedician({
   };
 
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const ENTRANCE_TRHGOUH_EXPIRES_URL = import.meta.env
+    .VITE_ENTRANCE_TRHGOUH_EXPIRES_URL;
+  const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [selectedMedician, setSelectedMedician] = React.useState("");
@@ -162,10 +166,6 @@ export default function SelectMedician({
     country: "",
     company: "",
   });
-
-  React.useEffect(() => {
-    setMedician(results);
-  }, [results]);
 
   React.useEffect(() => {
     department &&
@@ -186,6 +186,7 @@ export default function SelectMedician({
       tabFormulate != undefined && tabFormulate();
     }
     setRegisterModalOpen(true);
+    setMedician(medicianWith)
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
@@ -215,8 +216,10 @@ export default function SelectMedician({
       : stringArray.length == 7
       ? setTextHighlight({ company: "" })
       : "";
-
   }, [stringArray]);
+
+  const [medicianWith, setMedicineWith] = React.useState([])
+
 
 
   return (
@@ -232,16 +235,7 @@ export default function SelectMedician({
         </div>
         <div className="selected-medician-show">
           <h4>
-            {selectedMedician &&
-              selectedMedician.brand_name +
-                " " +
-                selectedMedician.ml +
-                " " +
-                selectedMedician.weight}
-            {kind.map(
-              (kind) =>
-                kind.id == selectedMedician.kind && " ." + kind.name_english
-            )}
+            {selectedMedician && selectedMedician.medicine_full}
           </h4>
         </div>
         <Modal
@@ -325,6 +319,7 @@ export default function SelectMedician({
                 inputDebounce="10"
                 showItemsOnFocus={true}
                 onSearch={(string, result) => {
+                  setMedicineWith([])
                   let stringArray = string.split("  ");
                   setStringArray(stringArray);
                   if (string != "" && isNaN(string)) {
@@ -341,23 +336,25 @@ export default function SelectMedician({
                           (stringArray[3] ? stringArray[3] : "") +
                           "&country__name=" +
                           (stringArray[4] ? stringArray[4] : "") +
-                          "&big_company__name=" + 
+                          "&big_company__name=" +
                           (stringArray[5] ? stringArray[5] : "")
                       )
                       .then((res) => {
                         setMedician(res.data.results);
                         if (string == false) {
-                          setMedician([])
+                          setMedician([]);
                         }
                       });
                   }
                   if (string != "" && !isNaN(string)) {
-                    axios.get(MEDICIAN_URL + "?barcode=" + string).then((res) => {
-                      setMedician(res.data.results);
-                    });
+                    axios
+                      .get(MEDICIAN_URL + "?barcode=" + string)
+                      .then((res) => {
+                        setMedician(res.data.results);
+                      });
                   }
                   if (string == "") {
-                    setMedician([])
+                    setMedician([]);
                   }
                 }}
                 onSelect={(item) => {
@@ -365,6 +362,39 @@ export default function SelectMedician({
                   setMedician([]);
                   registerModalCloser();
                   setSelectedMedician(item);
+                  let result = []
+                  axios
+                    .get(MEDICIAN_WITH_URL + "?medicine=" + item.id)
+                    .then((res2) => {
+                      if (res2.data && res2.data[0]) {
+                        axios
+                          .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
+                          .then((res3) => {
+                            res3.data.results.length > 0 ? setMedicineWith(res3.data.results) : setMedicineWith(result)
+                          });
+                      }
+                      else {
+                        medicianWith.map((medicineWith) => (
+                          medicineWith.id != item.id && result.push(medicineWith)
+                        ))
+                        setMedicineWith(result)
+                      }
+                    });
+                  if (item.generic_name != "") {
+                    axios
+                      .get(
+                        ENTRANCE_TRHGOUH_EXPIRES_URL +
+                          "?search=" +
+                          item.generic_name +
+                          "&medician__ml=" +
+                          item.ml.match(/\d+/)[0]
+                      )
+                      .then((res) => {
+                        ExpiresMedicine(res.data);
+                      });
+                  } else {
+                    ExpiresMedicine([]);
+                  }
                 }}
                 maxResults={20}
                 style={{ width: "20rem" }}

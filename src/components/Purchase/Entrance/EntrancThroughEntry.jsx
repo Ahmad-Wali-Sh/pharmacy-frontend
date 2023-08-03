@@ -3,17 +3,17 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
+import DatePicker from "react-date-picker";
+import "../../../datePicker.css"
 
 function EntrancThroughEntry({
   through,
   keyValue,
   num,
-  kind,
   UpdateUI,
   UpdateChunk,
 }) {
   const ENTRANCE_THROUGH_URL = import.meta.env.VITE_ENTRANCE_THROUGH;
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
   const user = useAuthUser();
 
   const {
@@ -21,18 +21,10 @@ function EntrancThroughEntry({
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [exactMedician, setExactMedician] = React.useState("");
   const [factorNumber, setInFactorNumber] = React.useState("");
   const [purchasePrice, setPurchasePrice] = React.useState("");
 
-  React.useEffect(() => {
-    axios
-      .get(MEDICIAN_URL + through.medician)
-      .then((res) => {
-        setExactMedician(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+
 
   const MedicianUpdate = (data) => {
     const interest_percent = (
@@ -46,7 +38,7 @@ function EntrancThroughEntry({
     MedicianUpdateForm.append("each_price_factor", data.each_price_factor);
     MedicianUpdateForm.append("discount_money", data.discount_money);
     MedicianUpdateForm.append("discount_percent", data.discount_percent);
-    MedicianUpdateForm.append("expire_date", data.expire_date);
+    MedicianUpdateForm.append("expire_date", expireDate);
     MedicianUpdateForm.append("interest_percent", interest_percent);
     MedicianUpdateForm.append("bonus", 0);
     MedicianUpdateForm.append("quantity_bonus", data.quantity_bonus);
@@ -114,7 +106,7 @@ function EntrancThroughEntry({
   };
 
   const DateComprision = (date) => {
-    return new Date(date).getFullYear() + (new Date(date).getMonth()) / 12 > new Date().getFullYear() + ((new Date().getMonth() + exactMedician.min_expire_date) / 12)
+    return new Date(date).getFullYear() + (new Date(date).getMonth()) / 12 > new Date().getFullYear() + ((new Date().getMonth() + through.medicine_min_expire) / 12)
   }
 
   const AlertHighlighter = () => {
@@ -126,6 +118,9 @@ function EntrancThroughEntry({
      
   }
 
+  const [expireDate, setExpireDate] = React.useState(through.expire_date)
+  console.log(expireDate)
+
   return (
     <form>
       <div className={AlertHighlighter() ? "entrance-medician-map" : "entrance-medician-map-alert"}>
@@ -133,16 +128,7 @@ function EntrancThroughEntry({
         <div className="entrance-medician-map-box">
           <h4 className="entrance-medician-map-name">
             <h4>
-              {kind.map(
-                (kind) => kind.id == exactMedician.kind && kind.name_english
-              )}
-              {exactMedician &&
-                ". " +
-                  exactMedician.brand_name +
-                  " " +
-                  exactMedician.ml +
-                  " " +
-                  exactMedician.weight}
+              {through.medicine_full}
             </h4>
           </h4>
         </div>
@@ -162,7 +148,7 @@ function EntrancThroughEntry({
           {...register("entrance_through_id")}
           onBlurCapture={handleSubmit(MedicianUpdate)}
         />
-        <div>
+        <div className="input-with-currency">
           <span className="currency-span">{through.rate_name}</span>
         <input
           type="text"
@@ -172,7 +158,7 @@ function EntrancThroughEntry({
           onBlurCapture={handleSubmit(MedicianUpdate)}
         />
         </div>
-        <div>
+        <div className="input-with-currency">
           <span className="currency-span">{through.rate_name}</span>
         <input
           type="text"
@@ -182,7 +168,7 @@ function EntrancThroughEntry({
           className="transparent-inputs"
         />
         </div>
-        <div>
+        <div className="input-with-currency">
         <span className="currency-span-percent">%</span>
         <input
           type="text"
@@ -193,7 +179,7 @@ function EntrancThroughEntry({
         />
         </div>
         <input type="text" value={through.no_box} style={{cursor:"default"}} {...register("no_box")} />
-        <div>
+        <div className="input-with-currency">
           <span className="currency-span"
           style={{cursor:"default"}}
           >{through.rate_name}</span>
@@ -204,7 +190,7 @@ function EntrancThroughEntry({
           style={{cursor:"default"}}
         />
         </div>
-        <div>
+        <div className="input-with-currency">
           <span className="currency-span" style={{cursor:"default"}}>{through.rate_name}</span>
         <input
           type="text"
@@ -219,13 +205,25 @@ function EntrancThroughEntry({
             {...register("quantity_bonus")}
             onBlurCapture={handleSubmit(MedicianUpdate)}
             />
-          <input
+          {/* <input
             type="date"
             defaultValue={through.expire_date}
             {...register("expire_date")}
             className={DateComprision(through.expire_date) ? "" : "transparent-inputs-date-alert"}
             onBlurCapture={handleSubmit(MedicianUpdate)}
+          /> */}
+          <div className={DateComprision(through.expire_date) ? "" : "transparent-inputs-date-alert"}>
+          <DatePicker calendarIcon={null} clearIcon={null} disableCalendar={true} value={expireDate} onChange={(e)=> {
+            setExpireDate(e.toISOString().slice(0,10))
+            minDetail="month"
+            format="y-MM-dd"
+          }}
+          onBlur={handleSubmit(MedicianUpdate)}
+          className="date-picker-expire"
+          calendarClassName="date-picker-expire"
+          style={{border: "none"}}
           />
+          </div>
           <input
             type="text"
             defaultValue={through.shortage}
@@ -239,7 +237,7 @@ function EntrancThroughEntry({
           style={{ width: "1rem", marginRight: "0rem" }}
           onBlurCapture={handleSubmit(MedicianUpdate)}
           />
-          <div>
+          <div className="input-with-currency">
           <span className="currency-span" style={{cursor:"default"}}>{through.rate_name}</span>
         <input
           type="text"
@@ -248,7 +246,7 @@ function EntrancThroughEntry({
           style={{cursor:"default"}}
         />
         </div>
-        <div>
+        <div className="input-with-currency">
         <span className={"currency-span-percent"}>%</span>
         <input
           type="text"
@@ -258,19 +256,8 @@ function EntrancThroughEntry({
           onBlurCapture={handleSubmit(MedicianInterestUpdate)}
           />
         </div>
-        <div>
-        <span className="currency-span"
-        style={{cursor:"default"}}
-        >{through.rate_name}</span>
-        <input
-          type="text"
-          className="transparent-inputs"
-          value={through.each_sell_price}
-          {...register("each_sell_price")}
-          style={{cursor:"default"}}
-        />
-        </div>
-        <div>
+        
+        <div className="input-with-currency">
         <span className="currency-span"
         style={{cursor:"default"}}
         >AFG</span>
