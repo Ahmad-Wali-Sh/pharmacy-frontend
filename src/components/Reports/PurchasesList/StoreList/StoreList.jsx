@@ -6,6 +6,7 @@ import EntranceList from "../EntranceList/EntranceList";
 import CompanyList from "../CompanyList/CompanyList";
 import { useForm } from "react-hook-form";
 import StoreListMap from "./StoreListMap";
+import PurchaseListQuery from "../PurcahseList/PurchaseListQuery";
 
 function StoreList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -89,6 +90,7 @@ function StoreList({ Closer }) {
           <OutranceList Closer={registerModalCloser} />
           <div></div>
           <CompanyList Closer={registerModalCloser} />
+          <PurchaseListQuery Closer={registerModalCloser}/>
         </div>
         <div className="store-list-filtering-box">
           <div className="store-filters">

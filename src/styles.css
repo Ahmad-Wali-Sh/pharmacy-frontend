@@ -2994,3 +2994,51 @@ input[type="date"]:disabled {
   background-color: var(--color-fourth);
 }
 
+.purchase-list-query-header {
+  display: grid;
+  grid-template-columns: 2.5% 10% 3% 5% 4.4% 4% 4% 4% 4% 5% 4.4% 4% 4% 4% 4% 5% 4.4% 4% 4% 4% 4% 4% 4%;
+  background-color: var(--color-two);
+  border-radius: 1rem;
+  color:var(--color-ten);
+  height: 2rem;
+  font-weight: 800;
+  align-items: center;
+  padding-left: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.purchase-list-query-header > h5 {
+  font-size: 0.7rem;
+}
+.purchase-list-query-map {
+  display: grid;
+  grid-template-columns: 2.5% 10% 3% 5% 4.4% 4% 4% 4.3% 3.7% 5% 4.4% 4% 4% 4.3% 3.7% 5% 4.4% 4% 4% 4.3% 3.7% 4% 4%;
+  background-color: var(--color-three);
+  color:var(--color-ten);
+  min-height: 2rem;
+  font-weight: 800;
+  align-items: center;
+  padding-left: 0.6rem;
+  border-bottom: 1px solid var(--color-four);
+}
+
+.purchase-list-query-map > h5 {
+  overflow: hidden;
+  font-size: 0.7rem;  
+}
+
+.purchase-list-query-map > input[type="text"] {
+  background-color: var(--color-four);
+  border-radius: 0.5rem;
+  border: none;
+  padding-left: 0.5rem;
+}
+
+.purchase-list-query-box {
+  background-color: var(--color-sex);
+  height: 100%;
+  border-radius: 1rem;
+  overflow-y: scroll;
+}
+
+

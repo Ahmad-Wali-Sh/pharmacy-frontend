@@ -7,6 +7,7 @@ import CompanyList from "../CompanyList/CompanyList";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useForm } from "react-hook-form";
 import Entrance from "../../../Purchase/Entrance/Entrance";
+import PurchaseListQuery from "../PurcahseList/PurchaseListQuery";
 
 function EntranceList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -132,6 +133,7 @@ function EntranceList({ Closer }) {
           <OutranceList Closer={registerModalCloser} />
           <StoreList Closer={registerModalCloser} />
           <CompanyList Closer={registerModalCloser} />
+          <PurchaseListQuery Closer={registerModalCloser}/>
         </div>
         <div className="entrance-filter-list-box">
           <div className="entrance-filters">

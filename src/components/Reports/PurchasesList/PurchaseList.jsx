@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import CompanyList from "./CompanyList/CompanyList";
 import EntranceList from "./EntranceList/EntranceList";
 import OutranceList from "./OutranceList/OutranceList";
+import PurchaseListQuery from "./PurcahseList/PurchaseListQuery";
 import StoreList from "./StoreList/StoreList";
 
 function PurchaseList({ title, icon }) {
@@ -56,6 +57,7 @@ function PurchaseList({ title, icon }) {
           <OutranceList Closer={registerModalCloser} />
           <StoreList Closer={registerModalCloser} />
           <CompanyList Closer={registerModalCloser} />
+          <PurchaseListQuery Closer={registerModalCloser}/>
         </div>
       </Modal>
     </>

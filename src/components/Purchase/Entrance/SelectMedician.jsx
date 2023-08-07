@@ -99,19 +99,7 @@ export default function SelectMedician({
         <div className="medician-text-field">
           <div>
             <div className="medician-select-information">
-              <h4>{item.brand_name + " " + (item.ml ? item.ml : " ")}</h4>
-              <h4>
-                &nbsp;
-                {country.map(
-                  (country) => country.id == item.country && country.name
-                )}
-              </h4>
-              <h4>
-                &nbsp;
-                {pharmGroub.map(
-                  (pharm) => pharm.id == item.pharm_group && pharm.name_english
-                )}
-              </h4>
+              <h4>{item.medicine_full}</h4>
             </div>
             <h4>ترکیب: {item.generic_name.toString()}</h4>
             <div className="medician-text-field-numbers">
@@ -120,6 +108,8 @@ export default function SelectMedician({
               <h4>تعداد در پاکت: {item.no_pocket}</h4>
               <h4>تعداد در قطی: {item.no_box}</h4>
               <h4>موجودیت: {item.existence}</h4>
+              <h4>قیمت قطی: {parseFloat(item.no_box) * parseFloat(item.price)}</h4>
+              {item.unsubmited_existence != 0 && <h4>موجودی.ثبت.نشده: {item.unsubmited_existence}</h4>}
             </div>
           </div>
           <div className="medician-big-text-fields">

@@ -4,6 +4,7 @@ import axios from "axios";
 import EntranceList from "../EntranceList/EntranceList";
 import StoreList from "../StoreList/StoreList";
 import CompanyList from "../CompanyList/CompanyList";
+import PurchaseListQuery from "../PurcahseList/PurchaseListQuery";
 
 function OutranceList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -64,6 +65,7 @@ function OutranceList({ Closer }) {
           <div></div>
           <StoreList Closer={registerModalCloser}/>
           <CompanyList Closer={registerModalCloser}/>
+          <PurchaseListQuery Closer={registerModalCloser}/>
         </div>
       </Modal>
     </>
