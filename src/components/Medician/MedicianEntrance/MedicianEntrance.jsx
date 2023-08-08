@@ -9,6 +9,7 @@ import Kind from "../Kind";
 import PharmGroup from "../PharmGroup";
 import Country from "../Country";
 import { useAuthUser } from "react-auth-kit";
+import WebCamModal from "../../PageComponents/WebCamModal";
 
 function MedicianEntrance({ title, icon, button, medician }) {
   const ModalStyles = {
@@ -208,6 +209,10 @@ function MedicianEntrance({ title, icon, button, medician }) {
       .catch((err) => console.log(err));
   };
 
+  const WebComFileSeter = (file) => {
+    setFile(file)
+  }
+
   return (
     <>
       {button == 1 && (
@@ -336,25 +341,23 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 <Country button={2} Update={UpdateFunction} />
               </div>
               <label>کمپنی:</label>
-              <select className="big-company-select"
-                  {...register("company")}
-                >
-                  <option></option>
-                  {bigCompany.map((company) => (
-                    <option
-                      selected={
-                        medician &&
-                        medician.big_company &&
-                        medician.big_company == company.id
-                          ? "selected"
-                          : ""
-                      }
-                      value={company.id}
-                    >
-                      {company.name}
-                    </option>
-                  ))}
-                </select>
+              <select className="big-company-select" {...register("company")}>
+                <option></option>
+                {bigCompany.map((company) => (
+                  <option
+                    selected={
+                      medician &&
+                      medician.big_company &&
+                      medician.big_company == company.id
+                        ? "selected"
+                        : ""
+                    }
+                    value={company.id}
+                  >
+                    {company.name}
+                  </option>
+                ))}
+              </select>
               <label>قیمت:</label>
               <input
                 type="text"
@@ -442,12 +445,17 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 <label>حداقل_انقضا:</label>
               </div>
               <div>
-                <input
-                  type="file"
-                  className="medician-image-field"
-                  onChange={(e) => setFile(e.target.files[0])}
-                />
-                <br />
+                <div className="webcam-box">
+                  <input
+                    type="file"
+                    className="medician-image-field"
+                    onChange={(e) => {
+                      setFile(e.target.files[0])
+                      console.log(e.target.files[0])
+                    }}
+                  />
+                  <WebCamModal medician={medician} setFile={WebComFileSeter}/>
+                </div>
                 <br />
                 <select
                   className="medicine-department-select"
@@ -471,7 +479,12 @@ function MedicianEntrance({ title, icon, button, medician }) {
                 </select>
                 <br />
                 <br />
-                <input type="text" className="min-expire-date-input" {...register("min_expire_date")} defaultValue={medician && medician.min_expire_date}/>
+                <input
+                  type="text"
+                  className="min-expire-date-input"
+                  {...register("min_expire_date")}
+                  defaultValue={medician && medician.min_expire_date}
+                />
               </div>
               <label>توضیحات:</label>
               <textarea

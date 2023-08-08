@@ -1,7 +1,9 @@
 import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import MedicianEntrance from "../../../Medician/MedicianEntrance/MedicianEntrance";
+import WebCamModal from "../../../PageComponents/WebCamModal";
 
 function MedicianListMap({ num, country, medician, kind, pharmGroup, AutoReSearch}) {
   const [file, setFile] = React.useState("");
@@ -69,20 +71,32 @@ function MedicianListMap({ num, country, medician, kind, pharmGroup, AutoReSearc
         {...register("no_pocket")}
         onBlurCapture={handleSubmit(MedicianUpdate)}
       />
+      <div className="webcam-box-2">
       <input
         type="file"
         onChange={(e) => {
           setFile(e.target.files[0]);
           setImagePreview(URL.createObjectURL(e.target.files[0]));
           handleSubmit(MedicianUpdate)
-
+          AutoReSearch()
           const ImageForm = new FormData()
           ImageForm.append('image', e.target.files[0])
           axios
               .patch(MEDICIAN_URL + medician[num].id + "/", ImageForm)
-              .then(() => {})
+              .then((res) => {toast.success("Patched Succesufly.")})
         }}
       />
+      <WebCamModal medician={medician[num]} setFile={(data) => {
+        setFile(data)
+        setImagePreview(URL.createObjectURL(data));
+          handleSubmit(MedicianUpdate)
+          const ImageForm = new FormData()
+          ImageForm.append('image', data)
+          axios
+              .patch(MEDICIAN_URL + medician[num].id + "/", ImageForm)
+              .then(() => {})
+        }}/>
+        </div>
       <img
         src={
           imagePreview
