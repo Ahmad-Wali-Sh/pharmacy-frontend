@@ -3041,4 +3041,54 @@ input[type="date"]:disabled {
   overflow-y: scroll;
 }
 
+.webcam-box {
+  display: flex;
+}
+.webcam-box-2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.webcam {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 0.1fr;
+  z-index: 100;
+  text-align: center;
+}
+
+.screenshot-button {
+  margin: 0.2rem;
+  background-color: var(--color-four);
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 1px 1px 10px var(--color-one);
+  
+}
+.screenshot-button:hover {
+  margin: 0.2rem;
+  background-image: var(--color-five);
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 1px 1px 10px var(--color-one);
+}
+
+.webcam-camera {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.webcam-opener{
+  background-color: #53385500;
+  border:none;
+  margin: 0.3rem;
+  box-shadow: 1px 1px 10px black;
+  border-radius: 1rem;
+  width: 4rem;
+}
+.webcam-opener:hover{
+  background-image: var(--color-five);
+}
+
 
