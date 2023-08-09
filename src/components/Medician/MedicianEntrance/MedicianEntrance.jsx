@@ -11,7 +11,7 @@ import Country from "../Country";
 import { useAuthUser } from "react-auth-kit";
 import WebCamModal from "../../PageComponents/WebCamModal";
 
-function MedicianEntrance({ title, icon, button, medician }) {
+function MedicianEntrance({ title, icon, button, medician, UpdateMedicine }) {
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(30,30,30)",
@@ -55,6 +55,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   const [country, setCountry] = React.useState([]);
@@ -189,10 +190,36 @@ function MedicianEntrance({ title, icon, button, medician }) {
           .patch(MEDICIAN_URL + medician.id + "/", MedicianForm)
           .then((res) => {
             toast.success("Data Updated Successfuly.");
+            UpdateMedicine(res.data)
+            registerModalCloser()
           })
           .catch((err) => toast.error("Check Your Input And Try Again!"));
+
     }
+
   };
+
+  React.useEffect(() => {
+    medician && document.addEventListener('keydown', (e) => {  
+        if (e.code === 'F9') {
+            reset({
+            })
+            registerModalOpener()
+        }  
+    })
+}, [])
+//   React.useEffect(() => {
+//     medician && document.addEventListener('keydown', (e) => {  
+//       console.log(e.code)
+//         if ((e.metaKey || e.ctrlKey) && e.code === 'F9') {
+//             console.log('fire!')
+//             reset({
+//               brand_name: medician.brand_name
+//             })
+//             registerModalOpener()
+//         }  
+//     })
+// }, [])
 
   const UpdateFunction = () => {
     axios
@@ -212,6 +239,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
   const WebComFileSeter = (file) => {
     setFile(file)
   }
+
 
   return (
     <>
@@ -239,7 +267,12 @@ function MedicianEntrance({ title, icon, button, medician }) {
       )}
 
       {button == 3 && (
-        <div onClick={registerModalOpener}>
+        <div onClick={() => {
+          reset({
+            brand_name: medician.brand_name
+          })
+          registerModalOpener()
+        }}>
           <i class="fa-solid fa-circle-info"></i>
         </div>
       )}
@@ -255,7 +288,7 @@ function MedicianEntrance({ title, icon, button, medician }) {
             <i className="fa-solid fa-xmark"></i>
           </div>
         </div>
-        <form className="medician-inter">
+        <form className="medician-inter" onSubmit={handleSubmit(SubmitMedician)}>
           <div className="medician-inter">
             <div className="medician-inter-form">
               <label>نام برند:</label>
@@ -454,7 +487,9 @@ function MedicianEntrance({ title, icon, button, medician }) {
                       console.log(e.target.files[0])
                     }}
                   />
-                  <WebCamModal medician={medician} setFile={WebComFileSeter}/>
+                  <form tabIndex={-1}>
+                  <WebCamModal medician={medician} setFile={WebComFileSeter} tabIndex={-1}/>
+                  </form>
                 </div>
                 <br />
                 <select

@@ -211,6 +211,9 @@ export default function SelectMedician({
   const [medicianWith, setMedicineWith] = React.useState([])
 
 
+  const UpdateSelectedMedicine = (item) => {
+      setSelectedMedician(item)
+  }
 
   return (
     <>
@@ -228,6 +231,7 @@ export default function SelectMedician({
             {selectedMedician && selectedMedician.medicine_full}
           </h4>
         </div>
+        {selectedMedician && <MedicianEntrance button={3} medician={selectedMedician} UpdateMedicine={UpdateSelectedMedicine}/>}
         <Modal
           style={customStyles}
           isOpen={registerModalOpen}
