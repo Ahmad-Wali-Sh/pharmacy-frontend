@@ -1049,6 +1049,11 @@ input[type="date"]:disabled {
   padding: 0.2rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid grey;
+  color: var(--color-ten);
+  width: 100%;
+}
+.medician-format:hover {
+  color: var(--color-sex);
 }
 
 .medician-text-field {
@@ -3089,6 +3094,19 @@ input[type="date"]:disabled {
 }
 .webcam-opener:hover{
   background-image: var(--color-five);
+}
+
+.input-picker-menu {
+  background-color: var(--color-three);
+  color: white;
+}
+.input-picker-menu:hover {
+  background-color: var(--color-three);
+  color:var(--color-one) !important
+}
+
+.rs-picker-search-input {
+  
 }
 
 

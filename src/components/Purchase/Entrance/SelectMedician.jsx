@@ -3,6 +3,8 @@ import Modal from "react-modal";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import axios from "axios";
 import MedicianEntrance from "../../Medician/MedicianEntrance/MedicianEntrance";
+import { InputPicker } from "rsuite";
+import SpinnerIcon from "@rsuite/icons/legacy/Spinner";
 
 export default function SelectMedician({
   kind,
@@ -108,8 +110,12 @@ export default function SelectMedician({
               <h4>تعداد در پاکت: {item.no_pocket}</h4>
               <h4>تعداد در قطی: {item.no_box}</h4>
               <h4>موجودیت: {item.existence}</h4>
-              <h4>قیمت قطی: {parseFloat(item.no_box) * parseFloat(item.price)}</h4>
-              {item.unsubmited_existence != 0 && <h4>موجودی.ثبت.نشده: {item.unsubmited_existence}</h4>}
+              <h4>
+                قیمت قطی: {parseFloat(item.no_box) * parseFloat(item.price)}
+              </h4>
+              {item.unsubmited_existence != 0 && (
+                <h4>موجودی.ثبت.نشده: {item.unsubmited_existence}</h4>
+              )}
             </div>
           </div>
           <div className="medician-big-text-fields">
@@ -145,6 +151,7 @@ export default function SelectMedician({
   const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [selectedMedician, setSelectedMedician] = React.useState("");
   const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([]);
   const [medician, setMedician] = React.useState([]);
@@ -176,7 +183,7 @@ export default function SelectMedician({
       tabFormulate != undefined && tabFormulate();
     }
     setRegisterModalOpen(true);
-    setMedician(medicianWith)
+    setMedician(medicianWith);
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
@@ -208,12 +215,11 @@ export default function SelectMedician({
       : "";
   }, [stringArray]);
 
-  const [medicianWith, setMedicineWith] = React.useState([])
-
+  const [medicianWith, setMedicineWith] = React.useState([]);
 
   const UpdateSelectedMedicine = (item) => {
-      setSelectedMedician(item)
-  }
+    setSelectedMedician(item);
+  };
 
   return (
     <>
@@ -227,11 +233,15 @@ export default function SelectMedician({
           انتخاب دارو
         </div>
         <div className="selected-medician-show">
-          <h4>
-            {selectedMedician && selectedMedician.medicine_full}
-          </h4>
+          <h4>{selectedMedician && selectedMedician.medicine_full}</h4>
         </div>
-        {selectedMedician && <MedicianEntrance button={3} medician={selectedMedician} UpdateMedicine={UpdateSelectedMedicine}/>}
+        {selectedMedician && (
+          <MedicianEntrance
+            button={3}
+            medician={selectedMedician}
+            UpdateMedicine={UpdateSelectedMedicine}
+          />
+        )}
         <Modal
           style={customStyles}
           isOpen={registerModalOpen}
@@ -293,7 +303,255 @@ export default function SelectMedician({
                   بارکد/نام برند
                 </span>
               </div>
-              <ReactSearchAutocomplete
+              <div onKeyDown={(e) => {
+                let scrollNow = document.querySelector(".sc-gLDzan").scrollTop;
+                console.log(scrollNow);
+                if (e.key == "ArrowDown") {
+                  document
+                    .querySelector(".sc-gLDzan")
+                    .scroll(
+                      scrollNow == 0 ? 1 : scrollNow + 160,
+                      scrollNow == 0 ? 1 : scrollNow + 160
+                    );
+                }
+                if (e.key == "ArrowUp") {
+                  document
+                    .querySelector(".sc-gLDzan")
+                    .scroll(scrollNow - 160, scrollNow - 160);
+                }
+              }}>
+
+              
+              <InputPicker
+                data={medician}
+                autoFocus={true}
+                className="rs-picker"
+                onKeyDown={(e) => {
+                  let scrollNow = document.querySelector(".sc-gLDzan").scrollTop;
+                  console.log(scrollNow);
+                  if (e.key == "ArrowDown") {
+                    document
+                      .querySelector(".sc-gLDzan")
+                      .scroll(
+                        scrollNow == 0 ? 1 : scrollNow + 160,
+                        scrollNow == 0 ? 1 : scrollNow + 160
+                      );
+                  }
+                  if (e.key == "ArrowUp") {
+                    document
+                      .querySelector(".sc-gLDzan")
+                      .scroll(scrollNow - 160, scrollNow - 160);
+                  }
+                }}
+                style={{ width: "100%", backgroundColor: "rgb(60,60,60)" }}
+                searchable={true}
+                menuClassName="input-picker-menu"
+                searchBy={(string, label, children) => children}
+                menuMaxHeight={450}
+                placeholder="...جستوجو"
+                onSearch={(string) => {
+                  let datas = [];
+                  setMedicineWith([]);
+                  setLoading(true);
+                  let stringArray = string.split("  ");
+                  setStringArray(stringArray);
+                  if (string != "" && isNaN(string)) {
+                    setTimeout(() => {
+                      axios
+                      .get(
+                        MEDICIAN_URL +
+                          "?brand_name=" +
+                          stringArray[0] +
+                          "&ml=" +
+                          (stringArray[1] ? stringArray[1] : "") +
+                          "&search=" +
+                          (stringArray[2] ? stringArray[2] : "") +
+                          "&kind__name_english=" +
+                          (stringArray[3] ? stringArray[3] : "") +
+                          "&country__name=" +
+                          (stringArray[4] ? stringArray[4] : "") +
+                          "&big_company__name=" +
+                          (stringArray[5] ? stringArray[5] : "")
+                      )
+                      .then((res) => {
+                        datas = res.data.results.map((item) => ({
+                          label: item.medicine_full,
+                          value: item?.id,
+                          children: item,
+                        }));
+                        setMedician(
+                          datas.length >= 1
+                            ? datas
+                            : { label: "", value: "", children: "" }
+                        );
+                        setLoading(false);
+                        if (string == false) {
+                          setMedician([]);
+                        }
+                      })
+                    }, 100);
+                  }
+                  if (string == "") {
+                    setMedician({ label: "", value: "", children: "" });
+                  }
+                }}
+                renderMenu={(menu) => {
+                  if (loading) {
+                    return (
+                      <p
+                        style={{
+                          padding: 10,
+                          color: "#999",
+                          textAlign: "center",
+                        }}
+                      >
+                        <SpinnerIcon spin /> Loading...
+                      </p>
+                    );
+                  } else {
+                    return menu;
+                  }
+                }}
+                tabIndex={0}
+                renderMenuItem={(name, data) => (
+                 
+                  name && (<div className="medician-format">
+                  <div className="medician-image">
+                    <img
+                      className="medician-image"
+                      src={
+                        name && data?.children?.image
+                          ? new URL(
+                              name && data?.children?.image
+                            ).pathname.slice(16)
+                          : "./images/nophoto.jpg"
+                      }
+                    />
+                  </div>
+                  <div className="medician-image">
+                    <img
+                      className="medician-image"
+                      src={"./images/nophoto.jpg"}
+                    />
+                  </div>
+                  <div className="medician-image">
+                    <img
+                      className="medician-image"
+                      src={"./images/nophoto.jpg"}
+                    />
+                  </div>
+                  <div className="medician-image">
+                    <img
+                      className="medician-image"
+                      src={"./images/nophoto.jpg"}
+                    />
+                  </div>
+                  <div className="medician-text-field">
+                    <div>
+                      <div className="medician-select-information">
+                        <h4>{name && data?.children?.medicine_full}</h4>
+                      </div>
+                      <h4>
+                        ترکیب:{" "}
+                        {name && data?.children?.generic_name.toString()}
+                      </h4>
+                      <div className="medician-text-field-numbers">
+                        <h4>مکان: {name && data?.children?.location}</h4>
+                        <h4>قیمت: {`${name && data?.children?.price}AF`}</h4>
+                        <h4>
+                          تعداد در پاکت: {name && data?.children?.no_pocket}
+                        </h4>
+                        <h4>
+                          تعداد در قطی: {name && data?.children?.no_box}
+                        </h4>
+                        <h4>موجودیت: {name && data?.children?.existence}</h4>
+                        <h4>
+                          قیمت قطی:{" "}
+                          {parseFloat(name && data?.children?.no_box) *
+                            parseFloat(name && data?.children?.price)}
+                        </h4>
+                        {name &&
+                          data?.children?.unsubmited_existence != 0 && (
+                            <h4>
+                              موجودی.ثبت.نشده:{" "}
+                              {name && data?.children?.unsubmited_existence}
+                            </h4>
+                          )}
+                      </div>
+                    </div>
+                    <div className="medician-big-text-fields">
+                      <div className="medician-bix-text-field">
+                        {name && data?.children?.description && (
+                          <div className="paragraph-big-text">
+                            توضیحات:
+                            {name && data?.children?.description}
+                          </div>
+                        )}
+                        {name && data?.children?.cautions && (
+                          <div className="paragraph-big-text">
+                            اخطار:
+                            {name && data?.children?.cautions}
+                          </div>
+                        )}
+                        {name && data?.children?.usages && (
+                          <div className="paragraph-big-text">
+                            استفاده:
+                            {name && data?.children?.usages}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>)
+                )}
+                id="rs-picker"
+                preventOverflow={true}
+                onSelect={(string, item) => {
+                  console.log(item.children);
+                  selectAutoCompleteData(item.children);
+                  setMedician([]);
+                  registerModalCloser();
+                  setSelectedMedician(item.children);
+                  let result = [];
+                  axios
+                    .get(MEDICIAN_WITH_URL + "?medicine=" + item.children.id)
+                    .then((res2) => {
+                      if (res2.data && res2.data[0]) {
+                        axios
+                          .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
+                          .then((res3) => {
+                            res3.data.results.length > 0
+                              ? setMedicineWith(res3.data.results)
+                              : setMedicineWith(result);
+                          });
+                      } else {
+                        medicianWith.map(
+                          (medicineWith) =>
+                            medicineWith.id != item.children.id &&
+                            result.push(medicineWith)
+                        );
+                        setMedicineWith(result);
+                      }
+                    });
+                  if (item.children.generic_name != "") {
+                    axios
+                      .get(
+                        ENTRANCE_TRHGOUH_EXPIRES_URL +
+                          "?search=" +
+                          item.children.generic_name +
+                          "&medician__ml=" +
+                          item.children.ml.match(/\d+/)[0]
+                      )
+                      .then((res) => {
+                        ExpiresMedicine(res.data);
+                      });
+                  } else {
+                    ExpiresMedicine([]);
+                  }
+                }}
+              />
+              </div>
+              {/* <ReactSearchAutocomplete
                 items={medician}
                 showIcon={false}
                 fuseOptions={{
@@ -395,7 +653,7 @@ export default function SelectMedician({
                 formatResult={formatResult}
                 autoFocus={true}
                 className="search"
-              />
+              /> */}
               <MedicianEntrance button={2} />
               <div className="bookmarks-box">
                 {bookmarkedMedicine.map((medicine) => (

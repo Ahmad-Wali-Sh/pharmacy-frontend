@@ -1,9 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import './picker.less';
 import App from "./App";
 import "./styles.css";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import { AuthProvider } from "react-auth-kit";
 
 
