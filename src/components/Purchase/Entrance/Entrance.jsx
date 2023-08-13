@@ -212,7 +212,7 @@ export default function Entrance(props) {
           autoCompleteData.medician.no_box) * exactEntrance.currency_rate
       ).toFixed(1)
     );
-  }, [interest, purchasePrice, quantity]);
+  }, [interest, purchasePrice, quantity, autoCompleteData.medician]);
 
   React.useEffect(() => {
     if (props.button == 1 && registerModalOpen) {
@@ -234,6 +234,7 @@ export default function Entrance(props) {
   function registerModalOpener() {
     setRegisterModalOpen(true);
     setTrigger(0);
+    document.getElementById('final-register-id').focus()
 
     axios
       .get(COMPANY_URL)
@@ -505,7 +506,7 @@ export default function Entrance(props) {
     EntranceThrough.append("entrance", exactEntrance.id);
     EntranceThrough.append("batch_number", data.batch_number);
     EntranceThrough.append("user", user().id);
-    EntranceThrough.append("each_sell_price_afg", data.each_sell_price_afg);
+    EntranceThrough.append("each_sell_price_afg", sellPrice);
     EntranceThrough.append("lease", data.lease);
 
     let result = true;
@@ -1000,6 +1001,7 @@ export default function Entrance(props) {
                       type="text"
                       onChange={(res) => setFactorTotal(res.target.value)}
                       value={FactorTotal}
+                      tabIndex={-1}
                     />
                     <label style={{ fontSize: "0.9rem" }}>
                       {exactEntrance.currency_name}
@@ -1035,7 +1037,7 @@ export default function Entrance(props) {
                     {...register("final_register")}
                     placeholder={exactEntrance.final_register}
                     className="final-select entrance--inputs"
-                    tabIndex={0}
+                    id="final-register-id"
                   >
                     <option
                       value={exactEntrance.final_register}
@@ -1286,6 +1288,7 @@ export default function Entrance(props) {
                     pharmGroub={pharmGroub}
                     selectAutoCompleteData={AutoCompleteHandle}
                     trigger={selectTrigger}
+                    UpdateChangedMedicine={AutoCompleteHandle}
                     tabFormulate={tabFormulate}
                   />
                 </div>

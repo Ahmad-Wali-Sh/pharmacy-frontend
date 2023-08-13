@@ -11,7 +11,7 @@ import Country from "../Country";
 import { useAuthUser } from "react-auth-kit";
 import WebCamModal from "../../PageComponents/WebCamModal";
 
-function MedicianEntrance({ title, icon, button, medician, UpdateMedicine }) {
+function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, UpdateChangedMedicine }) {
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(30,30,30)",
@@ -191,23 +191,33 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine }) {
           .then((res) => {
             toast.success("Data Updated Successfuly.");
             UpdateMedicine(res.data)
+            UpdateChangedMedicine(res.data)       
             registerModalCloser()
           })
-          .catch((err) => toast.error("Check Your Input And Try Again!"));
+          .catch((err) => {
+            console.log(err)
+            toast.error("Check Your Input And Try Again!")});
 
     }
 
   };
 
   React.useEffect(() => {
-    medician && document.addEventListener('keydown', (e) => {  
-        if (e.code === 'F9') {
-            reset({
-            })
+    const listener = (e) =>{
+      if (e.code === 'F9') {
+            reset({})
             registerModalOpener()
-        }  
-    })
+        }
+    }
+
+    medician && document.addEventListener('keydown', listener)
+
+    return () => {
+      document.removeEventListener('keydown', listener)
+    }
 }, [])
+
+
 //   React.useEffect(() => {
 //     medician && document.addEventListener('keydown', (e) => {  
 //       console.log(e.code)

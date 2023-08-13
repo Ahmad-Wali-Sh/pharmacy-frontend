@@ -14,6 +14,7 @@ export default function SelectMedician({
   department,
   results,
   ExpiresMedicine,
+  UpdateChangedMedicine
 }) {
   const customStyles = {
     content: {
@@ -224,6 +225,7 @@ export default function SelectMedician({
   const [scrolled, setScrolled] = React.useState(false)
 
 
+
   return (
     <>
       <div className="select-medician">
@@ -243,6 +245,7 @@ export default function SelectMedician({
             button={3}
             medician={selectedMedician}
             UpdateMedicine={UpdateSelectedMedicine}
+            UpdateChangedMedicine={UpdateChangedMedicine}
           />
         )}
         <Modal
@@ -437,14 +440,13 @@ export default function SelectMedician({
                 className="search"
               />
               </div>
-              <MedicianEntrance button={2} />
+              <MedicianEntrance button={3} autocompleter={selectAutoCompleteData}/>
               <div className="bookmarks-box">
                 {bookmarkedMedicine.map((medicine) => (
                   <div
                     className="bookmark-card"
                     onClick={() => {
                       selectAutoCompleteData(medicine);
-
                       registerModalCloser();
                       setSelectedMedician(medicine);
                     }}
