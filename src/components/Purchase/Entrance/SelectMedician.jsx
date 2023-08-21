@@ -14,6 +14,7 @@ export default function SelectMedician({
   department,
   results,
   ExpiresMedicine,
+  UpdateChangedMedicine
 }) {
   const customStyles = {
     content: {
@@ -108,8 +109,12 @@ export default function SelectMedician({
               <h4>تعداد در پاکت: {item.no_pocket}</h4>
               <h4>تعداد در قطی: {item.no_box}</h4>
               <h4>موجودیت: {item.existence}</h4>
-              <h4>قیمت قطی: {parseFloat(item.no_box) * parseFloat(item.price)}</h4>
-              {item.unsubmited_existence != 0 && <h4>موجودی.ثبت.نشده: {item.unsubmited_existence}</h4>}
+              <h4>
+                قیمت قطی: {parseFloat(item.no_box) * parseFloat(item.price)}
+              </h4>
+              {item.unsubmited_existence != 0 && (
+                <h4>موجودی.ثبت.نشده: {item.unsubmited_existence}</h4>
+              )}
             </div>
           </div>
           <div className="medician-big-text-fields">
@@ -145,6 +150,7 @@ export default function SelectMedician({
   const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [selectedMedician, setSelectedMedician] = React.useState("");
   const [bookmarkedMedicine, setBookmarkedMedicine] = React.useState([]);
   const [medician, setMedician] = React.useState([]);
@@ -176,11 +182,12 @@ export default function SelectMedician({
       tabFormulate != undefined && tabFormulate();
     }
     setRegisterModalOpen(true);
-    setMedician(medicianWith)
+    setMedician(medicianWith);
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
     setMedician([]);
+    setScrolled(false)
   }
 
   const handleKeyDown = (event) => {
@@ -208,12 +215,16 @@ export default function SelectMedician({
       : "";
   }, [stringArray]);
 
-  const [medicianWith, setMedicineWith] = React.useState([])
-
+  const [medicianWith, setMedicineWith] = React.useState([]);
 
   const UpdateSelectedMedicine = (item) => {
-      setSelectedMedician(item)
-  }
+    setSelectedMedician(item);
+  };
+
+
+  const [scrolled, setScrolled] = React.useState(false)
+
+
 
   return (
     <>
@@ -227,11 +238,16 @@ export default function SelectMedician({
           انتخاب دارو
         </div>
         <div className="selected-medician-show">
-          <h4>
-            {selectedMedician && selectedMedician.medicine_full}
-          </h4>
+          <h4>{selectedMedician && selectedMedician.medicine_full}</h4>
         </div>
-        {selectedMedician && <MedicianEntrance button={3} medician={selectedMedician} UpdateMedicine={UpdateSelectedMedicine}/>}
+        {selectedMedician && (
+          <MedicianEntrance
+            button={3}
+            medician={selectedMedician}
+            UpdateMedicine={UpdateSelectedMedicine}
+            UpdateChangedMedicine={UpdateChangedMedicine}
+          />
+        )}
         <Modal
           style={customStyles}
           isOpen={registerModalOpen}
@@ -247,20 +263,47 @@ export default function SelectMedician({
             <div
               className="medician-select-input-box"
               onKeyDown={(e) => {
-                let scrollNow = document.querySelector(".sc-gLDzan").scrollTop;
-                console.log(scrollNow);
+                const element = document.querySelector('.sc-gLDzan')
+                let scrollNow = element.scrollTop;
+
                 if (e.key == "ArrowDown") {
-                  document
-                    .querySelector(".sc-gLDzan")
-                    .scroll(
-                      scrollNow == 0 ? 1 : scrollNow + 160,
-                      scrollNow == 0 ? 1 : scrollNow + 160
+                  if (element.scrollTop + element.offsetHeight>= element.scrollHeight){
+                    if (scrolled) {
+                      element.scroll(0,0)
+                      setScrolled(false)
+                    }
+                    else {
+                      setScrolled(true);
+                    }
+                  }
+                  else {
+                    element.scroll(
+                      scrollNow == 0 ? 1 : scrollNow == 2 ? 1 : scrollNow + 160,
+                      scrollNow == 0 ? 1 : scrollNow == 2 ? 1 : scrollNow + 160,
                     );
+                  
+                  }
                 }
                 if (e.key == "ArrowUp") {
-                  document
-                    .querySelector(".sc-gLDzan")
-                    .scroll(scrollNow - 160, scrollNow - 160);
+                  
+                  if (element.scrollTop + element.offsetHeight>= element.scrollHeight) {
+                    console.log("bottom")
+                    element.scroll(scrollNow - 2, scrollNow - 2)
+                    
+                  }
+                  else {
+                    console.log('other')
+                    element.scroll(scrollNow - 160, scrollNow - 160)
+                  }
+                  if (scrollNow == 0 || scrollNow == 1) {
+                    console.log("Top")
+                    element.scroll(0,2)
+                  }
+                  if (scrollNow == 2) {
+                    // element.scroll({ top: element.scrollHeight, behavior:'smooth',block: 'end'});
+                    element.scroll(0, 20000);
+                  }
+
                 }
               }}
             >
@@ -396,14 +439,14 @@ export default function SelectMedician({
                 autoFocus={true}
                 className="search"
               />
-              <MedicianEntrance button={2} />
+              </div>
+              <MedicianEntrance button={3} autocompleter={selectAutoCompleteData}/>
               <div className="bookmarks-box">
                 {bookmarkedMedicine.map((medicine) => (
                   <div
                     className="bookmark-card"
                     onClick={() => {
                       selectAutoCompleteData(medicine);
-
                       registerModalCloser();
                       setSelectedMedician(medicine);
                     }}
@@ -422,7 +465,6 @@ export default function SelectMedician({
                   </div>
                 ))}
               </div>
-            </div>
           </div>
         </Modal>
       </div>

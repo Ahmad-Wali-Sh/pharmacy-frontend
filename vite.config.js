@@ -7,4 +7,13 @@ export default defineConfig({
     port: 3000
   },
   plugins: [react()],
+  css: {
+    preprocessorOptions: {
+      less: {
+        math: "always",
+        relativeUrls: true,
+        javascriptEnabled: true
+      },
+    },
+  }
 })

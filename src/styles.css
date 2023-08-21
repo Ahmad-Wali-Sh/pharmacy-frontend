@@ -809,7 +809,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 2.4% 20% 4% 4.6% 4.6% 5% 5% 6% 6% 3.5% 7.5% 5% 5% 6% 5% 7% 7% 7% 4.6%;
+  grid-template-columns: 2.4% 20% 3% 5.3% 4.6% 5% 5% 6% 6% 3.5% 7.5% 5% 5% 6% 5% 7% 7% 7% 4.6%;
   direction: rtl;
   justify-content: space-between;
 }
@@ -821,7 +821,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 2.4% 20% 4% 4.6% 4.6% 5% 5% 6% 6% 3.5% 7.5% 5% 5% 6% 5% 7% 7% 7% 4.6%;
+  grid-template-columns: 2.4% 20% 3% 5.3% 4.6% 5% 5% 6% 6% 3.5% 7.5% 5% 5% 6% 5% 7% 7% 7% 4.6%;
   direction: rtl;
   text-align: right;
   justify-content: space-between;
@@ -1049,6 +1049,11 @@ input[type="date"]:disabled {
   padding: 0.2rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid grey;
+  color: var(--color-ten);
+  width: 100%;
+}
+.medician-format:hover {
+  color: var(--color-sex);
 }
 
 .medician-text-field {
@@ -3090,5 +3095,15 @@ input[type="date"]:disabled {
 .webcam-opener:hover{
   background-image: var(--color-five);
 }
+
+.input-picker-menu {
+  background-color: var(--color-three);
+  color: white;
+}
+.input-picker-menu:hover {
+  background-color: var(--color-three);
+  color:var(--color-one) !important
+}
+
 
 
