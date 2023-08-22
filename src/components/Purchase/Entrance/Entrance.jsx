@@ -15,8 +15,6 @@ import { useAuthUser } from "react-auth-kit";
 import CurrencyList from "../Currency/CurrencyList";
 
 export default function Entrance(props) {
-
-
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(60,60,60)",
@@ -199,9 +197,7 @@ export default function Entrance(props) {
   };
 
   React.useEffect(() => {
-    setPurchasePrice(
-      autoCompleteData.medician.last_purchased
-    );
+    setPurchasePrice(autoCompleteData.medician.last_purchased);
   }, [autoCompleteData.medician]);
 
   React.useEffect(() => {
@@ -209,7 +205,8 @@ export default function Entrance(props) {
       (
         ((parseFloat(purchasePrice) +
           (parseFloat(interest) * parseFloat(purchasePrice)) / 100) /
-          autoCompleteData.medician.no_box) * exactEntrance.currency_rate
+          autoCompleteData.medician.no_box) *
+        exactEntrance.currency_rate
       ).toFixed(1)
     );
   }, [interest, purchasePrice, quantity, autoCompleteData.medician]);
@@ -234,7 +231,7 @@ export default function Entrance(props) {
   function registerModalOpener() {
     setRegisterModalOpen(true);
     setTrigger(0);
-    document.getElementById('final-register-id').focus()
+    document.getElementById("final-register-id").focus();
 
     axios
       .get(COMPANY_URL)
@@ -284,7 +281,7 @@ export default function Entrance(props) {
       cur.id == exactEntrance.currency ? (currency_rate = cur.rate) : 1;
     });
 
-    if (report.grandTotal == FactorTotal ) {
+    if (report.grandTotal == FactorTotal) {
       if (priceApplied == false) {
         entranceThrough.length >= 1
           ? PriceAppliedVerifyOpener()
@@ -495,14 +492,17 @@ export default function Entrance(props) {
     EntranceThrough.append("number_in_factor", data.number_in_factor);
     EntranceThrough.append("medician", autoCompleteData.medician.id);
     EntranceThrough.append("each_price_factor", data.each_price_factor);
-    EntranceThrough.append("each_quantity", autoCompleteData.medician.no_pocket);
+    EntranceThrough.append(
+      "each_quantity",
+      autoCompleteData.medician.no_pocket
+    );
     EntranceThrough.append("discount_money", data.discount_money);
     EntranceThrough.append("discount_percent", data.discount_percent);
     EntranceThrough.append("expire_date", expireDate);
     EntranceThrough.append("interest_percent", interest);
     EntranceThrough.append("bonus", 0);
     EntranceThrough.append("quantity_bonus", data.quantity_bonus);
-    EntranceThrough.append("no_box",autoCompleteData.medician.no_box);
+    EntranceThrough.append("no_box", autoCompleteData.medician.no_box);
     EntranceThrough.append("entrance", exactEntrance.id);
     EntranceThrough.append("batch_number", data.batch_number);
     EntranceThrough.append("user", user().id);
@@ -524,11 +524,14 @@ export default function Entrance(props) {
         .post(ENTRANCE_THROUGH_URL, EntranceThrough)
         .then((res) => {
           setEntranceThrough((prev) => [...prev, res.data]);
-          if (res.data.total_purchaseـafghani * autoCompleteData.medician.no_box > res.data.total_sell) {
+          if (
+            res.data.total_purchaseـafghani * autoCompleteData.medician.no_box >
+            res.data.total_sell
+          ) {
             alert("قیمت خرید از قیمت فروش بیشتر است!");
           }
           toast.info("New Item Added.");
-          ResetEntranceThroughEntries()
+          ResetEntranceThroughEntries();
           axios
             .get(ENTRANCE_THROUGH_URL + "?medician=" + res.data.medician)
             .then((lastRes) => {
@@ -602,11 +605,10 @@ export default function Entrance(props) {
     setExpireDate("");
     setSellPrice("");
     setPurchasePrice("");
-    setPriceApplied(false)
-  }
+    setPriceApplied(false);
+  };
 
   const Reporting = () => {
-
     const totalInterest = () => {
       let result = 0;
       entranceThrough.map((through) => {
@@ -625,37 +627,36 @@ export default function Entrance(props) {
 
     const totalBeforeDiscount = () => {
       const result = entranceThrough.reduce((total, current) => {
-        return total + current.total_purchase_currency_before
-      }, 0)
-      return result
-    }
+        return total + current.total_purchase_currency_before;
+      }, 0);
+      return result;
+    };
 
     const totalDiscount = () => {
       const result = entranceThrough.reduce((total, currentValue) => {
-        return (
-          total + currentValue.discount_value
-        );
+        return total + currentValue.discount_value;
       }, 0);
       return result;
     };
     const totalBonusValue = () => {
       const result = entranceThrough.reduce((total, currentValue) => {
-        return (
-          total + currentValue.bonus_value
-        );
+        return total + currentValue.bonus_value;
       }, 0);
       return result;
     };
     const totalSell = () => {
       const result = entranceThrough.reduce((total, currentValue) => {
-        return (
-          total + currentValue.total_sell
-        );
+        return total + currentValue.total_sell;
       }, 0);
       return result;
     };
 
-    const totalInterester = (totalSell() + totalBonusValue() + totalDiscount() - totalBeforeDiscount()).toFixed(1)
+    const totalInterester = (
+      totalSell() +
+      totalBonusValue() +
+      totalDiscount() -
+      totalBeforeDiscount()
+    ).toFixed(1);
     setReport({
       number: entranceThrough.length,
       total_before_discount: totalBeforeDiscount().toFixed(1),
@@ -663,7 +664,10 @@ export default function Entrance(props) {
       total: 0,
       total_bonous_value: totalBonusValue().toFixed(1),
       total_interest: totalInterester,
-      total_interest_percent: (totalInterester / totalBeforeDiscount() * 100).toFixed(1),
+      total_interest_percent: (
+        (totalInterester / totalBeforeDiscount()) *
+        100
+      ).toFixed(1),
       sell_total: totalSell().toFixed(1),
       purchase_total: totalPurchase(),
       purchase_after_discount: totalPurchase() - totalDiscount(),
@@ -736,7 +740,7 @@ export default function Entrance(props) {
   };
 
   const BackEntrance = () => {
-    ResetForm()
+    ResetForm();
 
     exactEntrance.id
       ? axios
@@ -786,7 +790,7 @@ export default function Entrance(props) {
   };
 
   const FrontEntrance = () => {
-    ResetForm()
+    ResetForm();
 
     exactEntrance.id
       ? axios
@@ -989,11 +993,11 @@ export default function Entrance(props) {
                   <div className="entrance-report-map-box">
                     <label>مجموع فایده </label>
                     <label>{report.total_interest_percent}%</label>
-                    <label>{(report.total_interest)}</label>
+                    <label>{report.total_interest}</label>
                   </div>
                   <div className="entrance-report-map-box">
                     <label>مجموعه</label>
-                    <label>{(report.grandTotal)}</label>
+                    <label>{report.grandTotal}</label>
                   </div>
                   <div className="entrance-report-map-box">
                     <label>مجموع فاکتور</label>
@@ -1059,7 +1063,7 @@ export default function Entrance(props) {
                   <FinalRegister Update={UpdateFinals} />
                 </div>
                 <label>شرکت:</label>
-                <div>
+                <div className="react-select-box">
                   <ReactSearchAutocomplete
                     items={company}
                     onSelect={(item) =>
@@ -1083,6 +1087,7 @@ export default function Entrance(props) {
                     showIcon={false}
                     className="autoComplete entrance--inputs"
                   />
+
                   <Company button={2} Update={UpdateCompanies} />
                 </div>
                 <label>انبار:</label>
@@ -1309,7 +1314,7 @@ export default function Entrance(props) {
                   className="entrance--inputs"
                   value={purchasePrice}
                   onChange={(e) => {
-                    setPurchasePrice(e.target.value)
+                    setPurchasePrice(e.target.value);
                   }}
                 />
                 <label>
@@ -1355,7 +1360,7 @@ export default function Entrance(props) {
                     setInterest(
                       (
                         (100 *
-                          ((e.target.value / exactEntrance.currency_rate ) *
+                          ((e.target.value / exactEntrance.currency_rate) *
                             autoCompleteData.medician.no_box -
                             purchasePrice)) /
                         purchasePrice

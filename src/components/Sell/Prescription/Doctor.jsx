@@ -1,115 +1,36 @@
 import React from "react";
-import Modal from "react-modal";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { toast } from "react-toastify";
-import {useAuthUser} from 'react-auth-kit'
+import { useAuthUser } from "react-auth-kit";
+import { useMutation } from "react-query";
+import { postDataFn, successFn, handlePostData } from "../../services/API";
+import BigModal from "../../PageComponents/Modals/BigModal";
+import { useRef } from "react";
+import { MainButton, PlusButton } from "../../PageComponents/Buttons/Buttons";
 
+function Doctor({ button, title, icon }) {
+  const user = useAuthUser();
+  const DoctorModalRef = useRef(null);
 
+  const { register, handleSubmit } = useForm();
 
-function Doctor({ button, title, icon, Update }) {
-  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-
-  function registerModalOpener() {
-    setRegisterModalOpen(true);
-  }
-  function registerModalCloser() {
-    setRegisterModalOpen(false);
-  }
-
-  const user = useAuthUser()
-
-  const ModalStyles = {
-    content: {
-      backgroundColor: "rgb(30,30,30)",
-      border: "none",
-      borderRadius: "1rem",
-      overflow: "hidden",
-      padding: "0px",
-      margin: "0px",
-    },
-    overlay: {
-      backgroundColor: "rgba(60,60,60,0.5)",
-    },
-  };
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const DOCOTOR_URL = import.meta.env.VITE_DOCTOR;
-
-  const [companyLength, setCompanyLength] = React.useState([]);
-
-  React.useEffect(() => {
-    axios
-      .get(DOCOTOR_URL)
-      .then((res) => setCompanyLength(res.data.length))
-      .catch((err) => console.log(err));
-  }, []);
-
-  const SubmitForm = (data) => {
-    const DoctorForm = new FormData();
-    DoctorForm.append("name", data.name);
-    DoctorForm.append("code", data.code);
-    DoctorForm.append("last_name", data.last_name);
-    DoctorForm.append("expertise", data.expertise);
-    DoctorForm.append("contact_number", data.contact_number);
-    DoctorForm.append("email", data.email);
-    DoctorForm.append("workplace", data.workplace);
-    DoctorForm.append("work_time", data.work_time);
-    DoctorForm.append("home_address", data.home_address);
-    DoctorForm.append("discription", data.discription);
-    DoctorForm.append("user", user().id);
-
-    axios
-      .post(DOCOTOR_URL, DoctorForm)
-      .then((e) => {
-        if (button == 2) {
-          registerModalCloser();
-          Update();
-        }
-        toast.success("Data Updated Successfuly.");
-        console.log(e.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Check Your Input And Try Again!");
-      });
-  };
+  const { mutateAsync } = useMutation({
+    mutationFn: (data) => postDataFn(data, "doctor/"),
+    onSuccess: () =>
+      successFn("doctor/", () => DoctorModalRef.current.Closer()),
+  });
   return (
     <>
-      {button == 1 && (
-        <div className="purchase-card" onClick={registerModalOpener}>
-          <div>
-            <h3>{title}</h3>
-            <div>{companyLength}</div>
-          </div>
-          <div>
-            <i className={icon}></i>
-          </div>
-        </div>
+      {button == "main" && (
+        <MainButton
+          Func={() => DoctorModalRef.current.Opener()}
+          title={title}
+          icon={icon}
+        />
       )}
-      {button == 2 && (
-        <div className="plus-box" onClick={registerModalOpener}>
-          <div className="plus">
-            <i class="fa-solid fa-plus"></i>
-          </div>
-        </div>
+      {button == "plus" && (
+        <PlusButton Func={() => DoctorModalRef.current.Opener()} />
       )}
-      <Modal
-        style={ModalStyles}
-        isOpen={registerModalOpen}
-        onRequestClose={registerModalCloser}
-      >
-        <div className="modal-header">
-          <h3>ثبت داکتر</h3>
-          <div className="modal-close-btn" onClick={registerModalCloser}>
-            <i className="fa-solid fa-xmark"></i>
-          </div>
-        </div>
+      <BigModal title="ثبت داکتر" ref={DoctorModalRef}>
         <form className="company">
           <div className="company">
             <div className="company-form">
@@ -143,15 +64,17 @@ function Doctor({ button, title, icon, Update }) {
             </div>
             <div className="company-submit">
               <input
-                onClick={handleSubmit(SubmitForm)}
+                onClick={handleSubmit((data) =>
+                  handlePostData(data, mutateAsync, user)
+                )}
                 type="submit"
-                value="ثبت داکتر"
+                value={title}
               />
               <input type="reset" value="ریسیت" />
             </div>
           </div>
         </form>
-      </Modal>
+      </BigModal>
     </>
   );
 }

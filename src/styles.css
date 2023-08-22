@@ -3105,5 +3105,9 @@ input[type="date"]:disabled {
   color:var(--color-one) !important
 }
 
+/* News..................................................... */
 
+.modal-box {
+  height: 100%;
+}
 

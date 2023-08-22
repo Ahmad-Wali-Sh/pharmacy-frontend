@@ -1,5 +1,5 @@
 import React from "react";
-import Prescription from "../../../Sell/Prescription/Prescription";
+import Prescription from "../../../Sell/Prescription/Prescription/Prescription";
 
 function PrescriptionListMap({ data, num, department }) {
   return (

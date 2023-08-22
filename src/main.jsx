@@ -4,8 +4,9 @@ import App from "./App";
 import "./styles.css";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { AuthProvider } from "react-auth-kit";
+import { QueryClientProvider } from 'react-query'
+import { queryClient } from './components/services/API'
 
 
 
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       pauseOnHover={false}
     />
     <AuthProvider authType={"localstorage"} authName={"_auth"}>
+      <QueryClientProvider client={queryClient}>
       <App />
+      </QueryClientProvider>
     </AuthProvider>
   </React.StrictMode>
 );

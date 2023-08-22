@@ -1,113 +1,37 @@
 import React from "react";
-import Modal from "react-modal";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { toast } from "react-toastify";
-import {useAuthUser} from 'react-auth-kit'
+import { useAuthUser } from "react-auth-kit";
+import { useMutation } from "react-query";
+import { postDataFn, successFn, handlePostData } from "../../services/API";
+import BigModal from "../../PageComponents/Modals/BigModal";
+import { useRef } from "react";
+import { MainButton, PlusButton } from "../../PageComponents/Buttons/Buttons";
 
-function Patient({ button, title, icon, Update }) {
-  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+function Patient({ button, title, icon }) {
+  const user = useAuthUser();
 
-  function registerModalOpener() {
-    setRegisterModalOpen(true);
-  }
-  function registerModalCloser() {
-    setRegisterModalOpen(false);
-  }
+  const PatientRef = useRef(null);
 
-  const user = useAuthUser()
+  const { register, handleSubmit } = useForm();
 
-  const ModalStyles = {
-    content: {
-      backgroundColor: "rgb(30,30,30)",
-      border: "none",
-      borderRadius: "1rem",
-      overflow: "hidden",
-      padding: "0px",
-      margin: "0px",
-    },
-    overlay: {
-      backgroundColor: "rgba(60,60,60,0.5)",
-    },
-  };
+  const { mutateAsync } = useMutation({
+    mutationFn: (data) => postDataFn(data, "patient/"),
+    onSuccess: () => successFn("patient/", () => PatientRef.current.Closer()),
+  });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const PATIENT_URL = import.meta.env.VITE_PATIENT;
-
-  const [companyLength, setCompanyLength] = React.useState([])
-
-  React.useEffect(()=> {
-      axios
-          .get(PATIENT_URL)
-          .then((res) => setCompanyLength(res.data.length))
-          .catch((err) => console.log(err))
-  },[])
-
-  const SubmitForm = (data) => {
-    const PatientForm = new FormData();
-    PatientForm.append("name", data.name);
-    PatientForm.append("code", data.code);
-    PatientForm.append("last_name", data.last_name);
-    PatientForm.append("gender", data.gender);
-    PatientForm.append("birth_date", data.birth_date);
-    PatientForm.append("tazkira_number", data.tazkira_number);
-    PatientForm.append("contact_number", data.contact_number);
-    PatientForm.append("address", data.address);
-    PatientForm.append("sickness", data.sickness);
-    PatientForm.append("discription", data.discription);
-    PatientForm.append("user", user().id);
-
-    axios
-      .post(PATIENT_URL, PatientForm)
-      .then((e) => {
-        if (button == 2) {
-          registerModalCloser();
-          Update();
-        }
-        toast.success("Data Updated Successfuly.");
-        console.log(e.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Check Your Input And Try Again!");
-      });
-  };
   return (
     <>
-      {button == 1 && (
-        <div className="purchase-card" onClick={registerModalOpener}>
-          <div>
-            <h3>{title}</h3>
-            <div>{companyLength}</div>
-          </div>
-          <div>
-            <i className={icon}></i>
-          </div>
-        </div>
+      {button == "main" && (
+        <MainButton
+          Func={() => PatientRef.current.Opener()}
+          title={title}
+          icon={icon}
+        />
       )}
-      {button == 2 && (
-        <div className="plus-box" onClick={registerModalOpener}>
-          <div className="plus">
-          <i class="fa-solid fa-plus"></i>
-          </div>
-        </div>
+      {button == "plus" && (
+        <PlusButton Func={() => PatientRef.current.Opener()} />
       )}
-      <Modal
-        style={ModalStyles}
-        isOpen={registerModalOpen}
-        onRequestClose={registerModalCloser}
-      >
-        <div className="modal-header">
-          <h3>ثبت داکتر</h3>
-          <div className="modal-close-btn" onClick={registerModalCloser}>
-            <i className="fa-solid fa-xmark"></i>
-          </div>
-        </div>
+      <BigModal title="ثبت مریض" ref={PatientRef}>
         <form className="company">
           <div className="company">
             <div className="company-form">
@@ -128,23 +52,24 @@ function Patient({ button, title, icon, Update }) {
               <label>آدرس:</label>
               <input type="text" {...register("address")} />
               <label>جنسیت:</label>
-              <select {...register('gender')}>
-                  <option value="Male">
-                    مرد
-                  </option>
-                  <option value="Female">
-                    زن
-                  </option>
+              <select {...register("gender")}>
+                <option value="Male">مرد</option>
+                <option value="Female">زن</option>
               </select>
-                <div></div>
-                <div></div>
+              <div></div>
+              <div></div>
               <label>توضیحات:</label>
-              <input type="text" {...register("discription")} className="doctor-discription" />
-              
+              <input
+                type="text"
+                {...register("discription")}
+                className="doctor-discription"
+              />
             </div>
             <div className="company-submit">
               <input
-                onClick={handleSubmit(SubmitForm)}
+                onClick={handleSubmit((data) =>
+                  handlePostData(data, mutateAsync, user)
+                )}
                 type="submit"
                 value="ثبت داکتر"
               />
@@ -152,7 +77,7 @@ function Patient({ button, title, icon, Update }) {
             </div>
           </div>
         </form>
-      </Modal>
+      </BigModal>
     </>
   );
 }

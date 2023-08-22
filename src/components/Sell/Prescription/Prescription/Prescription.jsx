@@ -4,14 +4,25 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
-import LoadingDNA from "../../PageComponents/LoadingDNA";
-import SelectMedician from "../../Purchase/Entrance/SelectMedician";
+import LoadingDNA from "../../../PageComponents/LoadingDNA";
+import SelectMedician from "../../../Purchase/Entrance/SelectMedician";
 import PrescriptionThroughEntry from "./PrescriptionThroughEntry";
-import Doctor from "./Doctor";
-import Patient from "./Patient";
+import Doctor from "../Doctor";
+import Patient from "../Patient";
 import { useAuthUser } from "react-auth-kit";
+import BigModal from "../../../PageComponents/Modals/BigModal";
+import { useRef } from "react";
+import {
+  DepartButton,
+  InfoButton,
+  MainButton,
+} from "../../../PageComponents/Buttons/Buttons";
+import AlertModal from "../../../PageComponents/Modals/AlertModal";
 
 export default function Prescription(props) {
+  const PrescriptionModalRef = useRef(null);
+  const SameMedicineAlertModalRef = useRef(null);
+
   const ModalStyles = {
     content: {
       backgroundColor: "rgb(60,60,60)",
@@ -106,7 +117,7 @@ export default function Prescription(props) {
   const [selectTrigger, setTrigger] = React.useState(1);
   const [file, setFile] = React.useState("");
   const [medicineConflict, setMedicineConflict] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     doctor.map((doctor) =>
@@ -386,11 +397,12 @@ export default function Prescription(props) {
         });
     }
     if (Conditional() == false) {
-      popUpOpener();
+      SameMedicineAlertModalRef.current.Opener();
     }
   };
 
   const MedicineIncluder = (data) => {
+    console.log("jo");
     const MedicianUpdateForm = new FormData();
     MedicianUpdateForm.append(
       "quantity",
@@ -406,7 +418,7 @@ export default function Prescription(props) {
         toast.success("Data Updated Successfuly.");
         UpdateChunk();
         UpdateUI();
-        popUpCloser();
+        SameMedicineAlertModalRef.current.Closer();
       })
       .catch(() => toast.error("Check Your Input And Try Again!"));
   };
@@ -582,6 +594,7 @@ export default function Prescription(props) {
 
   const departmentSubmit = () => {
     registerModalOpener();
+    PrescriptionModalRef.current.Opener();
     axios.get(DEPARTMENT_URL + props.department.id).then((res) => {
       const DepartmentForm = new FormData();
       DepartmentForm.append("name", autoCompleteData.patient);
@@ -807,65 +820,31 @@ export default function Prescription(props) {
 
   return (
     <>
-      {props.button == undefined && (
-        <div
-          className="purchase-card"
-          onClick={() => {
-            registerModalOpener();
-            setLoading(true);
-          }}
-        >
-          <div>
-            <h3>{props.title}</h3>
-            <div>
-              <LoadingDNA />
-            </div>
-          </div>
-          <div>
-            <i className={props.icon}></i>
-          </div>
-        </div>
+      {props.button == "main" && (
+        <MainButton
+          Func={() => PrescriptionModalRef.current.Opener()}
+          title="ثبت نسخه"
+          icon="fa-solid fa-circle-info"
+        />
       )}
       {props.button == 1 && (
-        <div onClick={registerModalOpener}>
-          <i class="fa-solid fa-circle-info"></i>
-        </div>
+        <InfoButton Func={() => PrescriptionModalRef.current.Opener()} />
       )}
       {props.button == 2 && (
-        <div className="department-card" onClick={departmentSubmit}>
-          <h3>{props.department.name}</h3>
-        </div>
+        <DepartButton
+          Func={() => departmentSubmit()}
+          name={props.department.name}
+        />
       )}
-      {registerModalOpen == true && (
-        <Modal
-          style={ModalStyles}
-          isOpen={registerModalOpen}
-          onRequestClose={registerModalCloser}
-        >
-          <Modal
-            isOpen={popUpOpen}
-            onRequestClose={popUpCloser}
-            style={popUpStyle}
-          >
-            <>
-              <div className="modal-header">
-                <h3>!خطا</h3>
-                <div className="modal-close-btn" onClick={popUpCloser}>
-                  <i className="fa-solid fa-xmark"></i>
-                </div>
-              </div>
-              <div className="alert-box">
-                <div className="alert-text-box">
-                  <h4>این دوا قبلا ثبت شده است</h4>
-                  <h4>آیا میخواهید به تعداد آن اضافه نمائید؟</h4>
-                </div>
-                <div className="alert-button-box">
-                  <button onClick={handleSubmit(MedicineIncluder)}>بله</button>
-                  <button onClick={popUpCloser}>نخیر</button>
-                </div>
-              </div>
-            </>
-          </Modal>
+      {
+        <BigModal title="ثبت نسخه" ref={PrescriptionModalRef}>
+          <AlertModal
+            ref={SameMedicineAlertModalRef}
+            errorText="آیا میخواهید به تعداد آن اضافه نمایید؟"
+            errorTitle="این دوا ثبت شده است!"
+            OkFunc={handleSubmit(MedicineIncluder)}
+            NoFunc={() => {}}
+          />
           <Modal
             isOpen={expiresMedicineLog}
             onRequestClose={expiresMedicineLogCloser}
@@ -1021,12 +1000,6 @@ export default function Prescription(props) {
           </Modal>
           {loading ? (
             <div className="modal">
-              <div className="modal-header">
-                <h3>ثبت نسخه</h3>
-                <div className="modal-close-btn" onClick={registerModalCloser}>
-                  <i className="fa-solid fa-xmark"></i>
-                </div>
-              </div>
               <div className="prescription-box">
                 <div className="entrance-report">
                   <div className="entrance-report-header">راپور</div>
@@ -1349,8 +1322,8 @@ export default function Prescription(props) {
               </div>
             </div>
           )}
-        </Modal>
-      )}
+        </BigModal>
+      }
     </>
   );
 }
