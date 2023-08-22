@@ -105,16 +105,16 @@ export default function Prescription(props) {
   const [excatTrough, setExactThrough] = React.useState("");
   const [selectTrigger, setTrigger] = React.useState(1);
   const [file, setFile] = React.useState("");
-  const [medicineConflict, setMedicineConflict] = React.useState([])
+  const [medicineConflict, setMedicineConflict] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     doctor.map((doctor) =>
-      doctor.id == prescription.doctor ? setDoctorName(doctor.name) : ""
+      doctor.id == prescription.doctor ? setDoctorName(doctor.code_name) : ""
     );
 
     patient.map((patient) =>
-      patient.id == prescription.name ? setPatientName(patient.name) : ""
+      patient.id == prescription.name ? setPatientName(patient.code_name) : ""
     );
   }, [prescription]);
 
@@ -200,9 +200,7 @@ export default function Prescription(props) {
       axios
         .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
         .catch((err) => console.log(err));
-
   }, [prescriptionThrough]);
-
 
   function registerModalOpener() {
     ResetForm();
@@ -717,6 +715,7 @@ export default function Prescription(props) {
             khairat: res.data.khairat,
             number: "",
           });
+
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
             .then((res) => {
@@ -798,7 +797,7 @@ export default function Prescription(props) {
     setExpiresMedicianLog(false);
   };
   const expiresMedicineLogOpener = () => {
-    tabFormulate()
+    tabFormulate();
     setExpiresMedicianLog(true);
   };
 
@@ -873,122 +872,150 @@ export default function Prescription(props) {
             style={ModalStyles}
           >
             <div className="modal">
-            <div className="modal-header">
+              <div className="modal-header">
                 <h3>دوا های تاریخ کم</h3>
-                <div className="modal-close-btn" onClick={expiresMedicineLogCloser}>
+                <div
+                  className="modal-close-btn"
+                  onClick={expiresMedicineLogCloser}
+                >
                   <i className="fa-solid fa-xmark"></i>
                 </div>
               </div>
               <div className="expires-log-box">
-                  {expiresMedicine.map((medicine) => {
-                    const pharmImage = pharmGroub.filter((value) => {
-                      return value.id == medicine.medician.pharm_group && value.image;
-                    });
-                    const kindImage = kind.filter((value) => {
-                      return value.id == medicine.medician.kind && value.image;
-                    });
-                    const countryImage = country.filter((value) => {
-                      return value.id == medicine.medician.country && value.image;
-                    });
-                    return ( 
-                    <div className="expires-medicine-select" onClick={() => {
-                      AutoCompleteHandle(medicine.medician)
-                      expiresMedicineLogCloser()
-                    }}>
-                    <div className="medician-format">
-                    <div className="medician-image">
-                      <img
-                        className="medician-image"
-                        src={
-                          medicine.medician.image
-                            ? new URL(medicine.medician.image).pathname.slice(16)
-                            : "./images/nophoto.jpg"
-                        }
-                      />
-                    </div>
-                    <div className="medician-image">
-                      <img
-                        className="medician-image"
-                        src={
-                          pharmImage[0] && pharmImage[0].image
-                            ? new URL(pharmImage[0].image).pathname.slice(16)
-                            : "./images/nophoto.jpg"
-                        }
-                      />
-                    </div>
-                    <div className="medician-image">
-                      <img
-                        className="medician-image"
-                        src={
-                          kindImage[0] && kindImage[0].image
-                            ? new URL(kindImage[0].image).pathname.slice(16)
-                            : "./images/nophoto.jpg"
-                        }
-                      />
-                    </div>
-                    <div className="medician-image">
-                      <img
-                        className="medician-image"
-                        src={
-                          countryImage[0] && countryImage[0].image
-                            ? new URL(countryImage[0].image).pathname.slice(16)
-                            : "./images/nophoto.jpg"
-                        }
-                      />
-                    </div>
-                    <div className="medician-text-field">
-                      <div>
-                        <div className="medician-select-information">
-                          <h4>{medicine.medician.brand_name + " " + (medicine.medician.ml ? medicine.medician.ml : " ")}</h4>
-                          <h4>
-                            &nbsp;
-                            {country.map(
-                              (country) => country.id == medicine.medician.country && country.name
-                            )}
-                          </h4>
-                          <h4>
-                            &nbsp;
-                            {pharmGroub.map(
-                              (pharm) => pharm.id == medicine.medician.pharm_group && pharm.name_english
-                            )}
-                          </h4>
+                {expiresMedicine.map((medicine) => {
+                  const pharmImage = pharmGroub.filter((value) => {
+                    return (
+                      value.id == medicine.medician.pharm_group && value.image
+                    );
+                  });
+                  const kindImage = kind.filter((value) => {
+                    return value.id == medicine.medician.kind && value.image;
+                  });
+                  const countryImage = country.filter((value) => {
+                    return value.id == medicine.medician.country && value.image;
+                  });
+                  return (
+                    <div
+                      className="expires-medicine-select"
+                      onClick={() => {
+                        AutoCompleteHandle(medicine.medician);
+                        expiresMedicineLogCloser();
+                      }}
+                    >
+                      <div className="medician-format">
+                        <div className="medician-image">
+                          <img
+                            className="medician-image"
+                            src={
+                              medicine.medician.image
+                                ? new URL(
+                                    medicine.medician.image
+                                  ).pathname.slice(16)
+                                : "./images/nophoto.jpg"
+                            }
+                          />
                         </div>
-                        <h4>ترکیب: {medicine.medician.generic_name.toString()}</h4>
-                        <div className="medician-text-field-numbers">
-                          <h4>مکان: {medicine.medician.location}</h4>
-                          <h4>قیمت: {`${medicine.medician.price}AF`}</h4>
-                          <h4>تعداد در پاکت: {medicine.medician.no_pocket}</h4>
-                          <h4>تعداد در قطی: {medicine.medician.no_box}</h4>
-                          <h4>موجودیت: {medicine.medician.existence}</h4>
+                        <div className="medician-image">
+                          <img
+                            className="medician-image"
+                            src={
+                              pharmImage[0] && pharmImage[0].image
+                                ? new URL(pharmImage[0].image).pathname.slice(
+                                    16
+                                  )
+                                : "./images/nophoto.jpg"
+                            }
+                          />
+                        </div>
+                        <div className="medician-image">
+                          <img
+                            className="medician-image"
+                            src={
+                              kindImage[0] && kindImage[0].image
+                                ? new URL(kindImage[0].image).pathname.slice(16)
+                                : "./images/nophoto.jpg"
+                            }
+                          />
+                        </div>
+                        <div className="medician-image">
+                          <img
+                            className="medician-image"
+                            src={
+                              countryImage[0] && countryImage[0].image
+                                ? new URL(countryImage[0].image).pathname.slice(
+                                    16
+                                  )
+                                : "./images/nophoto.jpg"
+                            }
+                          />
+                        </div>
+                        <div className="medician-text-field">
+                          <div>
+                            <div className="medician-select-information">
+                              <h4>
+                                {medicine.medician.brand_name +
+                                  " " +
+                                  (medicine.medician.ml
+                                    ? medicine.medician.ml
+                                    : " ")}
+                              </h4>
+                              <h4>
+                                &nbsp;
+                                {country.map(
+                                  (country) =>
+                                    country.id == medicine.medician.country &&
+                                    country.name
+                                )}
+                              </h4>
+                              <h4>
+                                &nbsp;
+                                {pharmGroub.map(
+                                  (pharm) =>
+                                    pharm.id == medicine.medician.pharm_group &&
+                                    pharm.name_english
+                                )}
+                              </h4>
+                            </div>
+                            <h4>
+                              ترکیب: {medicine.medician.generic_name.toString()}
+                            </h4>
+                            <div className="medician-text-field-numbers">
+                              <h4>مکان: {medicine.medician.location}</h4>
+                              <h4>قیمت: {`${medicine.medician.price}AF`}</h4>
+                              <h4>
+                                تعداد در پاکت: {medicine.medician.no_pocket}
+                              </h4>
+                              <h4>تعداد در قطی: {medicine.medician.no_box}</h4>
+                              <h4>موجودیت: {medicine.medician.existence}</h4>
+                            </div>
+                          </div>
+                          <div className="medician-big-text-fields">
+                            <div className="medician-bix-text-field">
+                              {medicine.medician.description && (
+                                <div className="paragraph-big-text">
+                                  توضیحات:
+                                  {medicine.medician.description}
+                                </div>
+                              )}
+                              {medicine.medician.cautions && (
+                                <div className="paragraph-big-text">
+                                  اخطار:
+                                  {medicine.medician.cautions}
+                                </div>
+                              )}
+                              {medicine.medician.usages && (
+                                <div className="paragraph-big-text">
+                                  استفاده:
+                                  {medicine.medician.usages}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="medician-big-text-fields">
-                        <div className="medician-bix-text-field">
-                          {medicine.medician.description && (
-                            <div className="paragraph-big-text">
-                              توضیحات:
-                              {medicine.medician.description}
-                            </div>
-                          )}
-                          {medicine.medician.cautions && (
-                            <div className="paragraph-big-text">
-                              اخطار:
-                              {medicine.medician.cautions}
-                            </div>
-                          )}
-                          {medicine.medician.usages && (
-                            <div className="paragraph-big-text">
-                              استفاده:
-                              {medicine.medician.usages}
-                            </div>
-                          )}
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                  </div>)
-                  } 
-                  )}
+                  );
+                })}
               </div>
             </div>
           </Modal>
@@ -1077,6 +1104,8 @@ export default function Prescription(props) {
                   <div>
                     <ReactSearchAutocomplete
                       items={patient}
+                      fuseOptions={{ keys: ["code_name", "id", "name"] }}
+                      resultStringKeyName={"code_name"}
                       onSelect={(item) =>
                         setAutoCompleteData({
                           ...autoCompleteData,
@@ -1089,6 +1118,7 @@ export default function Prescription(props) {
                       showIcon={false}
                       className="autoComplete"
                       placeholder={patientName}
+                      inputSearchString={patientName}
                     />
                     <Patient button={2} Update={UpdateDoctorsPatient} />
                   </div>
@@ -1096,7 +1126,10 @@ export default function Prescription(props) {
                   <div>
                     <ReactSearchAutocomplete
                       items={doctor}
+                      fuseOptions={{ keys: ["code_name", "id", "name"] }}
+                      resultStringKeyName={"code_name"}
                       styling={AutoCompleteStyle}
+                      showItemsOnFocus={true}
                       onSelect={(item) =>
                         setAutoCompleteData({
                           ...autoCompleteData,
@@ -1107,6 +1140,7 @@ export default function Prescription(props) {
                       inputDebounce="10"
                       showIcon={false}
                       placeholder={doctorName}
+                      inputSearchString={doctorName}
                     />
                     <Doctor button={2} Update={UpdateDoctorsPatient} />
                   </div>
@@ -1253,17 +1287,19 @@ export default function Prescription(props) {
                   <div className="prescription-button">
                     {expiresMedicine != "" && (
                       <div className="expires-box">
-                      <input className="prescription-alert-button"
-                      onClick={expiresMedicineLogOpener}
-                      type="button"
-                      onSubmit={handleSubmit(PrescriptionThrough)}
-                      tabIndex={-1}
-                      value="!"
-                      >
-                      </input>
-                      <p className="selected-color-medicine">Now: {autoCompleteData.medician.brand_name}</p>
+                        <input
+                          className="prescription-alert-button"
+                          onClick={expiresMedicineLogOpener}
+                          type="button"
+                          onSubmit={handleSubmit(PrescriptionThrough)}
+                          tabIndex={-1}
+                          value="!"
+                        ></input>
+                        <p className="selected-color-medicine">
+                          Now: {autoCompleteData.medician.brand_name}
+                        </p>
                       </div>
-                    )} 
+                    )}
                     <input
                       type="submit"
                       value="⤵ Add"

@@ -14,7 +14,7 @@ export default function SelectMedician({
   department,
   results,
   ExpiresMedicine,
-  UpdateChangedMedicine
+  UpdateChangedMedicine,
 }) {
   const customStyles = {
     content: {
@@ -187,7 +187,7 @@ export default function SelectMedician({
   function registerModalCloser() {
     setRegisterModalOpen(false);
     setMedician([]);
-    setScrolled(false)
+    setScrolled(false);
   }
 
   const handleKeyDown = (event) => {
@@ -221,10 +221,7 @@ export default function SelectMedician({
     setSelectedMedician(item);
   };
 
-
-  const [scrolled, setScrolled] = React.useState(false)
-
-
+  const [scrolled, setScrolled] = React.useState(false);
 
   return (
     <>
@@ -263,47 +260,46 @@ export default function SelectMedician({
             <div
               className="medician-select-input-box"
               onKeyDown={(e) => {
-                const element = document.querySelector('.sc-gLDzan')
+                const element = document.querySelector(".sc-gLDzan");
                 let scrollNow = element.scrollTop;
 
                 if (e.key == "ArrowDown") {
-                  if (element.scrollTop + element.offsetHeight>= element.scrollHeight){
+                  if (
+                    element.scrollTop + element.offsetHeight >=
+                    element.scrollHeight
+                  ) {
                     if (scrolled) {
-                      element.scroll(0,0)
-                      setScrolled(false)
-                    }
-                    else {
+                      element.scroll(0, 0);
+                      setScrolled(false);
+                    } else {
                       setScrolled(true);
                     }
-                  }
-                  else {
+                  } else {
                     element.scroll(
                       scrollNow == 0 ? 1 : scrollNow == 2 ? 1 : scrollNow + 160,
-                      scrollNow == 0 ? 1 : scrollNow == 2 ? 1 : scrollNow + 160,
+                      scrollNow == 0 ? 1 : scrollNow == 2 ? 1 : scrollNow + 160
                     );
-                  
                   }
                 }
                 if (e.key == "ArrowUp") {
-                  
-                  if (element.scrollTop + element.offsetHeight>= element.scrollHeight) {
-                    console.log("bottom")
-                    element.scroll(scrollNow - 2, scrollNow - 2)
-                    
-                  }
-                  else {
-                    console.log('other')
-                    element.scroll(scrollNow - 160, scrollNow - 160)
+                  if (
+                    element.scrollTop + element.offsetHeight >=
+                    element.scrollHeight
+                  ) {
+                    console.log("bottom");
+                    element.scroll(scrollNow - 2, scrollNow - 2);
+                  } else {
+                    console.log("other");
+                    element.scroll(scrollNow - 160, scrollNow - 160);
                   }
                   if (scrollNow == 0 || scrollNow == 1) {
-                    console.log("Top")
-                    element.scroll(0,2)
+                    console.log("Top");
+                    element.scroll(0, 2);
                   }
                   if (scrollNow == 2) {
                     // element.scroll({ top: element.scrollHeight, behavior:'smooth',block: 'end'});
                     element.scroll(0, 20000);
                   }
-
                 }
               }}
             >
@@ -353,10 +349,10 @@ export default function SelectMedician({
                 resultStringKeyName="brand_name"
                 styling={AutoCompleteStyle2}
                 showClear={false}
-                inputDebounce="10"
+                inputDebounce="0"
                 showItemsOnFocus={true}
                 onSearch={(string, result) => {
-                  setMedicineWith([])
+                  setMedicineWith([]);
                   let stringArray = string.split("  ");
                   setStringArray(stringArray);
                   if (string != "" && isNaN(string)) {
@@ -399,7 +395,7 @@ export default function SelectMedician({
                   setMedician([]);
                   registerModalCloser();
                   setSelectedMedician(item);
-                  let result = []
+                  let result = [];
                   axios
                     .get(MEDICIAN_WITH_URL + "?medicine=" + item.id)
                     .then((res2) => {
@@ -407,14 +403,17 @@ export default function SelectMedician({
                         axios
                           .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
                           .then((res3) => {
-                            res3.data.results.length > 0 ? setMedicineWith(res3.data.results) : setMedicineWith(result)
+                            res3.data.results.length > 0
+                              ? setMedicineWith(res3.data.results)
+                              : setMedicineWith(result);
                           });
-                      }
-                      else {
-                        medicianWith.map((medicineWith) => (
-                          medicineWith.id != item.id && result.push(medicineWith)
-                        ))
-                        setMedicineWith(result)
+                      } else {
+                        medicianWith.map(
+                          (medicineWith) =>
+                            medicineWith.id != item.id &&
+                            result.push(medicineWith)
+                        );
+                        setMedicineWith(result);
                       }
                     });
                   if (item.generic_name != "") {
@@ -439,32 +438,35 @@ export default function SelectMedician({
                 autoFocus={true}
                 className="search"
               />
-              </div>
-              <MedicianEntrance button={3} autocompleter={selectAutoCompleteData}/>
-              <div className="bookmarks-box">
-                {bookmarkedMedicine.map((medicine) => (
-                  <div
-                    className="bookmark-card"
-                    onClick={() => {
-                      selectAutoCompleteData(medicine);
-                      registerModalCloser();
-                      setSelectedMedician(medicine);
-                    }}
-                  >
-                    <img
-                      className="bookmark-image"
-                      src={
-                        medicine.image
-                          ? new URL(medicine.image).pathname.slice(16)
-                          : "./images/nophoto.jpg"
-                      }
-                    />
-                    <h4>{medicine.brand_name}</h4>
-                    <h5>{medicine.generic_name}</h5>
-                    <h4>{medicine.ml}</h4>
-                  </div>
-                ))}
-              </div>
+            </div>
+            <MedicianEntrance
+              button={3}
+              autocompleter={selectAutoCompleteData}
+            />
+            <div className="bookmarks-box">
+              {bookmarkedMedicine.map((medicine) => (
+                <div
+                  className="bookmark-card"
+                  onClick={() => {
+                    selectAutoCompleteData(medicine);
+                    registerModalCloser();
+                    setSelectedMedician(medicine);
+                  }}
+                >
+                  <img
+                    className="bookmark-image"
+                    src={
+                      medicine.image
+                        ? new URL(medicine.image).pathname.slice(16)
+                        : "./images/nophoto.jpg"
+                    }
+                  />
+                  <h4>{medicine.brand_name}</h4>
+                  <h5>{medicine.generic_name}</h5>
+                  <h4>{medicine.ml}</h4>
+                </div>
+              ))}
+            </div>
           </div>
         </Modal>
       </div>
