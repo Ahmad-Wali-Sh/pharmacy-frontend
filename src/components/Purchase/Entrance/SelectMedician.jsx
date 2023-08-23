@@ -5,9 +5,6 @@ import axios from "axios";
 import MedicianEntrance from "../../Medician/MedicianEntrance/MedicianEntrance";
 
 export default function SelectMedician({
-  kind,
-  country,
-  pharmGroub,
   selectAutoCompleteData,
   trigger,
   tabFormulate,
@@ -46,101 +43,95 @@ export default function SelectMedician({
   };
 
   const formatResult = (item) => {
-    const pharmImage = pharmGroub.filter((value) => {
-      return value.id == item.pharm_group && value.image;
-    });
-    const kindImage = kind.filter((value) => {
-      return value.id == item.kind && value.image;
-    });
-    const countryImage = country.filter((value) => {
-      return value.id == item.country && value.image;
-    });
+    
     return (
       <div className="medician-format">
-        <div className="medician-image">
-          <img
-            className="medician-image"
-            src={
-              item.image
-                ? new URL(item.image).pathname.slice(16)
-                : "./images/nophoto.jpg"
-            }
-          />
-        </div>
-        <div className="medician-image">
-          <img
-            className="medician-image"
-            src={
-              pharmImage[0] && pharmImage[0].image
-                ? new URL(pharmImage[0].image).pathname.slice(16)
-                : "./images/nophoto.jpg"
-            }
-          />
-        </div>
-        <div className="medician-image">
-          <img
-            className="medician-image"
-            src={
-              kindImage[0] && kindImage[0].image
-                ? new URL(kindImage[0].image).pathname.slice(16)
-                : "./images/nophoto.jpg"
-            }
-          />
-        </div>
-        <div className="medician-image">
-          <img
-            className="medician-image"
-            src={
-              countryImage[0] && countryImage[0].image
-                ? new URL(countryImage[0].image).pathname.slice(16)
-                : "./images/nophoto.jpg"
-            }
-          />
-        </div>
-        <div className="medician-text-field">
-          <div>
-            <div className="medician-select-information">
-              <h4>{item.medicine_full}</h4>
-            </div>
-            <h4>ترکیب: {item.generic_name.toString()}</h4>
-            <div className="medician-text-field-numbers">
-              <h4>مکان: {item.location}</h4>
-              <h4>قیمت: {`${item.price}AF`}</h4>
-              <h4>تعداد در پاکت: {item.no_pocket}</h4>
-              <h4>تعداد در قطی: {item.no_box}</h4>
-              <h4>موجودیت: {item.existence}</h4>
-              <h4>
-                قیمت قطی: {parseFloat(item.no_box) * parseFloat(item.price)}
-              </h4>
-              {item.unsubmited_existence != 0 && (
-                <h4>موجودی.ثبت.نشده: {item.unsubmited_existence}</h4>
-              )}
-            </div>
-          </div>
-          <div className="medician-big-text-fields">
-            <div className="medician-bix-text-field">
-              {item.description && (
-                <div className="paragraph-big-text">
-                  توضیحات:
-                  {item.description}
+                  <div className="medician-image">
+                    <img
+                      className="medician-image"
+                      src={
+                        item.image
+                          ? new URL(item.image).pathname.slice(16)
+                          : "./images/nophoto.jpg"
+                      }
+                    />
+                  </div>
+                  <div className="medician-image">
+                    <img
+                      className="medician-image"
+                      src={
+                        item?.pharm_group_image
+                          ? new URL(
+                            item.pharm_group_image
+                            ).pathname.slice(16)
+                          : "./images/nophoto.jpg"
+                      }
+                    />
+                  </div>
+                  <div className="medician-image">
+                    <img
+                      className="medician-image"
+                      src={
+                        item.kind_image
+                          ? new URL(
+                            item.kind_image
+                            ).pathname.slice(16)
+                          : "./images/nophoto.jpg"
+                      }
+                    />
+                  </div>
+                  <div className="medician-image">
+                    <img
+                      className="medician-image"
+                      src={
+                        item.country_image
+                          ? new URL(
+                            item.country_image
+                            ).pathname.slice(16)
+                          : "./images/nophoto.jpg"
+                      }
+                    />
+                  </div>
+                  <div className="medician-text-field">
+                    <div>
+                      <div className="medician-select-information">
+                        <h4>{item.medicine_full}</h4>
+                      </div>
+                      <h4>
+                        ترکیب: {item.generic_name.toString()}
+                      </h4>
+                      <div className="medician-text-field-numbers">
+                        <h4>مکان: {item.location}</h4>
+                        <h4>قیمت: {`${item.price}AF`}</h4>
+                        <h4>تعداد در پاکت: {item.no_pocket}</h4>
+                        <h4>تعداد در قطی: {item.no_box}</h4>
+                        <h4>موجودیت: {item.existence}</h4>
+                      </div>
+                    </div>
+                    <div className="medician-big-text-fields">
+                      <div className="medician-bix-text-field">
+                        {item.description && (
+                          <div className="paragraph-big-text">
+                            توضیحات:
+                            {item.description}
+                          </div>
+                        )}
+                        {item.cautions && (
+                          <div className="paragraph-big-text">
+                            اخطار:
+                            {item.cautions}
+                          </div>
+                        )}
+                        {item.usages && (
+                          <div className="paragraph-big-text">
+                            استفاده:
+                            {item.usages}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              )}
-              {item.cautions && (
-                <div className="paragraph-big-text">
-                  اخطار:
-                  {item.cautions}
-                </div>
-              )}
-              {item.usages && (
-                <div className="paragraph-big-text">
-                  استفاده:
-                  {item.usages}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
     );
   };
 
@@ -171,11 +162,11 @@ export default function SelectMedician({
         .catch((err) => console.log(err));
   }, []);
 
-  React.useEffect(() => {
-    if (trigger != 0) {
-      registerModalOpener();
-    }
-  }, [trigger]);
+  // React.useEffect(() => {
+  //   if (trigger != 0) {
+  //     registerModalOpener();
+  //   }
+  // }, [trigger]);
 
   function registerModalOpener() {
     {

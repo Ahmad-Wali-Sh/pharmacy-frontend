@@ -489,13 +489,6 @@ input[type="date"]:disabled {
   background-color: rgba(109, 109, 109, 0.476);
 }
 
-.entrance-buttons {
-  display: flex;
-  justify-content: left;
-  gap: 0.3rem;
-  position: relative;
-  top: -0.5rem;
-}
 .entrance-buttons > input[type="submit"] {
   height: 2rem;
   border-radius: 1rem;
@@ -571,9 +564,8 @@ input[type="date"]:disabled {
 
 .entrance-report-footer {
   background-color: var(--color-nine);
-  height: 2.2rem;
+  height: 2.3rem;
   border-radius: 1rem;
-  margin: 0.5rem;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
@@ -3109,5 +3101,39 @@ input[type="date"]:disabled {
 
 .modal-box {
   height: 100%;
+}
+
+.form-button {
+  background-color: var(--color-nine);
+  width: 8rem;
+  height: 1.7rem;
+  border-radius: 0.6rem;
+  text-align: center;
+  border: none;
+  box-shadow: 1px 1px 3px black;
+  color: var(--color-ten)
+}
+.form-button:hover {
+  background-image: var(--color-five);
+  cursor: pointer;
+}
+.alert-button {
+  background-color: var(--color-nine) !important;
+}
+.alert-button:hover {
+  background-color: var(--color-seventh) !important;
+  background-image: none;
+  cursor: pointer;
+}
+
+.button-group {
+  display: flex;
+  width: 100%;
+  background-color: grey;
+  gap: 0.2rem;
+  padding: 0.3rem;
+  border-radius: 1rem;
+  position: relative;
+  top: -0.5rem;
 }
 

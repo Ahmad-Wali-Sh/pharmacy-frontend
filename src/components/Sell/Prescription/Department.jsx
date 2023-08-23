@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
 import { useMutation } from "react-query";
-import { postDataFn, successFn, handlePostData } from "../../services/API";
+import { postDataFn, successFn, handleFormData } from "../../services/API";
 import SmallModal from "../../PageComponents/Modals/SmallModal";
 import { useRef } from "react";
 import {MainButton,PlusButton } from "../../PageComponents/Buttons/Buttons";
@@ -75,7 +75,7 @@ function Department({ title, icon, button }) {
             <div className="store-submit">
               <input
                 onClick={handleSubmit((data) =>
-                  handlePostData(data, mutateAsync, user)
+                  handleFormData(data, mutateAsync, user)
                 )}
                 type="submit"
                 value="ثبت نوع"

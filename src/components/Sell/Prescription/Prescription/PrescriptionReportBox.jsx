@@ -1,4 +1,5 @@
 import React from "react";
+import { AfterBeforeButtonGroup } from "../../../PageComponents/Buttons/Buttons";
 
 function PrescriptionReportBox({
   report,
@@ -58,17 +59,7 @@ function PrescriptionReportBox({
           <label>:مقدار روند شده </label>
         </div>
       </div>
-      <div className="entrance-report-footer">
-        <button className="entrance-report-button" onClick={() => BackFunc()}>
-          <i class="fa-solid fa-left-long"></i>
-        </button>
-        <button className="entrance-report-button" onClick={() => MiddleFunc()}>
-          <i class="fa-solid fa-comments-dollar"></i>
-        </button>
-        <button className="entrance-report-button" onClick={() => FrontFunc()}>
-          <i class="fa-solid fa-right-long"></i>
-        </button>
-      </div>
+      <AfterBeforeButtonGroup BackFunc={() => BackFunc()} FrontFunc={() => FrontFunc()}/>
     </div>
   );
 }

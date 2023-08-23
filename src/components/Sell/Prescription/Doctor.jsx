@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
 import { useMutation } from "react-query";
-import { postDataFn, successFn, handlePostData } from "../../services/API";
+import { postDataFn, successFn, handleFormData } from "../../services/API";
 import BigModal from "../../PageComponents/Modals/BigModal";
 import { useRef } from "react";
 import { MainButton, PlusButton } from "../../PageComponents/Buttons/Buttons";
@@ -65,7 +65,7 @@ function Doctor({ button, title, icon }) {
             <div className="company-submit">
               <input
                 onClick={handleSubmit((data) =>
-                  handlePostData(data, mutateAsync, user)
+                  handleFormData(data, mutateAsync, user)
                 )}
                 type="submit"
                 value={title}

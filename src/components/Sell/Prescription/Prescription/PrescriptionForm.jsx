@@ -5,10 +5,15 @@ import { useQuery } from "react-query";
 import { useForm } from "react-hook-form";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { AutoCompleteStyle } from "../../../../styles";
+import {
+  ButtonGroup,
+  FormButton,
+  SearchButton,
+  SubmitButton,
+} from "../../../PageComponents/Buttons/Buttons";
 
 function PrescriptionForm({
   prescription,
-  departmentSelected,
   handlePrescriptionSearch,
   handlePrescriptionDelete,
   handleDuplicationPrescription,
@@ -19,27 +24,36 @@ function PrescriptionForm({
   const { data: doctor } = useQuery(["doctor/"]);
   const { data: department } = useQuery(["department/"]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, reset, setValue } = useForm();
+
+  React.useEffect(() => {
+    reset({
+      discount_money: prescription.discount_money
+        ? prescription.discount_money
+        : 0,
+      discount_percent: prescription.discount_percent
+        ? prescription.discount_percent
+        : 0,
+      zakat: prescription.zakat ? prescription.zakat : 0,
+      khairat: prescription.khairat ? prescription.khairat : 0,
+      department: prescription.department ? prescription.department : 0,
+      prescription_number: prescription.prescription_number
+        ? prescription.prescription_number
+        : "",
+      image: prescription.image ? prescription.image : "",
+    });
+  }, [prescription]);
 
   return (
-    <form className="prescription-prescription" id="Myform">
+    <form
+      className="prescription-prescription"
+      id="Myform"
+      onSubmit={handleSubmit(handlePrescriptionSubmit)}
+    >
       <label>نوع نسخه:</label>
-      <select
-        {...register("department")}
-        defaultValue={prescription.id}
-        onChange={(res) => {
-          DepartmentHandler(res.target.value);
-        }}
-      >
-        <option value={prescription.department} selected hidden>
-          {department?.map(
-            (depart) => depart.id == prescription.department && depart.name
-          )}
+      <select {...register("department")}>
+        <option value={prescription.department} selected disabled>
+          {prescription.department_name}
         </option>
         {department?.map((depart) => (
           <option value={depart.id}>{depart.name}</option>
@@ -91,35 +105,26 @@ function PrescriptionForm({
         type="text"
         {...register("prescription_number")}
         value={prescription.prescription_number}
+        disabled
       />
       <label>جستوجو:</label>
       <div className="flex">
         <form className="search-form">
           <input type="text" {...register("number")} />
-          <button
-            className="search-button-box"
-            onClick={handleSubmit(handlePrescriptionSearch)}
-            type="submit"
-          >
-            <i class="fa-brands fa-searchengin"></i>
-          </button>
+          <SearchButton Func={handleSubmit(handlePrescriptionSearch)} />
         </form>
       </div>
       <label>عکس:</label>
-      <input type="file" onChange={(e) => setFile(e.target.files[0])}></input>
+      <input
+        type="file"
+        onChange={(e) => {
+          setValue("image", e.target.files[0]);
+        }}
+      ></input>
       <label>تخفیف:</label>
-      <input
-        type="text"
-        {...register("discount_money")}
-        defaultValue={prescription.discount_money}
-        onChange={(e) => {}}
-      />
+      <input type="text" {...register("discount_money")} />
       <label>تخفیف %:</label>
-      <input
-        type="text"
-        {...register("discount_percent")}
-        defaultValue={prescription.discount_percent}
-      />
+      <input type="text" {...register("discount_percent")} />
       <div></div>
       <a
         href={
@@ -128,45 +133,29 @@ function PrescriptionForm({
         target="_blank"
         style={{ textDecoration: "none", color: "grey" }}
       >
-        {prescription.image ? "Show_Photo" : ""}
+        {prescription.image ? "Image <<" : ""}
       </a>
       <label>ذکات:</label>
-      <input
-        type="text"
-        {...register("zakat")}
-        defaultValue={prescription.zakat}
-      />
+      <input type="text" {...register("zakat")} />
       <label>خیرات:</label>
-      <input
-        type="text"
-        {...register("khairat")}
-        defaultValue={prescription.khairat}
-      />
+      <input type="text" {...register("khairat")} />
       <div></div>
-      <div className="entrance-buttons">
-        <input
-          type="reset"
-          value="ریسیت"
-          onClick={handlePrescriptionDelete}
-        ></input>
-        <input
-          type="button"
-          value="کپی نسخه"
-          className="prescription-create-button"
-          onClick={handleSubmit(handleDuplicationPrescription)}
-        ></input>
-        <input
-          type="button"
-          value="جدید"
-          className="prescription-create-button"
-          onClick={handleSubmit(handleCreactNewPrescription)}
-        ></input>
-        <input
-          type="submit"
-          value={"ثبت"}
-          onClick={handleSubmit(handlePrescriptionSubmit)}
-        ></input>
-      </div>
+      <ButtonGroup>
+        <FormButton
+          Func={handleSubmit(handlePrescriptionDelete)}
+          name="حذف"
+          className="alert-button"
+        />
+        <FormButton Func={() => handleDuplicationPrescription()} name="کپی" />
+        <FormButton
+          Func={handleSubmit(handleCreactNewPrescription)}
+          name="جدید"
+        />
+        <SubmitButton
+          Func={handleSubmit(handlePrescriptionSubmit)}
+          name="ذخیره"
+        />
+      </ButtonGroup>
     </form>
   );
 }

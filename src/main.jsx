@@ -11,18 +11,18 @@ import { queryClient } from './components/services/API'
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <>
     <ToastContainer
       position="top-left"
       autoClose={200}
       transition={Flip}
       theme="dark"
       pauseOnHover={false}
-    />
+      />
     <AuthProvider authType={"localstorage"} authName={"_auth"}>
       <QueryClientProvider client={queryClient}>
       <App />
       </QueryClientProvider>
     </AuthProvider>
-  </React.StrictMode>
+  </>
 );

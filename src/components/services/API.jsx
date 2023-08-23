@@ -27,16 +27,24 @@ export const postDataFn = (data, api) => {
     return axios.post(API_URL + api, data)
 }
 
+export const putDataFn = (data, api) => {
+    return axios.put(API_URL + api, data)
+}
+
+export const patchDataFn = (data, api) => {
+    return axios.patch(API_URL + api, data)
+}
+
 
 // it is a default success function to do its job
 export const successFn = (invalidKey, func) => {
-    toast.success('New Department Activtated!')
+    toast.success('Successfull!')
     queryClient.invalidateQueries([invalidKey])
     func()
 }
 
 // it is a function that gets data from react hook form and translate it into Form for submiting.
-export const handlePostData = (data, mutationFun, user) => {
+export const handleFormData = (data, mutationFun, user) => {
     const Form = new FormData();
     const result = Object.keys(data).map((key) => [key, data[key]]);
     result.map((field) => {
