@@ -15,14 +15,13 @@ import PrescriptionReportBox from "./PrescriptionReportBox";
 import PrescriptionForm from "./PrescriptionForm";
 import PrescriptionThroughForm from "./PrescriptionThroughForm";
 import PrescriptionThroughMapForm from "./PrescriptionThroughMapForm";
-import { useMutation } from "react-query";
-import { putDataFn, postDataFn, handleFormData, successFn } from "../../../services/API";
+import { useQuery } from "react-query";
 
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
   const SameMedicineAlertModalRef = useRef(null);
 
-  let loading = true
+  let loading = true;
   const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
   const PRESCRIPTION_THOURGH_URL = import.meta.env.VITE_PRESCRIPTION_THROUGH;
   const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
@@ -36,14 +35,13 @@ export default function Prescription(props) {
     number: 0,
     total_to_sale: 0,
     rounded_number: 0,
-    disount_value:0
+    disount_value: 0,
   });
 
   const Reporting = () => {
-    
     const totalCalculate = () => {
       let result = 0;
-      prescriptionThrough.map((item) => {
+      prescriptionThrough?.map((item) => {
         result += item.each_price * item.quantity;
         return result;
       });
@@ -92,7 +90,7 @@ export default function Prescription(props) {
     };
     setReport({
       total: Math.round(totalCalculate()),
-      number: prescriptionThrough.length,
+      number: prescriptionThrough?.length,
       total_to_sale: Math.round(totalToSaleCalculate()) + CellingHandler(),
       rounded_number: CellingHandler(),
       disount_value:
@@ -110,9 +108,14 @@ export default function Prescription(props) {
   const [submited, setSubmited] = React.useState(false);
   const [prescription, setPrescription] = React.useState([]);
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-  const [prescriptionThrough, setPrescriptionThrough] = React.useState([]);
+  // const [prescriptionThrough, setPrescriptionThrough] = React.useState([]);
   const [departmentSelected, setDepartmentSelected] = React.useState("");
   const [excatTrough, setExactThrough] = React.useState("");
+
+  const { data: prescriptionThrough, isLoading: presThroughLoad } = useQuery({
+    queryKey: [`prescription-through/${prescription?.id}`],
+    enabled: !!prescription.id,
+  });
 
   // React.useEffect(() => {
   //   if (props.trigger) {
@@ -148,7 +151,7 @@ export default function Prescription(props) {
 
   React.useEffect(() => {
     Reporting();
-  }, [prescriptionThrough]);
+  }, [prescriptionThrough, prescription]);
 
   // React.useEffect(() => {
   //   const RoundForm = new FormData();
@@ -165,23 +168,12 @@ export default function Prescription(props) {
     setRegisterModalOpen(true);
   }
 
-
   function AutoCompleteHandle(data) {
     setAutoCompleteData({
       ...autoCompleteData,
       medician: data,
     });
   }
-
-  const { mutateAsync } = useMutation({
-    mutationFn: (data) => postDataFn(data, "prescription/"),
-    onSuccess: (res) => {
-      successFn('', () => {
-        setPrescription(res.data)
-      })
-    },
-  });
-
 
   // const PrescriptionSubmit = (data) => {
   //   console.log(data.image);
@@ -387,24 +379,23 @@ export default function Prescription(props) {
   const ResetForm = () => {
     setPrescription([]);
     setSubmited(false);
-    setPrescriptionThrough([]);
+    // setPrescriptionThrough([]);
     setDepartmentSelected([]);
   };
 
-  function UpdateUI() {
-    setPrescriptionThrough([]);
-    axios
-      .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + prescription.id)
-      .then((res) => setPrescriptionThrough(res.data))
-      .catch((err) => console.log(err));
-  }
-  function UpdateChunk() {
-    axios
-      .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + prescription.id)
-      .then((res) => setPrescriptionThrough(res.data))
-      .catch((err) => console.log(err));
-  }
-
+  // function UpdateUI() {
+  //   setPrescriptionThrough([]);
+  //   axios
+  //     .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + prescription.id)
+  //     .then((res) => setPrescriptionThrough(res.data))
+  //     .catch((err) => console.log(err));
+  // }
+  // function UpdateChunk() {
+  //   axios
+  //     .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + prescription.id)
+  //     .then((res) => setPrescriptionThrough(res.data))
+  //     .catch((err) => console.log(err));
+  // }
 
   const DuplicatePrescription = () => {
     const PrescriptionForm = new FormData();
@@ -445,8 +436,6 @@ export default function Prescription(props) {
       .catch((err) => console.log(err));
   };
 
-
-
   const tabFormulate = () => {
     document.getElementById("number-in-factor-input").focus();
   };
@@ -471,7 +460,6 @@ export default function Prescription(props) {
           setPrescription(res.data);
 
           setSubmited(true);
-          setLoading(true);
           toast.success("Data Submited Successfuly.");
 
           axios
@@ -508,8 +496,8 @@ export default function Prescription(props) {
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
             .then((res) => {
-              setPrescriptionThrough([]);
-              setPrescriptionThrough(res.data);
+              // setPrescriptionThrough([]);
+              // setPrescriptionThrough(res.data);
             });
         })
       : axios
@@ -524,8 +512,8 @@ export default function Prescription(props) {
                   PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id
                 )
                 .then((res) => {
-                  setPrescriptionThrough([]);
-                  setPrescriptionThrough(res.data);
+                  // setPrescriptionThrough([]);
+                  // setPrescriptionThrough(res.data);
                 });
           });
   };
@@ -553,8 +541,8 @@ export default function Prescription(props) {
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
             .then((res) => {
-              setPrescriptionThrough([]);
-              setPrescriptionThrough(res.data);
+              // setPrescriptionThrough([]);
+              // setPrescriptionThrough(res.data);
             });
         })
       : axios
@@ -569,8 +557,8 @@ export default function Prescription(props) {
                   PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id
                 )
                 .then((res) => {
-                  setPrescriptionThrough([]);
-                  setPrescriptionThrough(res.data);
+                  // setPrescriptionThrough([]);
+                  // setPrescriptionThrough(res.data);
                 });
           });
   };
@@ -599,9 +587,6 @@ export default function Prescription(props) {
         : toast.error("This Prescription Can't be deleted!");
     }
   };
-
-
-
 
   return (
     <>
@@ -643,13 +628,13 @@ export default function Prescription(props) {
                 handlePrescriptionDelete={DeletePrescription}
                 handleCreactNewPrescription={CreateNewPrescription}
                 handleDuplicationPrescription={DuplicatePrescription}
-                handlePrescriptionSubmit={(data) => handleFormData(data, mutateAsync, user)}
+                handlePrescriptionSubmit={(data) => setPrescription(data)}
               />
               <PrescriptionThroughForm
                 handlePrescriptionThroughSubmit={PrescriptionThrough}
                 handleMedicineSelect={AutoCompleteHandle}
               />
-              <PrescriptionThroughMapForm prescriptionThrough={prescriptionThrough}/>
+              <PrescriptionThroughMapForm prescription={prescription} />
             </div>
           </div>
         ) : (

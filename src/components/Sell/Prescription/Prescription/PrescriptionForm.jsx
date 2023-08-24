@@ -11,6 +11,14 @@ import {
   SearchButton,
   SubmitButton,
 } from "../../../PageComponents/Buttons/Buttons";
+import { useMutation } from "react-query";
+import {
+  putDataFn,
+  postDataFn,
+  handleFormData,
+  successFn,
+} from "../../../services/API";
+import { useAuthUser } from "react-auth-kit";
 
 function PrescriptionForm({
   prescription,
@@ -20,6 +28,7 @@ function PrescriptionForm({
   handleCreactNewPrescription,
   handlePrescriptionSubmit,
 }) {
+  const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
   const { data: doctor } = useQuery(["doctor/"]);
   const { data: department } = useQuery(["department/"]);
@@ -28,27 +37,93 @@ function PrescriptionForm({
 
   React.useEffect(() => {
     reset({
-      discount_money: prescription.discount_money
-        ? prescription.discount_money
-        : 0,
-      discount_percent: prescription.discount_percent
-        ? prescription.discount_percent
-        : 0,
-      zakat: prescription.zakat ? prescription.zakat : 0,
-      khairat: prescription.khairat ? prescription.khairat : 0,
-      department: prescription.department ? prescription.department : 0,
-      prescription_number: prescription.prescription_number
-        ? prescription.prescription_number
-        : "",
-      image: prescription.image ? prescription.image : "",
+      discount_money: prescription.discount_money || 0,
+      discount_percent: prescription.discount_percent || 0,
+      zakat: prescription.zakat || 0,
+      khairat: prescription.khairat || 0,
+      department: prescription.department || 0,
+      prescription_number: prescription.prescription_number || "",
+      image: prescription.image || "",
     });
   }, [prescription]);
+
+  const { mutateAsync: newPrescription } = useMutation({
+    mutationFn: (data) => postDataFn(data, "prescription/"),
+    onSuccess: (res) => {
+      successFn("", () => {
+        handlePrescriptionSubmit(res.data);
+      });
+    },
+  });
+
+  const { mutate: updatePrescription } = useMutation({
+    mutationFn: (data) => {
+      putDataFn(data, `prescription/${prescription.id}/`);
+    },
+    onSuccess: (res) =>
+      successFn("", () => {
+        handlePrescriptionSubmit(res.data);
+      }),
+  });
+
+  const { mutateAsync: duplicatePrescription } = useMutation({
+    mutationFn: (data) => postDataFn(data, "prescription/"),
+    onSuccess: (res) => {
+      successFn("", () => {
+        handlePrescriptionSubmit(res.data);
+      });
+    },
+  });
+
+  const DuplicatePrescription = () => {
+    const PrescriptionForm = new FormData();
+    PrescriptionForm.append("name", autoCompleteData.patient);
+    PrescriptionForm.append("doctor", autoCompleteData.doctor);
+    PrescriptionForm.append("department", prescription.department);
+    PrescriptionForm.append("round_number", prescription.round_number);
+    PrescriptionForm.append("discount_money", prescription.discount_money);
+    PrescriptionForm.append("discount_percent", prescription.discount_percent);
+    PrescriptionForm.append("zakat", prescription.zakat);
+    PrescriptionForm.append("khairat", prescription.khairat);
+    PrescriptionForm.append(
+      "image",
+      prescription.image ? prescription.image : ""
+    );
+    PrescriptionForm.append("user", user().id);
+
+    axios
+      .post(PRESCRIPTION_URL, PrescriptionForm)
+      .then((res) => {
+        setPrescription(res.data);
+        prescriptionThrough.map((item) => {
+          const PrescriptionThroughForm = new FormData();
+          PrescriptionThroughForm.append("quantity", item.quantity);
+          PrescriptionThroughForm.append("each_price", item.each_price);
+          PrescriptionThroughForm.append("medician", item.medician);
+          PrescriptionThroughForm.append("prescription", res.data.id);
+          PrescriptionThroughForm.append("user", user().id);
+          setPrescriptionThrough([]);
+          axios
+            .post(PRESCRIPTION_THOURGH_URL, PrescriptionThroughForm)
+            .then((res) => {
+              setPrescriptionThrough((prev) => [...prev, res.data]);
+            })
+            .catch((err) => console.log(err));
+        });
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <form
       className="prescription-prescription"
-      id="Myform"
-      onSubmit={handleSubmit(handlePrescriptionSubmit)}
+      onSubmit={handleSubmit((data) =>
+        handleFormData(
+          data,
+          prescription.id ? updatePrescription : newPrescription,
+          user
+        )
+      )}
     >
       <label>نوع نسخه:</label>
       <select {...register("department")}>
@@ -151,10 +226,7 @@ function PrescriptionForm({
           Func={handleSubmit(handleCreactNewPrescription)}
           name="جدید"
         />
-        <SubmitButton
-          Func={handleSubmit(handlePrescriptionSubmit)}
-          name="ذخیره"
-        />
+        <SubmitButton name={prescription.id ? "آپدیت" : "ذخیره"} />
       </ButtonGroup>
     </form>
   );
