@@ -112,56 +112,14 @@ export default function Prescription(props) {
   const [departmentSelected, setDepartmentSelected] = React.useState("");
   const [excatTrough, setExactThrough] = React.useState("");
 
-  const { data: prescriptionThrough, isLoading: presThroughLoad } = useQuery({
-    queryKey: [`prescription-through/${prescription?.id}`],
-    enabled: !!prescription.id,
+  const { data: prescriptionThrough } = useQuery({
+    queryKey: [`prescription-through/?prescription=${prescription?.id}`],
+    enabled: prescription?.id != null,
   });
-
-  // React.useEffect(() => {
-  //   if (props.trigger) {
-  //     registerModalOpener();
-  //   }
-  //   ResetForm();
-  //   if (props.button == 1 && registerModalOpen) {
-  //     axios
-  //       .get(
-  //         PRESCRIPTION_URL +
-  //           "?prescription_number=" +
-  //           props.prescription.prescription_number
-  //       )
-  //       .then((res) => {
-  //         setPrescription(res.data[0] ? res.data[0] : []);
-  //         setSubmited(true);
-  //         {
-  //           res.data[0] ? toast.success("Search Was Successful.") : "";
-  //         }
-  //         axios
-  //           .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
-  //           .then((res) => {
-  //             setPrescriptionThrough(res.data);
-  //           })
-  //           .catch((err) => console.log(err));
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         toast.error("Check Your Input And Try Again!");
-  //       });
-  //   }
-  // }, [registerModalOpen, props.trigger]);
 
   React.useEffect(() => {
     Reporting();
   }, [prescriptionThrough, prescription]);
-
-  // React.useEffect(() => {
-  //   const RoundForm = new FormData();
-  //   RoundForm.append("rounded_number", report.rounded_number);
-  //   prescriptionThrough &&
-  //     prescription.id &&
-  //     axios
-  //       .patch(PRESCRIPTION_URL + prescription.id + "/", RoundForm)
-  //       .catch((err) => console.log(err));
-  // }, [prescriptionThrough]);
 
   function registerModalOpener() {
     ResetForm();
@@ -175,265 +133,11 @@ export default function Prescription(props) {
     });
   }
 
-  // const PrescriptionSubmit = (data) => {
-  //   console.log(data.image);
-  //   const PrescriptionForm = new FormData();
-  //   PrescriptionForm.append("name", autoCompleteData.patient);
-  //   PrescriptionForm.append("doctor", autoCompleteData.doctor);
-  //   PrescriptionForm.append(
-  //     "department",
-  //     data.department ? data.department : departmentSelected.id
-  //   );
-  //   PrescriptionForm.append("round_number", data.round_number);
-  //   PrescriptionForm.append(
-  //     "discount_money",
-  //     data.discount_money
-  //       ? data.discount_money
-  //       : departmentSelected.discount_money
-  //   );
-  //   PrescriptionForm.append(
-  //     "discount_percent",
-  //     data.discount_percent
-  //       ? data.discount_percent
-  //       : departmentSelected.discount_percent
-  //   );
-  //   PrescriptionForm.append("zakat", data.zakat);
-  //   PrescriptionForm.append("khairat", data.khairat);
-  //   PrescriptionForm.append(
-  //     "prescription_number",
-  //     prescription.prescription_number
-  //       ? prescription.prescription_number
-  //       : data.prescription_number
-  //   );
-  //   PrescriptionForm.append("image", data.image ? data.image : "");
-  //   PrescriptionForm.append("user", user().id);
-
-  //   if (submited == false) {
-  //     axios
-  //       .post(PRESCRIPTION_URL, PrescriptionForm)
-  //       .then((res) => {
-  //         setPrescription(res.data);
-  //         setSubmited(true);
-  //         toast.success("Data Submited Successfuly.");
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         toast.error("Check Your Input And Try Again!");
-  //       });
-  //   }
-
-  //   const PrescriptionUpdate = new FormData();
-  //   PrescriptionUpdate.append(
-  //     "name",
-  //     data.patient ? data.patient : autoCompleteData.patient
-  //   );
-  //   PrescriptionUpdate.append(
-  //     "doctor",
-  //     data.doctor ? data.doctor : autoCompleteData.doctor
-  //   );
-  //   PrescriptionUpdate.append(
-  //     "department",
-  //     data.department ? data.department : prescription.department
-  //   );
-  //   PrescriptionUpdate.append("round_number", data.round_number);
-  //   PrescriptionUpdate.append(
-  //     "discount_money",
-  //     data.discount_money ? data.discount_money : prescription.discount_money
-  //   );
-  //   PrescriptionUpdate.append(
-  //     "discount_percent",
-  //     data.discount_percent
-  //       ? data.discount_percent
-  //       : prescription.discount_percent
-  //   );
-  //   PrescriptionUpdate.append(
-  //     "zakat",
-  //     data.zakat ? data.zakat : prescription.zakat
-  //   );
-  //   PrescriptionUpdate.append(
-  //     "khairat",
-  //     data.khairat ? data.khairat : prescription.khairat
-  //   );
-  //   PrescriptionUpdate.append(
-  //     "prescription_number",
-  //     prescription.prescription_number
-  //       ? prescription.prescription_number
-  //       : data.prescription_number
-  //   );
-  //   PrescriptionUpdate.append("image", data.image ? data.image : "");
-  //   PrescriptionUpdate.append("user", user().id);
-
-  //   if (submited == true) {
-  //     axios
-  //       .patch(PRESCRIPTION_URL + prescription.id + "/", PrescriptionUpdate)
-  //       .then((res) => {
-  //         setPrescription(res.data);
-  //         toast.success("Data Updated Successfuly.");
-  //         UpdateChunk();
-  //         UpdateUI();
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         toast.error("Check Your Input And Try Again!");
-  //       });
-  //   }
-  // };
-
-  const PrescriptionThrough = (data) => {
-    const PrescritptionThroughForm = new FormData();
-    PrescritptionThroughForm.append("quantity", data.quantity);
-    PrescritptionThroughForm.append(
-      "each_price",
-      autoCompleteData.medician.price
-    );
-    PrescritptionThroughForm.append("medician", autoCompleteData.medician.id);
-    PrescritptionThroughForm.append("prescription", prescription.id);
-    PrescritptionThroughForm.append("user", user().id);
-
-    let result = true;
-    const Conditional = () => {
-      prescriptionThrough.map((prescription) => {
-        prescription.medician == autoCompleteData.medician.id &&
-          ((result = false), setExactThrough(prescription));
-
-        return result;
-      });
-      return result;
-    };
-
-    if (Conditional() == true) {
-      axios
-        .post(PRESCRIPTION_THOURGH_URL, PrescritptionThroughForm)
-        .then((res) => {
-          setPrescriptionThrough((prev) => [...prev, res.data]);
-          toast.info("Item Added.");
-          setTrigger((prev) => prev + 1);
-          axios
-            .get(MEDICIAN_WITH_URL + "?medicine=" + res.data.medician)
-            .then((res2) => {
-              axios
-                .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
-                .then((res3) => {
-                  setMedicineWith(res3.data.results);
-                });
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("Check Your Input And Try Again!");
-        });
-    }
-    if (Conditional() == false) {
-      SameMedicineAlertModalRef.current.Opener();
-    }
-  };
-
-  const MedicineIncluder = (data) => {
-    const MedicianUpdateForm = new FormData();
-    MedicianUpdateForm.append(
-      "quantity",
-      excatTrough && parseInt(excatTrough.quantity) + parseInt(data.quantity)
-    );
-
-    axios
-      .patch(
-        PRESCRIPTION_THOURGH_URL + excatTrough.id + "/",
-        MedicianUpdateForm
-      )
-      .then(() => {
-        toast.success("Data Updated Successfuly.");
-        UpdateChunk();
-        UpdateUI();
-        SameMedicineAlertModalRef.current.Closer();
-      })
-      .catch(() => toast.error("Check Your Input And Try Again!"));
-  };
-
-  const SearchSubmit = (data) => {
-    ResetForm();
-    axios
-      .get(PRESCRIPTION_URL + "?prescription_number=" + data.number)
-      .then((res) => {
-        setPrescription(res.data[0] ? res.data[0] : []);
-        setSubmited(true);
-        {
-          res.data[0] ? toast.success("Search Was Successful.") : "";
-        }
-        axios
-          .get(DEPARTMENT_URL + res.data[0].department)
-          .then((res) => setDepartmentSelected(res.data))
-          .catch((err) => console.log(err));
-        axios
-          .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
-          .then((res) => {
-            setPrescriptionThrough(res.data);
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Check Your Input And Try Again!");
-      });
-  };
-
+  
   const ResetForm = () => {
     setPrescription([]);
     setSubmited(false);
-    // setPrescriptionThrough([]);
     setDepartmentSelected([]);
-  };
-
-  // function UpdateUI() {
-  //   setPrescriptionThrough([]);
-  //   axios
-  //     .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + prescription.id)
-  //     .then((res) => setPrescriptionThrough(res.data))
-  //     .catch((err) => console.log(err));
-  // }
-  // function UpdateChunk() {
-  //   axios
-  //     .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + prescription.id)
-  //     .then((res) => setPrescriptionThrough(res.data))
-  //     .catch((err) => console.log(err));
-  // }
-
-  const DuplicatePrescription = () => {
-    const PrescriptionForm = new FormData();
-    PrescriptionForm.append("name", autoCompleteData.patient);
-    PrescriptionForm.append("doctor", autoCompleteData.doctor);
-    PrescriptionForm.append("department", prescription.department);
-    PrescriptionForm.append("round_number", prescription.round_number);
-    PrescriptionForm.append("discount_money", prescription.discount_money);
-    PrescriptionForm.append("discount_percent", prescription.discount_percent);
-    PrescriptionForm.append("zakat", prescription.zakat);
-    PrescriptionForm.append("khairat", prescription.khairat);
-    PrescriptionForm.append(
-      "image",
-      prescription.image ? prescription.image : ""
-    );
-    PrescriptionForm.append("user", user().id);
-
-    axios
-      .post(PRESCRIPTION_URL, PrescriptionForm)
-      .then((res) => {
-        setPrescription(res.data);
-        prescriptionThrough.map((item) => {
-          const PrescriptionThroughForm = new FormData();
-          PrescriptionThroughForm.append("quantity", item.quantity);
-          PrescriptionThroughForm.append("each_price", item.each_price);
-          PrescriptionThroughForm.append("medician", item.medician);
-          PrescriptionThroughForm.append("prescription", res.data.id);
-          PrescriptionThroughForm.append("user", user().id);
-          setPrescriptionThrough([]);
-          axios
-            .post(PRESCRIPTION_THOURGH_URL, PrescriptionThroughForm)
-            .then((res) => {
-              setPrescriptionThrough((prev) => [...prev, res.data]);
-            })
-            .catch((err) => console.log(err));
-        });
-      })
-      .catch((err) => console.log(err));
   };
 
   const tabFormulate = () => {
@@ -495,10 +199,7 @@ export default function Prescription(props) {
           setPrescription(res.data[0]);
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
-            .then((res) => {
-              // setPrescriptionThrough([]);
-              // setPrescriptionThrough(res.data);
-            });
+            .then((res) => {});
         })
       : axios
           .get(PRESCRIPTION_URL + "?prescription_number=" + next_pres)
@@ -511,10 +212,7 @@ export default function Prescription(props) {
                 .get(
                   PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id
                 )
-                .then((res) => {
-                  // setPrescriptionThrough([]);
-                  // setPrescriptionThrough(res.data);
-                });
+                .then((res) => {});
           });
   };
 
@@ -540,10 +238,7 @@ export default function Prescription(props) {
 
           axios
             .get(PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id)
-            .then((res) => {
-              // setPrescriptionThrough([]);
-              // setPrescriptionThrough(res.data);
-            });
+            .then((res) => {});
         })
       : axios
           .get(PRESCRIPTION_URL + "?prescription_number=" + next_pres)
@@ -556,36 +251,27 @@ export default function Prescription(props) {
                 .get(
                   PRESCRIPTION_THOURGH_URL + "?prescription=" + res.data[0].id
                 )
-                .then((res) => {
-                  // setPrescriptionThrough([]);
-                  // setPrescriptionThrough(res.data);
-                });
+                .then((res) => {});
           });
   };
 
-  const CreateNewPrescription = () => {
-    ResetForm();
-    departmentSubmit();
-    setTrigger((prev) => prev + 1);
-  };
+    const MedicineIncluder = (data) => {
+    const MedicianUpdateForm = new FormData();
+    MedicianUpdateForm.append(
+      "quantity",
+      excatTrough && parseInt(excatTrough.quantity) + parseInt(data.quantity)
+    );
 
-  const DeletePrescription = () => {
-    if (prescription.sold == false) {
-      axios
-        .delete(PRESCRIPTION_URL + prescription.id)
-        .then((res) => {
-          console.log(res.data);
-          ResetForm();
-          toast.success("Deleted Succesfully.");
-        })
-        .catch((err) => {
-          ResetForm();
-        });
-    } else {
-      prescription
-        ? toast.error("No Prescription to Remove!")
-        : toast.error("This Prescription Can't be deleted!");
-    }
+    axios
+      .patch(
+        PRESCRIPTION_THOURGH_URL + excatTrough.id + "/",
+        MedicianUpdateForm
+      )
+      .then(() => {
+        toast.success("Data Updated Successfuly.");
+        SameMedicineAlertModalRef.current.Closer();
+      })
+      .catch(() => toast.error("Check Your Input And Try Again!"));
   };
 
   return (
@@ -607,12 +293,6 @@ export default function Prescription(props) {
         />
       )}
       <BigModal title="ثبت نسخه" ref={PrescriptionModalRef}>
-        <AlertModal
-          ref={SameMedicineAlertModalRef}
-          errorText="آیا میخواهید به تعداد آن اضافه نمایید؟"
-          errorTitle="این دوا ثبت شده است!"
-          OkFunc={MedicineIncluder}
-        />
         {loading ? (
           <div className="modal">
             <div className="prescription-box">
@@ -624,16 +304,10 @@ export default function Prescription(props) {
               />
               <PrescriptionForm
                 prescription={prescription}
-                handlePrescriptionSearch={SearchSubmit}
-                handlePrescriptionDelete={DeletePrescription}
-                handleCreactNewPrescription={CreateNewPrescription}
-                handleDuplicationPrescription={DuplicatePrescription}
-                handlePrescriptionSubmit={(data) => setPrescription(data)}
+                prescriptionThrough={prescriptionThrough}
+                setPrescription={(data) => setPrescription(data)}
               />
-              <PrescriptionThroughForm
-                handlePrescriptionThroughSubmit={PrescriptionThrough}
-                handleMedicineSelect={AutoCompleteHandle}
-              />
+              <PrescriptionThroughForm prescription={prescription} prescriptionThrough={prescriptionThrough} />
               <PrescriptionThroughMapForm prescription={prescription} />
             </div>
           </div>

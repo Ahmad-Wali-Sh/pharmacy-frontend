@@ -22,6 +22,7 @@ export const queryClient = new QueryClient({
 // it is a default posting function to be used for api
 export const postDataFn = (data, api) => {
   return axios.post(API_URL + api, data);
+
 };
 
 export const putDataFn = (data, api) => {
@@ -32,9 +33,13 @@ export const patchDataFn = (data, api) => {
   return axios.patch(API_URL + api, data);
 };
 
+export const deleteDataFn = (api) => {
+  return axios.delete(API_URL + api);
+};
+
 // it is a default success function to do its job
 export const successFn = (invalidKey, func) => {
-  toast.success("Successfull!");
+  toast.success("The Requeset Was Successful!");
   queryClient.invalidateQueries([invalidKey]);
   func();
 };
