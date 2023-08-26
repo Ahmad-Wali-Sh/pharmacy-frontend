@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
 import Company from "../Company/Company";
 import Store from "../Store/Store";
-import SelectMedician from "../Entrance/SelectMedician";
+import SelectMedician from "../../Medician/SelectMedicine/SelectMedician";
 import OutranceThroughEntry from "./OutranceThroughEntry";
 
 export default function Outrance(props) {

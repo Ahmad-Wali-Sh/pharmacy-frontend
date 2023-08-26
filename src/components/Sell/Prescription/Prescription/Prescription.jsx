@@ -10,7 +10,6 @@ import {
   InfoButton,
   MainButton,
 } from "../../../PageComponents/Buttons/Buttons";
-import AlertModal from "../../../PageComponents/Modals/AlertModal";
 import PrescriptionReportBox from "./PrescriptionReportBox";
 import PrescriptionForm from "./PrescriptionForm";
 import PrescriptionThroughForm from "./PrescriptionThroughForm";
@@ -19,16 +18,16 @@ import { useQuery } from "react-query";
 
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
-  const SameMedicineAlertModalRef = useRef(null);
 
   let loading = true;
   const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
   const PRESCRIPTION_THOURGH_URL = import.meta.env.VITE_PRESCRIPTION_THROUGH;
   const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
-  const MEDICIAN_WITH_URL = import.meta.env.VITE_MEDICIAN_WITH;
   const LAST_PRESCRIPTION_URL = import.meta.env.VITE_LAST_PRESCRIPTION;
   const user = useAuthUser();
+
+  const [prescription, setPrescription] = React.useState([]);
+  const [departmentSelected, setDepartmentSelected] = React.useState("");
 
   const [report, setReport] = React.useState({
     total: 0,
@@ -37,6 +36,15 @@ export default function Prescription(props) {
     rounded_number: 0,
     disount_value: 0,
   });
+
+  const { data: prescriptionThrough } = useQuery({
+    queryKey: [`prescription-through/?prescription=${prescription?.id}`],
+    enabled: prescription?.id != null,
+  });
+
+  React.useEffect(() => {
+    Reporting();
+  }, [prescriptionThrough, prescription]);
 
   const Reporting = () => {
     const totalCalculate = () => {
@@ -47,6 +55,7 @@ export default function Prescription(props) {
       });
       return result;
     };
+
 
     const totalToSaleCalculate = () => {
       let result =
@@ -99,58 +108,17 @@ export default function Prescription(props) {
     });
   };
 
-  const [autoCompleteData, setAutoCompleteData] = React.useState({
-    patient: "",
-    doctor: "",
-    medician: [],
-  });
-
-  const [submited, setSubmited] = React.useState(false);
-  const [prescription, setPrescription] = React.useState([]);
-  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-  // const [prescriptionThrough, setPrescriptionThrough] = React.useState([]);
-  const [departmentSelected, setDepartmentSelected] = React.useState("");
-  const [excatTrough, setExactThrough] = React.useState("");
-
-  const { data: prescriptionThrough } = useQuery({
-    queryKey: [`prescription-through/?prescription=${prescription?.id}`],
-    enabled: prescription?.id != null,
-  });
-
-  React.useEffect(() => {
-    Reporting();
-  }, [prescriptionThrough, prescription]);
-
-  function registerModalOpener() {
-    ResetForm();
-    setRegisterModalOpen(true);
-  }
-
-  function AutoCompleteHandle(data) {
-    setAutoCompleteData({
-      ...autoCompleteData,
-      medician: data,
-    });
-  }
-
-  
-  const ResetForm = () => {
-    setPrescription([]);
-    setSubmited(false);
-    setDepartmentSelected([]);
-  };
 
   const tabFormulate = () => {
     document.getElementById("number-in-factor-input").focus();
   };
 
   const departmentSubmit = () => {
-    registerModalOpener();
     PrescriptionModalRef.current.Opener();
     axios.get(DEPARTMENT_URL + props.department.id).then((res) => {
       const DepartmentForm = new FormData();
-      DepartmentForm.append("name", autoCompleteData.patient);
-      DepartmentForm.append("doctor", autoCompleteData.doctor);
+      DepartmentForm.append("name", "");
+      DepartmentForm.append("doctor", "");
       DepartmentForm.append("department", props.department.id);
       DepartmentForm.append("discount_money", res.data.discount_money);
       DepartmentForm.append("discount_percent", res.data.discount_percent);
@@ -163,7 +131,6 @@ export default function Prescription(props) {
         .then((res) => {
           setPrescription(res.data);
 
-          setSubmited(true);
           toast.success("Data Submited Successfuly.");
 
           axios
@@ -255,24 +222,6 @@ export default function Prescription(props) {
           });
   };
 
-    const MedicineIncluder = (data) => {
-    const MedicianUpdateForm = new FormData();
-    MedicianUpdateForm.append(
-      "quantity",
-      excatTrough && parseInt(excatTrough.quantity) + parseInt(data.quantity)
-    );
-
-    axios
-      .patch(
-        PRESCRIPTION_THOURGH_URL + excatTrough.id + "/",
-        MedicianUpdateForm
-      )
-      .then(() => {
-        toast.success("Data Updated Successfuly.");
-        SameMedicineAlertModalRef.current.Closer();
-      })
-      .catch(() => toast.error("Check Your Input And Try Again!"));
-  };
 
   return (
     <>

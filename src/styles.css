@@ -1689,7 +1689,6 @@ input[type="date"]:disabled {
 }
 .prescription-button {
   grid-area: 2 / 6;
-  display: grid;
   direction: ltr;
   gap: 1rem;
 }
@@ -3128,7 +3127,7 @@ input[type="date"]:disabled {
 
 .button-group {
   display: flex;
-  width: 100%;
+  justify-content: center;
   background-color: grey;
   gap: 0.2rem;
   padding: 0.3rem;

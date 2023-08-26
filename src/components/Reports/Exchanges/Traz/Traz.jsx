@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
-import SelectMedician from "../../../Purchase/Entrance/SelectMedician";
+import SelectMedician from "../../../Medician/SelectMedicine/SelectMedician";
 import axios from "axios";
 import 'jb-date-input'
 import DatePicker, { DateObject } from "react-multi-date-picker";

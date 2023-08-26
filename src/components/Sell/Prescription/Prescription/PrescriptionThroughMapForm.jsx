@@ -3,7 +3,6 @@ import PrescriptionThroughEntry from "./PrescriptionThroughEntry";
 import { useQuery } from "react-query";
 
 function PrescriptionThroughMapForm({ prescription }) {
-  let medicineConflict = [];
 
   const { data: prescriptionThrough, isLoading } = useQuery({
     queryKey: [`prescription-through/?prescription=${prescription.id}`],
@@ -27,13 +26,12 @@ function PrescriptionThroughMapForm({ prescription }) {
         <label>حذف</label>
       </div>
       <div className="prescription-medicine">
-        {prescriptionThrough?.map((through, key) => (
+        {prescriptionThrough?.map((presThrough, key) => (
           <PrescriptionThroughEntry
-            through={through}
-            keyValue={through.id}
+            prescription={prescription}
+            through={presThrough}
             num={key}
             prescriptionThroughs={prescriptionThrough}
-            conflicts={medicineConflict}
           />
         ))}
       </div>

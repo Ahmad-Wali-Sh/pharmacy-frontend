@@ -1,19 +1,41 @@
 import React from "react";
-import SelectMedician from "../../../Purchase/Entrance/SelectMedician";
+import SelectMedician from "../../../Medician/SelectMedicine/SelectMedician";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
 import { useMutation } from "react-query";
-import { postDataFn, successFn } from "../../../services/API";
+import { postDataFn, successFn, patchDataFn } from "../../../services/API";
 import AlertModal from "../../../PageComponents/Modals/AlertModal";
+import { SubmitButton } from "../../../PageComponents/Buttons/Buttons";
 
 function PrescriptionThroughForm({ prescription, prescriptionThrough }) {
-  const SameMedicineAlertModalRef = React.useRef(null)
+  const SameMedicineAlertModalRef = React.useRef(null);
   const user = useAuthUser();
   const { register, handleSubmit } = useForm();
-  const [medicine, setMedicine] = React.useState(null)
+  const [medicine, setMedicine] = React.useState(null);
+
+  const { mutateAsync: prescriptionThroughPost } = useMutation({
+    mutationFn: (data) => postDataFn(data, "prescription-through/"),
+    onSuccess: () => {
+      successFn(
+        `prescription-through/?prescription=${prescription?.id}`,
+        () => {}
+      );
+    },
+  });
+
+  const { mutateAsync: prescriptionThroughPatch } = useMutation({
+    mutationFn: (data) =>
+      patchDataFn(data, `prescription-through/${medicineIncludesCheck().id}/`),
+    onSuccess: () => {
+      successFn(
+        `prescription-through/?prescription=${prescription?.id}`,
+        () => {}
+      );
+    },
+  });
 
   const handleMedicineSelect = (data) => {
-    setMedicine(data)
+    setMedicine(data);
   };
 
   const handlePrescriptionThroughSubmit = (data) => {
@@ -23,122 +45,56 @@ function PrescriptionThroughForm({ prescription, prescriptionThrough }) {
     PrescriptionThroughForm.append("medician", medicine.id);
     PrescriptionThroughForm.append("prescription", prescription.id);
     PrescriptionThroughForm.append("user", user().id);
-
-    
-
-    medicineincludess[0] === false && prescriptionThroughPost(PrescriptionThroughForm)
-    medicineincludess[0] === true && SameMedicineAlertModalRef.current.Opener()
+    console.log(medicineIncludesCheck());
+    medicineIncludesCheck() === false
+      ? prescriptionThroughPost(PrescriptionThroughForm)
+      : SameMedicineAlertModalRef.current.Opener();
   };
 
-  const medicineincludess = prescriptionThrough.map((presThrough) => {
-    return presThrough.medician === medicine.id ? true : false
-  })
+  const handleMedicineIncluder = (data) => {
+    const PrescriptionThroughIncluderForm = new FormData();
+    PrescriptionThroughIncluderForm.append(
+      "quantity",
+      parseInt(data.quantity) + parseInt(medicineIncludesCheck().quantity)
+    );
 
-  const { mutateAsync: prescriptionThroughPost } = useMutation({
-    mutationFn: (data) => postDataFn(data, "prescription-through/"),
-    onSuccess: () => {
-      successFn(`prescription-through/?prescription=${prescription?.id}`, () => {});
-    },
-  });
+    prescriptionThroughPatch(PrescriptionThroughIncluderForm);
+  };
 
-  // const PrescriptionThrough = (data) => {
-  //   const PrescritptionThroughForm = new FormData();
-  //   PrescritptionThroughForm.append("quantity", data.quantity);
-  //   PrescritptionThroughForm.append(
-  //     "each_price",
-  //     autoCompleteData.medician.price
-  //   );
-  //   PrescritptionThroughForm.append("medician", autoCompleteData.medician.id);
-  //   PrescritptionThroughForm.append("prescription", prescription.id);
-  //   PrescritptionThroughForm.append("user", user().id);
+  const medicineIncludesCheck = () => {
+    let result = false;
 
-  //   let result = true;
-  //   const Conditional = () => {
-  //     prescriptionThrough.map((prescription) => {
-  //       prescription.medician == autoCompleteData.medician.id &&
-  //         ((result = false), setExactThrough(prescription));
-
-  //       return result;
-  //     });
-  //     return result;
-  //   };
-
-  //   if (Conditional() == true) {
-  //     axios
-  //       .post(PRESCRIPTION_THOURGH_URL, PrescritptionThroughForm)
-  //       .then((res) => {
-  //         setPrescriptionThrough((prev) => [...prev, res.data]);
-  //         toast.info("Item Added.");
-  //         setTrigger((prev) => prev + 1);
-  //         axios
-  //           .get(MEDICIAN_WITH_URL + "?medicine=" + res.data.medician)
-  //           .then((res2) => {
-  //             axios
-  //               .get(MEDICIAN_URL + "?ids=" + res2.data[0].includes)
-  //               .then((res3) => {
-  //                 setMedicineWith(res3.data.results);
-  //               });
-  //           });
-  //         ``;
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         toast.error("Check Your Input And Try Again!");
-  //       });
-  //   }
-  //   if (Conditional() == false) {
-  //     SameMedicineAlertModalRef.current.Opener();
-  //   }
-  // };
-
-  // const MedicineIncluder = (data) => {
-  //   const MedicianUpdateForm = new FormData();
-  //   MedicianUpdateForm.append(
-  //     "quantity",
-  //     excatTrough && parseInt(excatTrough.quantity) + parseInt(data.quantity)
-  //   );
-
-  //   axios
-  //     .patch(
-  //       PRESCRIPTION_THOURGH_URL + excatTrough.id + "/",
-  //       MedicianUpdateForm
-  //     )
-  //     .then(() => {
-  //       toast.success("Data Updated Successfuly.");
-  //       SameMedicineAlertModalRef.current.Closer();
-  //     })
-  //     .catch(() => toast.error("Check Your Input And Try Again!"));
-  // };
+    prescriptionThrough?.map((presThrough) => {
+      presThrough.medician == medicine?.id && (result = presThrough);
+      return result;
+    });
+    return result;
+  };
 
   return (
     <>
-    <AlertModal
-          ref={SameMedicineAlertModalRef}
-          errorTitle="این دوا ثبت شده است!"
-          errorText="آیا میخواهید به تعداد آن اضافه نمایید؟"
-          OkFunc={handleSubmit()}
-        />
-    <form className="prescription-through">
-      <label>قلم:</label>
-      <div className="entrance-through-medician-input">
-        <SelectMedician selectAutoCompleteData={handleMedicineSelect} />
-      </div>
-      <label>تعداد:</label>
-      <input
-        type="text"
-        {...register("quantity")}
-        id="number-in-factor-input"
+      <AlertModal
+        ref={SameMedicineAlertModalRef}
+        errorTitle="این دوا ثبت شده است!"
+        errorText="آیا میخواهید به تعداد آن اضافه نمایید؟"
+        OkFunc={handleSubmit(handleMedicineIncluder)}
       />
-      <div className="prescription-button">
+      <form className="prescription-through" onSubmit={handleSubmit(handlePrescriptionThroughSubmit)}>
+        <label>قلم:</label>
+        <div className="entrance-through-medician-input">
+          <SelectMedician selectAutoCompleteData={handleMedicineSelect} />
+        </div>
+        <label>تعداد:</label>
         <input
-          type="submit"
-          value="⤵ Add"
-          className="prescription-add-button"
-          onClick={handleSubmit(handlePrescriptionThroughSubmit)}
-          ></input>
-      </div>
-    </form>
-          </>
+          type="text"
+          {...register("quantity")}
+          id="number-in-factor-input"
+        />
+        <div className="prescription-button">
+          <SubmitButton name="⤵ Add"/>
+        </div>
+      </form>
+    </>
   );
 }
 
