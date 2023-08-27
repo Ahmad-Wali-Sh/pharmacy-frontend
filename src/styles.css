@@ -1044,9 +1044,6 @@ input[type="date"]:disabled {
   color: var(--color-ten);
   width: 100%;
 }
-.medician-format:hover {
-  color: var(--color-sex);
-}
 
 .medician-text-field {
   height: 9.5rem;
@@ -1243,14 +1240,13 @@ input[type="date"]:disabled {
   cursor: pointer;
 }
 
-.select-medician-button:hover {
-  background-image: var(--color-five);
-}
 
 .medician-select-input-box {
-  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
   overflow-y: scroll !important;
   min-height: 90%;
+  background-color: var(--color-sex);
 }
 
 .selected-medician-show {
@@ -2772,10 +2768,10 @@ input[type="date"]:disabled {
   height: 68vh;
   width: 100%;
   position: relative;
-  top: -2rem;
-  padding: 0.3rem;
-  display: grid;
+  top: 2rem;
+  padding: 0.4rem;
   gap: 2%;
+  display: grid;
   grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
 }
 

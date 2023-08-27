@@ -82,7 +82,7 @@ function PrescriptionThroughForm({ prescription, prescriptionThrough }) {
       <form className="prescription-through" onSubmit={handleSubmit(handlePrescriptionThroughSubmit)}>
         <label>قلم:</label>
         <div className="entrance-through-medician-input">
-          <SelectMedician selectAutoCompleteData={handleMedicineSelect} />
+          <SelectMedician selectAutoCompleteData={handleMedicineSelect} department={prescription.department} />
         </div>
         <label>تعداد:</label>
         <input

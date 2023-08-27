@@ -58,3 +58,34 @@ export const AutoCompleteStyle = {
   zIndex: "2",
   overflow: "scroll",
 };
+
+export const MedicineSelectStyle = {
+  control: (baseStyles, state) => ({
+    ...baseStyles,
+    backgroundColor: 'rgb(30,30,30)',
+    border: "1px solid black",
+    color: "white",
+  }),
+  option: (styles, state) => ({
+    ...styles,
+    backgroundColor: state.isFocused ? 'rgb(80,80,80)': 'rgb(40,40,40)'
+  }),
+  container: (styles) => ({
+    ...styles,
+    backgroundColor: 'rgb(60,60,60)',
+  }),
+  input: (styles) => ({
+    ...styles,
+    color: 'white'
+  }),
+  noOptionsMessage: (styles) => ({
+    ...styles,
+    display: 'none'
+  }),
+  menuList: (styles) => ({
+    ...styles,
+    backgroundColor: 'rgb(60,60,60)',
+    maxHeight: '70vh'
+  })
+}
+
