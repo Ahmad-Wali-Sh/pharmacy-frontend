@@ -8,7 +8,7 @@ import { useRef } from "react";
 import {MainButton,PlusButton } from "../../PageComponents/Buttons/Buttons";
 
 
-function Department({ title, icon, button }) {
+function Department({ title, button }) {
   const user = useAuthUser();
 
   const DepartmentModalRef = useRef(null);
@@ -29,7 +29,7 @@ function Department({ title, icon, button }) {
         <MainButton
           Func={() => DepartmentModalRef.current.Opener()}
           title={title}
-          icon={icon}
+          icon="fa-solid fa-bed"
         />
       )}
       {button == "plus" && (

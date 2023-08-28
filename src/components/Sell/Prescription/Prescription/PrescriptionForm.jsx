@@ -21,12 +21,15 @@ import {
 } from "../../../services/API";
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
+import Select from "react-select";
+import { SelectInputStyle } from '../../../../styles'
 
 function PrescriptionForm({
   prescription,
   setPrescription,
   prescriptionThrough,
 }) {
+
   const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
   const { data: doctor } = useQuery(["doctor/"]);
@@ -34,6 +37,7 @@ function PrescriptionForm({
   const [searchNumber, setSearchNumber] = React.useState("");
 
   const { register, handleSubmit, reset, setValue } = useForm();
+
 
   React.useEffect(() => {
     reset({
@@ -44,6 +48,8 @@ function PrescriptionForm({
       department: prescription.department || 0,
       prescription_number: prescription.prescription_number || "",
       image: prescription.image ? prescription.image : "",
+      name: prescription.name ? prescription.name : "",
+      doctor: prescription.doctor ? prescription.doctor : ""
     });
   }, [prescription]);
 
@@ -138,7 +144,7 @@ function PrescriptionForm({
       </select>
       <label>نام مریض:</label>
       <div>
-        <ReactSearchAutocomplete
+        {/* <ReactSearchAutocomplete
           items={patient}
           fuseOptions={{ keys: ["code_name", "id", "name"] }}
           resultStringKeyName={"code_name"}
@@ -153,12 +159,24 @@ function PrescriptionForm({
           inputDebounce="10"
           showIcon={false}
           className="autoComplete"
+        /> */}
+        <Select
+          options={patient}
+          getOptionLabel={(option) => option.code_name}
+          getOptionValue={(option) => option.code_name}
+          isRtl
+          className="react-select-container"
+          onChange={(item) => {
+            console.log(item)
+            setValue('name', item.id)
+          }}
+          styles={SelectInputStyle}
         />
         <Patient button="plus" />
       </div>
       <label>نام داکتر:</label>
       <div>
-        <ReactSearchAutocomplete
+        {/* <ReactSearchAutocomplete
           items={doctor}
           fuseOptions={{ keys: ["code_name", "id", "name"] }}
           resultStringKeyName={"code_name"}
@@ -173,6 +191,16 @@ function PrescriptionForm({
           showClear={false}
           inputDebounce="10"
           showIcon={false}
+        /> */}
+        <Select
+          options={doctor}
+          getOptionLabel={(option) => option.code_name}
+          getOptionValue={(option) => option.code_name}
+          isRtl
+          className="react-select-container"
+          onChange={(item) => console.log(item)}
+          styles={SelectInputStyle}
+          
         />
         <Doctor button="plus" />
       </div>

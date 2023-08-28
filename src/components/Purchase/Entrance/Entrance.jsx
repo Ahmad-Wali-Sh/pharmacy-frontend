@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import EntrancThroughEntry from "./EntrancThroughEntry";
-import SelectMedician from "../../Medician/SelectMedicine/SelectMedician";
+import { SelectMedician } from "../../Medician/SelectMedicine/SelectMedician";
 import Company from "../Company/Company";
 import Store from "../Store/Store";
 import FinalRegister from "../FinalRegister/FinalRegister";

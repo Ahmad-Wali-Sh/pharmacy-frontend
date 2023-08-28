@@ -44,6 +44,8 @@ const AlertModal = forwardRef(
                   OkFunc();
                   onClose();
                 }}
+                autoFocus
+                tabIndex={0}
               >
                 بله
               </button>

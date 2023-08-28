@@ -12,12 +12,13 @@ import {
 } from "../../../PageComponents/Buttons/Buttons";
 import PrescriptionReportBox from "./PrescriptionReportBox";
 import PrescriptionForm from "./PrescriptionForm";
-import PrescriptionThroughForm from "./PrescriptionThroughForm";
+import { PrescriptionThroughForm } from "./PrescriptionThroughForm";
 import PrescriptionThroughMapForm from "./PrescriptionThroughMapForm";
 import { useQuery } from "react-query";
 
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
+  const SelectMedicineModalRef = useRef(null);
 
   let loading = true;
   const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
@@ -130,7 +131,7 @@ export default function Prescription(props) {
         .post(PRESCRIPTION_URL, DepartmentForm)
         .then((res) => {
           setPrescription(res.data);
-
+          SelectMedicineModalRef.current.Opener()
           toast.success("Data Submited Successfuly.");
 
           axios
@@ -256,7 +257,7 @@ export default function Prescription(props) {
                 prescriptionThrough={prescriptionThrough}
                 setPrescription={(data) => setPrescription(data)}
               />
-              <PrescriptionThroughForm prescription={prescription} prescriptionThrough={prescriptionThrough} />
+              <PrescriptionThroughForm prescription={prescription} prescriptionThrough={prescriptionThrough} ref={SelectMedicineModalRef}/>
               <PrescriptionThroughMapForm prescription={prescription} />
             </div>
           </div>

@@ -1,5 +1,4 @@
 export const MedicineListFormat = (item, { context }) => {
-    console.log(context === 'value')
     return (
       context === 'value' ? item.medicine_full : (
         <div className="medician-format">
@@ -85,3 +84,5 @@ export const MedicineListFormat = (item, { context }) => {
     
     );
   };
+
+

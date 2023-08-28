@@ -25,14 +25,10 @@ function Sell() {
   return (
     <div className="purchase">
       <div className="purchase-box">
-        <Prescription button="main" title="ثبت نسخه" icon="fa-solid fa-cart-arrow-down" />
-        <Doctor
-          title="ثبت داکتر"
-          button="main"
-          icon="fa-solid fa-user-doctor"
-        />
-        <Patient title="ثبت مریض" button="main" icon="fa-solid fa-bed" />
-        <Department button="main" title="ثبت نوع نسخه" icon="fa-solid fa-bed" />
+        <Prescription button="main" title="ثبت نسخه" />
+        <Doctor title="ثبت داکتر" button="main" />
+        <Patient title="ثبت مریض" button="main" />
+        <Department button="main" title="ثبت نوع نسخه" />
       </div>
       <div className="sell-form">
         <div className="sell-department-buttons">

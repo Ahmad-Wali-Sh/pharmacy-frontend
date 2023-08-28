@@ -1385,7 +1385,7 @@ input[type="date"]:disabled {
   position: relative;
   z-index: 2;
   width: 1.3rem;
-  margin-bottom: 3rem;
+  top: -0.4rem
 }
 
 .plus {
@@ -3130,5 +3130,14 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   position: relative;
   top: -0.5rem;
+}
+
+.react-select-container {
+  height: 10px;
+  min-height: 10px;
+}
+
+.test {
+  height: 1rem;
 }
 

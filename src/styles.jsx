@@ -89,3 +89,34 @@ export const MedicineSelectStyle = {
   })
 }
 
+export const SelectInputStyle = {
+  control: (baseStyles, state) => ({
+    ...baseStyles,
+    backgroundColor: 'rgb(30,30,30)',
+    border: "1px solid black",
+    color: "white",
+    minHeight: '1.3rem',
+    height: '1.5rem',
+    border: 'none',
+    borderRadius: '1rem',
+    boxShadow: state.isFocused && '-4px -4px 4px var(--color-two);'
+  }),
+  indicatorsContainer: (base, state) => ({
+    ...base,
+    minHeight: '1.3rem',
+    height: '1.8rem'
+  }),
+  menu: (base, state) => ({
+    ...base,
+    marginTop:'1rem',
+  }),
+  singleValue: (base, state) => ({
+    ...base,
+    color:'white',
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? 'rgb(30,30,30)' : 'rgb(60,60,60)'
+  })
+}
+

@@ -7,7 +7,7 @@ import BigModal from "../../PageComponents/Modals/BigModal";
 import { useRef } from "react";
 import { MainButton, PlusButton } from "../../PageComponents/Buttons/Buttons";
 
-function Doctor({ button, title, icon }) {
+function Doctor({ button, title }) {
   const user = useAuthUser();
   const DoctorModalRef = useRef(null);
 
@@ -24,7 +24,7 @@ function Doctor({ button, title, icon }) {
         <MainButton
           Func={() => DoctorModalRef.current.Opener()}
           title={title}
-          icon={icon}
+          icon="fa-solid fa-user-doctor"
         />
       )}
       {button == "plus" && (
