@@ -47,6 +47,7 @@
 body {
   background-color: var(--color-three);
   --jb-date-input-bgcolor: var(--color-sex);
+  text-align : initial ;
 }
 
 .date-picker-expire {
@@ -1384,9 +1385,12 @@ input[type="date"]:disabled {
 .plus-box {
   position: relative;
   z-index: 2;
+  top: -1.3rem;
   width: 1.3rem;
-  top: -0.4rem
+  text-align: left;
+  left: -88%;
 }
+
 
 .plus {
   width: 1.3rem;
@@ -3139,5 +3143,14 @@ input[type="date"]:disabled {
 
 .test {
   height: 1rem;
+}
+
+.search-input {
+  direction: ltr;
+  padding-left: 2rem;
+}
+
+.search-input:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
 }
 

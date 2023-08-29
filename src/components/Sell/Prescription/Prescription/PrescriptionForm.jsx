@@ -3,8 +3,6 @@ import Patient from "../Patient";
 import Doctor from "../Doctor";
 import { useQuery } from "react-query";
 import { useForm } from "react-hook-form";
-import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import { AutoCompleteStyle } from "../../../../styles";
 import {
   ButtonGroup,
   FormButton,
@@ -21,23 +19,20 @@ import {
 } from "../../../services/API";
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
-import Select from "react-select";
-import { SelectInputStyle } from '../../../../styles'
+import ControlledSelect from "../../../PageComponents/ControlledSelect";
 
 function PrescriptionForm({
   prescription,
   setPrescription,
   prescriptionThrough,
 }) {
-
   const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
   const { data: doctor } = useQuery(["doctor/"]);
   const { data: department } = useQuery(["department/"]);
   const [searchNumber, setSearchNumber] = React.useState("");
 
-  const { register, handleSubmit, reset, setValue } = useForm();
-
+  const { register, handleSubmit, reset, setValue, control } = useForm();
 
   React.useEffect(() => {
     reset({
@@ -48,10 +43,64 @@ function PrescriptionForm({
       department: prescription.department || 0,
       prescription_number: prescription.prescription_number || "",
       image: prescription.image ? prescription.image : "",
-      name: prescription.name ? prescription.name : "",
-      doctor: prescription.doctor ? prescription.doctor : ""
+      name: "",
+      doctor: prescription.doctor ? prescription.doctor : "",
     });
   }, [prescription]);
+
+  React.useEffect(() => {
+    let date = new Date();
+    let year = date.getFullYear().toString().slice(2, 4);
+    let month =
+      date.getMonth() + 1 < 9
+        ? "0" + (date.getMonth() + 1).toString()
+        : (date.getMonth() + 1).toString();
+    let day = date.getDate();
+
+    const handleKeyDowns = (e) => {
+      if (e.ctrlKey) {
+        if (e.key != "A" && e.key != "a") {
+          e.preventDefault();
+          switch (e.key) {
+            case "B":
+              document.getElementById("search-number").focus();
+              setSearchNumber(`${year}-${month}-${day}-`);
+              break;
+            case "b":
+              e.preventDefault();
+              document.getElementById("search-number").focus();
+              setSearchNumber(`${year}-${month}-${day}-`);
+              break;
+            case "d":
+              handleSubmit((data) =>
+                handleFormData(data, newPrescription, user)
+              )();
+              break;
+            case "D":
+              handleSubmit((data) =>
+                handleFormData(data, newPrescription, user)
+              )();
+              break;
+            case "x":
+              prescription?.sold === false
+              ? deletePrescription()
+              : toast.error("این نسخه به صندوق ثبت شده است")
+              break;
+            case "X":
+              prescription?.sold === false
+              ? deletePrescription()
+              : toast.error("این نسخه به صندوق ثبت شده است")
+              break;
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDowns);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDowns);
+    };
+  }, []);
 
   const { mutateAsync: newPrescription } = useMutation({
     mutationFn: (data) => postDataFn(data, "prescription/"),
@@ -135,7 +184,7 @@ function PrescriptionForm({
     >
       <label>نوع نسخه:</label>
       <select {...register("department")}>
-        <option value={prescription.department} selected disabled>
+        <option value={prescription.department} selected>
           {prescription.department_name}
         </option>
         {department?.map((depart) => (
@@ -143,67 +192,33 @@ function PrescriptionForm({
         ))}
       </select>
       <label>نام مریض:</label>
-      <div>
-        {/* <ReactSearchAutocomplete
-          items={patient}
-          fuseOptions={{ keys: ["code_name", "id", "name"] }}
-          resultStringKeyName={"code_name"}
-          onSelect={(item) =>
-            setAutoCompleteData({
-              ...autoCompleteData,
-              patient: item.id,
-            })
-          }
-          styling={AutoCompleteStyle}
-          showClear={false}
-          inputDebounce="10"
-          showIcon={false}
-          className="autoComplete"
-        /> */}
-        <Select
-          options={patient}
-          getOptionLabel={(option) => option.code_name}
-          getOptionValue={(option) => option.code_name}
-          isRtl
-          className="react-select-container"
-          onChange={(item) => {
-            console.log(item)
-            setValue('name', item.id)
-          }}
-          styles={SelectInputStyle}
-        />
-        <Patient button="plus" />
-      </div>
+      <ControlledSelect
+        control={control}
+        name="name"
+        options={patient}
+        placeholder=""
+        getOptionLabel={(option) => option.code_name}
+        getOptionValue={(option) => option.code_name}
+        uniqueKey={`patient-unique${prescription.id}`}
+        defaultValue={patient?.find((c) =>
+          c.id === prescription?.name ? c.code_name : ""
+        )}
+        NewComponent={<Patient button="plus" />}
+      />
       <label>نام داکتر:</label>
-      <div>
-        {/* <ReactSearchAutocomplete
-          items={doctor}
-          fuseOptions={{ keys: ["code_name", "id", "name"] }}
-          resultStringKeyName={"code_name"}
-          styling={AutoCompleteStyle}
-          showItemsOnFocus={true}
-          onSelect={(item) =>
-            setAutoCompleteData({
-              ...autoCompleteData,
-              doctor: item.id,
-            })
-          }
-          showClear={false}
-          inputDebounce="10"
-          showIcon={false}
-        /> */}
-        <Select
-          options={doctor}
-          getOptionLabel={(option) => option.code_name}
-          getOptionValue={(option) => option.code_name}
-          isRtl
-          className="react-select-container"
-          onChange={(item) => console.log(item)}
-          styles={SelectInputStyle}
-          
-        />
-        <Doctor button="plus" />
-      </div>
+      <ControlledSelect
+        control={control}
+        name="doctor"
+        options={doctor}
+        placeholder=""
+        getOptionLabel={(option) => option.code_name}
+        getOptionValue={(option) => option.code_name}
+        uniqueKey={`doctor-unique${prescription.id}`}
+        defaultValue={doctor?.find((c) =>
+          c.id === prescription?.doctor ? c.code_name : ""
+        )}
+        NewComponent={<Doctor button="plus" />}
+      />
       <label>شماره:</label>
       <input
         required
@@ -221,6 +236,9 @@ function PrescriptionForm({
             onChange={(e) => {
               setSearchNumber(e.target.value);
             }}
+            value={searchNumber}
+            id="search-number"
+            className="search-input"
           />
           <SearchButton Func={() => prescriptionSearch()} />
         </form>

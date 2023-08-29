@@ -22,6 +22,7 @@ export const ModalBigStyles = {
     overflow: "hidden",
     padding: "0px",
     margin: "0px",
+    zIndex: 10
   },
   overlay: {
     backgroundColor: "rgba(60,60,60,0.5)",
@@ -65,6 +66,9 @@ export const MedicineSelectStyle = {
     backgroundColor: 'rgb(30,30,30)',
     border: "1px solid black",
     color: "white",
+    border: 'none',
+    borderRadius: '1rem',
+    boxShadow: state.isFocused && '-4px -4px 4px var(--color-two);'
   }),
   option: (styles, state) => ({
     ...styles,
@@ -99,16 +103,28 @@ export const SelectInputStyle = {
     height: '1.5rem',
     border: 'none',
     borderRadius: '1rem',
-    boxShadow: state.isFocused && '-4px -4px 4px var(--color-two);'
+    boxShadow: state.isFocused && '-4px -4px 4px var(--color-two);',
+    zIndex: 1
   }),
+  
   indicatorsContainer: (base, state) => ({
     ...base,
     minHeight: '1.3rem',
     height: '1.8rem'
   }),
+  container: (base, state) => ({
+    ...base,
+    zIndex: 1,
+    width: '100%'
+  }),
   menu: (base, state) => ({
     ...base,
-    marginTop:'1rem',
+    backgroundColor: 'rgb(30,30,30)'
+  }),
+  menuList: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? 'rgb(60,60,60)' : '',
+    textAlign: 'right'
   }),
   singleValue: (base, state) => ({
     ...base,
@@ -116,7 +132,23 @@ export const SelectInputStyle = {
   }),
   option: (base, state) => ({
     ...base,
-    backgroundColor: state.isFocused ? 'rgb(30,30,30)' : 'rgb(60,60,60)'
-  })
+    backgroundColor: state.isFocused ? 'rgb(60,60,60)' : 'rgb(30,30,30)',
+    color: 'var(--color-ten)'
+  }),
+  input: (base, state) => ({
+    ...base,
+    height: '1rem',
+    direction: 'rtl',
+    color: 'var(--color-ten)',
+    fontSize: '0.9rem',
+    marginTop: '-0.3rem'
+  }),
+  singleValue: (base, state) => ({
+    ...base,
+    direction: 'rtl',
+    textAlign: 'right',
+    color: 'var(--color-ten)',
+    
+  }),
 }
 
