@@ -136,10 +136,16 @@ export const SelectMedician = forwardRef(
                 getOptionValue={(option) => option?.medicine_full}
                 autoFocus
                 defaultValue={MedicianSearched?.results?.[0]}
-                filterOption={createFilter({ ignoreAccents: false })}
+                filterOption={createFilter({
+                  ignoreAccents: false,
+                })}
+                // filterOptions={(options, filter, current_values) => {
+                //   return options;
+                // }}
+                // filterOption={() => true}
+                options={MedicianSearched?.results}
                 formatOptionLabel={MedicineListFormat}
                 styles={MedicineSelectStyle}
-                options={MedicianSearched?.results}
                 onChange={handleMedicineSelect}
               />
               <div className="bookmarks-box">
