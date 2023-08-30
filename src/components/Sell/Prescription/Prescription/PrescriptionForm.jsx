@@ -59,7 +59,7 @@ function PrescriptionForm({
 
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
-        if (e.key != "A" && e.key != "a") {
+        if (e.key != "A" && e.key != "a" && e.key != 'c' && e.key != 'v') {
           e.preventDefault();
           switch (e.key) {
             case "B":
@@ -82,14 +82,14 @@ function PrescriptionForm({
               )();
               break;
             case "x":
-              prescription?.sold === false
-              ? deletePrescription()
-              : toast.error("این نسخه به صندوق ثبت شده است")
+                prescription?.sold === false
+                  ? deletePrescription()
+                  : toast.error("این نسخه به صندوق ثبت شده است")
               break;
             case "X":
               prescription?.sold === false
-              ? deletePrescription()
-              : toast.error("این نسخه به صندوق ثبت شده است")
+                ? deletePrescription()
+                : toast.error("این نسخه به صندوق ثبت شده است");
               break;
           }
         }

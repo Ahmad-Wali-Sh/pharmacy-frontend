@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useImperativeHandle } from "react";
+import React, { useRef, forwardRef, useImperativeHandle, useMemo } from "react";
 import MedicianEntrance from "../MedicianEntrance/MedicianEntrance";
 import BigModal from "../../PageComponents/Modals/BigModal";
 import { MedicineListFormat } from "./MedicineListFormat";
@@ -7,6 +7,7 @@ import { MedicineSelectStyle } from "../../../styles";
 import { useQuery } from "react-query";
 import AsyncSelect from "react-select/async";
 import { createFilter } from "react-select";
+import debounce from "lodash.debounce";
 
 export const SelectMedician = forwardRef(
   (
@@ -41,7 +42,14 @@ export const SelectMedician = forwardRef(
       enabled: department != undefined,
     });
 
-    const [stringArray, setStringArray] = React.useState([]);
+  
+    const loadMedicine1 = React.useCallback(
+      (string, callback) => {
+        !MedicineLoading && callback(MedicianSearched.results)
+    }
+    )
+
+    const [stringArray, setStringArray] = React.useState(['']);
     React.useEffect(() => {
       stringArray.length == 1
         ? setTextHighlight({ barcode: "on" })
@@ -64,9 +72,10 @@ export const SelectMedician = forwardRef(
       setSelectedMedician(item);
     };
 
-    const { data: MedicianSearched } = useQuery({
+
+    const { data: MedicianSearched, isFetching: MedicineLoading } = useQuery({
       queryKey: [
-        `medician/?brand_name=${stringArray[0] ? stringArray[0] : ""}&ml=${
+        `medician/?barcode=${stringArray[0] ? stringArray[0] : ""}&ml=${
           stringArray[1] ? stringArray[1] : ""
         }&search=${stringArray[2] ? stringArray[2] : ""}&kind__name_english=${
           stringArray[3] ? stringArray[3] : ""
@@ -74,7 +83,6 @@ export const SelectMedician = forwardRef(
           stringArray[4] ? stringArray[4] : ""
         }&big_company__name=${stringArray[5] ? stringArray[5] : ""}`,
       ],
-      staleTime: 10,
       enabled: stringArray[0] != undefined,
     });
 
@@ -84,11 +92,6 @@ export const SelectMedician = forwardRef(
       setSelectedMedician(item);
       // Medicine With Including Functionality
       // Medicine Expires Including Functionality
-    };
-
-    const loadMedicine = (string, callback) => {
-      setStringArray(string.split("  "));
-      callback(MedicianSearched?.results);
     };
 
     return (
@@ -131,22 +134,17 @@ export const SelectMedician = forwardRef(
                 <span className={textHighlight?.barcode}>بارکد/نام برند</span>
               </div>
               <AsyncSelect
-                loadOptions={loadMedicine}
+                loadOptions={!MedicineLoading && debounce(loadMedicine1, 5)}
                 getOptionLabel={(option) => option?.medicine_full}
                 getOptionValue={(option) => option?.medicine_full}
                 autoFocus
                 defaultValue={MedicianSearched?.results?.[0]}
-                filterOption={createFilter({
-                  ignoreAccents: false,
-                })}
-                // filterOptions={(options, filter, current_values) => {
-                //   return options;
-                // }}
-                // filterOption={() => true}
-                options={MedicianSearched?.results}
+                filterOption={() => true}
+                onInputChange={(string) => setStringArray(string.split('  '))}
                 formatOptionLabel={MedicineListFormat}
                 styles={MedicineSelectStyle}
                 onChange={handleMedicineSelect}
+                isLoading={MedicineLoading}
               />
               <div className="bookmarks-box">
                 {BookmarkedMedicine?.results.map((medicine) => (
