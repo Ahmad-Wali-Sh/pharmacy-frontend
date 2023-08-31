@@ -5,9 +5,8 @@ import { MedicineListFormat } from "./MedicineListFormat";
 import BookmarkCards from "./BookmarkCards";
 import { MedicineSelectStyle } from "../../../styles";
 import { useQuery } from "react-query";
-import AsyncSelect from "react-select/async";
-import { createFilter } from "react-select";
-import debounce from "lodash.debounce";
+import { AsyncPaginate } from 'react-select-async-paginate'
+
 
 export const SelectMedician = forwardRef(
   (
@@ -32,7 +31,8 @@ export const SelectMedician = forwardRef(
       barcode: "on",
       generic: "",
       ml: "",
-      kind: "",
+      kind_english: "",
+      kind_persian: "",
       country: "",
       company: "",
     });
@@ -42,12 +42,13 @@ export const SelectMedician = forwardRef(
       enabled: department != undefined,
     });
 
-  
-    const loadMedicine1 = React.useCallback(
-      (string, callback) => {
-        !MedicineLoading && callback(MedicianSearched.results)
+
+    const loadMedicine = (search, loadedOptions) => {
+      return {
+        options: (stringArray.join('').replace(/\s/g, '') != '') && !MedicineLoading && MedicianSearched?.results,
+        hasMore: false
+      }
     }
-    )
 
     const [stringArray, setStringArray] = React.useState(['']);
     React.useEffect(() => {
@@ -58,13 +59,15 @@ export const SelectMedician = forwardRef(
         : stringArray.length == 3
         ? setTextHighlight({ generic: "on" })
         : stringArray.length == 4
-        ? setTextHighlight({ kind: "on" })
+        ? setTextHighlight({ kind_persian: "on" })
         : stringArray.length == 5
-        ? setTextHighlight({ country: "on" })
+        ? setTextHighlight({ kind_english: "on" })
         : stringArray.length == 6
-        ? setTextHighlight({ company: "on" })
+        ? setTextHighlight({ country: "on" })
         : stringArray.length == 7
-        ? setTextHighlight({ company: "" })
+        ? setTextHighlight({ company: 'on' })
+        : stringArray.length == 8
+        ? setTextHighlight({ company: '' })
         : "";
     }, [stringArray]);
 
@@ -75,15 +78,15 @@ export const SelectMedician = forwardRef(
 
     const { data: MedicianSearched, isFetching: MedicineLoading } = useQuery({
       queryKey: [
-        `medician/?barcode=${stringArray[0] ? stringArray[0] : ""}&ml=${
+        `medician/?brand_name=${stringArray[0] ? stringArray[0] : ""}&ml=${
           stringArray[1] ? stringArray[1] : ""
-        }&search=${stringArray[2] ? stringArray[2] : ""}&kind__name_english=${
+        }&search=${stringArray[2] ? stringArray[2] : ""}&kind__name_persian=${
           stringArray[3] ? stringArray[3] : ""
-        }&country__name=${
+        }&kind__name_english=${
           stringArray[4] ? stringArray[4] : ""
-        }&big_company__name=${stringArray[5] ? stringArray[5] : ""}`,
+        }&country__name=${stringArray[5] ? stringArray[5] : ""}&big_company__name=${stringArray[6] ? stringArray[6]: ''}`,
       ],
-      enabled: stringArray[0] != undefined,
+      enabled: stringArray.join('').replace(/\s/g, '') != "",
     });
 
     const handleMedicineSelect = (item) => {
@@ -128,13 +131,14 @@ export const SelectMedician = forwardRef(
               <div>
                 <span className={textHighlight?.company}>کمپنی</span> |{" "}
                 <span className={textHighlight?.country}>کشور</span> |{" "}
-                <span className={textHighlight?.kind}>نوع</span> |{" "}
+                <span className={textHighlight?.kind_english}>نوع "انگلیسی"</span> |{" "}
+                <span className={textHighlight?.kind_persian}>نوع "فارسی"</span> |{" "}
                 <span className={textHighlight?.generic}>ترکیب</span> |{" "}
                 <span className={textHighlight?.ml}>میزان موثریت</span> |{" "}
                 <span className={textHighlight?.barcode}>بارکد/نام برند</span>
               </div>
-              <AsyncSelect
-                loadOptions={!MedicineLoading && debounce(loadMedicine1, 5)}
+              <AsyncPaginate
+                loadOptions={!MedicineLoading && loadMedicine}
                 getOptionLabel={(option) => option?.medicine_full}
                 getOptionValue={(option) => option?.medicine_full}
                 autoFocus
@@ -145,6 +149,7 @@ export const SelectMedician = forwardRef(
                 styles={MedicineSelectStyle}
                 onChange={handleMedicineSelect}
                 isLoading={MedicineLoading}
+                loadOptionsOnMenuOpen={false}
               />
               <div className="bookmarks-box">
                 {BookmarkedMedicine?.results.map((medicine) => (
