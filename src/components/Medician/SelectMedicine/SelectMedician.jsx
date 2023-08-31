@@ -75,10 +75,18 @@ export const SelectMedician = forwardRef(
       setSelectedMedician(item);
     };
 
+    const isBarcode = (stringArray) => {
+      let string = stringArray.join('').replace(/\s/g, '').slice(0,1)
+      console.log(!isNaN(string))
+
+      return !isNaN(string)
+    }
+
+    
 
     const { data: MedicianSearched, isFetching: MedicineLoading } = useQuery({
       queryKey: [
-        `medician/?brand_name=${stringArray[0] ? stringArray[0] : ""}&ml=${
+        `medician/?${isBarcode(stringArray) ? 'barcode' : 'brand_name'}=${stringArray[0] ? stringArray[0] : ""}&ml=${
           stringArray[1] ? stringArray[1] : ""
         }&search=${stringArray[2] ? stringArray[2] : ""}&kind__name_persian=${
           stringArray[3] ? stringArray[3] : ""

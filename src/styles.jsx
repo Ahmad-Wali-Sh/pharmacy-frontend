@@ -64,7 +64,6 @@ export const MedicineSelectStyle = {
   control: (baseStyles, state) => ({
     ...baseStyles,
     backgroundColor: 'rgb(30,30,30)',
-    border: "1px solid black",
     color: "white",
     border: 'none',
     borderRadius: '1rem',
@@ -97,7 +96,6 @@ export const SelectInputStyle = {
   control: (baseStyles, state) => ({
     ...baseStyles,
     backgroundColor: 'rgb(30,30,30)',
-    border: "1px solid black",
     color: "white",
     minHeight: '1.3rem',
     height: '1.5rem',
@@ -125,10 +123,6 @@ export const SelectInputStyle = {
     ...base,
     backgroundColor: state.isFocused ? 'rgb(60,60,60)' : '',
     textAlign: 'right'
-  }),
-  singleValue: (base, state) => ({
-    ...base,
-    color:'white',
   }),
   option: (base, state) => ({
     ...base,
