@@ -52,10 +52,10 @@ function PrescriptionForm({
     let date = new Date();
     let year = date.getFullYear().toString().slice(2, 4);
     let month =
-      date.getMonth() + 1 < 9
+      date.getMonth() + 1 <= 9
         ? "0" + (date.getMonth() + 1).toString()
         : (date.getMonth() + 1).toString();
-    let day = date.getDate();
+    let day = date.getDate() <= 9 ? "0" + date.getDate() : date.getDate();
 
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {

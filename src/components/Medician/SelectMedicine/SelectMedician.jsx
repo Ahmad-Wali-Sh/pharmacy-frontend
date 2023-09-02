@@ -86,7 +86,7 @@ export const SelectMedician = forwardRef(
 
     const { data: MedicianSearched, isFetching: MedicineLoading } = useQuery({
       queryKey: [
-        `medician/?${isBarcode(stringArray) ? 'barcode' : 'brand_name'}=${stringArray[0] ? stringArray[0] : ""}&ml=${
+        `medician/?${isBarcode(stringArray) ? 'barcode__contains' : 'brand_name'}=${stringArray[0] ? stringArray[0] : ""}&ml=${
           stringArray[1] ? stringArray[1] : ""
         }&search=${stringArray[2] ? stringArray[2] : ""}&kind__name_persian=${
           stringArray[3] ? stringArray[3] : ""
