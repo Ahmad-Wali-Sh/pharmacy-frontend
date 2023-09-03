@@ -85,7 +85,7 @@ export default function RevenueInfo({ revenue }) {
                   <h4>{revenuethrough.department}</h4>
                   <h4>{revenuethrough.created.slice(0, 10)}</h4>
                   <h4>{revenuethrough.created.slice(11, 16)}</h4>
-                  <h4>{revenuethrough.grand_total}AF</h4>
+                  <h4>{revenuethrough.purchased}AF</h4>
                   <h4>{revenue.username}</h4>
                   <h4>{revenuethrough.discount}</h4>
                   <h4>{revenuethrough.khairat}</h4>
