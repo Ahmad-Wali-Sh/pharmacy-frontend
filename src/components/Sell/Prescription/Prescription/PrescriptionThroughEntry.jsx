@@ -11,6 +11,7 @@ function PrescriptionThroughEntry({
   num,
   prescription,
   prescriptionThroughs,
+  updatePrescription
 }) {
   const user = useAuthUser();
 
@@ -46,8 +47,10 @@ function PrescriptionThroughEntry({
     onSuccess: () => {
       successFn(
         `prescription-through/?prescription=${prescription?.id}`,
-        () => {}
-      );
+        () => {
+          updatePrescription()
+        }
+        );
     },
   });
 
@@ -56,7 +59,9 @@ function PrescriptionThroughEntry({
     onSuccess: () => {
       successFn(
         `prescription-through/?prescription=${prescription?.id}`,
-        () => {}
+        () => {
+          updatePrescription()
+        }
       );
     },
   });

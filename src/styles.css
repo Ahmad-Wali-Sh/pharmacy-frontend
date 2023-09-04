@@ -3154,3 +3154,53 @@ input[type="date"]:disabled {
   box-shadow: -4px -4px 4px var(--color-two);
 }
 
+.barcode-input {
+  background-color: var(--color-three);
+  border: none;
+  border-radius: 1rem;
+  width: 20rem;
+  padding-left: 1rem;
+  direction: ltr;
+  font-size: 1rem;
+  color: var(--color-ten);
+}
+.barcode-input:focus{
+  box-shadow: 1px 1px 10px var(--color-two);
+}
+
+.prescription-print-box {
+  text-align: center;
+  width: 150px;
+  overflow: hidden;
+  direction: rtl;
+}
+.prescription-print-box > {
+  text-align: right;
+  overflow: hidden;
+  direction: rtl;
+}
+
+.barcode-image-print {
+  width: 100px;
+}
+
+.submit-badge {
+  margin-top: 0.6rem;
+  background-color: #68b12966;
+  width: 8rem;
+  text-align: center;
+  box-shadow: 1px 1px 10px black;
+  color: var(--color-ten);
+  border-radius: 1rem;
+}
+
+.pending-badge {
+  margin-top: 0.6rem;
+  background-color: #a747244c;
+  width: 8rem;
+  text-align: center;
+  box-shadow: 1px 1px 10px black;
+  color: var(--color-ten);
+  border-radius: 1rem;
+}
+

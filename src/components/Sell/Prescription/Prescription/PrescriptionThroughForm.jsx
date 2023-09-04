@@ -8,7 +8,7 @@ import AlertModal from "../../../PageComponents/Modals/AlertModal";
 import { SubmitButton } from "../../../PageComponents/Buttons/Buttons";
 
 export const PrescriptionThroughForm = forwardRef(
-  ({ prescription, prescriptionThrough }, ref) => {
+  ({ prescription, prescriptionThrough, updatePrescription }, ref) => {
     const SameMedicineAlertModalRef = React.useRef(null);
     const user = useAuthUser();
     const { register, handleSubmit, reset } = useForm();
@@ -33,7 +33,9 @@ export const PrescriptionThroughForm = forwardRef(
       onSuccess: () => {
         successFn(
           `prescription-through/?prescription=${prescription?.id}`,
-          () => {}
+          () => {
+            updatePrescription()
+          }
         );
       },
     });
@@ -117,6 +119,7 @@ export const PrescriptionThroughForm = forwardRef(
           />
           <div className="prescription-button">
             <SubmitButton name="⤵ Add" />
+            {prescription && prescription.sold ? <h4 className="submit-badge">پرداخت شده</h4> : <h4 className="pending-badge">در حالت انتظار</h4>}
           </div>
         </form>
       </>

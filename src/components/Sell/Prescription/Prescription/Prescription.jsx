@@ -15,6 +15,7 @@ import PrescriptionForm from "./PrescriptionForm";
 import { PrescriptionThroughForm } from "./PrescriptionThroughForm";
 import PrescriptionThroughMapForm from "./PrescriptionThroughMapForm";
 import { useQuery } from "react-query";
+import ReactToPrint from "react-to-print";
 
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
@@ -223,6 +224,16 @@ export default function Prescription(props) {
           });
   };
 
+  const updatePrescription = () => {
+    axios
+      .get(PRESCRIPTION_URL + prescription.id)
+      .then((res) => setPrescription(res.data))
+  }
+
+  const PrintPrescription = () => {
+    console.log('hey')
+  }
+
 
   return (
     <>
@@ -255,10 +266,11 @@ export default function Prescription(props) {
               <PrescriptionForm
                 prescription={prescription}
                 prescriptionThrough={prescriptionThrough}
+                updatePrescription={updatePrescription}
                 setPrescription={(data) => setPrescription(data)}
               />
               <PrescriptionThroughForm prescription={prescription} prescriptionThrough={prescriptionThrough} ref={SelectMedicineModalRef}/>
-              <PrescriptionThroughMapForm prescription={prescription} />
+              <PrescriptionThroughMapForm prescription={prescription} updatePrescription={updatePrescription}/>
             </div>
           </div>
         ) : (

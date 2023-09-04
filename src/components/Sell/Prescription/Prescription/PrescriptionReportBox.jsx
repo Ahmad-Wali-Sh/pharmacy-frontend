@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
+import ReactToPrint from "react-to-print";
 import { AfterBeforeButtonGroup } from "../../../PageComponents/Buttons/Buttons";
+import PrescriptionPrint from "./PrescriptionPrint";
 
 function PrescriptionReportBox({
   report,
@@ -8,6 +10,10 @@ function PrescriptionReportBox({
   FrontFunc,
   MiddleFunc,
 }) {
+
+  let PrescriptiontoPrintRef = useRef()
+
+
   return (
     <div className="entrance-report">
       <div className="entrance-report-header">راپور</div>
@@ -59,7 +65,28 @@ function PrescriptionReportBox({
           <label>:مقدار روند شده </label>
         </div>
       </div>
-      <AfterBeforeButtonGroup BackFunc={() => BackFunc()} FrontFunc={() => FrontFunc()}/>
+      <div className="entrance-report-footer">
+        <button className="entrance-report-button" onClick={() => BackFunc()}>
+          <i class="fa-solid fa-left-long"></i>
+        </button>
+        <ReactToPrint
+          trigger={() => (
+            <button
+              className="entrance-report-button"
+              // onClick={() => MiddleFunc()}
+            >
+              <i class="fa-solid fa-comments-dollar"></i>
+            </button>
+          )}
+          content={() => PrescriptiontoPrintRef}
+        />
+        <div style={{display: 'none'}}>
+        <PrescriptionPrint ref={(el) => (PrescriptiontoPrintRef = el)} prescription={prescription} report={report}/>
+        </div>
+        <button className="entrance-report-button" onClick={() => FrontFunc()}>
+          <i class="fa-solid fa-right-long"></i>
+        </button>
+      </div>
     </div>
   );
 }
