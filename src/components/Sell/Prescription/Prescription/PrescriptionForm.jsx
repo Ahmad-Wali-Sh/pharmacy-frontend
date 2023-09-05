@@ -82,12 +82,12 @@ function PrescriptionForm({
               )();
               break;
             case "x":
-                prescription?.sold === false
+                prescription.sold == false
                   ? deletePrescription()
                   : toast.error("این نسخه به صندوق ثبت شده است")
               break;
             case "X":
-              prescription?.sold === false
+              prescription.sold == false
                 ? deletePrescription()
                 : toast.error("این نسخه به صندوق ثبت شده است");
               break;

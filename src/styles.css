@@ -3170,18 +3170,16 @@ input[type="date"]:disabled {
 
 .prescription-print-box {
   text-align: center;
-  width: 150px;
+  width: 160px;
   overflow: hidden;
   direction: rtl;
-}
-.prescription-print-box > {
-  text-align: right;
-  overflow: hidden;
-  direction: rtl;
+  border: 1.4px solid black;
+  margin: 1rem;
 }
 
+
 .barcode-image-print {
-  width: 100px;
+  width: 150px;
 }
 
 .submit-badge {
@@ -3202,5 +3200,9 @@ input[type="date"]:disabled {
   box-shadow: 1px 1px 10px black;
   color: var(--color-ten);
   border-radius: 1rem;
+}
+
+.persian-number {
+  direction: ltr;
 }
 

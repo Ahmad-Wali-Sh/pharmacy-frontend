@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import React from "react";
+import React, { useRef } from "react";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -13,6 +13,7 @@ import Payment from "../Payment/Payment";
 import { DateInputSimple } from "react-hichestan-datetimepicker";
 import { useAuthUser } from "react-auth-kit";
 import CurrencyList from "../Currency/CurrencyList";
+import ControlledSelect from "../../PageComponents/ControlledSelect";
 
 export default function Entrance(props) {
   const ModalStyles = {
@@ -78,6 +79,7 @@ export default function Entrance(props) {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm();
   const [autoCompleteData, setAutoCompleteData] = React.useState({
@@ -357,9 +359,10 @@ export default function Entrance(props) {
     );
     EntranceForm.append(
       "company",
-      autoCompleteData.company.id != undefined
-        ? autoCompleteData.company.id
-        : parseInt(exactEntrance.company)
+      data.company ? data.company : exactEntrance.company
+      // autoCompleteData.company.id != undefined
+      //   ? autoCompleteData.company.id
+      //   : parseInt(exactEntrance.company)
     );
     EntranceForm.append(
       "payment_method",
@@ -379,9 +382,10 @@ export default function Entrance(props) {
     );
     EntranceForm.append(
       "store",
-      autoCompleteData.store.id != undefined
-        ? autoCompleteData.store.id
-        : exactEntrance.store
+      data.store ? data.store : exactEntrance.store
+      // autoCompleteData.store.id != undefined
+      //   ? autoCompleteData.store.id
+      //   : exactEntrance.store
     );
     EntranceForm.append("wholesale", data.wholesale);
     EntranceForm.append("image", file ? file : "");
@@ -536,6 +540,7 @@ export default function Entrance(props) {
             .get(ENTRANCE_THROUGH_URL + "?medician=" + res.data.medician)
             .then((lastRes) => {
               PriceCheck(res.data, lastRes.data[lastRes.data.length - 2]);
+              SelectMedicineOpener.current.Opener();
               axios
                 .get(
                   ENTRANCE_URL + lastRes.data[lastRes.data.length - 2].entrance
@@ -838,6 +843,12 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   };
 
+  const SelectMedicineOpener = useRef("");
+
+  const handleCloseFocus = () => {
+    document.getElementById("number-in-factor-input").focus();
+  };
+
   return (
     <>
       {!props.button && (
@@ -1064,7 +1075,7 @@ export default function Entrance(props) {
                 </div>
                 <label>شرکت:</label>
                 <div className="react-select-box">
-                  <ReactSearchAutocomplete
+                  {/* <ReactSearchAutocomplete
                     items={company}
                     onSelect={(item) =>
                       setAutoCompleteData({
@@ -1087,12 +1098,26 @@ export default function Entrance(props) {
                     showIcon={false}
                     className="autoComplete entrance--inputs"
                   />
-
-                  <Company button={2} Update={UpdateCompanies} />
+                  <Company button={2} Update={UpdateCompanies} /> */}
+                  <ControlledSelect
+                    control={control}
+                    name="company"
+                    options={company}
+                    placeholder=""
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    uniqueKey={`entrance-unique${exactEntrance.id}`}
+                    defaultValue={company?.find((c) =>
+                      c.id === exactEntrance?.company ? c.name : ""
+                    )}
+                    NewComponent={
+                      <Company button={2} Update={UpdateCompanies} />
+                    }
+                  />
                 </div>
                 <label>انبار:</label>
                 <div>
-                  <ReactSearchAutocomplete
+                  {/* <ReactSearchAutocomplete
                     items={store}
                     styling={AutoCompleteStyle}
                     onSelect={(item) =>
@@ -1109,7 +1134,20 @@ export default function Entrance(props) {
                     showIcon={false}
                     className="entrance--inputs"
                   />
-                  <Store button={2} Update={UpdateStores} />
+                  <Store button={2} Update={UpdateStores} /> */}
+                  <ControlledSelect
+                    control={control}
+                    name="store"
+                    options={store}
+                    placeholder=""
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    uniqueKey={`entrance-unique${exactEntrance.id}`}
+                    defaultValue={store?.find((c) =>
+                      c.id === exactEntrance?.store ? c.name : ""
+                    )}
+                    NewComponent={<Store button={2} Update={UpdateStores} />}
+                  />
                 </div>
                 <label>تاریخ:</label>
 
@@ -1293,6 +1331,8 @@ export default function Entrance(props) {
                     pharmGroub={pharmGroub}
                     selectAutoCompleteData={AutoCompleteHandle}
                     trigger={selectTrigger}
+                    ref={SelectMedicineOpener}
+                    handleCloseFocus={handleCloseFocus}
                     UpdateChangedMedicine={AutoCompleteHandle}
                     tabFormulate={tabFormulate}
                   />

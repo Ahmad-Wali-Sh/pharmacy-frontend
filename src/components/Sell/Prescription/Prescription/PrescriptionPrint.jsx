@@ -1,7 +1,9 @@
 import React from "react";
 
 class PrescriptionPrint extends React.Component {
+
   render() {
+    console.log(this.props.prescription?.barcode)
     return (
       <div className="prescription-print-box">
         <h4 style={{ color: "red" }}>دواخانه شریف</h4>
@@ -9,8 +11,8 @@ class PrescriptionPrint extends React.Component {
           <table>
             <tbody>
               <tr>
-                <td>بیمار</td>
-                <td colspan="2">{this.props.prescription.patient_name}</td>
+                <td>زمان</td>
+                <td colspan="2">{this.props.prescription?.timestamp?.slice(11,16)}</td>
               </tr>
               <tr>
                 <td>نوع</td>
@@ -38,7 +40,7 @@ class PrescriptionPrint extends React.Component {
               </tr>
               <tr>
                 <td>پرداخت</td>
-                <td colspan="2">{this.props.report.total_to_sale}Af</td>
+                <td colspan="1" className="persian-number">{this.props.prescription.refund ? this.props.prescription.refund : this.props.report.total_to_sale}Af</td>
               </tr>
             </tbody>
           </table>
