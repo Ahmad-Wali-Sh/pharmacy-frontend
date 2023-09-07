@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postbuild": "purgecss --css build/static/css/*.css --content build/index.html build/static/jsx/*.jsx --output build/static/css"
   },
   "dependencies": {
     "@kasraghoreyshi/calendar": "^0.0.5",
@@ -43,9 +44,11 @@
     "react-webcam": "^7.1.1",
     "react-window": "^1.8.9",
     "react-windowed-select": "^5.1.0",
-    "zaman": "^2.0.7"
+    "zaman": "^2.0.7",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^5.0.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",

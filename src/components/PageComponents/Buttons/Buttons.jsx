@@ -2,7 +2,7 @@ import React from "react";
 
 export function MainButton({ Func, title, length, icon }) {
   return (
-    <div className="purchase-card" onClick={() => Func()}>
+    <div className="purchase-card shadow-drop-center" onClick={() => Func()}>
       <div>
         <h3>{title}</h3>
       </div>
@@ -33,7 +33,7 @@ export function InfoButton({ Func }) {
 
 export function DepartButton({ Func, name }) {
   return (
-    <div className="department-card" onClick={() => Func()}>
+    <div className="department-card shadow-drop-center" onClick={() => Func()}>
       <h3>{name}</h3>
     </div>
   );
@@ -54,7 +54,7 @@ export function SubmitButton({ Func, name, className }) {
     <input
       type="submit"
       onClick={() => Func()}
-      className={`form-button ${className}`}
+      className={`form-button ${className} `}
       value={name}
     ></input>
   );
@@ -83,7 +83,7 @@ export function ButtonGroup({ children }) {
 export function SearchButton({ Func }) {
   return (
     <button
-      className="search-button-box"
+      className="search-button-box shadow-drop-center"
       onClick={(e) => {
         e.preventDefault()
         Func()

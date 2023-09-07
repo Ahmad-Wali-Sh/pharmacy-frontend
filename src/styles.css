@@ -47,7 +47,7 @@
 body {
   background-color: var(--color-three);
   --jb-date-input-bgcolor: var(--color-sex);
-  text-align : initial ;
+  text-align: initial;
 }
 
 .date-picker-expire {
@@ -1241,7 +1241,6 @@ input[type="date"]:disabled {
   cursor: pointer;
 }
 
-
 .medician-select-input-box {
   display: flex;
   flex-direction: column;
@@ -1390,7 +1389,6 @@ input[type="date"]:disabled {
   text-align: left;
   left: -88%;
 }
-
 
 .plus {
   width: 1.3rem;
@@ -1724,7 +1722,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 0% 3% 25%  20% 1% 20.7% 9% 7% 10% 10%;
+  grid-template-columns: 0% 3% 25% 20% 1% 20.7% 9% 7% 10% 10%;
   direction: rtl;
   justify-content: space-between;
   align-items: center;
@@ -1745,7 +1743,7 @@ input[type="date"]:disabled {
   direction: rtl;
   padding: 0.4rem;
   font-size: 0.8rem;
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
 
 .prescription-through-map > h5 {
@@ -2894,7 +2892,7 @@ input[type="date"]:disabled {
 
 .input-with-currency {
   position: relative;
-  left:0.5rem;
+  left: 0.5rem;
   display: grid;
   grid-template-columns: 0.1fr 1fr;
   align-items: center;
@@ -2931,8 +2929,7 @@ input[type="date"]:disabled {
   color: var(--color-fifth);
 }
 
-
-.big-company-select{
+.big-company-select {
   border-radius: 1rem;
   border: none;
   background-color: var(--color-three);
@@ -2940,8 +2937,6 @@ input[type="date"]:disabled {
   height: 1.7rem;
   width: 98%;
 }
-
-
 
 .on {
   color: var(--color-sixth);
@@ -2966,7 +2961,7 @@ input[type="date"]:disabled {
 .expires-medicine-select {
   background-color: var(--color-three);
   border-radius: 0.2rem;
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
 .expires-medicine-select:hover {
   background-color: var(--color-seven);
@@ -2983,7 +2978,7 @@ input[type="date"]:disabled {
 }
 
 .selected-color-medicine {
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
 
 .alert_on {
@@ -2995,7 +2990,7 @@ input[type="date"]:disabled {
   grid-template-columns: 2.5% 10% 3% 5% 4.4% 4% 4% 4% 4% 5% 4.4% 4% 4% 4% 4% 5% 4.4% 4% 4% 4% 4% 4% 4%;
   background-color: var(--color-two);
   border-radius: 1rem;
-  color:var(--color-ten);
+  color: var(--color-ten);
   height: 2rem;
   font-weight: 800;
   align-items: center;
@@ -3010,7 +3005,7 @@ input[type="date"]:disabled {
   display: grid;
   grid-template-columns: 2.5% 10% 3% 5% 4.4% 4% 4% 4.3% 3.7% 5% 4.4% 4% 4% 4.3% 3.7% 5% 4.4% 4% 4% 4.3% 3.7% 4% 4%;
   background-color: var(--color-three);
-  color:var(--color-ten);
+  color: var(--color-ten);
   min-height: 2rem;
   font-weight: 800;
   align-items: center;
@@ -3020,7 +3015,7 @@ input[type="date"]:disabled {
 
 .purchase-list-query-map > h5 {
   overflow: hidden;
-  font-size: 0.7rem;  
+  font-size: 0.7rem;
 }
 
 .purchase-list-query-map > input[type="text"] {
@@ -3060,7 +3055,6 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   border: none;
   box-shadow: 1px 1px 10px var(--color-one);
-  
 }
 .screenshot-button:hover {
   margin: 0.2rem;
@@ -3075,15 +3069,15 @@ input[type="date"]:disabled {
   margin-right: auto;
 }
 
-.webcam-opener{
+.webcam-opener {
   background-color: #53385500;
-  border:none;
+  border: none;
   margin: 0.3rem;
   box-shadow: 1px 1px 10px black;
   border-radius: 1rem;
   width: 4rem;
 }
-.webcam-opener:hover{
+.webcam-opener:hover {
   background-image: var(--color-five);
 }
 
@@ -3093,7 +3087,7 @@ input[type="date"]:disabled {
 }
 .input-picker-menu:hover {
   background-color: var(--color-three);
-  color:var(--color-one) !important
+  color: var(--color-one) !important;
 }
 
 /* News..................................................... */
@@ -3110,7 +3104,7 @@ input[type="date"]:disabled {
   text-align: center;
   border: none;
   box-shadow: 1px 1px 3px black;
-  color: var(--color-ten)
+  color: var(--color-ten);
 }
 .form-button:hover {
   background-image: var(--color-five);
@@ -3164,7 +3158,7 @@ input[type="date"]:disabled {
   font-size: 1rem;
   color: var(--color-ten);
 }
-.barcode-input:focus{
+.barcode-input:focus {
   box-shadow: 1px 1px 10px var(--color-two);
 }
 
@@ -3176,7 +3170,6 @@ input[type="date"]:disabled {
   border: 1.4px solid black;
   margin: 1rem;
 }
-
 
 .barcode-image-print {
   width: 150px;
@@ -3206,3 +3199,29 @@ input[type="date"]:disabled {
   direction: ltr;
 }
 
+@-webkit-keyframes shadow-drop-center {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 transparent;
+    box-shadow: 0 0 0 0 transparent;
+  }
+  100% {
+    -webkit-box-shadow: 0 0 20px 0 rgba(222, 222, 222, 0.35);
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.35);
+  }
+}
+@keyframes shadow-drop-center {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 transparent;
+    box-shadow: 0 0 0 0 transparent;
+  }
+  100% {
+    -webkit-box-shadow: 0 0 20px 0 var(--color-two);
+    box-shadow: 0 0 20px 0 var(--color-two);
+  }
+}
+
+.shadow-drop-center:hover {
+  -webkit-animation: shadow-drop-center 0.4s
+    cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: shadow-drop-center 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}

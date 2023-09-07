@@ -20,10 +20,9 @@ import {
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import ControlledSelect from "../../../PageComponents/ControlledSelect";
+import { usePrescription } from "../../../States/States";
 
 function PrescriptionForm({
-  prescription,
-  setPrescription,
   prescriptionThrough,
 }) {
   const user = useAuthUser();
@@ -31,6 +30,7 @@ function PrescriptionForm({
   const { data: doctor } = useQuery(["doctor/"]);
   const { data: department } = useQuery(["department/"]);
   const [searchNumber, setSearchNumber] = React.useState("");
+  const {prescription, setPrescription} = usePrescription()
 
   const { register, handleSubmit, reset, setValue, control } = useForm();
 
@@ -59,7 +59,7 @@ function PrescriptionForm({
 
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
-        if (e.key != "A" && e.key != "a" && e.key != 'c' && e.key != 'v') {
+        if (e.key != "A" && e.key != "a" && e.key != "c" && e.key != "v") {
           e.preventDefault();
           switch (e.key) {
             case "B":
@@ -82,9 +82,9 @@ function PrescriptionForm({
               )();
               break;
             case "x":
-                prescription.sold == false
-                  ? deletePrescription()
-                  : toast.error("این نسخه به صندوق ثبت شده است")
+              prescription.sold == false
+                ? deletePrescription()
+                : toast.error("این نسخه به صندوق ثبت شده است");
               break;
             case "X":
               prescription.sold == false

@@ -15,7 +15,7 @@ import PrescriptionForm from "./PrescriptionForm";
 import { PrescriptionThroughForm } from "./PrescriptionThroughForm";
 import PrescriptionThroughMapForm from "./PrescriptionThroughMapForm";
 import { useQuery } from "react-query";
-import ReactToPrint from "react-to-print";
+import { usePrescription } from "../../../States/States";
 
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
@@ -28,7 +28,7 @@ export default function Prescription(props) {
   const LAST_PRESCRIPTION_URL = import.meta.env.VITE_LAST_PRESCRIPTION;
   const user = useAuthUser();
 
-  const [prescription, setPrescription] = React.useState([]);
+  const { prescription, setPrescription } = usePrescription()
   const [departmentSelected, setDepartmentSelected] = React.useState("");
 
   const [report, setReport] = React.useState({

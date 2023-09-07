@@ -1,5 +1,5 @@
 import axios from "axios";
-import { QueryClient } from "react-query";
+import { QueryClient, useQuery } from "react-query";
 import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API;
@@ -22,7 +22,6 @@ export const queryClient = new QueryClient({
 // it is a default posting function to be used for api
 export const postDataFn = (data, api) => {
   return axios.post(API_URL + api, data);
-
 };
 
 export const putDataFn = (data, api) => {
@@ -54,3 +53,4 @@ export const handleFormData = (data, mutationFun, user) => {
   Form.append("user", user().id);
   mutationFun(Form);
 };
+
