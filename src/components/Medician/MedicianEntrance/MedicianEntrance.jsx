@@ -128,7 +128,6 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
   const SubmitMedician = (data) => {
     const MedicianForm = new FormData();
     MedicianForm.append("brand_name", data.brand_name);
-    MedicianForm.append("geniric_name", data.geniric_name);
     MedicianForm.append("no_pocket", data.no_pocket);
     MedicianForm.append("no_box", data.no_box);
     MedicianForm.append("ml", data.ml);
@@ -140,7 +139,7 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
     MedicianForm.append("must_advised", data.must_advised);
     MedicianForm.append("dividing_rules", data.dividing_rules);
     MedicianForm.append("price", data.price);
-    MedicianForm.append("generic_name", data.generic_name);
+    MedicianForm.append("generic_name", data.generic_name ? data.generic_name : "");
     MedicianForm.append("cautions", data.cautions);
     MedicianForm.append("usages", data.usages);
     MedicianForm.append("description", data.description);
