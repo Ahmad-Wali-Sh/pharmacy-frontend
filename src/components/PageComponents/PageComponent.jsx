@@ -1,18 +1,15 @@
 import React from "react";
 import Header from "./Header";
-import Layount from "./Layount";
 import Navbar from "./Navbar";
 
-function PageComponent() {
+function PageComponent({ children }) {
   return (
-    <div>
+    <div className="view-port">
       <div className="pagecomponent">
         <Header />
         <Navbar />
       </div>
-      <div className="pagecomponent-box">
-        <Layount />
-      </div>
+      <div className="pagecomponent-box">{children}</div>
     </div>
   );
 }
