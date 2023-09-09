@@ -40,7 +40,7 @@ class PrescriptionPrint extends React.Component {
               </tr>
               <tr>
                 <td>پرداخت</td>
-                <td colspan="1" className="persian-number">{this.props.prescription.refund ? this.props.prescription.refund : this.props.report.total_to_sale}Af</td>
+                <td colspan="1" className="persian-number">{this.props.prescription.refund ? this.props.prescription.refund : this.props.report.total_to_sale} Af</td>
               </tr>
             </tbody>
           </table>
