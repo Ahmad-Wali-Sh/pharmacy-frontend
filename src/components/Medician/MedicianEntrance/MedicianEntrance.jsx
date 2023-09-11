@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Modal from "react-modal";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
@@ -10,119 +10,57 @@ import PharmGroup from "../PharmGroup";
 import Country from "../Country";
 import { useAuthUser } from "react-auth-kit";
 import WebCamModal from "../../PageComponents/WebCamModal";
+import BigModal from "../../PageComponents/Modals/BigModal";
+import ControlledSelect from "../../PageComponents/ControlledSelect";
+import { useQuery } from "react-query";
 
-function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, UpdateChangedMedicine }) {
-  const ModalStyles = {
-    content: {
-      backgroundColor: "rgb(30,30,30)",
-      border: "none",
-      borderRadius: "1rem",
-      overflow: "hidden",
-      padding: "0px",
-      margin: "0px",
-    },
-    overlay: {
-      backgroundColor: "rgba(60,60,60,0.5)",
-    },
-  };
+function MedicianEntrance({
+  title,
+  icon,
+  button,
+  medician,
+  UpdateMedicine,
+  UpdateChangedMedicine,
+}) {
+  const MedicineEntranceRef = useRef(null);
 
-  const AutoCompleteStyle = {
-    height: "1.7rem",
-    borderRadius: "1rem",
-    fontSize: "14px",
-    backgroundColor: "rgb(34, 34, 34)",
-    color: "white",
-    border: "none",
-    hoverBackgroundColor: "grey",
-    overflow: "scroll",
-    zIndex: "2",
-  };
-
-  const AutoCompleteStyle2 = {
-    ...AutoCompleteStyle,
-    zIndex: "1",
-  };
-
-  const COUNTRY_URL = import.meta.env.VITE_COUNTRY;
-  const PHARM_GROUB_URL = import.meta.env.VITE_PHARM_GROUB;
-  const KIND_URL = import.meta.env.VITE_KIND;
   const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
-  const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
-  const BIG_COMPANY_URL = import.meta.env.VITE_BIG_COMPANY;
-  const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const user = useAuthUser();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-  const [country, setCountry] = React.useState([]);
-  const [pharmGroup, setPharmGroup] = React.useState([]);
-  const [kind, setKind] = React.useState([]);
+  const { register, handleSubmit, reset, control,  } = useForm();
   const [file, setFile] = React.useState("");
-  const [kindName, setKindName] = React.useState("");
-  const [department, setDepartment] = React.useState([]);
-  const [pharmGroupName, setPharmGroupName] = React.useState("");
-  const [countryName, setCountryName] = React.useState("");
-  const [bigCompany, setBigCompany] = React.useState([]);
-  const [autoCompleteData, setAutoCompleteData] = React.useState({
-    country: medician && medician.country ? medician.country : "",
-    pharm_group: medician && medician.pharm_group ? medician.pharm_group : "",
-    kind: medician && medician.kind ? medician.kind : "",
-  });
 
-  React.useEffect(() => {
-    axios
-      .get(COUNTRY_URL)
-      .then((res) => setCountry(res.data))
-      .catch((err) => console.log(err));
-    axios
-      .get(PHARM_GROUB_URL)
-      .then((res) => setPharmGroup(res.data))
-      .catch((err) => console.log(err));
-    axios
-      .get(KIND_URL)
-      .then((res) => setKind(res.data))
-      .catch((err) => console.log(err));
-    axios
-      .get(DEPARTMENT_URL)
-      .then((res) => setDepartment(res.data))
-      .catch((err) => console.log(err));
-    axios
-      .get(BIG_COMPANY_URL)
-      .then((res) => setBigCompany(res.data))
-      .catch((err) => console.log(err));
-  }, []);
 
-  React.useEffect(() => {
-    kind.map(
-      (kind) =>
-        kind.id == (medician && medician.kind) && setKindName(kind.name_english)
-    );
-  }, [kind]);
-  React.useEffect(() => {
-    pharmGroup.map(
-      (pharm) =>
-        pharm.id == (medician && medician.pharm_group) &&
-        setPharmGroupName(pharm.name_english)
-    );
-  }, [pharmGroup]);
-  React.useEffect(() => {
-    country.map(
-      (country) =>
-        country.id == (medician && medician.country) &&
-        setCountryName(country.name)
-    );
-  }, [country]);
+  const { data: pharmGroup } = useQuery({
+    queryKey: ['pharm-groub/']
+  })
+  const { data: kind } = useQuery({
+    queryKey: ['kind/']
+  })
+  const { data: country } = useQuery({
+    queryKey: ['country/']
+  })
+  const { data: department } = useQuery({
+    queryKey: ['department/']
+  })
+  const { data: bigCompany } = useQuery({
+    queryKey: ['big-company/']
+  })
+
+
 
   function registerModalOpener() {
     UpdateFunction();
-    setRegisterModalOpen(true);
+    reset({
+      kind: medician?.kind ? medician.kind : "",
+      country: medician?.country ? medician.country : "",
+      pharm_group: medician?.pharm_group ? medician.pharm_group : "",
+      big_company: medician?.big_company ? medician.big_company : ""
+    })
+    MedicineEntranceRef.current.Opener();
   }
   function registerModalCloser() {
-    setRegisterModalOpen(false);
+    MedicineEntranceRef.current.Closer();
   }
 
   const SubmitMedician = (data) => {
@@ -133,13 +71,16 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
     MedicianForm.append("ml", data.ml);
     MedicianForm.append("weight", data.weight);
     MedicianForm.append("location", data.location);
-    MedicianForm.append("big_company", data.company);
+    MedicianForm.append("big_company", data.big_company);
     MedicianForm.append("minmum_existence", data.minmum_existence);
     MedicianForm.append("maximum_existence", data.maximum_existence);
     MedicianForm.append("must_advised", data.must_advised);
     MedicianForm.append("dividing_rules", data.dividing_rules);
     MedicianForm.append("price", data.price);
-    MedicianForm.append("generic_name", data.generic_name ? data.generic_name : "");
+    MedicianForm.append(
+      "generic_name",
+      data.generic_name ? data.generic_name : ""
+    );
     MedicianForm.append("cautions", data.cautions);
     MedicianForm.append("usages", data.usages);
     MedicianForm.append("description", data.description);
@@ -148,9 +89,9 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
     {
       file && MedicianForm.append("image", file);
     }
-    MedicianForm.append("pharm_group", autoCompleteData.pharm_group);
-    MedicianForm.append("kind", autoCompleteData.kind);
-    MedicianForm.append("country", autoCompleteData.country);
+    MedicianForm.append("pharm_group", data.pharm_group);
+    MedicianForm.append("kind", data.kind);
+    MedicianForm.append("country", data.country);
     MedicianForm.append("doctor_approved", data.doctor_approved);
     MedicianForm.append("patient_approved", data.patient_approved);
     MedicianForm.append("department", data.department);
@@ -189,66 +130,49 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
           .patch(MEDICIAN_URL + medician.id + "/", MedicianForm)
           .then((res) => {
             toast.success("Data Updated Successfuly.");
-            UpdateMedicine(res.data)
-            UpdateChangedMedicine(res.data)       
-            registerModalCloser()
+            UpdateMedicine && UpdateMedicine(res.data);
+            UpdateChangedMedicine && UpdateChangedMedicine(res.data);
+            registerModalCloser();
           })
           .catch((err) => {
-            console.log(err)
-            toast.error("Check Your Input And Try Again!")});
-
+            console.log(err);
+            toast.error("Check Your Input And Try Again!");
+          });
     }
-
   };
 
   React.useEffect(() => {
-    const listener = (e) =>{
-      if (e.code === 'F9') {
-            reset({})
-            registerModalOpener()
-        }
-    }
+    const listener = (e) => {
+      if (e.code === "F9") {
+        registerModalOpener();
+      }
+    };
 
-    medician && document.addEventListener('keydown', listener)
+    medician && document.addEventListener("keydown", listener);
 
     return () => {
-      document.removeEventListener('keydown', listener)
-    }
-}, [])
-
-
-//   React.useEffect(() => {
-//     medician && document.addEventListener('keydown', (e) => {  
-//       console.log(e.code)
-//         if ((e.metaKey || e.ctrlKey) && e.code === 'F9') {
-//             console.log('fire!')
-//             reset({
-//               brand_name: medician.brand_name
-//             })
-//             registerModalOpener()
-//         }  
-//     })
-// }, [])
+      document.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   const UpdateFunction = () => {
-    axios
-      .get(COUNTRY_URL)
-      .then((res) => setCountry(res.data))
-      .catch((err) => console.log(err));
-    axios
-      .get(PHARM_GROUB_URL)
-      .then((res) => setPharmGroup(res.data))
-      .catch((err) => console.log(err));
-    axios
-      .get(KIND_URL)
-      .then((res) => setKind(res.data))
-      .catch((err) => console.log(err));
+    // axios
+    //   .get(COUNTRY_URL)
+    //   .then((res) => setCountry(res.data))
+    //   .catch((err) => console.log(err));
+    // axios
+    //   .get(PHARM_GROUB_URL)
+    //   .then((res) => setPharmGroup(res.data))
+    //   .catch((err) => console.log(err));
+    // axios
+    //   .get(KIND_URL)
+    //   .then((res) => setKind(res.data))
+    //   .catch((err) => console.log(err));
   };
 
   const WebComFileSeter = (file) => {
-    setFile(file)
-  }
-
+    setFile(file);
+  };
 
   return (
     <>
@@ -276,28 +200,22 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
       )}
 
       {button == 3 && (
-        <div onClick={() => {
-          reset({
-            brand_name: medician.brand_name
-          })
-          registerModalOpener()
-        }}>
+        <div
+          onClick={() => {
+            reset({
+              brand_name: medician.brand_name,
+            });
+            registerModalOpener();
+          }}
+        >
           <i class="fa-solid fa-circle-info"></i>
         </div>
       )}
-
-      <Modal
-        style={ModalStyles}
-        isOpen={registerModalOpen}
-        onRequestClose={registerModalCloser}
-      >
-        <div className="modal-header">
-          <h3>ثبت دوا</h3>
-          <div className="modal-close-btn" onClick={registerModalCloser}>
-            <i className="fa-solid fa-xmark"></i>
-          </div>
-        </div>
-        <form className="medician-inter" onSubmit={handleSubmit(SubmitMedician)}>
+      <BigModal ref={MedicineEntranceRef} title="ثبت دوا">
+        <form
+          className="medician-inter"
+          onSubmit={handleSubmit(SubmitMedician)}
+        >
           <div className="medician-inter">
             <div className="medician-inter-form">
               <label>نام برند:</label>
@@ -326,80 +244,68 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
               />
               <label>گروپ_دوایی:</label>
               <div style={{ marginLeft: "0.5rem" }}>
-                <ReactSearchAutocomplete
-                  fuseOptions={{ keys: ["name_english", "name_persian"] }}
-                  items={pharmGroup}
-                  styling={AutoCompleteStyle}
-                  showClear={false}
-                  inputDebounce="10"
-                  showIcon={false}
-                  resultStringKeyName="name_english"
-                  onSelect={(data) => {
-                    setAutoCompleteData({
-                      ...autoCompleteData,
-                      pharm_group: data.id,
-                    });
-                  }}
-                  placeholder={pharmGroupName}
+                <ControlledSelect
+                  control={control}
+                  name="pharm_group"
+                  options={pharmGroup}
+                  placeholder=""
+                  getOptionLabel={(option) => option.name_english}
+                  getOptionValue={(option) => option.id}
+                  uniqueKey={`medicine-unigue${medician}`}
+                  defaultValue={pharmGroup?.find((c) =>
+                    c.id === medician?.pharm_group ? c.name_english : null
+                  )}
+                  NewComponent={<PharmGroup button={2} Update={UpdateFunction} />}
                 />
-                <PharmGroup button={2} Update={UpdateFunction} />
               </div>
               <label>نوع:</label>
               <div style={{ marginLeft: "0.5rem" }}>
-                <ReactSearchAutocomplete
-                  fuseOptions={{ keys: ["name_english", "name_persian"] }}
-                  items={kind}
-                  styling={AutoCompleteStyle}
-                  showClear={false}
-                  inputDebounce="10"
-                  showIcon={false}
-                  resultStringKeyName="name_english"
-                  onSelect={(data) => {
-                    setAutoCompleteData({
-                      ...autoCompleteData,
-                      kind: data.id,
-                    });
-                  }}
-                  placeholder={kindName}
+              <ControlledSelect
+                  control={control}
+                  name="kind"
+                  options={kind}
+                  placeholder=""
+                  getOptionLabel={(option) => option.name_english}
+                  getOptionValue={(option) => option.id}
+                  uniqueKey={`medicine-unigue${kind}`}
+                  defaultValue={kind?.find((c) =>
+                    c.id === medician?.kind ? c.name_english : null
+                  )}
+                  NewComponent={<Kind button={2} Update={UpdateFunction} />}
                 />
-                <Kind button={2} Update={UpdateFunction} />
               </div>
               <label>کشور:</label>
               <div style={{ marginLeft: "0.5rem" }}>
-                <ReactSearchAutocomplete
-                  items={country}
-                  styling={AutoCompleteStyle2}
-                  showClear={false}
-                  inputDebounce="10"
-                  showIcon={false}
-                  onSelect={(data) => {
-                    setAutoCompleteData({
-                      ...autoCompleteData,
-                      country: data.id,
-                    });
-                  }}
-                  placeholder={countryName}
+              <ControlledSelect
+                  control={control}
+                  name="country"
+                  options={country}
+                  placeholder=""
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  uniqueKey={`medicine-unigue${country}`}
+                  defaultValue={country?.find((c) =>
+                    c.id === medician?.country ? c.name : null
+                  )}
+                  NewComponent={<Country button={2} Update={UpdateFunction} />}
                 />
-                <Country button={2} Update={UpdateFunction} />
               </div>
               <label>کمپنی:</label>
-              <select className="big-company-select" {...register("company")}>
-                <option></option>
-                {bigCompany.map((company) => (
-                  <option
-                    selected={
-                      medician &&
-                      medician.big_company &&
-                      medician.big_company == company.id
-                        ? "selected"
-                        : ""
-                    }
-                    value={company.id}
-                  >
-                    {company.name}
-                  </option>
-                ))}
-              </select>
+              <div style={{ marginLeft: "0.5rem" }}>
+                <ControlledSelect
+                  control={control}
+                  name="big_company"
+                  options={bigCompany}
+                  placeholder=""
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  uniqueKey={`medicine-unigue${bigCompany}`}
+                  defaultValue={bigCompany?.find((c) =>
+                    c.id === medician?.big_company ? c.name : null
+                  )}
+                  NewComponent={<Country button={2} Update={UpdateFunction} />}
+                />
+                </div>
               <label>قیمت:</label>
               <input
                 type="text"
@@ -492,12 +398,15 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
                     type="file"
                     className="medician-image-field"
                     onChange={(e) => {
-                      setFile(e.target.files[0])
-                      console.log(e.target.files[0])
+                      setFile(e.target.files[0]);
                     }}
                   />
                   <form tabIndex={-1}>
-                  <WebCamModal medician={medician} setFile={WebComFileSeter} tabIndex={-1}/>
+                    <WebCamModal
+                      medician={medician}
+                      setFile={WebComFileSeter}
+                      tabIndex={-1}
+                    />
                   </form>
                 </div>
                 <br />
@@ -506,7 +415,7 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
                   {...register("department")}
                 >
                   <option></option>
-                  {department.map((depart) => (
+                  {department?.map((depart) => (
                     <option
                       selected={
                         medician &&
@@ -563,7 +472,7 @@ function MedicianEntrance({ title, icon, button, medician, UpdateMedicine, Updat
             </div>
           </div>
         </form>
-      </Modal>
+      </BigModal>
     </>
   );
 }

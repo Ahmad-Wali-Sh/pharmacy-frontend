@@ -117,17 +117,20 @@ export const SelectInputStyle = {
   }),
   menu: (base, state) => ({
     ...base,
-    backgroundColor: 'rgb(30,30,30)'
+    backgroundColor: 'rgb(30,30,30)',
+    zIndex: 1000
   }),
   menuList: (base, state) => ({
     ...base,
     backgroundColor: state.isFocused ? 'rgb(60,60,60)' : '',
-    textAlign: 'right'
+    textAlign: 'right',
+    zIndex: 1,
   }),
   option: (base, state) => ({
     ...base,
     backgroundColor: state.isFocused ? 'rgb(60,60,60)' : 'rgb(30,30,30)',
-    color: 'var(--color-ten)'
+    color: 'var(--color-ten)',
+    zIndex: 1,
   }),
   input: (base, state) => ({
     ...base,
@@ -135,14 +138,15 @@ export const SelectInputStyle = {
     direction: 'rtl',
     color: 'var(--color-ten)',
     fontSize: '0.9rem',
-    marginTop: '-0.3rem'
+    marginTop: '-0.3rem',
+    zIndex: 1,
   }),
   singleValue: (base, state) => ({
     ...base,
     direction: 'rtl',
     textAlign: 'right',
     color: 'var(--color-ten)',
-    
+    zIndex: 1,
   }),
 }
 
