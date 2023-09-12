@@ -4,6 +4,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import {useAuthUser} from 'react-auth-kit'
+import { MainButton, PlusButton } from "../PageComponents/Buttons/Buttons";
 
 
 function Country({title, icon, button, Update}) {
@@ -65,33 +66,19 @@ function Country({title, icon, button, Update}) {
           toast.error("Check Your Input And Try Again!");
         });
     };
-    const [storeLength, setStoreLength] = React.useState(0)
 
-    React.useEffect(() => {
-        axios
-            .get(COUNTRY_URL)
-            .then((res) => setStoreLength(res.data.length))
-            .catch((err) => console.log(err))
-    }, [])
+
     return (
       <>
         {button == 1 && (
-          <div className="purchase-card" onClick={registerModalOpener}>
-            <div>
-              <h3>{title}</h3>
-              <div>{storeLength}</div>
-            </div>
-            <div>
-              <i className={icon}></i>
-            </div>
-          </div>
+          <MainButton 
+          Func={() => registerModalOpener()}
+          title={title}
+          icon={icon}
+          />
         )}
         {button == 2 && (
-          <div className="plus-box" onClick={registerModalOpener}>
-            <div className="plus">
-            <i class="fa-solid fa-plus"></i>
-            </div>
-          </div>
+          <PlusButton Func={() => registerModalOpener()}/>
         )}
         <Modal
           style={ModalStyles}

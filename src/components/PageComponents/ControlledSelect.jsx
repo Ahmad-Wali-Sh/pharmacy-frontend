@@ -18,7 +18,7 @@ export default function ControlledSelect({
   const IndicatorDropDown = (props) => {
     return (
       <components.DropdownIndicator {...props}>
-        <div style={{ width: "0.8rem" }}></div>
+        <div style={{ width: "0.5vw" }}></div>
       </components.DropdownIndicator>
     );
   };
@@ -32,9 +32,10 @@ export default function ControlledSelect({
           <Select
             inputRef={ref}
             options={options}
+            menuPortalTarget={document.body} 
             placeholder={placeholder}
             isClearable
-            components={{ DropdownIndicator: IndicatorDropDown }}
+            components={{ DropdownIndicator: IndicatorDropDown, IndicatorSeparator: () => null }}
             getOptionLabel={getOptionLabel}
             getOptionValue={getOptionValue}
             key={uniqueKey}

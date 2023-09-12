@@ -1386,7 +1386,6 @@ input[type="date"]:disabled {
   z-index: 2;
   top: -1.3rem;
   width: 1.3rem;
-  text-align: left;
   left: -88%;
 }
 

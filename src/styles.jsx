@@ -102,35 +102,39 @@ export const SelectInputStyle = {
     border: 'none',
     borderRadius: '1rem',
     boxShadow: state.isFocused && '-4px -4px 4px var(--color-two);',
-    zIndex: 1
   }),
-  
   indicatorsContainer: (base, state) => ({
     ...base,
     minHeight: '1.3rem',
-    height: '1.8rem'
+    height: '1.8rem',
+    border: 'none',
+    width: '23%'
   }),
   container: (base, state) => ({
     ...base,
-    zIndex: 1,
-    width: '100%'
+    width: '100%',
+  }),
+  indicatorsDropdown: (base) => ({
+    ...base,
+    border: 'none',
   }),
   menu: (base, state) => ({
     ...base,
     backgroundColor: 'rgb(30,30,30)',
-    zIndex: 1000
   }),
   menuList: (base, state) => ({
     ...base,
     backgroundColor: state.isFocused ? 'rgb(60,60,60)' : '',
     textAlign: 'right',
-    zIndex: 1,
+  }),
+  menuPortal: (base) => ({
+    ...base,
+    zIndex: 999
   }),
   option: (base, state) => ({
     ...base,
     backgroundColor: state.isFocused ? 'rgb(60,60,60)' : 'rgb(30,30,30)',
     color: 'var(--color-ten)',
-    zIndex: 1,
   }),
   input: (base, state) => ({
     ...base,
@@ -139,14 +143,12 @@ export const SelectInputStyle = {
     color: 'var(--color-ten)',
     fontSize: '0.9rem',
     marginTop: '-0.3rem',
-    zIndex: 1,
   }),
   singleValue: (base, state) => ({
     ...base,
     direction: 'rtl',
     textAlign: 'right',
     color: 'var(--color-ten)',
-    zIndex: 1,
   }),
 }
 
