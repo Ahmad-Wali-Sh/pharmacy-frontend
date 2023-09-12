@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Patient from "../Patient";
 import Doctor from "../Doctor";
 import { useQuery } from "react-query";
@@ -21,6 +21,7 @@ import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import ControlledSelect from "../../../PageComponents/ControlledSelect";
 import { usePrescription } from "../../../States/States";
+import ListDashboard from "../../../PageComponents/Lists/ListDashboard";
 
 function PrescriptionForm({
   prescriptionThrough,
@@ -171,6 +172,8 @@ function PrescriptionForm({
     },
   });
 
+  const ListRef = useRef(null)
+
   return (
     <form
       className="prescription-prescription"
@@ -203,7 +206,8 @@ function PrescriptionForm({
         defaultValue={patient?.find((c) =>
           c.id === prescription?.name ? c.code_name : ""
         )}
-        NewComponent={<Patient button="plus" />}
+        // NewComponent={<Patient button="plus" />}
+        NewComponent={<ListDashboard title='لست ها' activeKey='patient' ref={ListRef}/>}
       />
       <label>نام داکتر:</label>
       <ControlledSelect

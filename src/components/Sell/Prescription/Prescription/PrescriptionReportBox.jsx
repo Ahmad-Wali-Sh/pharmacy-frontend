@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
-import { AfterBeforeButtonGroup } from "../../../PageComponents/Buttons/Buttons";
 import PrescriptionPrint from "./PrescriptionPrint";
 
 function PrescriptionReportBox({
@@ -8,10 +7,9 @@ function PrescriptionReportBox({
   prescription,
   BackFunc,
   FrontFunc,
-  MiddleFunc,
 }) {
 
-  let PrescriptiontoPrintRef = useRef()
+  let PrescriptiontoPrintRef = useRef(null)
 
 
   return (
@@ -73,7 +71,6 @@ function PrescriptionReportBox({
           trigger={() => (
             <button
               className="entrance-report-button"
-              // onClick={() => MiddleFunc()}
             >
               <i class="fa-solid fa-comments-dollar"></i>
             </button>
