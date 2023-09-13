@@ -30,6 +30,13 @@ export function InfoButton({ Func }) {
     </div>
   );
 }
+export function DeleteButton({ Func }) {
+  return (
+    <div onClick={() => Func()}>
+      <i class="fa-solid fa-trash"></i>
+    </div>
+  );
+}
 
 export function DepartButton({ Func, name }) {
   return (

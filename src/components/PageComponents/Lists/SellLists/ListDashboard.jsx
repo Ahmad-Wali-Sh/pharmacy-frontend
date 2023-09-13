@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import BigModal from "../Modals/BigModal";
-import { PlusButton } from "../Buttons/Buttons";
+import BigModal from "../../Modals/BigModal";
+import { PlusButton } from "../../Buttons/Buttons";
 import PatientList from "./PatientList";
 
 const ListDashboard = ({ title, activeKey }) => {

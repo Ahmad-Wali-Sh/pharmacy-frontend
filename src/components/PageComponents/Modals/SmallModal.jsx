@@ -22,6 +22,7 @@ const SmallModal = forwardRef((props, ref) => {
   return (
     <Modal
       style={ModalSmallStyles}
+      className={props.className}
       isOpen={registerModalOpen}
       onRequestClose={onClose}
     >

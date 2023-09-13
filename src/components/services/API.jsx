@@ -1,5 +1,5 @@
 import axios from "axios";
-import { QueryClient, useQuery } from "react-query";
+import { QueryClient } from "react-query";
 import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API;
@@ -39,7 +39,7 @@ export const deleteDataFn = (api) => {
 // it is a default success function to do its job
 export const successFn = (invalidKey, func) => {
   toast.success("درخواست موفقانه بود");
-  queryClient.invalidateQueries([invalidKey]);
+  queryClient.invalidateQueries();
   func();
 };
 
@@ -53,4 +53,3 @@ export const handleFormData = (data, mutationFun, user) => {
   Form.append("user", user().id);
   mutationFun(Form);
 };
-

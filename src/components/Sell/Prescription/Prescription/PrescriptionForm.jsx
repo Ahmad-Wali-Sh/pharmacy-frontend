@@ -21,7 +21,7 @@ import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import ControlledSelect from "../../../PageComponents/ControlledSelect";
 import { usePrescription } from "../../../States/States";
-import ListDashboard from "../../../PageComponents/Lists/ListDashboard";
+import ListDashboard from "../../../PageComponents/Lists/SellLists/ListDashboard";
 
 function PrescriptionForm({
   prescriptionThrough,

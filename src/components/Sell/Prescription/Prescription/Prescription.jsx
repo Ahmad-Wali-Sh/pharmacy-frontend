@@ -230,9 +230,6 @@ export default function Prescription(props) {
       .then((res) => setPrescription(res.data))
   }
 
-  const PrintPrescription = () => {
-    console.log('hey')
-  }
 
 
   return (

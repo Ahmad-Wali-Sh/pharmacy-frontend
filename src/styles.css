@@ -119,6 +119,12 @@ body {
   color: var(--color-four);
 }
 
+
+
+.fa-trash:hover {
+  color:rgb(185, 34, 34)
+}
+
 .fa-brands {
   color: var(--color-four);
 }
@@ -3336,4 +3342,41 @@ input[type="date"]:disabled {
 .patient-list-box {
   overflow-y: scroll;
   height: 80%;
+}
+
+.filter-button {
+  position: absolute;
+  left: 2%;
+  top: 13%;
+  background-color: var(--color-three);
+  width: 2rem;
+  height: 1.5rem;
+  text-align: center;
+  line-height: 2rem;
+  border-radius: 1rem;
+  box-shadow: 1px 1px 2px var(--color-three)
+}
+.filter-button:hover {
+  background-color: var(--color-one);
+}
+
+.list-filter-form {
+  background-color: var(--color-sex);
+  height: 100%;
+  padding-bottom: 1rem;
+  margin:1rem;
+  border-radius: 1rem;
+  direction: rtl;
+  display: grid;
+  gap: 1rem;
+  padding-top: 1rem;
+  grid-template-columns: 18% 70%;
+  text-align: right;
+  padding-right: 1rem;
+}
+
+.patient-filter-modal {
+  position: relative;
+  top: 12%;
+  z-index: 101;
 }
