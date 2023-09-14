@@ -30,6 +30,7 @@
     "react-dom": "^18.2.0",
     "react-hichestan-datetimepicker": "^3.0.24",
     "react-hook-form": "^7.43.9",
+    "react-image-upload": "^3.0.1",
     "react-loader-spinner": "^5.3.4",
     "react-modal": "^3.16.1",
     "react-multi-date-picker": "^4.0.0",

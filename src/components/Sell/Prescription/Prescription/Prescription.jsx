@@ -111,10 +111,6 @@ export default function Prescription(props) {
   };
 
 
-  const tabFormulate = () => {
-    document.getElementById("number-in-factor-input").focus();
-  };
-
   const departmentSubmit = () => {
     PrescriptionModalRef.current.Opener();
     axios.get(DEPARTMENT_URL + props.department.id).then((res) => {

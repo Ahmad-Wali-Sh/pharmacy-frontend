@@ -102,6 +102,7 @@ export const SelectInputStyle = {
     border: 'none',
     borderRadius: '1rem',
     boxShadow: state.isFocused && '-4px -4px 4px var(--color-two);',
+    width: '100%'
   }),
   indicatorsContainer: (base, state) => ({
     ...base,

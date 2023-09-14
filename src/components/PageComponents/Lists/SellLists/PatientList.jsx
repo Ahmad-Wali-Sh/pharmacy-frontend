@@ -18,8 +18,6 @@ import {
 import { toast } from "react-toastify";
 import SmallModal from "../../Modals/SmallModal";
 
-
-
 export default function PatientList() {
   const PatientListFilterRef = useRef(null);
   const [active, setActive] = React.useState("list");
@@ -39,7 +37,7 @@ export default function PatientList() {
   const { mutateAsync: newPatient } = useMutation({
     mutationFn: (data) => postDataFn(data, "patient/"),
     onSuccess: () =>
-      successFn([patientQuery, 'patient/'], () => {
+      successFn([patientQuery, "patient/"], () => {
         setActive("list");
       }),
   });
@@ -47,15 +45,52 @@ export default function PatientList() {
   const { mutateAsync: handleEditPatient } = useMutation({
     mutationFn: (data) => putDataFn(data, `patient/${editPatient.id}/`),
     onSuccess: () =>
-      successFn([patientQuery, 'patient/'], () => {
+      successFn([patientQuery, "patient/"], () => {
         setActive("list");
       }),
   });
 
+  React.useEffect(() => {
+    const handleKeyDowns = (e) => {
+      console.log(e.key)
+      if (e.ctrlKey) {
+        switch (e.key) {
+          case 'e':
+          case 'E':
+          case 'ث':
+            e.preventDefault();
+            setActive('new')
+            reset({
+              name: '',
+              code: ''
+            })
+            break;
+          case 'f':
+          case 'F':
+          case 'ب':
+            e.preventDefault();
+            PatientListFilterRef.current.Opener()
+            break;
+          case 'l':
+          case 'L':
+          case 'م':
+            e.preventDefault();
+            setActive('list')
+            break;
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDowns);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDowns);
+    };
+  }, []);
+
   const { mutateAsync: deletePatient } = useMutation({
     mutationFn: (id) => deleteDataFn(`patient/${id}/`),
     onSuccess: () =>
-      successFn([patientQuery, 'patient/'], () => {
+      successFn([patientQuery, "patient/"], () => {
         setActive("list");
       }),
     onError: (e) => {
@@ -77,7 +112,7 @@ export default function PatientList() {
             PatientListFilterRef={PatientListFilterRef}
             filter={filter}
             setFilter={setFilter}
-          ></PatientFilterModal>
+          />
           <PatientListMap
             patients={patients}
             setActive={setActive}
@@ -85,7 +120,7 @@ export default function PatientList() {
             reset={reset}
             setPatiendEdit={setEditPatient}
             deletePatient={deletePatient}
-          ></PatientListMap>
+          />
           <ListFooter setActive={setActive} reset={reset} user={user} />
         </>
       );
@@ -93,7 +128,7 @@ export default function PatientList() {
       () => setEditPatient("");
       return (
         <>
-          <NewPatientForm register={register}></NewPatientForm>
+          <NewPatientForm register={register} />
           <ListFooter
             setActive={setActive}
             user={user}
@@ -106,7 +141,7 @@ export default function PatientList() {
     case "edit":
       return (
         <>
-          <PatientEdit register={register}></PatientEdit>
+          <PatientEdit register={register} />
           <ListFooter
             setActive={setActive}
             user={user}
@@ -323,6 +358,7 @@ function PatientFilterModal(props) {
       >
         <form>
           <div className="list-filter-form">
+
             <label>نام</label>
             <input
               className="text-input-standard"

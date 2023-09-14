@@ -21,7 +21,7 @@ import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import ControlledSelect from "../../../PageComponents/ControlledSelect";
 import { usePrescription } from "../../../States/States";
-import ListDashboard from "../../../PageComponents/Lists/SellLists/ListDashboard";
+import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 
 function PrescriptionForm({
   prescriptionThrough,
@@ -60,7 +60,7 @@ function PrescriptionForm({
 
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
-        if (e.key != "A" && e.key != "a" && e.key != "c" && e.key != "v") {
+        if (e.key != "A" && e.key != "a" && e.key != "c" && e.key != "v" && e.key != "X" && e.key != "x") {
           e.preventDefault();
           switch (e.key) {
             case "B":
@@ -81,16 +81,6 @@ function PrescriptionForm({
               handleSubmit((data) =>
                 handleFormData(data, newPrescription, user)
               )();
-              break;
-            case "x":
-              prescription.sold == false
-                ? deletePrescription()
-                : toast.error("این نسخه به صندوق ثبت شده است");
-              break;
-            case "X":
-              prescription.sold == false
-                ? deletePrescription()
-                : toast.error("این نسخه به صندوق ثبت شده است");
               break;
           }
         }
@@ -207,7 +197,7 @@ function PrescriptionForm({
           c.id === prescription?.name ? c.code_name : ""
         )}
         // NewComponent={<Patient button="plus" />}
-        NewComponent={<ListDashboard title='لست ها' activeKey='patient' ref={ListRef}/>}
+        NewComponent={<SellingLists title='لست ها' activeKey='patient' ref={ListRef} button='plus'/>}
       />
       <label>نام داکتر:</label>
       <ControlledSelect
@@ -221,7 +211,7 @@ function PrescriptionForm({
         defaultValue={doctor?.find((c) =>
           c.id === prescription?.doctor ? c.code_name : ""
         )}
-        NewComponent={<Doctor button="plus" />}
+        NewComponent={<SellingLists title='لست ها' activeKey='doctor' ref={ListRef} button='plus'/>}
       />
       <label>شماره:</label>
       <input

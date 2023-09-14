@@ -1,20 +1,31 @@
 import React, { useRef } from "react";
 import BigModal from "../../Modals/BigModal";
-import { PlusButton } from "../../Buttons/Buttons";
+import { MainButton, PlusButton } from "../../Buttons/Buttons";
 import PatientList from "./PatientList";
+import DoctorList from "./DoctorList";
+import DepartmentsList from "./DepartmentsList";
 
-const ListDashboard = ({ title, activeKey }) => {
+const SellingLists = ({ title, activeKey, button, name, icon }) => {
   const ListDashboardRef = useRef(null);
 
   const [active, setActive] = React.useState(activeKey);
   return (
     <>
-      <PlusButton
+      {button == 'plus' && <PlusButton
         Func={() => {
           ListDashboardRef.current.Opener();
           setActive(activeKey);
         }}
-      />
+      />}
+      {button == 'main' && <MainButton 
+        Func={() => {
+          ListDashboardRef.current.Opener();
+          setActive(activeKey);
+        }}
+        icon={icon}
+        title={name}
+        />
+      }
       <BigModal ref={ListDashboardRef} title={title}>
         <div className="list-container">
           <div className="list-nav">
@@ -36,18 +47,20 @@ const ListDashboard = ({ title, activeKey }) => {
               مریضان
             </div>
             <div
-              onClick={() => setActive("prescriptions")}
+              onClick={() => setActive("departments")}
               className={`list-item ${
-                active == "prescriptions" && "list-item-active"
+                active == "departments" && "list-item-active"
               }`}
             >
-              نسخه ها
+              انواع نسخه
             </div>
           </div>
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
               {active == "patient" && <PatientList />}
+              {active == "doctor" && <DoctorList />}
+              {active == "departments" && <DepartmentsList />}
             </div>
           </div>
         </div>
@@ -56,4 +69,4 @@ const ListDashboard = ({ title, activeKey }) => {
   );
 };
 
-export default ListDashboard;
+export default SellingLists;
