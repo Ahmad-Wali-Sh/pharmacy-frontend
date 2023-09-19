@@ -66,7 +66,7 @@ function WebCamModal({ medician, setFile }) {
                         const file = new File(
                           [blob],
                             medician
-                              ? medician.medicine_full + ".jpeg"
+                              ? medician + ".jpeg"
                               : "no_name.jpeg",
                           { type: blob.type }
                         );

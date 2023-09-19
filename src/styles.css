@@ -124,7 +124,7 @@ body {
 }
 
 .fa-trash:hover {
-  color:rgb(185, 34, 34)
+  color: rgb(185, 34, 34);
 }
 
 .fa-brands {
@@ -225,6 +225,18 @@ button:focus {
 }
 
 /* Standards */
+
+.image-preview {
+  width: 8rem;
+  aspect-ratio: 4/3;
+  border-radius: 1rem;
+  border: 3px solid white;
+}
+
+.image-preview-text {
+  direction: ltr;
+  width: 100%;
+}
 
 .text-input-standard {
   border: none;
@@ -1297,7 +1309,7 @@ input[type="date"]:disabled {
   padding-top: 1rem;
   gap: 0.7rem;
 }
-.listing-form > input  {
+.listing-form > input {
   height: 1.7rem;
   border: none;
   background-color: var(--color-three);
@@ -1308,7 +1320,7 @@ input[type="date"]:disabled {
   color: white;
   font-weight: bold;
 }
-.listing-form > input:focus  {
+.listing-form > input:focus {
   box-shadow: -4px -4px 4px var(--color-two);
 }
 
@@ -3256,9 +3268,8 @@ input[type="date"]:disabled {
 
 .Select-menu-outer {
   z-index: 1000;
-  position:relative;
+  position: relative;
 }
-
 
 .list-container {
   width: 100%;
@@ -3271,9 +3282,9 @@ input[type="date"]:disabled {
   gap: 0.4rem;
 }
 
-.list-footer{
+.list-footer {
   position: absolute;
-  bottom:1.5rem;
+  bottom: 1.5rem;
   background-color: var(--color-three);
   width: 87%;
   margin: 0.2rem;
@@ -3281,19 +3292,17 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   display: flex;
   direction: ltr;
-  gap:1rem;
+  gap: 1rem;
   align-items: center;
   padding-left: 1rem;
   padding-right: 1rem;
   justify-content: space-between;
-  
 }
 
 .list-box {
   background-color: var(--color-three);
   border-radius: 1rem 0rem 1rem 1rem;
   overflow: hidden;
-
 }
 
 .list-nav {
@@ -3311,7 +3320,6 @@ input[type="date"]:disabled {
   padding: 0.5rem;
 }
 
-
 .list-item {
   width: 100%;
   height: 2.5rem;
@@ -3323,7 +3331,7 @@ input[type="date"]:disabled {
   border-bottom: 1px solid var(--color-two);
 }
 
-.list-item:hover{
+.list-item:hover {
   background-image: var(--color-five);
 }
 .list-item-active {
@@ -3335,7 +3343,7 @@ input[type="date"]:disabled {
   padding: 0.5rem;
 }
 
-.list-box-container{
+.list-box-container {
   width: 99%;
   border-radius: 1rem;
   height: 90%;
@@ -3368,6 +3376,50 @@ input[type="date"]:disabled {
   grid-auto-columns: 1fr;
   grid-auto-flow: column;
 }
+.patient-list-item-medi {
+  background-color: rgb(74, 73, 73);
+  border-bottom: 1px solid var(--color-three);
+  margin: 0.4rem;
+  text-align: right;
+  padding-right: 1rem;
+  align-items: center;
+  display: grid;
+  width: 100%;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+}
+.patient-list-item-medi > h5 {
+  width: 100%;
+  overflow: hidden;
+  direction: ltr;
+  text-overflow: ellipsis;
+}
+
+.pagination-group {
+  display: flex;
+  gap: 0.2rem;
+  background-color: var(--color-sex);
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  align-items: center;
+}
+.pagination-group > h4{
+  box-shadow: 1px 1px 10px black;
+  background-color: var(--color-three);
+  color: white;
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+  user-select: none;
+}
+.pagination-group > h4:hover{
+  box-shadow: 1px 1px 10px black;
+  background-image: var(--color-five);
+  color: white;
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+}
+
 
 .patient-list-box {
   overflow-y: scroll;
@@ -3385,7 +3437,7 @@ input[type="date"]:disabled {
   text-align: center;
   line-height: 2rem;
   border-radius: 1rem;
-  box-shadow: 1px 1px 2px var(--color-three)
+  box-shadow: 1px 1px 2px var(--color-three);
 }
 .filter-button:hover {
   background-color: var(--color-one);
@@ -3395,7 +3447,7 @@ input[type="date"]:disabled {
   background-color: var(--color-sex);
   height: 100%;
   padding-bottom: 1rem;
-  margin:1rem;
+  margin: 1rem;
   border-radius: 1rem;
   direction: rtl;
   display: grid;
