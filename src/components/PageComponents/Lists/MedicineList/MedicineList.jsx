@@ -8,6 +8,7 @@ import {
   successFn,
   putDataFn,
   deleteDataFn,
+  queryClient,
 } from "../../../services/API";
 import { toast } from "react-toastify";
 import {
@@ -25,8 +26,6 @@ import WebCamModal from "../../WebCamModal";
 import "react-image-upload/dist/index.css";
 import axios from "axios";
 
-
-
 export default function MedicineList() {
   const ListFilterRef = useRef(null);
   const [active, setActive] = useState("list");
@@ -40,40 +39,7 @@ export default function MedicineList() {
     kind_persian: "",
     country: "",
     company: "",
-    page: 1
-  });
-
-  const user = useAuthUser();
-
-  const { register, handleSubmit, reset, control, setValue, watch, getValues } =
-    useForm();
-
-  const { mutateAsync: newMedicine } = useMutation({
-    mutationFn: (data) => postDataFn(data, "medician/"),
-    onSuccess: () =>
-      successFn([medicineQuery], () => {
-        setActive("list");
-      }),
-  });
-
-  const { mutateAsync: handleEditMedicine } = useMutation({
-    mutationFn: (data) => putDataFn(data, `medician/${editItem.id}/`),
-    onSuccess: () =>
-      successFn([medicineQuery], () => {
-        setActive("list");
-      }),
-  });
-
-  const { mutateAsync: deleteMedicine } = useMutation({
-    mutationFn: (id) => deleteDataFn(`medician/${id}/`),
-    onSuccess: () =>
-      successFn([medicineQuery], () => {
-        setActive("list");
-      }),
-    onError: (e) => {
-      console.log(e.response);
-      toast.error(`نسخه های قبلی را حذف نموده دوباره سعی کنید`);
-    },
+    page: 1,
   });
 
   const { data: pharmGroup } = useQuery({
@@ -88,6 +54,33 @@ export default function MedicineList() {
 
   const { data: bigCompany } = useQuery({
     queryKey: ["big-company/"],
+  });
+
+  let medicineQuery = `medician/?brand_name=${filter.brand_name}&search=${filter.generic_name}&ml=${filter.ml}&kind__name_persian=${filter.kind_persian}&kind__name_english=${filter.kind_english}&country__name=${filter.country}&big_company__name=${filter.company}&page=${filter.page}`;
+  const { data: medicines, refetch: getTwiceMedicine } = useQuery({
+    queryKey: [medicineQuery],
+    enabled: true,
+  });
+
+  const user = useAuthUser();
+
+  const { register, handleSubmit, reset, control, setValue, watch } = useForm();
+
+  const { mutate: newMedicine } = useMutation({
+    mutationFn: (data) => postDataFn(data, "medician/"),
+    onSuccess: () =>
+      successFn("", () => {
+        setActive("list");
+      }),
+  });
+
+  const { mutate: handleEditMedicine } = useMutation({
+    mutationFn: (data) => putDataFn(data, `medician/${editItem.id}/`),
+    onSuccess: () =>
+      successFn("", () => {
+        setActive("list");
+        ResetForm();
+      }),
   });
 
   const FormResetToItem = (item) => {
@@ -131,9 +124,9 @@ export default function MedicineList() {
           { type: blob.type }
         );
         reset({
-          image: file ? file : ''
+          image: file ? file : "",
         });
-        console.log(file)
+        console.log(file);
       });
 
     setEditItem(item);
@@ -177,10 +170,7 @@ export default function MedicineList() {
     setImage("");
   };
 
-  console.log(filter)
-
-  let medicineQuery = `medician/?brand_name=${filter.brand_name}&search=${filter.generic_name}&ml=${filter.ml}&kind__name_persian=${filter.kind_persian}&kind__name_english=${filter.kind_english}&country__name=${filter.country}&big_company__name=${filter.company}&page=${filter.page}`;
-  const { data: medicines } = useQuery([medicineQuery]);
+  console.log(filter);
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
@@ -241,9 +231,7 @@ export default function MedicineList() {
             <FilterInput
               label="موثریت"
               value={filter.ml}
-              handleChange={(e) =>
-                setFilter({ ...filter, ml: e.target.value })
-              }
+              handleChange={(e) => setFilter({ ...filter, ml: e.target.value })}
             />
             <FilterInput
               label="نوع.فارسی"
@@ -269,9 +257,10 @@ export default function MedicineList() {
             <FilterInput
               label="کمپنی"
               value={filter.company}
-              handleChange={(e) =>
-                setFilter({ ...filter, company: e.target.value })
-              }
+              handleChange={(e) => {
+                setFilter({ ...filter, company: e.target.value });
+                getTwiceMedicine();
+              }}
             />
           </FilterModal>
           <ListHeader>
@@ -289,7 +278,7 @@ export default function MedicineList() {
           </ListHeader>
           <ListMap>
             {medicines?.results.map((medicine, key) => (
-              <div className="patient-list-item-medi">
+              <div className="patient-list-item-medi" key={medicine.id}>
                 <h4>{medicine.id}</h4>
                 <h5>{medicine.brand_name}</h5>
                 <h5></h5>
@@ -312,7 +301,14 @@ export default function MedicineList() {
               </div>
             ))}
           </ListMap>
-          <ListFooter setActive={setActive} reset={reset} user={user} filter={filter} setFilter={setFilter} medicines={medicines}/>
+          <ListFooter
+            setActive={setActive}
+            reset={reset}
+            user={user}
+            filter={filter}
+            setFilter={setFilter}
+            medicines={medicines}
+          />
         </>
       );
     case "new":
@@ -339,6 +335,7 @@ export default function MedicineList() {
             handleSubmit={handleSubmit}
             mutateAsync={newMedicine}
             reset={reset}
+            refetch={getTwiceMedicine}
           />
         </>
       );
@@ -365,12 +362,12 @@ export default function MedicineList() {
             handleSubmit={handleSubmit}
             mutateAsync={handleEditMedicine}
             reset={reset}
+            refetch={getTwiceMedicine}
           />
         </>
       );
   }
 }
-
 
 function MedicineForm(props) {
   return (

@@ -5,8 +5,7 @@ import { MedicineListFormat } from "./MedicineListFormat";
 import BookmarkCards from "./BookmarkCards";
 import { MedicineSelectStyle } from "../../../styles";
 import { useQuery } from "react-query";
-import { AsyncPaginate } from 'react-select-async-paginate'
-
+import { AsyncPaginate } from "react-select-async-paginate";
 
 export const SelectMedician = forwardRef(
   (
@@ -35,6 +34,7 @@ export const SelectMedician = forwardRef(
       kind_persian: "",
       country: "",
       company: "",
+      all: "",
     });
 
     const { data: BookmarkedMedicine } = useQuery({
@@ -42,15 +42,17 @@ export const SelectMedician = forwardRef(
       enabled: department != undefined,
     });
 
-
     const loadMedicine = (search, loadedOptions) => {
       return {
-        options: (stringArray.join('').replace(/\s/g, '') != '') && !MedicineLoading && MedicianSearched?.results,
-        hasMore: false
-      }
-    }
+        options:
+          stringArray.join("").replace(/\s/g, "") != "" &&
+          !MedicineLoading &&
+          MedicianSearched?.results,
+        hasMore: false,
+      };
+    };
 
-    const [stringArray, setStringArray] = React.useState(['']);
+    const [stringArray, setStringArray] = React.useState([""]);
     React.useEffect(() => {
       stringArray.length == 1
         ? setTextHighlight({ barcode: "on" })
@@ -65,9 +67,11 @@ export const SelectMedician = forwardRef(
         : stringArray.length == 6
         ? setTextHighlight({ country: "on" })
         : stringArray.length == 7
-        ? setTextHighlight({ company: 'on' })
+        ? setTextHighlight({ company: "on" })
         : stringArray.length == 8
-        ? setTextHighlight({ company: '' })
+        ? setTextHighlight({ all: "on" })
+        : stringArray.length == 9
+        ? setTextHighlight({ all: "" })
         : "";
     }, [stringArray]);
 
@@ -76,23 +80,27 @@ export const SelectMedician = forwardRef(
     };
 
     const isBarcode = (stringArray) => {
-      let string = stringArray.join('').replace(/\s/g, '').slice(0,1)
-      return !isNaN(string)
-    }
-
-    
+      let string = stringArray.join("").replace(/\s/g, "").slice(0, 1);
+      return !isNaN(string);
+    };
 
     const { data: MedicianSearched, isFetching: MedicineLoading } = useQuery({
       queryKey: [
-        `medician/?${isBarcode(stringArray) ? 'barcode__contains' : 'brand_name'}=${stringArray[0] ? stringArray[0] : ""}&ml=${
+        `medician/?${
+          isBarcode(stringArray) ? "barcode__contains" : "brand_name"
+        }=${stringArray[0] ? stringArray[0] : ""}&ml=${
           stringArray[1] ? stringArray[1] : ""
         }&search=${stringArray[2] ? stringArray[2] : ""}&kind__name_persian=${
           stringArray[3] ? stringArray[3] : ""
         }&kind__name_english=${
           stringArray[4] ? stringArray[4] : ""
-        }&country__name=${stringArray[5] ? stringArray[5] : ""}&big_company__name=${stringArray[6] ? stringArray[6]: ''}`,
+        }&country__name=${
+          stringArray[5] ? stringArray[5] : ""
+        }&big_company__name=${stringArray[6] ? stringArray[6] : ""}&all=${
+          stringArray[7] ? stringArray[7] : ""
+        }`,
       ],
-      enabled: stringArray.join('').replace(/\s/g, '') != "",
+      enabled: stringArray.join("").replace(/\s/g, "") != "",
     });
 
     const handleMedicineSelect = (item) => {
@@ -135,11 +143,15 @@ export const SelectMedician = forwardRef(
           <BigModal title="انتخاب دارو" ref={SelectMedicineModalRef}>
             <div className="medician-select-input-box">
               <div>
+                <span className={textHighlight?.all}>همه</span> |{" "}
                 <span className={textHighlight?.company}>کمپنی</span> |{" "}
                 <span className={textHighlight?.country}>کشور</span> |{" "}
-                <span className={textHighlight?.kind_english}>نوع "انگلیسی"</span> |{" "}
-                <span className={textHighlight?.kind_persian}>نوع "فارسی"</span> |{" "}
-                <span className={textHighlight?.generic}>ترکیب</span> |{" "}
+                <span className={textHighlight?.kind_english}>
+                  نوع "انگلیسی"
+                </span>{" "}
+                |{" "}
+                <span className={textHighlight?.kind_persian}>نوع "فارسی"</span>{" "}
+                | <span className={textHighlight?.generic}>ترکیب</span> |{" "}
                 <span className={textHighlight?.ml}>میزان موثریت</span> |{" "}
                 <span className={textHighlight?.barcode}>بارکد/نام برند</span>
               </div>
@@ -150,7 +162,7 @@ export const SelectMedician = forwardRef(
                 autoFocus
                 defaultValue={MedicianSearched?.results?.[0]}
                 filterOption={() => true}
-                onInputChange={(string) => setStringArray(string.split('  '))}
+                onInputChange={(string) => setStringArray(string.split("  "))}
                 formatOptionLabel={MedicineListFormat}
                 styles={MedicineSelectStyle}
                 onChange={handleMedicineSelect}
