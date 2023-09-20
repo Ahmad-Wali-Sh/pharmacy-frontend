@@ -27,7 +27,7 @@ import axios from "axios";
 
 
 
-export default function MedicineList() {
+export default function MedicineList({edit}) {
   const ListFilterRef = useRef(null);
   const [active, setActive] = useState("list");
   const [editItem, setEditItem] = useState("");
@@ -44,6 +44,14 @@ export default function MedicineList() {
   });
 
   const user = useAuthUser();
+
+  useEffect(() => {
+    if (edit) {
+      setActive('edit')
+      setEditItem(edit)
+      FormResetToItem(edit)
+    }
+  }, [edit])
 
   const { register, handleSubmit, reset, control, setValue, watch, getValues } =
     useForm();
@@ -176,9 +184,6 @@ export default function MedicineList() {
     setEditItem("");
     setImage("");
   };
-
-  console.log(filter)
-
   let medicineQuery = `medician/?brand_name=${filter.brand_name}&search=${filter.generic_name}&ml=${filter.ml}&kind__name_persian=${filter.kind_persian}&kind__name_english=${filter.kind_english}&country__name=${filter.country}&big_company__name=${filter.company}&page=${filter.page}`;
   const { data: medicines } = useQuery([medicineQuery]);
 

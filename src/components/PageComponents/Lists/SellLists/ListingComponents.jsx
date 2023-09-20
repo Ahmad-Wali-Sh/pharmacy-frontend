@@ -195,7 +195,7 @@ export function ListHeader({ children }) {
 
 export function Form({ children }) {
   return (
-    <form>
+    <form onSubmit={(e) => e.preventDefault()}>
       <div className="company-form">{children}</div>
     </form>
   );

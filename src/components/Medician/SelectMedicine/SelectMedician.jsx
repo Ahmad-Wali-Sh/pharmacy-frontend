@@ -6,6 +6,8 @@ import BookmarkCards from "./BookmarkCards";
 import { MedicineSelectStyle } from "../../../styles";
 import { useQuery } from "react-query";
 import { AsyncPaginate } from 'react-select-async-paginate'
+import MedicineList from "../../PageComponents/Lists/MedicineList/MedicineList";
+import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLists";
 
 
 export const SelectMedician = forwardRef(
@@ -124,12 +126,13 @@ export const SelectMedician = forwardRef(
           </div>
           {selectedMedician && (
             <div className="flex">
-              <MedicianEntrance
+              {/* <MedicianEntrance
                 button={3}
                 medician={selectedMedician}
                 UpdateMedicine={UpdateSelectedMedicine}
                 UpdateChangedMedicine={UpdateChangedMedicine}
-              />
+              /> */}
+                <MedicinesLists title='لست ها' activeKey='medicines' medicine={selectedMedician} button='none' name='ثبت دوا'/>
             </div>
           )}
           <BigModal title="انتخاب دارو" ref={SelectMedicineModalRef}>

@@ -16,7 +16,7 @@ export const MedicineListFormat = (item, { context }) => {
         <img
           className="medician-image"
           src={
-            item?.pharm_group_image
+            item.pharm_group_image
               ? new URL(item.pharm_group_image).pathname.slice(16)
               : "./images/nophoto.jpg"
           }
@@ -37,7 +37,7 @@ export const MedicineListFormat = (item, { context }) => {
           className="medician-image"
           src={
             item.country_image
-              ? new URL(item.country_image).pathname.slice(16)
+              ? new URL(item?.country_image)?.pathname.slice(16)
               : "./images/nophoto.jpg"
           }
         />

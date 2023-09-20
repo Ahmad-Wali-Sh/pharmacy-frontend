@@ -3375,6 +3375,7 @@ input[type="date"]:disabled {
   width: 100%;
   grid-auto-columns: 1fr;
   grid-auto-flow: column;
+  align-items: center;
 }
 .patient-list-item-medi {
   background-color: rgb(74, 73, 73);
@@ -3412,6 +3413,15 @@ input[type="date"]:disabled {
   border-radius: 0.2rem;
   user-select: none;
 }
+
+.image-preview-kind {
+  width: 10rem;
+  aspect-ratio: 4/3;
+  position: fixed;
+  right: 21rem;
+  border: 2px solid var(--color-ten);
+  border-radius: 0.4rem;
+}
 .pagination-group > h4:hover{
   box-shadow: 1px 1px 10px black;
   background-image: var(--color-five);
@@ -3419,6 +3429,15 @@ input[type="date"]:disabled {
   padding: 0.2rem;
   border-radius: 0.2rem;
 }
+
+.image-preview-list {
+  width: 4rem;
+  margin: 1rem;
+  border-radius: 0.4rem;
+  position: relative;
+  left: 1rem
+}
+
 
 
 .patient-list-box {

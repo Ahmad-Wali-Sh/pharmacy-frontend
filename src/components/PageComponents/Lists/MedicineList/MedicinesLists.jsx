@@ -2,9 +2,27 @@ import React, { useRef } from "react";
 import BigModal from "../../Modals/BigModal";
 import { MainButton, PlusButton } from "../../Buttons/Buttons";
 import MedicineList from "./MedicineList";
+import KindList from "./KindsList";
+import PharmGroupLists from "./PharmgroupsLists";
+import CountryList from "./CountryList";
+import CompanyLists from "./CompanyLists";
 
-const MedicinesLists = ({ title, activeKey, button, name, icon }) => {
+const MedicinesLists = ({ title, activeKey, button, name, icon, medicine }) => {
   const ListDashboardRef = useRef(null);
+
+  React.useEffect(() => {
+    const listener = (e) => {
+      if (e.code === "F9" && medicine) {
+        ListDashboardRef.current.Opener()
+      }
+    };
+
+    medicine && document.addEventListener("keydown", listener);
+
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   const [active, setActive] = React.useState(activeKey);
   return (
@@ -60,11 +78,23 @@ const MedicinesLists = ({ title, activeKey, button, name, icon }) => {
             >
                 کشور ها
             </div>
+            <div
+              onClick={() => setActive("big-companies")}
+              className={`list-item ${
+                active == "big-companies" && "list-item-active"
+              }`}
+            >
+                کمپنی ها
+            </div>
           </div>
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
-              {active == "medicines" && <MedicineList />}
+              {active == "medicines" && <MedicineList edit={medicine}/>}
+              {active == 'kinds' && <KindList />}
+              {active == 'pharm-groups' && <PharmGroupLists />}
+              {active == 'countries' && <CountryList />}
+              {active == 'big-companies' && <CompanyLists />}
             </div>
           </div>
         </div>
