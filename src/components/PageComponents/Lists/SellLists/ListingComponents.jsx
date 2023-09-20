@@ -129,7 +129,7 @@ export function ListFooter({
   reset,
   filter,
   setFilter,
-  medicines
+  medicines,
 }) {
   React.useEffect(() => {
     const handleKeyDowns = (e) => {
@@ -151,7 +151,7 @@ export function ListFooter({
     return () => {
       document.removeEventListener("keydown", handleKeyDowns);
     };
-  }, [mutateAsync]);
+  }, [mutateAsync, handleSubmit]);
 
   return (
     <div className="list-footer">
@@ -163,10 +163,34 @@ export function ListFooter({
           }}
         />
       </div>
-        {filter && <div className="pagination-group">
-          {medicines?.previous && <h4 onClick={() => setFilter(prev => ({...prev, page: parseInt(prev.page) - 1}))}>{"<<"}</h4>}
-          {medicines?.next && <h4 onClick={() => setFilter(prev => ({...prev, page: parseInt(prev.page) + 1}))}>{">>"}</h4>}
-        </div>}
+      {filter && (
+        <div className="pagination-group">
+          {medicines?.previous && (
+            <h4
+              onClick={() =>
+                setFilter((prev) => ({
+                  ...prev,
+                  page: parseInt(prev.page) - 1,
+                }))
+              }
+            >
+              {"<<"}
+            </h4>
+          )}
+          {medicines?.next && (
+            <h4
+              onClick={() =>
+                setFilter((prev) => ({
+                  ...prev,
+                  page: parseInt(prev.page) + 1,
+                }))
+              }
+            >
+              {">>"}
+            </h4>
+          )}
+        </div>
+      )}
       <div className="flex">
         <DepartButton
           name="جدید"
@@ -183,7 +207,7 @@ export function ListFooter({
           Func={() => {
             setActive("list");
           }}
-          />
+        />
       </div>
     </div>
   );

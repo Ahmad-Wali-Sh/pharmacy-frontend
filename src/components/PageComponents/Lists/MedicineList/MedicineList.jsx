@@ -8,6 +8,7 @@ import {
   successFn,
   putDataFn,
   deleteDataFn,
+  queryClient,
 } from "../../../services/API";
 import { toast } from "react-toastify";
 import {
@@ -82,6 +83,7 @@ export default function MedicineList({edit}) {
       console.log(e.response);
       toast.error(`نسخه های قبلی را حذف نموده دوباره سعی کنید`);
     },
+
   });
 
   const { data: pharmGroup } = useQuery({
@@ -97,6 +99,13 @@ export default function MedicineList({edit}) {
   const { data: bigCompany } = useQuery({
     queryKey: ["big-company/"],
   });
+
+  let medicineQuery = `medician/?brand_name=${filter.brand_name}&search=${filter.generic_name}&ml=${filter.ml}&kind__name_persian=${filter.kind_persian}&kind__name_english=${filter.kind_english}&country__name=${filter.country}&big_company__name=${filter.company}&page=${filter.page}`;
+  const { data: medicines, refetch: getTwiceMedicine } = useQuery({
+    queryKey: [medicineQuery],
+    enabled: true,
+  });
+
 
   const FormResetToItem = (item) => {
     reset({
@@ -139,9 +148,9 @@ export default function MedicineList({edit}) {
           { type: blob.type }
         );
         reset({
-          image: file ? file : ''
+          image: file ? file : "",
         });
-        console.log(file)
+        console.log(file);
       });
 
     setEditItem(item);
@@ -184,8 +193,8 @@ export default function MedicineList({edit}) {
     setEditItem("");
     setImage("");
   };
-  let medicineQuery = `medician/?brand_name=${filter.brand_name}&search=${filter.generic_name}&ml=${filter.ml}&kind__name_persian=${filter.kind_persian}&kind__name_english=${filter.kind_english}&country__name=${filter.country}&big_company__name=${filter.company}&page=${filter.page}`;
-  const { data: medicines } = useQuery([medicineQuery]);
+
+  console.log(filter);
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
@@ -246,9 +255,7 @@ export default function MedicineList({edit}) {
             <FilterInput
               label="موثریت"
               value={filter.ml}
-              handleChange={(e) =>
-                setFilter({ ...filter, ml: e.target.value })
-              }
+              handleChange={(e) => setFilter({ ...filter, ml: e.target.value })}
             />
             <FilterInput
               label="نوع.فارسی"
@@ -274,9 +281,10 @@ export default function MedicineList({edit}) {
             <FilterInput
               label="کمپنی"
               value={filter.company}
-              handleChange={(e) =>
-                setFilter({ ...filter, company: e.target.value })
-              }
+              handleChange={(e) => {
+                setFilter({ ...filter, company: e.target.value });
+                getTwiceMedicine();
+              }}
             />
           </FilterModal>
           <ListHeader>
@@ -294,7 +302,7 @@ export default function MedicineList({edit}) {
           </ListHeader>
           <ListMap>
             {medicines?.results.map((medicine, key) => (
-              <div className="patient-list-item-medi">
+              <div className="patient-list-item-medi" key={medicine.id}>
                 <h4>{medicine.id}</h4>
                 <h5>{medicine.brand_name}</h5>
                 <h5></h5>
@@ -317,7 +325,14 @@ export default function MedicineList({edit}) {
               </div>
             ))}
           </ListMap>
-          <ListFooter setActive={setActive} reset={reset} user={user} filter={filter} setFilter={setFilter} medicines={medicines}/>
+          <ListFooter
+            setActive={setActive}
+            reset={reset}
+            user={user}
+            filter={filter}
+            setFilter={setFilter}
+            medicines={medicines}
+          />
         </>
       );
     case "new":
@@ -344,6 +359,7 @@ export default function MedicineList({edit}) {
             handleSubmit={handleSubmit}
             mutateAsync={newMedicine}
             reset={reset}
+            refetch={getTwiceMedicine}
           />
         </>
       );
@@ -370,12 +386,12 @@ export default function MedicineList({edit}) {
             handleSubmit={handleSubmit}
             mutateAsync={handleEditMedicine}
             reset={reset}
+            refetch={getTwiceMedicine}
           />
         </>
       );
   }
 }
-
 
 function MedicineForm(props) {
   return (
