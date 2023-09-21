@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import MedicianEntrance from "../Medician/MedicianEntrance/MedicianEntrance";
+import PurchasingLists from "../PageComponents/Lists/PurchaseLists/PurchasingLists";
 import Company from "./Company/Company";
 import Entrance from "./Entrance/Entrance";
 import Outrance from "./Outrance/Outrance";
@@ -23,13 +24,14 @@ function Purchase() {
           icon="fa-solid fa-cart-arrow-down"
           trigger={entTrigger}
         />
-        <Outrance
+        {/* <Outrance
           title="ثبت خروجی"
           icon="fa-solid fa-arrow-right-from-bracket"
           button={1}
-        />
-        <Company title="ثبت شرکت" icon="fa-solid fa-building" button={1} />
-        <Store title="ثبت انبار" icon="fa-solid fa-store" button={1} />
+        /> */}
+        <PurchasingLists button='main' icon='fa-solid fa-cart-arrow-down' name='ثبت شرکت' activeKey='companies'/>
+        <PurchasingLists button='main' icon='fa-solid fa-store' name='ثبت انبار' activeKey='stores'/>
+        <PurchasingLists button='main' icon='fa-solid fa-money-bill-transfer' name='واحدات پولی' activeKey='currencies'/>
       </div>
       <div className="purchase-form"></div>
     </div>

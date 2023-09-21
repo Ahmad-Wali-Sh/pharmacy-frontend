@@ -977,8 +977,7 @@ input[type="date"]:disabled {
 }
 
 .final-register-box {
-  display: grid;
-  direction: ltr;
+  width: 100%;
 }
 .final-register-box > select {
   height: 1.47rem;
@@ -1295,6 +1294,7 @@ input[type="date"]:disabled {
   grid-template-columns: 0.2fr 1fr 0.2fr 1fr;
   grid-template-rows: repeat(7, 1fr);
   direction: rtl;
+  padding: 1rem;
   padding-top: 2rem;
   gap: 0.7rem;
 }
@@ -3430,6 +3430,7 @@ input[type="date"]:disabled {
   border-radius: 0.2rem;
 }
 
+
 .image-preview-list {
   width: 4rem;
   margin: 1rem;
@@ -3481,4 +3482,8 @@ input[type="date"]:disabled {
   position: relative;
   top: 12%;
   z-index: 101;
+}
+
+.contorlled-select-box {
+  width: 70%;
 }

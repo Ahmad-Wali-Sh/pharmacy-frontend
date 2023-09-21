@@ -19,12 +19,11 @@ import {
   FilterInput,
 } from "../SellLists/ListingComponents";
 import ControlledSelect from "../../ControlledSelect";
-import PharmGroup from "../../../Medician/PharmGroup";
-import Kind from "../../../Medician/Kind";
-import Country from "../../../Medician/Country";
+
 import WebCamModal from "../../WebCamModal";
 import "react-image-upload/dist/index.css";
 import axios from "axios";
+import MedicinesLists from "./MedicinesLists";
 
 
 
@@ -417,7 +416,7 @@ function MedicineForm(props) {
           defaultValue={props.pharmGroup?.find((c) =>
             c.id === props.medicine.pharm_group ? c.name_english : null
           )}
-          NewComponent={<PharmGroup button={2} />}
+          NewComponent={<MedicinesLists title='لست ها' activeKey='pharm-groups'  button='plus' name='ثبت دوا'/>}
         />
         <label>نوع:</label>
         <div
@@ -436,7 +435,7 @@ function MedicineForm(props) {
             defaultValue={props.kind?.find((c) =>
               c.id === props.medicine?.kind ? c.name_english : null
             )}
-            NewComponent={<Kind button={2} />}
+            NewComponent={<MedicinesLists title='لست ها' activeKey='kinds'  button='plus' name='ثبت دوا'/>}
           />
         </div>
         <label>کشور:</label>
@@ -456,7 +455,7 @@ function MedicineForm(props) {
             defaultValue={props.country?.find((c) =>
               c.id === props.medicine?.country ? c.name : null
             )}
-            NewComponent={<Country button={2} />}
+            NewComponent={<MedicinesLists title='لست ها' activeKey='countries'  button='plus' name='ثبت دوا'/>}
           />
         </div>
         <label>کمپنی:</label>
@@ -476,7 +475,7 @@ function MedicineForm(props) {
             defaultValue={props.bigCompany?.find((c) =>
               c.id === props.medicine?.big_company ? c.name : null
             )}
-            NewComponent={<Country button={2} />}
+            NewComponent={<MedicinesLists title='لست ها' activeKey='big-companies'  button='plus' name='ثبت دوا'/>}
           />
         </div>
         <label>قیمت:</label>

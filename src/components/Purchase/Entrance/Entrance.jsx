@@ -1,19 +1,14 @@
 import Modal from "react-modal";
 import React, { useRef } from "react";
-import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import EntrancThroughEntry from "./EntrancThroughEntry";
 import { SelectMedician } from "../../Medician/SelectMedicine/SelectMedician";
-import Company from "../Company/Company";
-import Store from "../Store/Store";
-import FinalRegister from "../FinalRegister/FinalRegister";
-import Payment from "../Payment/Payment";
 import { DateInputSimple } from "react-hichestan-datetimepicker";
 import { useAuthUser } from "react-auth-kit";
-import CurrencyList from "../Currency/CurrencyList";
 import ControlledSelect from "../../PageComponents/ControlledSelect";
+import PurchasingLists from "../../PageComponents/Lists/PurchaseLists/PurchasingLists";
 
 export default function Entrance(props) {
   const ModalStyles = {
@@ -417,6 +412,7 @@ export default function Entrance(props) {
           setSearched(true);
           setInterest(data.data.total_interest);
           setTrigger((prev) => prev + 1);
+          SelectMedicineOpener.current.Opener();
         })
         .catch((e) => {
           console.log(e);
@@ -1046,59 +1042,24 @@ export default function Entrance(props) {
               </div>
               <form className="entrance-entrance">
                 <label>وضعیت:</label>
-
-                <div className="final-register-box">
-                  <select
-                    {...register("final_register")}
-                    placeholder={exactEntrance.final_register}
-                    className="final-select entrance--inputs"
-                    id="final-register-id"
-                  >
-                    <option
-                      value={exactEntrance.final_register}
-                      selected
-                      hidden
-                    >
-                      {finalRegister.map((final) =>
-                        final.id == exactEntrance.final_register
-                          ? final.name
-                          : ""
-                      )}
-                    </option>
-                    {finalRegister.map((final, key) => (
-                      <option key={final.id} value={final.id}>
-                        {final.name}
-                      </option>
-                    ))}
-                  </select>
-                  <FinalRegister Update={UpdateFinals} />
-                </div>
+                <ControlledSelect
+                    control={control}
+                    name="final_register"
+                    options={finalRegister}
+                    placeholder=""
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    uniqueKey={`entrance-unique${exactEntrance.id}`}
+                    defaultValue={finalRegister?.find((c) =>
+                      c.id === exactEntrance?.final_register ? c.name : ""
+                    )}
+                    NewComponent={
+                      <PurchasingLists button='plus' activeKey='final-registers'/>
+                    }
+                  />
                 <label>شرکت:</label>
                 <div className="react-select-box">
-                  {/* <ReactSearchAutocomplete
-                    items={company}
-                    onSelect={(item) =>
-                      setAutoCompleteData({
-                        ...autoCompleteData,
-                        company: item,
-                      })
-                    }
-                    onSearch={(search, results) => {
-                      axios
-                        .get(COMPANY_URL + "?search=" + search)
-                        .then((res) => {
-                          setCompany(res.data);
-                        });
-                    }}
-                    styling={AutoCompleteStyle}
-                    showClear={false}
-                    showItemsOnFocus={true}
-                    inputDebounce="10"
-                    placeholder={companyName}
-                    showIcon={false}
-                    className="autoComplete entrance--inputs"
-                  />
-                  <Company button={2} Update={UpdateCompanies} /> */}
+
                   <ControlledSelect
                     control={control}
                     name="company"
@@ -1111,30 +1072,12 @@ export default function Entrance(props) {
                       c.id === exactEntrance?.company ? c.name : ""
                     )}
                     NewComponent={
-                      <Company button={2} Update={UpdateCompanies} />
+                      <PurchasingLists button='plus' activeKey='companies'/>
                     }
                   />
                 </div>
                 <label>انبار:</label>
                 <div>
-                  {/* <ReactSearchAutocomplete
-                    items={store}
-                    styling={AutoCompleteStyle}
-                    onSelect={(item) =>
-                      setAutoCompleteData({ ...autoCompleteData, store: item })
-                    }
-                    showClear={false}
-                    onSearch={(search, results) => {
-                      axios.get(STORE_URL, +"?search=" + search).then((res) => {
-                        setStore(res.data);
-                      });
-                    }}
-                    inputDebounce="10"
-                    placeholder={storeName}
-                    showIcon={false}
-                    className="entrance--inputs"
-                  />
-                  <Store button={2} Update={UpdateStores} /> */}
                   <ControlledSelect
                     control={control}
                     name="store"
@@ -1146,7 +1089,7 @@ export default function Entrance(props) {
                     defaultValue={store?.find((c) =>
                       c.id === exactEntrance?.store ? c.name : ""
                     )}
-                    NewComponent={<Store button={2} Update={UpdateStores} />}
+                    NewComponent={<PurchasingLists button='plus' activeKey='stores'/>}
                   />
                 </div>
                 <label>تاریخ:</label>
@@ -1209,50 +1152,37 @@ export default function Entrance(props) {
                   className="entrance--inputs"
                 />
                 <label>واحد پول:</label>
-                <div>
-                  <select
-                    {...register("currency")}
-                    className="currency-select entrance--inputs"
-                  >
-                    <option value={exactEntrance.currency} selected hidden>
-                      {currency.map((currency) =>
-                        currency.id == exactEntrance.currency
-                          ? currency.name + `(${currency.rate})`
-                          : ""
-                      )}
-                    </option>
-                    {currency.map((currency) => (
-                      <option key={currency.id} value={currency.id}>
-                        {currency.name}
-                        {`(${currency.rate})`}
-                      </option>
-                    ))}
-                  </select>
-                  <CurrencyList Update={CurrencyUpdate} />
-                </div>
+                <ControlledSelect
+                    control={control}
+                    name="currency"
+                    options={currency}
+                    placeholder=""
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    uniqueKey={`entrance-unique${exactEntrance.id}`}
+                    defaultValue={currency?.find((c) =>
+                      c.id === exactEntrance?.currency ? c.name : ""
+                    )}
+                    NewComponent={
+                      <PurchasingLists button='plus' activeKey='currencies'/>
+                    }
+                  />
                 <label>پرداخت:</label>
-                <div className="final-register-box">
-                  <select
-                    {...register("payment_method")}
-                    className="entrance--inputs"
-                  >
-                    <option
-                      value={exactEntrance.payment_method}
-                      selected
-                      hidden
-                    >
-                      {paymentMethod.map((pay) =>
-                        pay.id == exactEntrance.payment_method ? pay.name : ""
-                      )}
-                    </option>
-                    {paymentMethod.map((payment) => (
-                      <option key={payment.id} value={payment.id}>
-                        {payment.name}
-                      </option>
-                    ))}
-                  </select>
-                  <Payment Update={PaymentUpdate} />
-                </div>
+                <ControlledSelect
+                    control={control}
+                    name="payment_method"
+                    options={paymentMethod}
+                    placeholder=""
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                    uniqueKey={`entrance-unique${exactEntrance.id}`}
+                    defaultValue={paymentMethod?.find((c) =>
+                      c.id === exactEntrance?.payment_method ? c.name : ""
+                    )}
+                    NewComponent={
+                      <PurchasingLists button='plus' activeKey='payments'/>
+                    }
+                  />
                 <label>
                   <h5>فایده%:</h5>
                 </label>

@@ -39,6 +39,28 @@ export const SelectMedician = forwardRef(
       all: "",
     });
 
+    React.useEffect(() => {
+      const listener = (e) => {
+        console.log(e)
+
+        if (e.ctrlKey === true) {
+          switch (e.key){
+            case 'm':
+            case 'M':
+            case 'ئ':
+              SelectMedicineModalRef.current.Opener()
+          }
+
+        }
+      };
+  
+      document.addEventListener("keydown", listener);
+  
+      return () => {
+        document.removeEventListener("keydown", listener);
+      };
+    }, []);
+
     const { data: BookmarkedMedicine } = useQuery({
       queryKey: [`medician/?department=${department}`],
       enabled: department != undefined,
