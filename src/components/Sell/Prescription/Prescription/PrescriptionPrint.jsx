@@ -3,7 +3,6 @@ import React from "react";
 class PrescriptionPrint extends React.Component {
 
   render() {
-    console.log(this.props.prescription?.barcode)
     return (
       <div className="prescription-print-box">
         <h4 style={{ color: "red" }}>دواخانه شریف</h4>

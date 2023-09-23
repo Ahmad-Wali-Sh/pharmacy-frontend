@@ -7,7 +7,7 @@ import PharmGroupLists from "./PharmgroupsLists";
 import CountryList from "./CountryList";
 import CompanyLists from "./CompanyLists";
 
-const MedicinesLists = ({ title, activeKey, button, name, icon, medicine }) => {
+const MedicinesLists = ({ title, activeKey, button, name, icon, medicine, setSelectedMedician,selectAutoCompleteData }) => {
   const ListDashboardRef = useRef(null);
 
   React.useEffect(() => {
@@ -90,7 +90,7 @@ const MedicinesLists = ({ title, activeKey, button, name, icon, medicine }) => {
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
-              {active == "medicines" && <MedicineList edit={medicine}/>}
+              {active == "medicines" && <MedicineList edit={medicine} setSelectedMedician={setSelectedMedician ? setSelectedMedician : ''} selectAutoCompleteData={selectAutoCompleteData && selectAutoCompleteData}/>}
               {active == 'kinds' && <KindList />}
               {active == 'pharm-groups' && <PharmGroupLists />}
               {active == 'countries' && <CountryList />}

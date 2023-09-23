@@ -1,6 +1,4 @@
 import React, { useRef } from "react";
-import Patient from "../Patient";
-import Doctor from "../Doctor";
 import { useQuery } from "react-query";
 import { useForm } from "react-hook-form";
 import {
@@ -13,7 +11,6 @@ import { useMutation } from "react-query";
 import {
   putDataFn,
   postDataFn,
-  deleteDataFn,
   handleFormData,
   successFn,
 } from "../../../services/API";
@@ -23,15 +20,13 @@ import ControlledSelect from "../../../PageComponents/ControlledSelect";
 import { usePrescription } from "../../../States/States";
 import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 
-function PrescriptionForm({
-  prescriptionThrough,
-}) {
+function PrescriptionForm({ prescriptionThrough }) {
   const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
   const { data: doctor } = useQuery(["doctor/"]);
   const { data: department } = useQuery(["department/"]);
   const [searchNumber, setSearchNumber] = React.useState("");
-  const {prescription, setPrescription} = usePrescription()
+  const { prescription, setPrescription } = usePrescription();
 
   const { register, handleSubmit, reset, setValue, control } = useForm();
 
@@ -60,29 +55,39 @@ function PrescriptionForm({
 
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
-        if (e.key != "A" && e.key != "a" && e.key != "c" && e.key != "v" && e.key != "X" && e.key != "x") {
-          e.preventDefault();
-          switch (e.key) {
-            case "B":
-              document.getElementById("search-number").focus();
-              setSearchNumber(`${year}-${month}-${day}-`);
-              break;
-            case "b":
-              e.preventDefault();
-              document.getElementById("search-number").focus();
-              setSearchNumber(`${year}-${month}-${day}-`);
-              break;
-            case "d":
-              handleSubmit((data) =>
-                handleFormData(data, newPrescription, user)
-              )();
-              break;
-            case "D":
-              handleSubmit((data) =>
-                handleFormData(data, newPrescription, user)
-              )();
-              break;
-          }
+        switch (e.key) {
+          case "B":
+          case "b":
+          case "ذ":
+            e.preventDefault();
+            document.getElementById("search-number").focus();
+            setSearchNumber(`${year}-${month}-${day}-`);
+            break;
+          case "d":
+          case "D":
+          case "ی":
+            e.preventDefault();
+            handleSubmit((data) =>
+              handleFormData(data, newPrescription, user)
+            )();
+            break;
+          case "x":
+          case "X":
+          case "ط":
+            e.preventDefault();
+            deletePrescription();
+            break;
+          case "s":
+          case "S":
+          case "س":
+            e.preventDefault();
+            handleSubmit((data) =>
+              handleFormData(
+                data,
+                prescription.id ? updatePrescription : newPrescription,
+                user
+              )
+            )()
         }
       }
     };
@@ -137,14 +142,10 @@ function PrescriptionForm({
     },
   });
 
-  const { mutate: deletePrescription } = useMutation({
-    mutationFn: () => {
-      deleteDataFn(`prescription/${prescription.id}/`);
-    },
-    onSuccess: () =>
-      successFn("", () => {
-        setPrescription([]);
-      }),
+  const { refetch: deletePrescription } = useQuery({
+    queryKey: [`prescription-through/delete/?prescription=${prescription.id}`],
+    enabled: false,
+    onSuccess: () => successFn("", () => {}),
   });
 
   const { refetch: prescriptionThroughSearch } = useQuery({
@@ -162,7 +163,7 @@ function PrescriptionForm({
     },
   });
 
-  const ListRef = useRef(null)
+  const ListRef = useRef(null);
 
   return (
     <form
@@ -176,7 +177,7 @@ function PrescriptionForm({
       )}
     >
       <label>نوع نسخه:</label>
-      <select {...register("department")}>
+      <select {...register("department")} autoFocus>
         <option value={prescription.department} selected>
           {prescription.department_name}
         </option>
@@ -196,8 +197,14 @@ function PrescriptionForm({
         defaultValue={patient?.find((c) =>
           c.id === prescription?.name ? c.code_name : ""
         )}
-        // NewComponent={<Patient button="plus" />}
-        NewComponent={<SellingLists title='لست ها' activeKey='patient' ref={ListRef} button='plus'/>}
+        NewComponent={
+          <SellingLists
+            title="لست ها"
+            activeKey="patient"
+            ref={ListRef}
+            button="plus"
+          />
+        }
       />
       <label>نام داکتر:</label>
       <ControlledSelect
@@ -211,7 +218,14 @@ function PrescriptionForm({
         defaultValue={doctor?.find((c) =>
           c.id === prescription?.doctor ? c.code_name : ""
         )}
-        NewComponent={<SellingLists title='لست ها' activeKey='doctor' ref={ListRef} button='plus'/>}
+        NewComponent={
+          <SellingLists
+            title="لست ها"
+            activeKey="doctor"
+            ref={ListRef}
+            button="plus"
+          />
+        }
       />
       <label>شماره:</label>
       <input

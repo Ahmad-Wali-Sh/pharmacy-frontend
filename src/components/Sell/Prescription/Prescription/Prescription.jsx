@@ -105,8 +105,8 @@ export default function Prescription(props) {
       total_to_sale: Math.round(totalToSaleCalculate()) + CellingHandler(),
       rounded_number: CellingHandler(),
       disount_value:
-        prescription.discount_money +
-        (report.total * prescription.discount_percent) / 100,
+        (prescription.discount_money +
+        (report.total * prescription.discount_percent) / 100).toFixed(2),
     });
   };
 
@@ -225,7 +225,6 @@ export default function Prescription(props) {
       .get(PRESCRIPTION_URL + prescription.id)
       .then((res) => setPrescription(res.data))
   }
-
 
 
   return (

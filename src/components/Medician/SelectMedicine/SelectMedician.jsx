@@ -41,7 +41,6 @@ export const SelectMedician = forwardRef(
 
     React.useEffect(() => {
       const listener = (e) => {
-        console.log(e)
 
         if (e.ctrlKey === true) {
           switch (e.key){
@@ -99,9 +98,6 @@ export const SelectMedician = forwardRef(
         : "";
     }, [stringArray]);
 
-    const UpdateSelectedMedicine = (item) => {
-      setSelectedMedician(item);
-    };
 
     const isBarcode = (stringArray) => {
       let string = stringArray.join("").replace(/\s/g, "").slice(0, 1);
@@ -131,9 +127,12 @@ export const SelectMedician = forwardRef(
       selectAutoCompleteData(item);
       SelectMedicineModalRef.current.Closer();
       setSelectedMedician(item);
+      // UpdateChangedMedicine(item)
       // Medicine With Including Functionality
       // Medicine Expires Including Functionality
     };
+
+    
 
     return (
       <>
@@ -162,7 +161,7 @@ export const SelectMedician = forwardRef(
                 UpdateMedicine={UpdateSelectedMedicine}
                 UpdateChangedMedicine={UpdateChangedMedicine}
               /> */}
-                <MedicinesLists title='لست ها' activeKey='medicines' medicine={selectedMedician} button='none' name='ثبت دوا'/>
+                <MedicinesLists title='لست ها' activeKey='medicines' medicine={selectedMedician} setSelectedMedician={setSelectedMedician} selectAutoCompleteData={selectAutoCompleteData} button='none' name='ثبت دوا'/>
             </div>
           )}
           <BigModal title="انتخاب دارو" ref={SelectMedicineModalRef}>

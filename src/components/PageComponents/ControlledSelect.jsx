@@ -14,6 +14,8 @@ export default function ControlledSelect({
   uniqueKey,
   defaultValue,
   NewComponent,
+  autoFocus,
+  tabindex
 }) {
   const IndicatorDropDown = (props) => {
     return (
@@ -35,6 +37,8 @@ export default function ControlledSelect({
             menuPortalTarget={document.body} 
             placeholder={placeholder}
             isClearable
+            tabIndex={tabindex ? tabindex : ''}
+            autoFocus={autoFocus ? autoFocus : false}
             components={{ DropdownIndicator: IndicatorDropDown, IndicatorSeparator: () => null }}
             getOptionLabel={getOptionLabel}
             getOptionValue={getOptionValue}

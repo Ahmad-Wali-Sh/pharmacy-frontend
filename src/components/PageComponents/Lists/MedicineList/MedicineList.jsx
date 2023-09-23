@@ -27,7 +27,7 @@ import MedicinesLists from "./MedicinesLists";
 
 
 
-export default function MedicineList({edit}) {
+export default function MedicineList({edit, setSelectedMedician, selectAutoCompleteData}) {
   const ListFilterRef = useRef(null);
   const [active, setActive] = useState("list");
   const [editItem, setEditItem] = useState("");
@@ -66,9 +66,11 @@ export default function MedicineList({edit}) {
 
   const { mutateAsync: handleEditMedicine } = useMutation({
     mutationFn: (data) => putDataFn(data, `medician/${editItem.id}/`),
-    onSuccess: () =>
+    onSuccess: (res) =>
       successFn([medicineQuery], () => {
         setActive("list");
+        setSelectedMedician && setSelectedMedician(res.data)
+        selectAutoCompleteData(res.data)
       }),
   });
 

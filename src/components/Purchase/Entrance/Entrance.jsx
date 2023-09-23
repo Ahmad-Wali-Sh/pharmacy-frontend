@@ -9,6 +9,8 @@ import { DateInputSimple } from "react-hichestan-datetimepicker";
 import { useAuthUser } from "react-auth-kit";
 import ControlledSelect from "../../PageComponents/ControlledSelect";
 import PurchasingLists from "../../PageComponents/Lists/PurchaseLists/PurchasingLists";
+import { useMutation, useQuery } from "react-query";
+import { handleFormData, putDataFn, successFn } from "../../services/API";
 
 export default function Entrance(props) {
   const ModalStyles = {
@@ -103,11 +105,11 @@ export default function Entrance(props) {
   const [discountPercent, setDiscountPercent] = React.useState(
     exactEntrance.discount_percent
   );
-  const [finalRegister, setFinalRegister] = React.useState([]);
-  const [company, setCompany] = React.useState([]);
-  const [store, setStore] = React.useState([]);
-  const [currency, setCurrency] = React.useState([]);
-  const [paymentMethod, setPaymentMethod] = React.useState([]);
+  // const [finalRegister, setFinalRegister] = React.useState([]);
+  // const [company, setCompany] = React.useState([]);
+  // const [store, setStore] = React.useState([]);
+  // const [currency, setCurrency] = React.useState([]);
+  // const [paymentMethod, setPaymentMethod] = React.useState([]);
   const [country, setCountry] = React.useState([]);
   const [kind, setKind] = React.useState([]);
   const [pharmGroub, setPharmGroub] = React.useState([]);
@@ -138,30 +140,30 @@ export default function Entrance(props) {
       registerModalOpener();
     }
 
-    axios
-      .get(FINAL_REGISTER_URL)
-      .then((result) => setFinalRegister(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(FINAL_REGISTER_URL)
+    //   .then((result) => setFinalRegister(result.data))
+    //   .catch((e) => console.log(e));
 
-    axios
-      .get(COMPANY_URL)
-      .then((result) => setCompany(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(COMPANY_URL)
+    //   .then((result) => setCompany(result.data))
+    //   .catch((e) => console.log(e));
 
-    axios
-      .get(STORE_URL)
-      .then((result) => setStore(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(STORE_URL)
+    //   .then((result) => setStore(result.data))
+    //   .catch((e) => console.log(e));
 
-    axios
-      .get(CURRENCY_URL)
-      .then((result) => setCurrency(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(CURRENCY_URL)
+    //   .then((result) => setCurrency(result.data))
+    //   .catch((e) => console.log(e));
 
-    axios
-      .get(PAYMENT_METHOD_URL)
-      .then((result) => setPaymentMethod(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(PAYMENT_METHOD_URL)
+    //   .then((result) => setPaymentMethod(result.data))
+    //   .catch((e) => console.log(e));
     axios
       .get(COUNTRY_URL)
       .then((result) => setCountry(result.data))
@@ -176,11 +178,17 @@ export default function Entrance(props) {
       .catch((e) => console.log(e));
   }, [props.trigger]);
 
+  const { data: finalRegister } = useQuery(["final-register"]);
+  const { data: company } = useQuery(["pharm-companies"]);
+  const { data: store } = useQuery(["store"]);
+  const { data: currency } = useQuery(["currency"]);
+  const { data: paymentMethod } = useQuery(["payment-method"]);
+
   React.useEffect(() => {
-    store.map((store) =>
+    store?.map((store) =>
       store.id == exactEntrance.store ? setStoreName(store.name) : ""
     );
-    company.map((company) =>
+    company?.map((company) =>
       company.id == exactEntrance.company ? setCompanyName(company.name) : ""
     );
   }, [exactEntrance]);
@@ -230,20 +238,20 @@ export default function Entrance(props) {
     setTrigger(0);
     document.getElementById("final-register-id").focus();
 
-    axios
-      .get(COMPANY_URL)
-      .then((result) => setCompany(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(COMPANY_URL)
+    //   .then((result) => setCompany(result.data))
+    //   .catch((e) => console.log(e));
 
-    axios
-      .get(STORE_URL)
-      .then((result) => setStore(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(STORE_URL)
+    //   .then((result) => setStore(result.data))
+    //   .catch((e) => console.log(e));
 
-    axios
-      .get(FINAL_REGISTER_URL)
-      .then((result) => setFinalRegister(result.data))
-      .catch((e) => console.log(e));
+    // axios
+    //   .get(FINAL_REGISTER_URL)
+    //   .then((result) => setFinalRegister(result.data))
+    //   .catch((e) => console.log(e));
   }
   function registerModalCloser() {
     setRegisterModalOpen(false);
@@ -270,6 +278,21 @@ export default function Entrance(props) {
       medician: data,
     });
   }
+
+  React.useEffect(() => {
+    reset({
+      company: exactEntrance.company ? exactEntrance.company : "",
+      payment_method: exactEntrance.payment_method
+        ? exactEntrance.payment_method
+        : "",
+      currency: exactEntrance.currency ? exactEntrance.currency : "",
+      final_register: exactEntrance.final_register
+        ? exactEntrance.final_register
+        : "",
+      store: exactEntrance.store ? exactEntrance.store : '',
+      wholesale: exactEntrance.wholesale ? exactEntrance.wholesale : ''
+    });
+  }, [exactEntrance]);
 
   const TotalAlertCloser = () => {
     let currency_rate = 1;
@@ -564,16 +587,17 @@ export default function Entrance(props) {
   };
 
   const ResetForm = () => {
-    reset({});
+    reset({
+    });
     setExatEntrance({
       without_discount: false,
       description: "",
     });
-    setAutoCompleteData({
-      company: "",
-      store: "",
-      medician: [],
-    });
+    // setAutoCompleteData({
+    //   company: "",
+    //   store: "",
+    //   medician: [],
+    // });
     setCompanyName("");
     setStoreName("");
     setEntranceThrough([]);
@@ -676,6 +700,15 @@ export default function Entrance(props) {
     });
   };
 
+  const { mutate: updateEntrance } = useMutation({
+    mutationFn: (data) => {
+      putDataFn(data, `entrance/${exactEntrance.id}/`);
+    },
+    onSuccess: (res) =>
+      successFn("", () => {
+      }),
+  });
+
   function UpdateUI() {
     setEntranceThrough([]);
     axios
@@ -690,39 +723,39 @@ export default function Entrance(props) {
       .catch((err) => console.log(err));
   }
 
-  function UpdateCompanies() {
-    axios
-      .get(COMPANY_URL)
-      .then((result) => setCompany(result.data))
-      .catch((e) => console.log(e));
-  }
+  // function UpdateCompanies() {
+  //   axios
+  //     .get(COMPANY_URL)
+  //     .then((result) => setCompany(result.data))
+  //     .catch((e) => console.log(e));
+  // }
 
-  function UpdateStores() {
-    axios
-      .get(STORE_URL)
-      .then((result) => setStore(result.data))
-      .catch((e) => console.log(e));
-  }
-  function UpdateFinals() {
-    axios
-      .get(FINAL_REGISTER_URL)
-      .then((result) => setFinalRegister(result.data))
-      .catch((e) => console.log(e));
-  }
+  // function UpdateStores() {
+  //   axios
+  //     .get(STORE_URL)
+  //     .then((result) => setStore(result.data))
+  //     .catch((e) => console.log(e));
+  // }
+  // function UpdateFinals() {
+  //   axios
+  //     .get(FINAL_REGISTER_URL)
+  //     .then((result) => setFinalRegister(result.data))
+  //     .catch((e) => console.log(e));
+  // }
 
-  function CurrencyUpdate() {
-    axios
-      .get(CURRENCY_URL)
-      .then((result) => setCurrency(result.data))
-      .catch((e) => console.log(e));
-  }
+  // function CurrencyUpdate() {
+  //   axios
+  //     .get(CURRENCY_URL)
+  //     .then((result) => setCurrency(result.data))
+  //     .catch((e) => console.log(e));
+  // }
 
-  function PaymentUpdate() {
-    axios
-      .get(PAYMENT_METHOD_URL)
-      .then((result) => setPaymentMethod(result.data))
-      .catch((err) => console.log(e));
-  }
+  // function PaymentUpdate() {
+  //   axios
+  //     .get(PAYMENT_METHOD_URL)
+  //     .then((result) => setPaymentMethod(result.data))
+  //     .catch((err) => console.log(e));
+  // }
 
   const PriceApply = () => {
     entranceThrough.map((through) => {
@@ -844,6 +877,33 @@ export default function Entrance(props) {
   const handleCloseFocus = () => {
     document.getElementById("number-in-factor-input").focus();
   };
+
+
+  React.useEffect(() => {
+
+    const handleKeyDowns = (e) => {
+      if (e.ctrlKey) {
+        switch (e.key) {
+          case "s":
+          case "S":
+          case "س":
+            e.preventDefault();
+            handleSubmit((data) =>
+              handleFormData(
+                data,
+                updateEntrance,
+                user
+              )
+            )()
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDowns);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDowns);
+    };
+  }, []);
 
   return (
     <>
@@ -1023,18 +1083,21 @@ export default function Entrance(props) {
                   <button
                     className="entrance-report-button"
                     onClick={FrontEntrance}
+                    tabIndex={-1}
                   >
                     <i class="fa-solid fa-left-long"></i>
                   </button>
                   <button
                     className="entrance-report-button"
                     onClick={PriceApply}
+                    tabIndex={-1}
                   >
                     <i class="fa-solid fa-comments-dollar"></i>
                   </button>
                   <button
                     className="entrance-report-button"
                     onClick={BackEntrance}
+                    tabIndex={-1}
                   >
                     <i class="fa-solid fa-right-long"></i>
                   </button>
@@ -1043,23 +1106,26 @@ export default function Entrance(props) {
               <form className="entrance-entrance">
                 <label>وضعیت:</label>
                 <ControlledSelect
-                    control={control}
-                    name="final_register"
-                    options={finalRegister}
-                    placeholder=""
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
-                    uniqueKey={`entrance-unique${exactEntrance.id}`}
-                    defaultValue={finalRegister?.find((c) =>
-                      c.id === exactEntrance?.final_register ? c.name : ""
-                    )}
-                    NewComponent={
-                      <PurchasingLists button='plus' activeKey='final-registers'/>
-                    }
-                  />
+                  control={control}
+                  // tabIndex={0}
+                  name="final_register"
+                  options={finalRegister}
+                  placeholder=""
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  uniqueKey={`entrance-unique${exactEntrance.id}`}
+                  defaultValue={finalRegister?.find((c) =>
+                    c.id === exactEntrance?.final_register ? c.name : ""
+                  )}
+                  NewComponent={
+                    <PurchasingLists
+                      button="plus"
+                      activeKey="final-registers"
+                    />
+                  }
+                />
                 <label>شرکت:</label>
                 <div className="react-select-box">
-
                   <ControlledSelect
                     control={control}
                     name="company"
@@ -1072,7 +1138,7 @@ export default function Entrance(props) {
                       c.id === exactEntrance?.company ? c.name : ""
                     )}
                     NewComponent={
-                      <PurchasingLists button='plus' activeKey='companies'/>
+                      <PurchasingLists button="plus" activeKey="companies" />
                     }
                   />
                 </div>
@@ -1089,7 +1155,9 @@ export default function Entrance(props) {
                     defaultValue={store?.find((c) =>
                       c.id === exactEntrance?.store ? c.name : ""
                     )}
-                    NewComponent={<PurchasingLists button='plus' activeKey='stores'/>}
+                    NewComponent={
+                      <PurchasingLists button="plus" activeKey="stores" />
+                    }
                   />
                 </div>
                 <label>تاریخ:</label>
@@ -1153,36 +1221,36 @@ export default function Entrance(props) {
                 />
                 <label>واحد پول:</label>
                 <ControlledSelect
-                    control={control}
-                    name="currency"
-                    options={currency}
-                    placeholder=""
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
-                    uniqueKey={`entrance-unique${exactEntrance.id}`}
-                    defaultValue={currency?.find((c) =>
-                      c.id === exactEntrance?.currency ? c.name : ""
-                    )}
-                    NewComponent={
-                      <PurchasingLists button='plus' activeKey='currencies'/>
-                    }
-                  />
+                  control={control}
+                  name="currency"
+                  options={currency}
+                  placeholder=""
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  uniqueKey={`entrance-unique${exactEntrance.id}`}
+                  defaultValue={currency?.find((c) =>
+                    c.id === exactEntrance?.currency ? c.name : ""
+                  )}
+                  NewComponent={
+                    <PurchasingLists button="plus" activeKey="currencies" />
+                  }
+                />
                 <label>پرداخت:</label>
                 <ControlledSelect
-                    control={control}
-                    name="payment_method"
-                    options={paymentMethod}
-                    placeholder=""
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
-                    uniqueKey={`entrance-unique${exactEntrance.id}`}
-                    defaultValue={paymentMethod?.find((c) =>
-                      c.id === exactEntrance?.payment_method ? c.name : ""
-                    )}
-                    NewComponent={
-                      <PurchasingLists button='plus' activeKey='payments'/>
-                    }
-                  />
+                  control={control}
+                  name="payment_method"
+                  options={paymentMethod}
+                  placeholder=""
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  uniqueKey={`entrance-unique${exactEntrance.id}`}
+                  defaultValue={paymentMethod?.find((c) =>
+                    c.id === exactEntrance?.payment_method ? c.name : ""
+                  )}
+                  NewComponent={
+                    <PurchasingLists button="plus" activeKey="payments" />
+                  }
+                />
                 <label>
                   <h5>فایده%:</h5>
                 </label>
@@ -1205,7 +1273,7 @@ export default function Entrance(props) {
                   <h5>نوع ورودی:</h5>
                 </label>
                 <select
-                  value={exactEntrance.wholesale}
+                  defaultValue={exactEntrance.wholesale}
                   {...register("wholesale")}
                 >
                   <option value={"WHOLESALE"}>عمده</option>
