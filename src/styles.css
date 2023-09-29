@@ -3364,6 +3364,23 @@ input[type="date"]:disabled {
   grid-auto-flow: column;
 }
 
+.patient-list-header-purchase {
+  width: 100%;
+  background-image: var(--color-five);
+  height: 2rem;
+  display: grid;
+  padding-right: 1rem;
+  text-align: right;
+  align-items: center;
+  grid-auto-columns: 10% 50% 10% 10% 10% 10%;
+  grid-auto-flow: column;
+}
+
+.selected-with-button {
+  position: relative;
+  top: 1.5rem;
+  left: 1rem;
+}
 .patient-list-item {
   background-color: rgb(74, 73, 73);
   border-bottom: 1px solid var(--color-three);
@@ -3377,6 +3394,21 @@ input[type="date"]:disabled {
   grid-auto-flow: column;
   align-items: center;
 }
+
+.patient-list-item-purchase {
+  background-color: rgb(74, 73, 73);
+  border-bottom: 1px solid var(--color-three);
+  margin: 0.4rem;
+  text-align: right;
+  padding-right: 1rem;
+  overflow-x: hidden;
+  display: grid;
+  width: 100%;
+  grid-auto-columns: 10% 50% 10% 10% 10% 10%;
+  grid-auto-flow: column;
+  align-items: center;
+}
+
 .patient-list-item-medi {
   background-color: rgb(74, 73, 73);
   border-bottom: 1px solid var(--color-three);
@@ -3405,7 +3437,7 @@ input[type="date"]:disabled {
   cursor: pointer;
   align-items: center;
 }
-.pagination-group > h4{
+.pagination-group > h4 {
   box-shadow: 1px 1px 10px black;
   background-color: var(--color-three);
   color: white;
@@ -3422,7 +3454,7 @@ input[type="date"]:disabled {
   border: 2px solid var(--color-ten);
   border-radius: 0.4rem;
 }
-.pagination-group > h4:hover{
+.pagination-group > h4:hover {
   box-shadow: 1px 1px 10px black;
   background-image: var(--color-five);
   color: white;
@@ -3430,16 +3462,13 @@ input[type="date"]:disabled {
   border-radius: 0.2rem;
 }
 
-
 .image-preview-list {
   width: 4rem;
   margin: 1rem;
   border-radius: 0.4rem;
   position: relative;
-  left: 1rem
+  left: 1rem;
 }
-
-
 
 .patient-list-box {
   overflow-y: scroll;

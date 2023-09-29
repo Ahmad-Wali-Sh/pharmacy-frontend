@@ -25,9 +25,11 @@ import "react-image-upload/dist/index.css";
 import axios from "axios";
 import MedicinesLists from "./MedicinesLists";
 
-
-
-export default function MedicineList({edit, setSelectedMedician, selectAutoCompleteData}) {
+export default function MedicineList({
+  edit,
+  setSelectedMedician,
+  selectAutoCompleteData,
+}) {
   const ListFilterRef = useRef(null);
   const [active, setActive] = useState("list");
   const [editItem, setEditItem] = useState("");
@@ -40,18 +42,18 @@ export default function MedicineList({edit, setSelectedMedician, selectAutoCompl
     kind_persian: "",
     country: "",
     company: "",
-    page: 1
+    page: 1,
   });
 
   const user = useAuthUser();
 
   useEffect(() => {
     if (edit) {
-      setActive('edit')
-      setEditItem(edit)
-      FormResetToItem(edit)
+      setActive("edit");
+      setEditItem(edit);
+      FormResetToItem(edit);
     }
-  }, [edit])
+  }, [edit]);
 
   const { register, handleSubmit, reset, control, setValue, watch, getValues } =
     useForm();
@@ -69,8 +71,8 @@ export default function MedicineList({edit, setSelectedMedician, selectAutoCompl
     onSuccess: (res) =>
       successFn([medicineQuery], () => {
         setActive("list");
-        setSelectedMedician && setSelectedMedician(res.data)
-        selectAutoCompleteData(res.data)
+        setSelectedMedician && setSelectedMedician(res.data);
+        selectAutoCompleteData(res.data);
       }),
   });
 
@@ -84,7 +86,6 @@ export default function MedicineList({edit, setSelectedMedician, selectAutoCompl
       console.log(e.response);
       toast.error(`نسخه های قبلی را حذف نموده دوباره سعی کنید`);
     },
-
   });
 
   const { data: pharmGroup } = useQuery({
@@ -106,7 +107,6 @@ export default function MedicineList({edit, setSelectedMedician, selectAutoCompl
     queryKey: [medicineQuery],
     enabled: true,
   });
-
 
   const FormResetToItem = (item) => {
     reset({
@@ -418,7 +418,14 @@ function MedicineForm(props) {
           defaultValue={props.pharmGroup?.find((c) =>
             c.id === props.medicine.pharm_group ? c.name_english : null
           )}
-          NewComponent={<MedicinesLists title='لست ها' activeKey='pharm-groups'  button='plus' name='ثبت دوا'/>}
+          NewComponent={
+            <MedicinesLists
+              title="لست ها"
+              activeKey="pharm-groups"
+              button="plus"
+              name="ثبت دوا"
+            />
+          }
         />
         <label>نوع:</label>
         <div
@@ -437,7 +444,14 @@ function MedicineForm(props) {
             defaultValue={props.kind?.find((c) =>
               c.id === props.medicine?.kind ? c.name_english : null
             )}
-            NewComponent={<MedicinesLists title='لست ها' activeKey='kinds'  button='plus' name='ثبت دوا'/>}
+            NewComponent={
+              <MedicinesLists
+                title="لست ها"
+                activeKey="kinds"
+                button="plus"
+                name="ثبت دوا"
+              />
+            }
           />
         </div>
         <label>کشور:</label>
@@ -457,7 +471,14 @@ function MedicineForm(props) {
             defaultValue={props.country?.find((c) =>
               c.id === props.medicine?.country ? c.name : null
             )}
-            NewComponent={<MedicinesLists title='لست ها' activeKey='countries'  button='plus' name='ثبت دوا'/>}
+            NewComponent={
+              <MedicinesLists
+                title="لست ها"
+                activeKey="countries"
+                button="plus"
+                name="ثبت دوا"
+              />
+            }
           />
         </div>
         <label>کمپنی:</label>
@@ -477,7 +498,14 @@ function MedicineForm(props) {
             defaultValue={props.bigCompany?.find((c) =>
               c.id === props.medicine?.big_company ? c.name : null
             )}
-            NewComponent={<MedicinesLists title='لست ها' activeKey='big-companies'  button='plus' name='ثبت دوا'/>}
+            NewComponent={
+              <MedicinesLists
+                title="لست ها"
+                activeKey="big-companies"
+                button="plus"
+                name="ثبت دوا"
+              />
+            }
           />
         </div>
         <label>قیمت:</label>

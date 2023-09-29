@@ -4,28 +4,39 @@ import { MainButton, PlusButton } from "../../Buttons/Buttons";
 import PatientList from "./PatientList";
 import DoctorList from "./DoctorList";
 import DepartmentsList from "./DepartmentsList";
+import PurchaseListManual from "./PurcahseListManual";
 
-const SellingLists = ({ title, activeKey, button, name, icon }) => {
+const SellingLists = ({
+  title,
+  activeKey,
+  button,
+  name,
+  icon,
+  selectedMedicine,
+}) => {
   const ListDashboardRef = useRef(null);
 
   const [active, setActive] = React.useState(activeKey);
   return (
     <>
-      {button == 'plus' && <PlusButton
-        Func={() => {
-          ListDashboardRef.current.Opener();
-          setActive(activeKey);
-        }}
-      />}
-      {button == 'main' && <MainButton 
-        Func={() => {
-          ListDashboardRef.current.Opener();
-          setActive(activeKey);
-        }}
-        icon={icon}
-        title={name}
+      {button == "plus" && (
+        <PlusButton
+          Func={() => {
+            ListDashboardRef.current.Opener();
+            setActive(activeKey);
+          }}
         />
-      }
+      )}
+      {button == "main" && (
+        <MainButton
+          Func={() => {
+            ListDashboardRef.current.Opener();
+            setActive(activeKey);
+          }}
+          icon={icon}
+          title={name}
+        />
+      )}
       <BigModal ref={ListDashboardRef} title={title}>
         <div className="list-container">
           <div className="list-nav">
@@ -54,6 +65,14 @@ const SellingLists = ({ title, activeKey, button, name, icon }) => {
             >
               انواع نسخه
             </div>
+            <div
+              onClick={() => setActive("purhase-list")}
+              className={`list-item ${
+                active == "purhase-list" && "list-item-active"
+              }`}
+            >
+              لست خرید
+            </div>
           </div>
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
@@ -61,6 +80,9 @@ const SellingLists = ({ title, activeKey, button, name, icon }) => {
               {active == "patient" && <PatientList />}
               {active == "doctor" && <DoctorList />}
               {active == "departments" && <DepartmentsList />}
+              {active == "purhase-list" && (
+                <PurchaseListManual selectedMedicine={selectedMedicine} />
+              )}
             </div>
           </div>
         </div>

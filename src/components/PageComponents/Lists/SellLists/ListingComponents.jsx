@@ -252,6 +252,46 @@ export function FilterInput({ label, autoFocus, value, handleChange, name }) {
   );
 }
 
+export function FilterDate({ label, autoFocus, value, handleChange, name }) {
+  return (
+    <>
+      <label>{label}</label>
+      <input
+        className="text-input-standard"
+        type="date"
+        autoFocus={autoFocus}
+        value={value}
+        onChange={handleChange}
+        name={name}
+      />
+    </>
+  );
+}
+
+export function FilterSelect({
+  label,
+  autoFocus,
+  value,
+  handleChange,
+  name,
+  children,
+}) {
+  return (
+    <>
+      <label>{label}</label>
+      <select
+        className="text-input-standard"
+        autoFocus={autoFocus}
+        value={value}
+        onChange={handleChange}
+        name={name}
+      >
+        {children}
+      </select>
+    </>
+  );
+}
+
 export function FilterModal(props) {
   return (
     <div>

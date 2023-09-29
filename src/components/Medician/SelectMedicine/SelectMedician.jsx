@@ -5,9 +5,9 @@ import { MedicineListFormat } from "./MedicineListFormat";
 import BookmarkCards from "./BookmarkCards";
 import { MedicineSelectStyle } from "../../../styles";
 import { useQuery } from "react-query";
-import { AsyncPaginate } from 'react-select-async-paginate'
+import { AsyncPaginate } from "react-select-async-paginate";
 import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLists";
-
+import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 
 export const SelectMedician = forwardRef(
   (
@@ -16,6 +16,7 @@ export const SelectMedician = forwardRef(
       department,
       UpdateChangedMedicine,
       handleCloseFocus,
+      purchaseMedicine,
     },
     ref
   ) => {
@@ -23,6 +24,9 @@ export const SelectMedician = forwardRef(
       Opener() {
         SelectMedicineModalRef.current.Opener();
         handleCloseFocus();
+      },
+      Closer() {
+        SelectMedicineModalRef.current.Closer();
       },
     }));
     const SelectMedicineModalRef = useRef(null);
@@ -41,24 +45,26 @@ export const SelectMedician = forwardRef(
 
     React.useEffect(() => {
       const listener = (e) => {
-
         if (e.ctrlKey === true) {
-          switch (e.key){
-            case 'm':
-            case 'M':
-            case 'ئ':
-              SelectMedicineModalRef.current.Opener()
+          switch (e.key) {
+            case "m":
+            case "M":
+            case "ئ":
+              SelectMedicineModalRef.current.Opener();
           }
-
         }
       };
-  
+
       document.addEventListener("keydown", listener);
-  
+
       return () => {
         document.removeEventListener("keydown", listener);
       };
     }, []);
+
+    React.useEffect(() => {
+      setSelectedMedician(purchaseMedicine);
+    }, [purchaseMedicine]);
 
     const { data: BookmarkedMedicine } = useQuery({
       queryKey: [`medician/?department=${department}`],
@@ -98,7 +104,6 @@ export const SelectMedician = forwardRef(
         : "";
     }, [stringArray]);
 
-
     const isBarcode = (stringArray) => {
       let string = stringArray.join("").replace(/\s/g, "").slice(0, 1);
       return !isNaN(string);
@@ -132,7 +137,7 @@ export const SelectMedician = forwardRef(
       // Medicine Expires Including Functionality
     };
 
-    
+    const SellRef = useRef();
 
     return (
       <>
@@ -154,14 +159,26 @@ export const SelectMedician = forwardRef(
             <h4>{selectedMedician && selectedMedician.medicine_full}</h4>
           </div>
           {selectedMedician && (
-            <div className="flex">
-              {/* <MedicianEntrance
-                button={3}
-                medician={selectedMedician}
-                UpdateMedicine={UpdateSelectedMedicine}
-                UpdateChangedMedicine={UpdateChangedMedicine}
-              /> */}
-                <MedicinesLists title='لست ها' activeKey='medicines' medicine={selectedMedician} setSelectedMedician={setSelectedMedician} selectAutoCompleteData={selectAutoCompleteData} button='none' name='ثبت دوا'/>
+            <div className="flex ">
+              <div className="selected-with-button">
+
+              <SellingLists
+                title="لست ها"
+                activeKey="purhase-list"
+                ref={SellRef}
+                selectedMedicine={selectedMedician}
+                button="plus"
+                />
+                </div>
+              <MedicinesLists
+                title="لست ها"
+                activeKey="medicines"
+                medicine={selectedMedician}
+                setSelectedMedician={setSelectedMedician}
+                selectAutoCompleteData={selectAutoCompleteData}
+                button="none"
+                name="ثبت دوا"
+              />
             </div>
           )}
           <BigModal title="انتخاب دارو" ref={SelectMedicineModalRef}>
