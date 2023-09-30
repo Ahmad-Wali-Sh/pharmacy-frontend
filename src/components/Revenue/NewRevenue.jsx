@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
+import { queryClient } from "../services/API";
 
 function NewRevenue({ users }) {
 
@@ -49,7 +50,10 @@ function NewRevenue({ users }) {
     axios.post(REVENUE_URL, RevenueForm).then((res) => {
       toast.success("Data Submited Succesfully");
       registerModalCloser();
-    });
+      queryClient.invalidateQueries()
+    }).catch((res)=> {
+      toast.error('صندوق باز شده برای این کاربر را بسته نموده و دوباره امتحان کنید')
+    })
   };
 
   return (
@@ -82,10 +86,10 @@ function NewRevenue({ users }) {
                 className="revenue-manager-inputs"
                 {...register("employee")}
               >
-                <option value=""></option>
-                {users.map((user) => (
-                  <option value={user.id}>{user.username}</option>
-                ))}
+                {/* {users.map((users) => (
+                 user.id == users.id && <option value={users.id}>{users.username}</option>
+                ))} */}
+                <option selected value={user().id}>{user().username}</option>
               </select>
             </div>
             <div className="store-submit">
@@ -94,7 +98,6 @@ function NewRevenue({ users }) {
                 type="submit"
                 value="ثبت صندوق"
               />
-              <input type="reset" value="ریسیت" />
             </div>
           </div>
         </form>

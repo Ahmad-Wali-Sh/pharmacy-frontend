@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { DepartButton, SubmitButton } from "../../Buttons/Buttons";
+import { ButtonGroup, DepartButton, FormButton, InfoButton, SubmitButton } from "../../Buttons/Buttons";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
 import { useMutation, useQuery } from "react-query";
@@ -12,6 +12,8 @@ import {
 } from "../../../services/API";
 import { toast } from "react-toastify";
 import SmallModal from "../../Modals/SmallModal";
+import axios from "axios";
+import fileDownload from "js-file-download";
 
 export default function PatientList() {
   const ListFilterRef = useRef(null);
@@ -293,6 +295,18 @@ export function FilterSelect({
 }
 
 export function FilterModal(props) {
+  const API_URL = import.meta.env.VITE_API
+
+  const ExcelExport = () => {
+    axios({
+      url: API_URL + props.url + '&format=xml',
+      method: 'GET',
+      responseType: 'blob'
+    }).then((response) => {
+      fileDownload(response.data, `${props.fileName}.xml`)
+    })
+  }
+
   return (
     <div>
       <div className="filter-button" onClick={() => props.current.Opener()}>
@@ -306,7 +320,11 @@ export function FilterModal(props) {
         <form>
           <div className="list-filter-form">
             {props.children}
+            <label></label>
+            <ButtonGroup>
             <SubmitButton name="تایید" Func={() => props.current.Closer()} />
+            <FormButton name="Excel" Func={() => ExcelExport()} />
+            </ButtonGroup>
           </div>
         </form>
       </SmallModal>

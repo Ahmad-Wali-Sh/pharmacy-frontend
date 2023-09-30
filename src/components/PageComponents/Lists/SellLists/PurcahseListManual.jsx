@@ -8,6 +8,7 @@ import {
   successFn,
   putDataFn,
   deleteDataFn,
+  patchDataFn
 } from "../../../services/API";
 import { toast } from "react-toastify";
 import {
@@ -21,6 +22,41 @@ import {
   FilterSelect,
 } from "./ListingComponents";
 import { SelectMedician } from "../../../Medician/SelectMedicine/SelectMedician";
+
+function PurchaseListItem(props) {
+  const { register, handleSubmit} = useForm()
+  const { mutateAsync: handleArrival } = useMutation({
+    mutationFn: (data) =>
+    patchDataFn(data, `purchase-list-manual/${props.purchase.id}/`),
+    onSuccess: () =>
+      successFn([''], () => {
+        // setActive("list");
+      }),
+  });
+
+  return (
+    <div className="patient-list-item-purchase">
+      <h4>{props.keyer + 1}</h4>
+      <h4>{props.purchase.medicine_full}</h4>
+      <h4>{props.purchase.existence}</h4>
+      <h4>{props.purchase.quantity}</h4>
+      <input type='text' className='transparent-inputs' defaultValue={props.purchase.arrival} {...register('arrival')} onBlur={handleSubmit(handleArrival)}/>
+      <div className="flex">
+        <InfoButton
+          Func={() => {
+            props.setActive("edit");
+            props.FormResetToItem(props.purchase);
+          }}
+        />
+        <DeleteButton
+          Func={() => {
+            props.deletePurchase(props.purchase.id);
+          }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function PurchaseListManual({ selectedMedicine }) {
   const ListFilterRef = useRef(null);
@@ -40,7 +76,6 @@ export default function PurchaseListManual({ selectedMedicine }) {
     onSuccess: () =>
       successFn([PurchaseQuery], () => {
         setActive("list");
-        
       }),
     onError: () => toast.error("این دوا قبلا به لست خرید اضافه شده است"),
   });
@@ -145,6 +180,8 @@ export default function PurchaseListManual({ selectedMedicine }) {
           <FilterModal
             current={ListFilterRef.current}
             ListFilterRef={ListFilterRef}
+            url={PurchaseQuery}
+            fileName={new Date().toISOString().slice(0,10) + 'purchase-list'}
           >
             <FilterSelect
               label="خریداری.شده"
@@ -176,27 +213,15 @@ export default function PurchaseListManual({ selectedMedicine }) {
             <h4>بیشتر</h4>
           </div>
           <ListMap>
-            {Purchases?.map((purchase, key) => (
-              <div className="patient-list-item-purchase">
-                <h4>{key + 1}</h4>
-                <h4>{purchase.medicine_full}</h4>
-                <h4>{purchase.existence}</h4>
-                <h4>{purchase.quantity}</h4>
-                <h4>{purchase.arrival}</h4>
-                <div className="flex">
-                  <InfoButton
-                    Func={() => {
-                      setActive("edit");
-                      FormResetToItem(purchase);
-                    }}
-                  />
-                  <DeleteButton
-                    Func={() => {
-                      deletePurchase(purchase.id);
-                    }}
-                  />
-                </div>
-              </div>
+            {Purchases?.map((purchase, keyer) => (
+              <PurchaseListItem
+                setActive={setActive}
+                deletePurchase={deletePurchase}
+                FormResetToItem={FormResetToItem}
+                purchase={purchase}
+                keyer={keyer}
+                key={purchase.id}
+              ></PurchaseListItem>
             ))}
           </ListMap>
           <ListFooter setActive={setActive} reset={reset} user={user} />

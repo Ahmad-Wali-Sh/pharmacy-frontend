@@ -24,7 +24,8 @@ function Sell() {
         <Prescription button="main" title="ثبت نسخه" />
         <SellingLists title='لست ها' activeKey='doctor' button='main' name='ثبت داکتر' icon='fa-solid fa-user-doctor'/>
         <SellingLists title='لست ها' activeKey='patient' button='main' name='ثبت مریض' icon='fa-solid fa-bed'/>
-        <SellingLists title='لست ها' activeKey='departments' button='main' name='ثبت نوع نسخه' icon='fa-solid fa-list-alt'/>
+        <SellingLists title='لست ها' activeKey='departments' button='main' name='ثبت نوع' icon='fa-solid fa-list-alt'/>
+        <SellingLists title='لست ها' activeKey='purhase-list' button='main' name='لست خرید' icon='fa-solid fa-list-alt'/>
       </div>
       <div className="sell-form">
         <div className="sell-department-buttons">

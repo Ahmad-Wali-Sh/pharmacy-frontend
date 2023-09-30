@@ -84,7 +84,7 @@ function PrescriptionForm({ prescriptionThrough }) {
             handleSubmit((data) =>
               handleFormData(
                 data,
-                prescription.id ? updatePrescription : newPrescription,
+                updatePrescription,
                 user
               )
             )()

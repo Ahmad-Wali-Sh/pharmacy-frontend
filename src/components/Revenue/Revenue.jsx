@@ -203,7 +203,7 @@ export default function Revenue(props) {
                       <h3>{key + 1}</h3>
                       <h3>{pres.prescription_number}</h3>
                       <h3>{pres.department_name}</h3>
-                      <h3>{pres.username}</h3>
+                      <h3>{pres.patient_name}</h3>
                       <h3 className='persian-number'>{pres.refund ? pres.refund.toFixed(2) : pres.grand_total.toFixed(2)}AF</h3>
                       <div
                         className="revenue-button"
@@ -226,7 +226,7 @@ export default function Revenue(props) {
                           <h3>{key + 1}</h3>
                           <h3>{through.prescription_number}</h3>
                           <h3>{through.department}</h3>
-                          <h3>{through.username}</h3>
+                          <h3>{through.patient_name}</h3>
                           <h3 className='persian-number'>{through.purchased.toFixed(2)}AF</h3>
                           <div
                             className="revenue-button"
