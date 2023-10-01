@@ -15,7 +15,8 @@ export default function ControlledSelect({
   defaultValue,
   NewComponent,
   autoFocus,
-  tabindex
+  tabindex,
+  isMulti,
 }) {
   const IndicatorDropDown = (props) => {
     return (
@@ -34,6 +35,7 @@ export default function ControlledSelect({
           <Select
             inputRef={ref}
             options={options}
+            isMulti={isMulti ? isMulti : false}
             menuPortalTarget={document.body} 
             placeholder={placeholder}
             isClearable

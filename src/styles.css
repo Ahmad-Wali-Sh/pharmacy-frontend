@@ -2676,7 +2676,7 @@ input[type="date"]:disabled {
   display: grid;
   direction: rtl;
   padding-right: 1rem;
-  grid-template-columns: 0.1fr 0.4fr 0.6fr 0.6fr 1fr 1fr 0.7fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.4fr;
+  grid-template-columns: 0.1fr 0.4fr 0.6fr 0.6fr 1fr 1fr 0.7fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.4fr;
 }
 .revenue-info-content-header {
   width: 99%;
@@ -2773,7 +2773,7 @@ input[type="date"]:disabled {
 
 .revenue-manager-map {
   display: grid;
-  grid-template-columns: 0.1fr 0.4fr 0.6fr 0.6fr 1fr 1fr 0.7fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.4fr;
+  grid-template-columns: 0.1fr 0.4fr 0.6fr 0.6fr 1fr 1fr 0.7fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.4fr;
   direction: rtl;
   padding-right: 0.1rem;
   height: 2.5rem;
@@ -3516,3 +3516,40 @@ input[type="date"]:disabled {
 .contorlled-select-box {
   width: 70%;
 }
+
+.meidince-show-box {
+  height: 95%;
+  margin: 1rem 1rem 1rem 1rem;
+  display: flex;
+  overflow: hidden;
+  gap:1rem;
+}
+
+.medicine-show-pic {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-three);
+  border-radius: 1rem;
+  border: 2px solid white
+}
+
+.medicine-show-info {
+  width: 100%;
+  height: 100%;
+  text-align: right;
+  direction: rtl;
+  background-color: var(--color-three);
+  border-radius: 1rem;
+  color: white;
+  padding: 1rem;
+  min-width: 20rem;
+  display: grid;
+  line-height: 26pt;
+}
+
+.medicine-show-info span {
+  color: grey
+}
+
+
+

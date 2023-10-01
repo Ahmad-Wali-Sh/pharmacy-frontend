@@ -24,6 +24,8 @@ import WebCamModal from "../../WebCamModal";
 import "react-image-upload/dist/index.css";
 import axios from "axios";
 import MedicinesLists from "./MedicinesLists";
+import Select from "react-select";
+import { SelectInputStyle } from "../../../../styles";
 
 export default function MedicineList({
   edit,
@@ -55,7 +57,7 @@ export default function MedicineList({
     }
   }, [edit]);
 
-  const { register, handleSubmit, reset, control, setValue, watch, getValues } =
+  const { register, handleSubmit, reset, control, watch, getValues, setValue } =
     useForm();
 
   const { mutateAsync: newMedicine } = useMutation({
@@ -66,8 +68,17 @@ export default function MedicineList({
       }),
   });
 
+  console.log(watch("department"));
+
   const { mutateAsync: handleEditMedicine } = useMutation({
-    mutationFn: (data) => putDataFn(data, `medician/${editItem.id}/`),
+    mutationFn: (data) => {
+      let newdata = data
+      for (var i = 0; i < watch('department').length; i++) {
+        newdata.append('department', watch('department')[i]);
+      }
+      console.log(newdata)
+      putDataFn(newdata, `medician/${editItem.id}/`)
+    },
     onSuccess: (res) =>
       successFn([medicineQuery], () => {
         setActive("list");
@@ -100,6 +111,9 @@ export default function MedicineList({
 
   const { data: bigCompany } = useQuery({
     queryKey: ["big-company/"],
+  });
+  const { data: department } = useQuery({
+    queryKey: ["department/"],
   });
 
   let medicineQuery = `medician/?brand_name=${filter.brand_name}&search=${filter.generic_name}&ml=${filter.ml}&kind__name_persian=${filter.kind_persian}&kind__name_english=${filter.kind_english}&country__name=${filter.country}&big_company__name=${filter.company}&page=${filter.page}`;
@@ -194,8 +208,6 @@ export default function MedicineList({
     setEditItem("");
     setImage("");
   };
-
-  console.log(filter);
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
@@ -380,6 +392,7 @@ export default function MedicineList({
             country={country}
             bigCompany={bigCompany}
             medicine={editItem}
+            department={department}
           />
           <ListFooter
             setActive={setActive}
@@ -552,9 +565,34 @@ function MedicineForm(props) {
         <label>استفاده:</label>
         <input {...props.register("usages")} />
         <label>دیپارتمنت:</label>
-        <select className="text-input-standard" {...props.register("medicine")}>
+        {/* <select className="text-input-standard" {...props.register("medicine")}>
           <option></option>
-        </select>
+        </select> */}
+        {/* <ControlledSelect
+            control={props.control}
+            name="department"
+            options={props.department}
+            placeholder=""
+            isMulti={true}
+            onChange={(e) => console.log(e)}
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option.id}
+            uniqueKey={`medicine-unigue${props.department}`}
+            defaultValue={props.department?.find((c) =>
+              c.id === props.medicine?.department ? c.name : null
+            )}
+          /> */}
+        <Select
+          styles={SelectInputStyle}
+          getOptionLabel={(option) => option.name}
+          getOptionValue={(option) => option.id}
+          options={props.department}
+          isMulti
+          defaultValue={props.medicine?.department.find((depart) => (
+            depart.id === props.department.id ? props.department.name : 'aa'
+          ))}
+          onChange={(e) => props.setValue('department', e.map((e)=> { return [e.id]}))}
+        />
         <label>انقضا:</label>
         <input type="text" {...props.register("min_expire_date")} />
         <label>توضیحات:</label>

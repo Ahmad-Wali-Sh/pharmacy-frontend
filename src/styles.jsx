@@ -29,6 +29,25 @@ export const ModalBigStyles = {
   },
 };
 
+export const MedicineShowModalStyles = {
+  content: {
+    backgroundColor: "rgb(30,30,30)",
+    border: "none",
+    width: '85%',
+    height: '30rem',
+    top:'14%',
+    left: '7%',
+    borderRadius: "1rem",
+    overflow: "hidden",
+    padding: "0px",
+    margin: "0px",
+    zIndex: 10
+  },
+  overlay: {
+    backgroundColor: "rgba(60,60,60,0.5)",
+  },
+};
+
 export const AlertModalStyle = {
   content: {
     backgroundColor: "rgb(120,120,120)",

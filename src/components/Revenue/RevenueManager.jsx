@@ -176,9 +176,10 @@ export default function RevenueManager(props) {
               <h4>حالت</h4>
               <h4>کارمند</h4>
               <h4>مدیر</h4>
-              <h4>تاریخ</h4>
               <h4>زمان.فعال</h4>
-              <h4>زمان.بسته</h4>
+              <h4></h4>
+              <h4>زمان.مسدود</h4>
+              <h4></h4>
               <h4>مجموع</h4>
               <h4>تخفیفات</h4>
               <h4>خیرات</h4>
@@ -226,6 +227,7 @@ export default function RevenueManager(props) {
                   <h5>
                     {revenue.start_time && revenue.start_time.slice(0, 5)}
                   </h5>
+                  <h5>{revenue.start_end && revenue.start_end_date}</h5>
                   <h5>{revenue.start_end && revenue.start_end.slice(0, 5)}</h5>
                   <h4>{revenue.total}</h4>
                   <h4>{revenue.discount}</h4>

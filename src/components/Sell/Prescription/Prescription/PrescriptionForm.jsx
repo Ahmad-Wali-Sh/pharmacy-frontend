@@ -20,7 +20,7 @@ import ControlledSelect from "../../../PageComponents/ControlledSelect";
 import { usePrescription } from "../../../States/States";
 import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 
-function PrescriptionForm({ prescriptionThrough }) {
+function PrescriptionForm({ prescriptionThrough, update }) {
   const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
   const { data: doctor } = useQuery(["doctor/"]);
@@ -82,12 +82,8 @@ function PrescriptionForm({ prescriptionThrough }) {
           case "س":
             e.preventDefault();
             handleSubmit((data) =>
-              handleFormData(
-                data,
-                updatePrescription,
-                user
-              )
-            )()
+              handleFormData(data, updatePrescription, user)
+            )();
         }
       }
     };
@@ -107,13 +103,13 @@ function PrescriptionForm({ prescriptionThrough }) {
     },
   });
 
-  const { mutate: updatePrescription } = useMutation({
+  const { mutateAsync: updatePrescription } = useMutation({
     mutationFn: (data) => {
       putDataFn(data, `prescription/${prescription.id}/`);
     },
-    onSuccess: (res) =>
+    onSuccess: (data) =>
       successFn("", () => {
-        setPrescription(res.data);
+        update();
       }),
   });
 

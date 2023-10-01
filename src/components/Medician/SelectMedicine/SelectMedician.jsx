@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import { AsyncPaginate } from "react-select-async-paginate";
 import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLists";
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
+import MedicineShowModal from "../../PageComponents/Modals/MedicineShow";
 
 export const SelectMedician = forwardRef(
   (
@@ -129,15 +130,25 @@ export const SelectMedician = forwardRef(
     });
 
     const handleMedicineSelect = (item) => {
-      selectAutoCompleteData(item);
-      SelectMedicineModalRef.current.Closer();
-      setSelectedMedician(item);
+      // selectAutoCompleteData(item);
+      // SelectMedicineModalRef.current.Closer();
+      // setSelectedMedician(item);
+      MedicineShowRef.current.Opener(item);
+
       // UpdateChangedMedicine(item)
       // Medicine With Including Functionality
       // Medicine Expires Including Functionality
     };
 
+    const ApproveMedicine = (item) => {
+      selectAutoCompleteData(item);
+      SelectMedicineModalRef.current.Closer();
+      setSelectedMedician(item);
+    };
+
     const SellRef = useRef();
+
+    const MedicineShowRef = useRef();
 
     return (
       <>
@@ -161,15 +172,14 @@ export const SelectMedician = forwardRef(
           {selectedMedician && (
             <div className="flex ">
               <div className="selected-with-button">
-
-              <SellingLists
-                title="لست ها"
-                activeKey="purhase-list"
-                ref={SellRef}
-                selectedMedicine={selectedMedician}
-                button="plus"
+                <SellingLists
+                  title="لست ها"
+                  activeKey="purhase-list"
+                  ref={SellRef}
+                  selectedMedicine={selectedMedician}
+                  button="plus"
                 />
-                </div>
+              </div>
               <MedicinesLists
                 title="لست ها"
                 activeKey="medicines"
@@ -182,6 +192,10 @@ export const SelectMedician = forwardRef(
             </div>
           )}
           <BigModal title="انتخاب دارو" ref={SelectMedicineModalRef}>
+            <MedicineShowModal
+              ref={MedicineShowRef}
+              ApproveMedicine={ApproveMedicine}
+            />
             <div className="medician-select-input-box">
               <div>
                 <span className={textHighlight?.all}>همه</span> |{" "}
