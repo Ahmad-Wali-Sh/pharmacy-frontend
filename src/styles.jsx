@@ -170,5 +170,14 @@ export const SelectInputStyle = {
     textAlign: 'right',
     color: 'var(--color-ten)',
   }),
+  multiValue: (base, state) => ({
+    ...base,
+    backgroundColor: 'rgb(100,100,100)',
+    color: 'var(--color-ten)',
+    minHeight: '0.6rem',
+    height: '1.2rem',
+    position: 'relative',
+    top: '-0.2rem'
+  })
 }
 

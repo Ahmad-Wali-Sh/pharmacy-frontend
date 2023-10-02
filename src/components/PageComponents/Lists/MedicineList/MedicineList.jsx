@@ -61,23 +61,34 @@ export default function MedicineList({
     useForm();
 
   const { mutateAsync: newMedicine } = useMutation({
-    mutationFn: (data) => postDataFn(data, "medician/"),
+    mutationFn: (data) => {
+      let newdata = data;
+      newdata.delete("department");
+      if (watch("department")) {
+        watch("department").forEach((item) =>
+          newdata.append("department", item)
+        );
+      }
+
+      postDataFn(newdata, "medician/");
+    },
     onSuccess: () =>
       successFn([medicineQuery], () => {
         setActive("list");
       }),
   });
 
-  console.log(watch("department"));
-
   const { mutateAsync: handleEditMedicine } = useMutation({
     mutationFn: (data) => {
-      let newdata = data
-      for (var i = 0; i < watch('department').length; i++) {
-        newdata.append('department', watch('department')[i]);
+      let newdata = data;
+      newdata.delete("department");
+      if (watch("department")) {
+        watch("department").forEach((item) =>
+          newdata.append("department", item)
+        );
       }
-      console.log(newdata)
-      putDataFn(newdata, `medician/${editItem.id}/`)
+
+      putDataFn(newdata, `medician/${editItem.id}/`);
     },
     onSuccess: (res) =>
       successFn([medicineQuery], () => {
@@ -151,7 +162,7 @@ export default function MedicineList({
       pharm_group: item.pharm_group ? item.pharm_group : "",
       kind: item.kind ? item.kind : "",
       country: item.country ? item.country : "",
-      department: item.department ? item.department : "",
+      department: item.department ? item.department : [],
       big_company: item.big_company ? item.big_company : "",
     });
     axios(item.image)
@@ -165,7 +176,6 @@ export default function MedicineList({
         reset({
           image: file ? file : "",
         });
-        console.log(file);
       });
 
     setEditItem(item);
@@ -202,7 +212,7 @@ export default function MedicineList({
       pharm_group: "",
       kind: "",
       country: "",
-      department: "",
+      department: [],
       big_company: "",
     });
     setEditItem("");
@@ -365,6 +375,7 @@ export default function MedicineList({
             country={country}
             bigCompany={bigCompany}
             medicine={editItem}
+            department={department}
           />
           <ListFooter
             setActive={setActive}
@@ -408,6 +419,18 @@ export default function MedicineList({
 }
 
 function MedicineForm(props) {
+  // console.log(props.department.filter((depart, index) => {return (depart.id === props.medicine?.department?.[0]) && depart}))
+
+  console.log(props.medicine.department);
+  let results = props.department.filter((depart, index) => {
+    if (props.medicine) {
+      return props.medicine?.department.find((medicineDepart) => {
+        return medicineDepart === depart.id && depart;
+      });
+    }
+  });
+
+  console.log(results);
   return (
     <form>
       <div className="listing-form">
@@ -564,7 +587,7 @@ function MedicineForm(props) {
         <input {...props.register("cautions")} />
         <label>استفاده:</label>
         <input {...props.register("usages")} />
-        <label>دیپارتمنت:</label>
+        <label>سنجاق:</label>
         {/* <select className="text-input-standard" {...props.register("medicine")}>
           <option></option>
         </select> */}
@@ -588,17 +611,24 @@ function MedicineForm(props) {
           getOptionValue={(option) => option.id}
           options={props.department}
           isMulti
-          defaultValue={props.medicine?.department.find((depart) => (
-            depart.id === props.department.id ? props.department.name : 'aa'
-          ))}
-          onChange={(e) => props.setValue('department', e.map((e)=> { return [e.id]}))}
+          defaultValue={results ? results : ""}
+          onChange={(e) =>
+            props.setValue(
+              "department",
+              e.map((e) => {
+                return [e.id ? e.id : ""];
+              })
+            )
+          }
         />
         <label>انقضا:</label>
         <input type="text" {...props.register("min_expire_date")} />
         <label>توضیحات:</label>
         <input {...props.register("description")} />
-        <label>سهمیه:</label>
-        <input {...props.register("dividing_rules")} />
+        <label></label>
+        <label></label>
+        {/* <label>سهمیه:</label>
+        <input {...props.register("dividing_rules")} /> */}
         <label>بارکد:</label>
         <input type="text" {...props.register("barcode")} />
         <label>عکس:</label>
