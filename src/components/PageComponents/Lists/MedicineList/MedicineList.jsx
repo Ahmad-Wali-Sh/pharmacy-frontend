@@ -419,9 +419,6 @@ export default function MedicineList({
 }
 
 function MedicineForm(props) {
-  // console.log(props.department.filter((depart, index) => {return (depart.id === props.medicine?.department?.[0]) && depart}))
-
-  console.log(props.medicine.department);
   let results = props.department.filter((depart, index) => {
     if (props.medicine) {
       return props.medicine?.department.find((medicineDepart) => {
@@ -430,7 +427,6 @@ function MedicineForm(props) {
     }
   });
 
-  console.log(results);
   return (
     <form>
       <div className="listing-form">
@@ -588,23 +584,6 @@ function MedicineForm(props) {
         <label>استفاده:</label>
         <input {...props.register("usages")} />
         <label>سنجاق:</label>
-        {/* <select className="text-input-standard" {...props.register("medicine")}>
-          <option></option>
-        </select> */}
-        {/* <ControlledSelect
-            control={props.control}
-            name="department"
-            options={props.department}
-            placeholder=""
-            isMulti={true}
-            onChange={(e) => console.log(e)}
-            getOptionLabel={(option) => option.name}
-            getOptionValue={(option) => option.id}
-            uniqueKey={`medicine-unigue${props.department}`}
-            defaultValue={props.department?.find((c) =>
-              c.id === props.medicine?.department ? c.name : null
-            )}
-          /> */}
         <Select
           styles={SelectInputStyle}
           getOptionLabel={(option) => option.name}
