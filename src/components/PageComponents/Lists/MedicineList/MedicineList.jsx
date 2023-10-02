@@ -444,7 +444,7 @@ function MedicineForm(props) {
           name="pharm_group"
           options={props.pharmGroup}
           placeholder=""
-          getOptionLabel={(option) => option.name_english}
+          getOptionLabel={(option) => `${option.name_english} - ${option.name_persian}`}
           getOptionValue={(option) => option.id}
           uniqueKey={`medicine-unigue${props.pharmGroup}`}
           defaultValue={props.pharmGroup?.find((c) =>
@@ -470,7 +470,7 @@ function MedicineForm(props) {
             name="kind"
             options={props.kind}
             placeholder=""
-            getOptionLabel={(option) => option.name_english}
+            getOptionLabel={(option) => `${option.name_english} - ${option.name_persian}`}
             getOptionValue={(option) => option.id}
             uniqueKey={`medicine-unigue${props.kind}`}
             defaultValue={props.kind?.find((c) =>
