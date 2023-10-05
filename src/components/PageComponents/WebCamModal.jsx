@@ -26,11 +26,29 @@ function WebCamModal({ medician, setFile }) {
     setWebCamModalOpen(false);
   };
 
-  const videoConstraints = {
-    width: 500,
-    height: 500,
-    facingMode: "user",
-  };
+ 
+
+const FACING_MODE_USER = "user";
+const FACING_MODE_ENVIRONMENT = "environment";
+
+const videoConstraints = {
+  facingMode: FACING_MODE_USER
+};
+
+  const [facingMode, setFacingMode] = React.useState(FACING_MODE_USER);
+
+  const handleClick = React.useCallback(() => {
+    setFacingMode(
+      prevState =>
+        prevState === FACING_MODE_USER
+          ? FACING_MODE_ENVIRONMENT
+          : FACING_MODE_USER
+    );
+  }, []);
+
+
+
+
 
   return (
     <>
@@ -51,7 +69,11 @@ function WebCamModal({ medician, setFile }) {
         <div className="webcam">
           <Webcam
             screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
+            audio={false}
+                    videoConstraints={{
+          ...videoConstraints,
+          facingMode
+        }}
             className="webcam-camera"
           >
             {({ getScreenshot }) => (
@@ -78,6 +100,7 @@ function WebCamModal({ medician, setFile }) {
                 >
                   Capture
                 </button>
+                <button onClick={handleClick}>Switch camera</button>
               </>
             )}
           </Webcam>
@@ -87,5 +110,4 @@ function WebCamModal({ medician, setFile }) {
     </>
   );
 }
-
 export default WebCamModal;

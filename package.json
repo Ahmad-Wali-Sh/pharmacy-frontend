@@ -42,6 +42,7 @@
     "react-tiny-popover": "^7.2.4",
     "react-to-print": "^2.14.13",
     "react-toastify": "^9.1.2",
+    "react-upload-image": "^1.1.0",
     "react-webcam": "^7.1.1",
     "react-window": "^1.8.9",
     "react-windowed-select": "^5.1.0",
