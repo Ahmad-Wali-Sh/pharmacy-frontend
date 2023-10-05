@@ -1,7 +1,5 @@
 import React, { useRef } from "react";
-import Modal from "react-modal";
 import LoadingDNA from "../../PageComponents/LoadingDNA";
-import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";

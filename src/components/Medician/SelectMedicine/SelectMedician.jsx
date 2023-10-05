@@ -114,36 +114,32 @@ export const SelectMedician = forwardRef(
       queryKey: [
         `medician/?${
           isBarcode(stringArray) ? "barcode__contains" : "brand_name"
-        }=${stringArray[0] ? stringArray[0] : ""}&ml=${
-          stringArray[1] ? stringArray[1] : ""
-        }&search=${stringArray[2] ? stringArray[2] : ""}&kind__name_persian=${
-          stringArray[3] ? stringArray[3] : ""
+        }=${stringArray[0] ? encodeURIComponent(stringArray[0]) : ""}&ml=${
+          stringArray[1] ? encodeURIComponent(stringArray[1]) : ""
+        }&search=${stringArray[2] ? encodeURIComponent(stringArray[2]) : ""}&kind__name_persian=${
+          stringArray[3] ? encodeURIComponent(stringArray[3]) : ""
         }&kind__name_english=${
-          stringArray[4] ? stringArray[4] : ""
+          stringArray[4] ? encodeURIComponent(stringArray[4]) : ""
         }&country__name=${
-          stringArray[5] ? stringArray[5] : ""
-        }&big_company__name=${stringArray[6] ? stringArray[6] : ""}&all=${
-          stringArray[7] ? stringArray[7] : ""
+          stringArray[5] ? encodeURIComponent(stringArray[5]) : ""
+        }&big_company__name=${stringArray[6] ? encodeURIComponent(stringArray[6]) : ""}&all=${
+          stringArray[7] ? encodeURIComponent(stringArray[7]) : ""
         }`,
       ],
       enabled: stringArray.join("").replace(/\s/g, "") != "",
     });
 
     const handleMedicineSelect = (item) => {
-      // selectAutoCompleteData(item);
-      // SelectMedicineModalRef.current.Closer();
-      // setSelectedMedician(item);
       MedicineShowRef.current.Opener(item);
-
-      // UpdateChangedMedicine(item)
-      // Medicine With Including Functionality
-      // Medicine Expires Including Functionality
     };
-
+    
     const ApproveMedicine = (item) => {
       selectAutoCompleteData(item);
       SelectMedicineModalRef.current.Closer();
       setSelectedMedician(item);
+      UpdateChangedMedicine(item)
+      // Medicine With Including Functionality
+      // Medicine Expires Including Functionality
     };
 
     const SellRef = useRef();

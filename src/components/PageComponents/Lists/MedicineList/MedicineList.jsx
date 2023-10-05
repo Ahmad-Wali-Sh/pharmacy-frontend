@@ -127,7 +127,7 @@ export default function MedicineList({
     queryKey: ["department/"],
   });
 
-  let medicineQuery = `medician/?brand_name=${filter.brand_name}&search=${filter.generic_name}&ml=${filter.ml}&kind__name_persian=${filter.kind_persian}&kind__name_english=${filter.kind_english}&country__name=${filter.country}&big_company__name=${filter.company}&page=${filter.page}`;
+  let medicineQuery = `medician/?brand_name=${encodeURIComponent(filter.brand_name)}&search=${encodeURIComponent(filter.generic_name)}&ml=${encodeURIComponent(filter.ml)}&kind__name_persian=${encodeURIComponent(filter.kind_persian)}&kind__name_english=${encodeURIComponent(filter.kind_english)}&country__name=${encodeURIComponent(filter.country)}&big_company__name=${encodeURIComponent(filter.company)}&page=${filter.page}`;
   const { data: medicines, refetch: getTwiceMedicine } = useQuery({
     queryKey: [medicineQuery],
     enabled: true,
