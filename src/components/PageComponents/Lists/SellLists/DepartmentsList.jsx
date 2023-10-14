@@ -91,6 +91,17 @@ export default function DepartmentsList() {
   let departmentQuery = `department/?name=${filter.name}`;
   const { data: departments } = useQuery([departmentQuery]);
 
+  const listRef = useRef(null)
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    listRef.current.scrollTo({ behavior: 'smooth', top: scrollPosition })
+  }
+
+  useEffect(() => {
+    active == 'list' && handleScroll()
+  }, [active])
+
   useEffect(() => {
     const handleKeyDowns = (e) => {
       console.log(e.key);
@@ -152,7 +163,8 @@ export default function DepartmentsList() {
             <h4>شروع روند</h4>
             <h4>بیشتر</h4>
           </ListHeader>
-          <ListMap>
+          <div className="patient-list-box" ref={listRef}>
+
             {departments?.map((department, key) => (
               <div className="patient-list-item">
                 <h4>{key + 1}</h4>
@@ -165,6 +177,7 @@ export default function DepartmentsList() {
                 <div className="flex">
                   <InfoButton
                     Func={() => {
+                      setScrollPosition(listRef.current?.scrollTop)
                       setActive("edit");
                       FormResetToItem(department);
                     }}
@@ -177,7 +190,7 @@ export default function DepartmentsList() {
                 </div>
               </div>
             ))}
-          </ListMap>
+            </div>
           <ListFooter setActive={setActive} reset={reset} user={user} />
         </>
       );

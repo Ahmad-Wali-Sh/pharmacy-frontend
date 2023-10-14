@@ -76,6 +76,17 @@ export default function CitiesLists() {
   let cityQuery = `city/`;
   const { data: cities } = useQuery([cityQuery]);
 
+  const listRef = useRef(null)
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    listRef.current.scrollTo({ behavior: 'smooth', top: scrollPosition })
+  }
+
+  useEffect(() => {
+    active == 'list' && handleScroll()
+  }, [active])
+
   useEffect(() => {
     const handleKeyDowns = (e) => {
       console.log(e.key);
@@ -132,7 +143,7 @@ export default function CitiesLists() {
             <h4>نام</h4>
             <h4>بیشتر</h4>
           </ListHeader>
-          <ListMap>
+          <div className="patient-list-box" ref={listRef}>
             {cities?.map((city, key) => (
               <div className="patient-list-item">
                 <h4>{key + 1}</h4>
@@ -140,6 +151,7 @@ export default function CitiesLists() {
                 <div className="flex">
                   <InfoButton
                     Func={() => {
+                      setScrollPosition(listRef.current?.scrollTop)
                       setActive("edit");
                       FormResetToItem(city);
                     }}
@@ -152,7 +164,7 @@ export default function CitiesLists() {
                 </div>
               </div>
             ))}
-          </ListMap>
+          </div>
           <ListFooter setActive={setActive} reset={reset} user={user} />
         </>
       );

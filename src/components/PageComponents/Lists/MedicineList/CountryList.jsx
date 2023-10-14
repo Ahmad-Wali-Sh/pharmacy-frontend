@@ -66,19 +66,20 @@ export default function CountryList() {
       name: item.name ? item.name : "",
     });
 
-    item.image && axios(item.image)
-    .then((response) => response.blob())
-    .then((blob) => {
-      const file = new File(
-        [blob],
-        item.name_english ? item.name_english + ".jpeg" : "no_name.jpeg",
-        { type: blob.type }
-      );
-      reset({
-        image: file ? file : ''
-      });
-      console.log(file)
-    });
+    item.image &&
+      axios(item.image)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const file = new File(
+            [blob],
+            item.name_english ? item.name_english + ".jpeg" : "no_name.jpeg",
+            { type: blob.type }
+          );
+          reset({
+            image: file ? file : "",
+          });
+          console.log(file);
+        });
 
     setEditItem(item);
     setImage(item.image ? new URL(item.image).pathname.slice(16) : "");
@@ -90,11 +91,22 @@ export default function CountryList() {
       image: "",
     });
     setEditItem("");
-    setImage('')
+    setImage("");
   };
 
   let countryQuery = `country/?name=${filter.name}&ordering=id`;
   const { data: countries } = useQuery([countryQuery]);
+
+  const listRef = useRef(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    listRef.current.scrollTo({ behavior: "smooth", top: scrollPosition });
+  };
+
+  useEffect(() => {
+    active == "list" && handleScroll();
+  }, [active]);
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
@@ -153,15 +165,23 @@ export default function CountryList() {
             <h4>عکس</h4>
             <h4>بیشتر</h4>
           </ListHeader>
-          <ListMap>
+          <div className="patient-list-box" ref={listRef}>
             {countries?.map((country, key) => (
               <div className="patient-list-item">
                 <h4>{key + 1}</h4>
                 <h4>{country.name}</h4>
-                <img src={country.image ? new URL(country.image).pathname.slice(16) : ""} className='image-preview-list'/>
+                <img
+                  src={
+                    country.image
+                      ? new URL(country.image).pathname.slice(16)
+                      : ""
+                  }
+                  className="image-preview-list"
+                />
                 <div className="flex">
                   <InfoButton
                     Func={() => {
+                      setScrollPosition(listRef.current?.scrollTop);
                       setActive("edit");
                       FormResetToItem(country);
                     }}
@@ -174,7 +194,7 @@ export default function CountryList() {
                 </div>
               </div>
             ))}
-          </ListMap>
+          </div>
           <ListFooter setActive={setActive} reset={reset} user={user} />
         </>
       );
@@ -190,25 +210,27 @@ export default function CountryList() {
               type="file"
               accept="image/*"
               onChange={(e) => {
-                  setValue("image", e.target.files[0])
-                  setImage(URL.createObjectURL(e.target.files[0]))
-                }}
+                setValue("image", e.target.files[0]);
+                setImage(URL.createObjectURL(e.target.files[0]));
+              }}
             />
             <label>نمایش:</label>
-            {imagePreview && <div className="flex">
-            <div
-              className="modal-close-btn"
-              onClick={() => {
-                reset({
-                  image: "",
-                });
-                setImage("");
-              }}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </div>
-            <img src={imagePreview} className='image-preview-kind'/>
-            </div>}
+            {imagePreview && (
+              <div className="flex">
+                <div
+                  className="modal-close-btn"
+                  onClick={() => {
+                    reset({
+                      image: "",
+                    });
+                    setImage("");
+                  }}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
+                <img src={imagePreview} className="image-preview-kind" />
+              </div>
+            )}
           </Form>
           <ListFooter
             setActive={setActive}
@@ -223,32 +245,34 @@ export default function CountryList() {
       return (
         <>
           <Form>
-          <label>نام:</label>
+            <label>نام:</label>
             <input type="text" {...register("name")} />
             <label>عکس:</label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => {
-                  setValue("image", e.target.files[0])
-                  setImage(URL.createObjectURL(e.target.files[0]))
-                }}
+                setValue("image", e.target.files[0]);
+                setImage(URL.createObjectURL(e.target.files[0]));
+              }}
             />
             <label>نمایش:</label>
-            {imagePreview && <div className="flex">
-            <div
-              className="modal-close-btn"
-              onClick={() => {
-                reset({
-                  image: "",
-                });
-                setImage("");
-              }}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </div>
-            <img src={imagePreview} className='image-preview-kind'/>
-            </div>}
+            {imagePreview && (
+              <div className="flex">
+                <div
+                  className="modal-close-btn"
+                  onClick={() => {
+                    reset({
+                      image: "",
+                    });
+                    setImage("");
+                  }}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
+                <img src={imagePreview} className="image-preview-kind" />
+              </div>
+            )}
           </Form>
           <ListFooter
             setActive={setActive}

@@ -110,6 +110,17 @@ export default function Companies() {
   let CompaniesQuery = `pharm-companies/?search=${filter.search}`;
   const { data: pharmCompanies } = useQuery([CompaniesQuery]);
 
+  const listRef = useRef(null)
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    listRef.current.scrollTo({ behavior: 'smooth', top: scrollPosition })
+  }
+
+  useEffect(() => {
+    active == 'list' && handleScroll()
+  }, [active])
+
   useEffect(() => {
     const handleKeyDowns = (e) => {
       console.log(e.key);
@@ -169,7 +180,7 @@ export default function Companies() {
             <h4>شهر</h4>
             <h4>بیشتر</h4>
           </ListHeader>
-          <ListMap>
+          <div className="patient-list-box" ref={listRef}>
             {pharmCompanies?.map((finalRegister, key) => (
               <div className="patient-list-item">
                 <h4>{key + 1}</h4>
@@ -180,6 +191,7 @@ export default function Companies() {
                 <div className="flex">
                   <InfoButton
                     Func={() => {
+                      setScrollPosition(listRef.current?.scrollTop)
                       setActive("edit");
                       FormResetToItem(finalRegister);
                     }}
@@ -192,7 +204,7 @@ export default function Companies() {
                 </div>
               </div>
             ))}
-          </ListMap>
+          </div>
           <ListFooter setActive={setActive} reset={reset} user={user} />
         </>
       );

@@ -219,6 +219,17 @@ export default function MedicineList({
     setImage("");
   };
 
+  const listRef = useRef(null)
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    listRef.current.scrollTo({ behavior: 'smooth', top: scrollPosition })
+  }
+
+  useEffect(() => {
+    active == 'list' && handleScroll()
+  }, [active])
+
   useEffect(() => {
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
@@ -323,7 +334,7 @@ export default function MedicineList({
             <h4>قیمت</h4>
             <h4>بیشتر</h4>
           </ListHeader>
-          <ListMap>
+          <div className="patient-list-box" ref={listRef} >
             {medicines?.results.map((medicine, key) => (
               <div className="patient-list-item-medi" key={medicine.id}>
                 <h4>{medicine.id}</h4>
@@ -339,6 +350,7 @@ export default function MedicineList({
                 <div className="flex">
                   <InfoButton
                     Func={() => {
+                      setScrollPosition(listRef.current?.scrollTop);
                       setActive("edit");
                       FormResetToItem(medicine);
                       setEditItem(medicine);
@@ -347,7 +359,7 @@ export default function MedicineList({
                 </div>
               </div>
             ))}
-          </ListMap>
+            </div>
           <ListFooter
             setActive={setActive}
             reset={reset}
