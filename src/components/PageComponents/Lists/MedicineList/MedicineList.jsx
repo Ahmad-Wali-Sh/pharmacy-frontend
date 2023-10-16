@@ -610,13 +610,13 @@ function MedicineForm(props) {
           style={{ direction: "ltr", textAlign: "right" }}
         />
         <label>حداقل:</label>
-        <input type="text" className={props.errors?.minmum_existence ? "error-input" : ""} {...props.register("minmum_existence", {required: true})} />
+        <input type="text"  {...props.register("minmum_existence")} />
         <label>حداکثر:</label>
-        <input type="text" className={props.errors?.maximum_existence ? "error-input" : ""} {...props.register("maximum_existence", {required: true})} />
+        <input type="text"  {...props.register("maximum_existence")} />
         <label>ت.پاکت:</label>
-        <input type="text" className={props.errors?.no_pocket ? "error-input" : ""} {...props.register("no_pocket", {required: true})} />
+        <input type="text"  {...props.register("no_pocket")} />
         <label>ت.قطی:</label>
-        <input type="text" className={props.errors?.no_box ? "error-input" : ""} {...props.register("no_box", {required: true})} />
+        <input type="text"  {...props.register("no_box")} />
 
         <div className="approving-box">
           <label>فعال:</label>
