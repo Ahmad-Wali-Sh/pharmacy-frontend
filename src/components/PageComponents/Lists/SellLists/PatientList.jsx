@@ -37,7 +37,7 @@ export default function PatientList() {
   const { mutateAsync: newPatient } = useMutation({
     mutationFn: (data) => postDataFn(data, "patient/"),
     onSuccess: () =>
-      successFn([patientQuery, "patient/"], () => {
+      successFn([patientQuery], () => {
         setActive("list");
       }),
   });
@@ -45,7 +45,7 @@ export default function PatientList() {
   const { mutateAsync: handleEditPatient } = useMutation({
     mutationFn: (data) => putDataFn(data, `patient/${editPatient.id}/`),
     onSuccess: () =>
-      successFn([patientQuery, "patient/"], () => {
+      successFn([patientQuery], () => {
         setActive("list");
       }),
   });
@@ -90,7 +90,7 @@ export default function PatientList() {
   const { mutateAsync: deletePatient } = useMutation({
     mutationFn: (id) => deleteDataFn(`patient/${id}/`),
     onSuccess: () =>
-      successFn([patientQuery, "patient/"], () => {
+      successFn([patientQuery], () => {
         setActive("list");
       }),
     onError: (e) => {

@@ -71,12 +71,6 @@ function PrescriptionForm({ prescriptionThrough, update }) {
               handleFormData(data, newPrescription, user)
             )();
             break;
-          case "x":
-          case "X":
-          case "ط":
-            e.preventDefault();
-            deletePrescription();
-            break;
           case "s":
           case "S":
           case "س":

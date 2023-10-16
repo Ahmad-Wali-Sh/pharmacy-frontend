@@ -3533,6 +3533,16 @@ input[type="date"]:disabled {
   border: 2px solid white
 }
 
+.error-input {
+  /* border: 1px solid red !important; */
+  box-shadow: 1px 1px 10px red !important;
+}
+
+.error-text-input {
+  position:absolute;
+  margin-top: 1rem;
+}
+
 .medicine-show-info {
   width: 100%;
   height: 100%;

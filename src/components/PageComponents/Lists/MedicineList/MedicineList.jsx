@@ -57,8 +57,17 @@ export default function MedicineList({
     }
   }, [edit]);
 
-  const { register, handleSubmit, reset, control, watch, getValues, setValue } =
-    useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    watch,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
 
   const { mutateAsync: newMedicine } = useMutation({
     mutationFn: (data) => {
@@ -91,10 +100,16 @@ export default function MedicineList({
       putDataFn(newdata, `medician/${editItem.id}/`);
     },
     onSuccess: (res) =>
-      successFn([medicineQuery], () => {
+      successFn("", async () => {
         setActive("list");
-        setSelectedMedician && setSelectedMedician(res.data);
-        selectAutoCompleteData(res.data);
+        if (res?.data) {
+          setSelectedMedician && res.data && setSelectedMedician(res.data);
+          selectAutoCompleteData(res.data);
+        }
+        await queryClient.invalidateQueries({
+          predicate: (query) => query.queryKey[0].startsWith("medician"),
+        });
+        getTwiceMedicine();
       }),
   });
 
@@ -127,10 +142,21 @@ export default function MedicineList({
     queryKey: ["department/"],
   });
 
-  let medicineQuery = `medician/?brand_name=${encodeURIComponent(filter.brand_name)}&search=${encodeURIComponent(filter.generic_name)}&ml=${encodeURIComponent(filter.ml)}&kind__name_persian=${encodeURIComponent(filter.kind_persian)}&kind__name_english=${encodeURIComponent(filter.kind_english)}&country__name=${encodeURIComponent(filter.country)}&big_company__name=${encodeURIComponent(filter.company)}&page=${filter.page}`;
+  let medicineQuery = `medician/?brand_name=${encodeURIComponent(
+    filter.brand_name
+  )}&search=${encodeURIComponent(filter.generic_name)}&ml=${encodeURIComponent(
+    filter.ml
+  )}&kind__name_persian=${encodeURIComponent(
+    filter.kind_persian
+  )}&kind__name_english=${encodeURIComponent(
+    filter.kind_english
+  )}&country__name=${encodeURIComponent(
+    filter.country
+  )}&big_company__name=${encodeURIComponent(filter.company)}&page=${
+    filter.page
+  }`;
   const { data: medicines, refetch: getTwiceMedicine } = useQuery({
     queryKey: [medicineQuery],
-    enabled: true,
   });
 
   const FormResetToItem = (item) => {
@@ -219,16 +245,16 @@ export default function MedicineList({
     setImage("");
   };
 
-  const listRef = useRef(null)
+  const listRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const handleScroll = () => {
-    listRef.current.scrollTo({ behavior: 'smooth', top: scrollPosition })
-  }
+    listRef.current.scrollTo({ behavior: "smooth", top: scrollPosition });
+  };
 
   useEffect(() => {
-    active == 'list' && handleScroll()
-  }, [active])
+    active == "list" && handleScroll();
+  }, [active]);
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
@@ -334,7 +360,7 @@ export default function MedicineList({
             <h4>قیمت</h4>
             <h4>بیشتر</h4>
           </ListHeader>
-          <div className="patient-list-box" ref={listRef} >
+          <div className="patient-list-box" ref={listRef}>
             {medicines?.results.map((medicine, key) => (
               <div className="patient-list-item-medi" key={medicine.id}>
                 <h4>{medicine.id}</h4>
@@ -359,7 +385,7 @@ export default function MedicineList({
                 </div>
               </div>
             ))}
-            </div>
+          </div>
           <ListFooter
             setActive={setActive}
             reset={reset}
@@ -388,6 +414,7 @@ export default function MedicineList({
             bigCompany={bigCompany}
             medicine={editItem}
             department={department}
+            errors={errors}
           />
           <ListFooter
             setActive={setActive}
@@ -416,6 +443,7 @@ export default function MedicineList({
             bigCompany={bigCompany}
             medicine={editItem}
             department={department}
+            errors={errors}
           />
           <ListFooter
             setActive={setActive}
@@ -443,20 +471,39 @@ function MedicineForm(props) {
     <form>
       <div className="listing-form">
         <label>نام برند:</label>
-        <input type="text" {...props.register("brand_name")} />
+        <input
+          type="text"
+          className={props.errors?.brand_name ? "error-input" : ""}
+          {...props.register("brand_name", {required: true})}
+          style={{ direction: "ltr", textAlign: "right" }}
+        />
         <label>ترکیب:</label>
-        <input type="text" {...props.register("generic_name")} />
+        <input
+          type="text"
+          {...props.register("generic_name")}
+          style={{ direction: "ltr", textAlign: "right" }}
+        />
         <label>موثریت:</label>
-        <input type="text" {...props.register("ml")} />
+        <input
+          type="text"
+          {...props.register("ml")}
+          style={{ direction: "ltr", textAlign: "right" }}
+        />
         <label>وزن:</label>
-        <input type="text" {...props.register("weight")} />
+        <input
+          type="text"
+          {...props.register("weight")}
+          style={{ direction: "ltr", textAlign: "right" }}
+        />
         <label>گروپ:</label>
         <ControlledSelect
           control={props.control}
           name="pharm_group"
           options={props.pharmGroup}
           placeholder=""
-          getOptionLabel={(option) => `${option.name_english} - ${option.name_persian}`}
+          getOptionLabel={(option) =>
+            `${option.name_english} - ${option.name_persian}`
+          }
           getOptionValue={(option) => option.id}
           uniqueKey={`medicine-unigue${props.pharmGroup}`}
           defaultValue={props.pharmGroup?.find((c) =>
@@ -482,7 +529,9 @@ function MedicineForm(props) {
             name="kind"
             options={props.kind}
             placeholder=""
-            getOptionLabel={(option) => `${option.name_english} - ${option.name_persian}`}
+            getOptionLabel={(option) =>
+              `${option.name_english} - ${option.name_persian}`
+            }
             getOptionValue={(option) => option.id}
             uniqueKey={`medicine-unigue${props.kind}`}
             defaultValue={props.kind?.find((c) =>
@@ -553,17 +602,21 @@ function MedicineForm(props) {
           />
         </div>
         <label>قیمت:</label>
-        <input type="text" {...props.register("price")} />
+        <input type="text" className={props.errors?.price ? "error-input" : ""} {...props.register("price", {required: true})} />
         <label>مکان:</label>
-        <input type="text" {...props.register("location")} />
+        <input
+          type="text"
+          {...props.register("location")}
+          style={{ direction: "ltr", textAlign: "right" }}
+        />
         <label>حداقل:</label>
-        <input type="text" {...props.register("minmum_existence")} />
+        <input type="text" className={props.errors?.minmum_existence ? "error-input" : ""} {...props.register("minmum_existence", {required: true})} />
         <label>حداکثر:</label>
-        <input type="text" {...props.register("maximum_existence")} />
+        <input type="text" className={props.errors?.maximum_existence ? "error-input" : ""} {...props.register("maximum_existence", {required: true})} />
         <label>ت.پاکت:</label>
-        <input type="text" {...props.register("no_pocket")} />
+        <input type="text" className={props.errors?.no_pocket ? "error-input" : ""} {...props.register("no_pocket", {required: true})} />
         <label>ت.قطی:</label>
-        <input type="text" {...props.register("no_box")} />
+        <input type="text" className={props.errors?.no_box ? "error-input" : ""} {...props.register("no_box", {required: true})} />
 
         <div className="approving-box">
           <label>فعال:</label>
@@ -621,7 +674,11 @@ function MedicineForm(props) {
         {/* <label>سهمیه:</label>
         <input {...props.register("dividing_rules")} /> */}
         <label>بارکد:</label>
-        <input type="text" {...props.register("barcode")} />
+        <input
+          type="text"
+          {...props.register("barcode")}
+          style={{ direction: "ltr", textAlign: "right" }}
+        />
         <label>عکس:</label>
         <div className="flex">
           <input

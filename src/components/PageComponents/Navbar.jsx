@@ -11,6 +11,7 @@ function Navbar() {
       "Authorization"
     ] = `Token ${localStorage._auth}`;
   }
+
   return (
     <div className="navbar">
       <div className="navbar-elements">
@@ -30,7 +31,7 @@ function Navbar() {
             }
           />
           <div className="profile-text">
-            <h5>{auth().username}</h5>
+            <h5>{auth().first_name + " " + auth().last_name}</h5>
             <h6>{auth().email}</h6>
           </div>
         </div>

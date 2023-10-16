@@ -1,6 +1,7 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSignIn } from "react-auth-kit";
+import { toast } from "react-toastify";
 
 function Login() {
   const signIn = useSignIn();
@@ -32,26 +33,39 @@ function Login() {
                 tokenType: "Token",
                 authState: me_res.data,
               });
+              toast.success(`${me_res.data.first_name}: خوش آمدید`);
             });
           axios.defaults.headers.common[
             "Authorization"
           ] = `Token ${res.data.auth_token}`;
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error("اطلاعات وارد شده درست نمیباشد");
+        console.log(err);
+      });
   };
+
+  useEffect(() => {
+    var foo = document.querySelector("input");
+    foo.setAttribute("autoComplete", "new-password");
+  }, []);
+
+  const [readOnly, setReadonly] = useState(true)
   return (
     <div className="container">
       <div className="screen">
         <div className="screen__content">
-          <form className="login">
+          <form className="login" autoComplete="new-password">
             <h3 className="title-text">Welcome | Sharif Pharmacy</h3>
             <div className="login__field">
               <i className="login__icon fas fa-user"></i>
+
               <input
                 type="text"
                 className="login__input"
                 placeholder="User name"
+                autoComplete="new-password"
                 onChange={(e) =>
                   setFormDate({ ...formData, username: e.target.value })
                 }
@@ -62,7 +76,11 @@ function Login() {
               <input
                 type="password"
                 className="login__input"
+                autoComplete="new-password"
                 placeholder="Password"
+                readOnly={readOnly}
+                onFocus={ () => setReadonly(false)}
+                onBlur={ () => setReadonly(true)}
                 onChange={(e) =>
                   setFormDate({ ...formData, password: e.target.value })
                 }

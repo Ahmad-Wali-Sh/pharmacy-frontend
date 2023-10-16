@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <ToastContainer
       position="top-left"
-      autoClose={200}
+      autoClose={700}
       transition={Flip}
       theme="dark"
       pauseOnHover={false}

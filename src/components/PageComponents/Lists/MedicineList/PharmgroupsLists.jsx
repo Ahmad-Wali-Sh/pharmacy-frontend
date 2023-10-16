@@ -115,7 +115,6 @@ export default function PharmGroupLists() {
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
-      console.log(e.key);
       if (e.ctrlKey) {
         switch (e.key) {
           case "e":

@@ -39,7 +39,7 @@ export const deleteDataFn = (api) => {
 // it is a default success function to do its job
 export const successFn = (invalidKey, func) => {
   toast.success("درخواست موفقانه بود");
-  queryClient.invalidateQueries();
+  queryClient.invalidateQueries(invalidKey, {refetchInactive: true, refetchType: 'all'});
   func();
 };
 
