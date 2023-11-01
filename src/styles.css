@@ -564,7 +564,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   grid-area: 1 / 2 / 2 / 3;
   display: grid;
-  grid-template-columns: 0.31fr 0.9fr 0.3fr 0.9fr 0.3fr 0.9fr;
+  grid-template-columns: 6% 26% 5% 26% 5% 26%;
   grid-template-rows: 15% 15% 15% 15% 15%;
   gap: 0.7rem;
   padding: 1rem;
@@ -3150,6 +3150,11 @@ input[type="date"]:disabled {
   background-image: var(--color-five);
   cursor: pointer;
 }
+.form-button:disabled {
+  background-image: var(--color-nine);
+  color: grey;
+  cursor:not-allowed;
+}
 .alert-button {
   background-color: var(--color-nine) !important;
 }
@@ -3168,6 +3173,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   position: relative;
   top: -0.5rem;
+  height: 5vh;
 }
 
 .react-select-container {

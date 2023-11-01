@@ -1,6 +1,18 @@
-import {create } from 'zustand'
+import { create } from "zustand";
 
 export const usePrescription = create((set) => ({
-        prescription: [],
-        setPrescription: (state) => set(() => ({prescription: state})),
-}))
+  prescription: [],
+  setPrescription: (state) => set(() => ({ prescription: state })),
+}));
+export const useEntrance = create((set) => ({
+  entrance: [],
+  setEntrance: (state) => set(() => ({ entrance: state })),
+}));
+export const useEntranceTrough = create((set) => ({
+  entranceThrough: [],
+  setEntranceThrough: (state) => set(() => ({ entranceThrough: state })),
+}));
+export const useFactorTotal = create((set) => ({
+  factorTotal: [],
+  setFactorTotal: (state) => set(() => ({ factorTotal: state })),
+}));
