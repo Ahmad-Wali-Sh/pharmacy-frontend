@@ -1,27 +1,91 @@
-import { useEffect } from "react";
-import { useEntranceTrough } from "../../States/States";
-import { Reporting } from "./Reporting";
+import { useEffect, useState } from "react";
+import { useEntranceTrough, useFactorTotal } from "../../States/States";
 
-export default function EntranceReport({ setFactorTotal, FactorTotal }) {
+export default function EntranceReport() {
+  const { entranceThrough, setEntranceThrough } = useEntranceTrough();
+  const { FactorTotal, setFactorTotal } = useFactorTotal();
+  const [report, setReport] = useState({
+    number: 0,
+    total_before_discount: 0,
+    total_discount: 0,
+    total_bonous_value: 0,
+    sell_total: 0,
+    total: 0,
+    total_interest: 0,
+    net_profit: 0,
+    purchase_total: 0,
+  });
 
-    const {entranceTrough, setEntranceThrough} = useEntranceTrough()
-    
-    const [report, setReport] = useState({
-        number: 0,
-        total_before_discount: 0,
-        total_discount: 0,
-        total_bonous_value: 0,
-        sell_total: 0,
-        total: 0,
-        total_interest: 0,
-        net_profit: 0,
-        purchase_total: 0,
+  const Reporting = () => {
+    const totalInterest = () => {
+      let result = 0;
+      entranceThrough.map((through) => {
+        result += through.total_interest * through.no_box;
+        return result;
       });
+      return result;
+    };
+    const totalPurchase = () => {
+      const result = entranceThrough.reduce((total, currentValue) => {
+        return total + currentValue.number_in_factor * currentValue.each_price;
+      }, 0);
+      return result;
+    };
 
-      useEffect(() => {
-          Reporting(entranceTrough)
-      },[entranceTrough])
-    
+    const totalBeforeDiscount = () => {
+      const result = entranceThrough.reduce((total, current) => {
+        return total + current.total_purchase_currency_before;
+      }, 0);
+      return result;
+    };
+
+    const totalDiscount = () => {
+      const result = entranceThrough.reduce((total, currentValue) => {
+        return total + currentValue.discount_value;
+      }, 0);
+      return result;
+    };
+    const totalBonusValue = () => {
+      const result = entranceThrough.reduce((total, currentValue) => {
+        return total + currentValue.bonus_value;
+      }, 0);
+      return result;
+    };
+    const totalSell = () => {
+      const result = entranceThrough.reduce((total, currentValue) => {
+        return total + currentValue.total_sell;
+      }, 0);
+      return result;
+    };
+
+    const totalInterester = (
+      totalSell() +
+      totalBonusValue() +
+      totalDiscount() -
+      totalBeforeDiscount()
+    ).toFixed(1);
+    setReport({
+      number: entranceThrough.length,
+      total_before_discount: totalBeforeDiscount().toFixed(1),
+      total_discount: totalDiscount().toFixed(1),
+      total: 0,
+      total_bonous_value: totalBonusValue().toFixed(1),
+      total_interest: totalInterester,
+      total_interest_percent: (
+        (totalInterester / totalBeforeDiscount()) *
+        100
+      ).toFixed(1),
+      sell_total: totalSell().toFixed(1),
+      purchase_total: totalPurchase(),
+      purchase_after_discount: totalPurchase() - totalDiscount(),
+      grandTotal: totalBeforeDiscount() - totalDiscount(),
+    });
+  };
+
+  useEffect(() => {
+    Reporting();
+  }, [entranceThrough]);
+
   return (
     <div className="entrance-report">
       <div className="entrance-report-header">راپور</div>
@@ -68,28 +132,28 @@ export default function EntranceReport({ setFactorTotal, FactorTotal }) {
               fontSize: "0.9rem",
             }}
           >
-            {currency_name}
+            {entranceThrough?.rate_name}
           </label>
         </div>
       </div>
       <div className="entrance-report-footer">
         <button
           className="entrance-report-button"
-          onClick={front}
+          onClick={() => console.log("left")}
           tabIndex={-1}
         >
           <i class="fa-solid fa-left-long"></i>
         </button>
         <button
           className="entrance-report-button"
-          onClick={middle}
+          onClick={() => console.log("middle")}
           tabIndex={-1}
         >
           <i class="fa-solid fa-comments-dollar"></i>
         </button>
         <button
           className="entrance-report-button"
-          onClick={back}
+          onClick={() => console.log("right")}
           tabIndex={-1}
         >
           <i class="fa-solid fa-right-long"></i>

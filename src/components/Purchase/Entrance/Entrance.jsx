@@ -11,7 +11,6 @@ export default function Entrance({ button, icon, title }) {
   const TotalPriceAlertRef = useRef(null);
   const PriceAppliedAlertRef = useRef(null);
 
-
   return (
     <>
       {!button && (

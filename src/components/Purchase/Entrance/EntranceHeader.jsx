@@ -1,11 +1,23 @@
 import { DateInputSimple } from "react-hichestan-datetimepicker";
 import ControlledSelect from "../../PageComponents/ControlledSelect";
 import PurchasingLists from "../../PageComponents/Lists/PurchaseLists/PurchasingLists";
-import { ButtonGroup, FormButton } from "../../PageComponents/Buttons/Buttons";
+import {
+  ButtonGroup,
+  FormButton,
+  SubmitButton,
+} from "../../PageComponents/Buttons/Buttons";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import { useEntrance } from "../../States/States";
-import { postDataFn, putDataFn } from "../../services/API";
+import {
+  deleteDataFn,
+  handleFormData,
+  postDataFn,
+  putDataFn,
+  successFn,
+} from "../../services/API";
+import { useAuthUser } from "react-auth-kit";
+import { useState, useEffect } from "react";
 
 export default function EntranceHeader() {
   const {
@@ -15,12 +27,29 @@ export default function EntranceHeader() {
     control,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
-      defaultValues: {
-          factor_date: new Date().toISOString().slice(0,10)
-      }
+    defaultValues: {
+      final_register: "",
+      company: "",
+      store: "",
+      factor_number: "",
+      factor_date: new Date().toISOString().slice(0, 10),
+      recived_by: "",
+      deliver_by: "",
+      entrance_search: "",
+      currency: "",
+      description: "",
+      entrance_id: "",
+      total_interest: "",
+      discount_percent_entrance: "",
+      wholesale: "",
+      entrance_id: "",
+      payment_method: "",
+    },
   });
+  const user = useAuthUser();
+  const [reKey, setReKey] = useState(0);
 
   const { data: finalRegister } = useQuery("final-register");
   const { data: company } = useQuery("pharm-companies");
@@ -29,52 +58,111 @@ export default function EntranceHeader() {
   const { data: paymentMethod } = useQuery("payment-method");
   const { entrance, setEntrance } = useEntrance();
 
-  const { mutate: SubmitHandle } = useMutation({
-    mutationFn: (data) => postDataFn(data, "entrance"),
+  const { mutate: submitEntrance } = useMutation({
+    mutationFn: (data) => postDataFn(data, "entrance/"),
     onSuccess: (res) => {
       successFn("", () => {
         setEntrance(res.data);
       });
     },
   });
-  const { mutate: UpdateHandle } = useMutation({
-    mutationFn: (data) => putDataFn(data, `entrance/${entrance.id}`),
+  const { mutate: updateEntrance } = useMutation({
+    mutationFn: (data) => putDataFn(data, `entrance/${entrance.id}/`),
     onSuccess: (res) => {
       successFn("", () => {
         setEntrance(res.data);
+        reset({ isDirty: false });
+      });
+    },
+  });
+  const { mutate: deleteEntrance } = useMutation({
+    mutationFn: () => deleteDataFn(`entrance/${entrance.id}/`),
+    onSuccess: () => {
+      successFn("", () => {
+        newEntrance();
       });
     },
   });
 
+  const newEntrance = () => {
+    setReKey((prev) => prev + 1);
+    setEntrance([]);
+    reset({
+      final_register: "",
+      company: "",
+      store: "",
+      factor_number: "",
+      recived_by: "",
+      deliver_by: "",
+      factor_date: new Date().toISOString().slice(0, 10),
+      entrance_search: "",
+      currency: "",
+      description: "",
+      entrance_id: "",
+      total_interest: "",
+      discount_percent_entrance: "",
+      wholesale: "",
+      entrance_id: "",
+      payment_method: "",
+    });
+  };
 
-  const SearchHandle = () => {
-      
-  }
+  const revertEntrance = () => {
+    setReKey((prev) => prev + 1);
+    reset({
+      final_register: entrance?.final_register,
+      company: entrance?.company,
+      store: entrance?.store,
+      factor_number: entrance?.factor_number ? entrance?.factor_number : '',
+      factor_date: entrance?.factor_date?.slice(0, 10),
+      recived_by: entrance?.recived_by,
+      deliver_by: entrance?.deliver_by,
+      entrance_search: "",
+      currency: entrance?.currency,
+      description: entrance?.description,
+      entrance_id: "",
+      total_interest: entrance?.total_interest,
+      discount_percent_entrance: entrance?.discount_percent_entrance,
+      wholesale: entrance?.wholesale,
+      entrance_id: entrance?.id,
+      payment_method: entrance?.payment_method,
+    });
+  };
 
+  const { refetch: searchEntrance } = useQuery({
+    queryKey: [`entrance/${watch("entrance_search")}/`],
+    enabled: false,
+    onSuccess: (res) => {
+      successFn("", () => {
+        setEntrance(res);
+      });
+    },
+  });
 
-  const DeleteHandle = () => {
-
-  }
-
-  const ResetHandle = () => {
-
-  }
-
-  const NewHandle = () => {
-      
-  }
+  useEffect(() => {
+    revertEntrance()
+  }, [entrance]);
 
   return (
-    <form className="entrance-entrance" onSubmit={() => handleSubmit(SubmitHandle)}>
+    <form
+      className="entrance-entrance"
+      onSubmit={handleSubmit((data) =>
+        handleFormData(
+          data,
+          entrance.id ? updateEntrance : submitEntrance,
+          user
+        )
+      )}
+    >
       <label>وضعیت:</label>
       <ControlledSelect
-        control={control} // tabIndex={0}
+        control={control}
         name="final_register"
         options={finalRegister}
         placeholder=""
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option.id}
-        uniqueKey={`entrance-unique${entrance.id}`}
+        uniqueKey={`entrance-unique${reKey}`}
         defaultValue={finalRegister?.find((c) =>
           c.id === entrance?.final_register ? c.name : ""
         )}
@@ -91,7 +179,7 @@ export default function EntranceHeader() {
           placeholder=""
           getOptionLabel={(option) => option.name}
           getOptionValue={(option) => option.id}
-          uniqueKey={`entrance-unique${entrance.id}`}
+          uniqueKey={`entrance-unique${reKey}`}
           defaultValue={company?.find((c) =>
             c.id === entrance?.company ? c.name : ""
           )}
@@ -107,7 +195,7 @@ export default function EntranceHeader() {
           placeholder=""
           getOptionLabel={(option) => option.name}
           getOptionValue={(option) => option.id}
-          uniqueKey={`entrance-unique${entrance.id}`}
+          uniqueKey={`entrance-unique${reKey}`}
           defaultValue={store?.find((c) =>
             c.id === entrance?.store ? c.name : ""
           )}
@@ -117,8 +205,8 @@ export default function EntranceHeader() {
       <label>تاریخ:</label>
 
       <DateInputSimple
-        onChange={(res) => setValue('factor_date', res.target.value)}
-        value={watch('factor_date')}
+        onChange={(res) => setValue("factor_date", res.target.value)}
+        value={watch("factor_date")}
       />
       <label>شماره:</label>
       <input
@@ -137,16 +225,15 @@ export default function EntranceHeader() {
           disabled
           tabIndex={-1}
         />
-        <form
-          className="search-form"
-          // onSubmit={props.handleSubmit(props.SearchSubmit)}
-          tabIndex={-1}
-        >
+        <form className="search-form" tabIndex={-1}>
           <input type="text" {...register("entrance_search")} tabIndex={-1} />
           <button
             className="search-button-box"
             type="submit"
-            //   onClick={props.handleSubmit(props.SearchSubmit)}
+            onClick={(e) => {
+              e.preventDefault();
+              searchEntrance(e.target.value);
+            }}
             tabIndex={-1}
           >
             <i class="fa-brands fa-searchengin"></i>
@@ -180,7 +267,7 @@ export default function EntranceHeader() {
         placeholder=""
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option.id}
-        uniqueKey={`entrance-unique${entrance.id}`}
+        uniqueKey={`entrance-unique${reKey}`}
         defaultValue={currency?.find((c) =>
           c.id === entrance?.currency ? c.name : ""
         )}
@@ -194,7 +281,7 @@ export default function EntranceHeader() {
         placeholder=""
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option.id}
-        uniqueKey={`entrance-unique${entrance.id}`}
+        uniqueKey={`entrance-unique${reKey}`}
         defaultValue={paymentMethod?.find((c) =>
           c.id === entrance?.payment_method ? c.name : ""
         )}
@@ -249,16 +336,17 @@ export default function EntranceHeader() {
         {entrance?.image ? "Show_Photo" : ""}
       </a>
       <ButtonGroup>
-        <FormButton name="حذف" Func={() => console.log("حذف")} />
+        <FormButton name="حذف" Func={() => deleteEntrance()} />
         <FormButton
           name="ریسیت"
-          Func={() => console.log("reset")}
-          disabled={true}
+          className="revert-button"
+          Func={() => revertEntrance()}
+          disabled={entrance?.id && isDirty == true ? false : true}
         />
-        <FormButton name="جدید" Func={() => console.log("new")} />
-        <FormButton
-          Func={() => console.log("submit")}
-          name={entrance ? "آپدیت" : "ثبت"}
+        <FormButton name="جدید" Func={() => newEntrance()} />
+        <SubmitButton
+          Func={() => console.log("submited")}
+          name={entrance?.id ? "آپدیت" : "ثبت"}
         />
       </ButtonGroup>
     </form>

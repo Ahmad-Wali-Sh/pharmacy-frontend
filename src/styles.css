@@ -490,6 +490,13 @@ button:focus {
   cursor: pointer;
 }
 
+.revert-button {
+  background-color: var(--color-seventh) !important;
+}
+.revert-button:disabled {
+  background-color: var(--color-nine) !important;
+}
+
 /* Entrance */
 
 .entrance-box {
