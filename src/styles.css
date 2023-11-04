@@ -3188,6 +3188,11 @@ input[type="date"]:disabled {
   min-height: 10px;
 }
 
+.react-select-container-error {
+  box-shadow: 1px 1px 10px red !important;
+  border-radius: 1rem !important;
+} 
+
 .test {
   height: 1rem;
 }

@@ -87,24 +87,6 @@ export default function EntranceHeader() {
   const newEntrance = () => {
     setReKey((prev) => prev + 1);
     setEntrance([]);
-    reset({
-      final_register: "",
-      company: "",
-      store: "",
-      factor_number: "",
-      recived_by: "",
-      deliver_by: "",
-      factor_date: new Date().toISOString().slice(0, 10),
-      entrance_search: "",
-      currency: "",
-      description: "",
-      entrance_id: "",
-      total_interest: "",
-      discount_percent_entrance: "",
-      wholesale: "",
-      entrance_id: "",
-      payment_method: "",
-    });
   };
 
   const revertEntrance = () => {
@@ -113,14 +95,13 @@ export default function EntranceHeader() {
       final_register: entrance?.final_register,
       company: entrance?.company,
       store: entrance?.store,
-      factor_number: entrance?.factor_number ? entrance?.factor_number : '',
+      factor_number: entrance?.factor_number ? entrance?.factor_number : "",
       factor_date: entrance?.factor_date?.slice(0, 10),
       recived_by: entrance?.recived_by,
       deliver_by: entrance?.deliver_by,
       entrance_search: "",
       currency: entrance?.currency,
       description: entrance?.description,
-      entrance_id: "",
       total_interest: entrance?.total_interest,
       discount_percent_entrance: entrance?.discount_percent_entrance,
       wholesale: entrance?.wholesale,
@@ -140,7 +121,27 @@ export default function EntranceHeader() {
   });
 
   useEffect(() => {
-    revertEntrance()
+    setReKey((prev) => prev + 1);
+    reset({
+      final_register: entrance.final_register || "",
+      company: entrance.company || "",
+      store: entrance.store || "",
+      factor_number: entrance.factor_number || "",
+      factor_date:
+        entrance.factor_date?.slice(0, 10) ||
+        new Date().toISOString().slice(0, 10),
+      recived_by: entrance.recived_by || "",
+      deliver_by: entrance.deliver_by || "",
+      entrance_search: "",
+      currency: entrance.currency || "",
+      description: entrance.description || "",
+      total_interest: entrance.total_interest || "",
+      discount_percent_entrance: entrance.discount_percent_entrance || "",
+      wholesale: entrance.wholesale || "",
+      entrance_id: entrance.id || "",
+      payment_method: entrance.payment_method || "",
+    });
+    entrance.id && revertEntrance();
   }, [entrance]);
 
   return (
@@ -158,6 +159,8 @@ export default function EntranceHeader() {
       <ControlledSelect
         control={control}
         name="final_register"
+        error={errors.final_register ? true : false}
+        required={true}
         options={finalRegister}
         placeholder=""
         getOptionLabel={(option) => option.name}
@@ -175,6 +178,8 @@ export default function EntranceHeader() {
         <ControlledSelect
           control={control}
           name="company"
+          error={errors.company ? true : false}
+          required={true}
           options={company}
           placeholder=""
           getOptionLabel={(option) => option.name}
@@ -192,6 +197,8 @@ export default function EntranceHeader() {
           control={control}
           name="store"
           options={store}
+          error={errors.store ? true : false}
+          required={true}
           placeholder=""
           getOptionLabel={(option) => option.name}
           getOptionValue={(option) => option.id}
@@ -203,7 +210,6 @@ export default function EntranceHeader() {
         />
       </div>
       <label>تاریخ:</label>
-
       <DateInputSimple
         onChange={(res) => setValue("factor_date", res.target.value)}
         value={watch("factor_date")}
@@ -265,6 +271,8 @@ export default function EntranceHeader() {
         name="currency"
         options={currency}
         placeholder=""
+        error={errors.currency ? true : false}
+        required={true}
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option.id}
         uniqueKey={`entrance-unique${reKey}`}
@@ -279,6 +287,8 @@ export default function EntranceHeader() {
         name="payment_method"
         options={paymentMethod}
         placeholder=""
+        error={errors.payment_method ? true : false}
+        required={true}
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option.id}
         uniqueKey={`entrance-unique${reKey}`}
@@ -294,8 +304,10 @@ export default function EntranceHeader() {
         <input
           type="text"
           defaultValue={entrance?.total_interest}
-          {...register("total_interest")}
-          className="entrance--inputs"
+          {...register("total_interest", { required: true })}
+          className={`entrance--inputs ${
+            errors.total_interest ? "error-input" : ""
+          }`}
         />
         <lable>تخفیف%:</lable>
         <input
@@ -336,7 +348,11 @@ export default function EntranceHeader() {
         {entrance?.image ? "Show_Photo" : ""}
       </a>
       <ButtonGroup>
-        <FormButton name="حذف" Func={() => deleteEntrance()} />
+        <FormButton
+          name="حذف"
+          Func={() => deleteEntrance()}
+          disabled={entrance?.id ? false : true}
+        />
         <FormButton
           name="ریسیت"
           className="revert-button"
@@ -347,6 +363,7 @@ export default function EntranceHeader() {
         <SubmitButton
           Func={() => console.log("submited")}
           name={entrance?.id ? "آپدیت" : "ثبت"}
+          disabled={errors.final_register ? true : false}
         />
       </ButtonGroup>
     </form>

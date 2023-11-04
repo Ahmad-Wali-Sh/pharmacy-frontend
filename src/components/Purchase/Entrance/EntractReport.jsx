@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { useEntranceTrough, useFactorTotal } from "../../States/States";
+import { useQuery } from "react-query";
+import { useEntrance, useEntranceTrough, useFactorTotal } from "../../States/States";
 
 export default function EntranceReport() {
-  const { entranceThrough, setEntranceThrough } = useEntranceTrough();
+  // const { entranceThrough, setEntranceThrough } = useEntranceTrough();
+
+  const { entrance, setEntrance} = useEntrance()
+  const { data: entranceThrough } = useQuery(`entrance-throug/?entrance=${entrance.id}`)
+
   const { FactorTotal, setFactorTotal } = useFactorTotal();
   const [report, setReport] = useState({
     number: 0,
@@ -19,53 +24,52 @@ export default function EntranceReport() {
   const Reporting = () => {
     const totalInterest = () => {
       let result = 0;
-      entranceThrough.map((through) => {
+      entranceThrough?.map((through) => {
         result += through.total_interest * through.no_box;
         return result;
       });
-      return result;
+      return result ? result : 0;
     };
     const totalPurchase = () => {
-      const result = entranceThrough.reduce((total, currentValue) => {
+      const result = entranceThrough?.reduce((total, currentValue) => {
         return total + currentValue.number_in_factor * currentValue.each_price;
       }, 0);
-      return result;
+      return result ? result : 0;
     };
-
     const totalBeforeDiscount = () => {
-      const result = entranceThrough.reduce((total, current) => {
+      const result = entranceThrough?.reduce((total, current) => {
         return total + current.total_purchase_currency_before;
       }, 0);
-      return result;
+      return result ? result : 0;
     };
-
     const totalDiscount = () => {
-      const result = entranceThrough.reduce((total, currentValue) => {
+      const result = entranceThrough?.reduce((total, currentValue) => {
         return total + currentValue.discount_value;
       }, 0);
-      return result;
+      return result ? result : 0;
     };
     const totalBonusValue = () => {
-      const result = entranceThrough.reduce((total, currentValue) => {
+      const result = entranceThrough?.reduce((total, currentValue) => {
         return total + currentValue.bonus_value;
       }, 0);
-      return result;
+      return result ? result : 0;
     };
     const totalSell = () => {
-      const result = entranceThrough.reduce((total, currentValue) => {
+      const result = entranceThrough?.reduce((total, currentValue) => {
         return total + currentValue.total_sell;
       }, 0);
-      return result;
+      return result ? result : 0;
     };
-
     const totalInterester = (
       totalSell() +
       totalBonusValue() +
       totalDiscount() -
       totalBeforeDiscount()
     ).toFixed(1);
+
+    
     setReport({
-      number: entranceThrough.length,
+      number: entranceThrough?.length,
       total_before_discount: totalBeforeDiscount().toFixed(1),
       total_discount: totalDiscount().toFixed(1),
       total: 0,

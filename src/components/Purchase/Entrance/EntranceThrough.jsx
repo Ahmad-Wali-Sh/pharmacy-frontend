@@ -1,8 +1,11 @@
 import { SelectMedician } from "../../Medician/SelectMedicine/SelectMedician";
 import { DateInputSimple } from "react-hichestan-datetimepicker";
-import { useEffect, useRef } from "react";
-import { useEntranceTrough, useFactorTotal } from "../../States/States";
+import { useEffect, useRef, useState } from "react";
+import { useEntrance, useEntranceTrough, useFactorTotal } from "../../States/States";
 import { useForm } from "react-hook-form";
+import { handleFormData, postDataFn, queryClient, successFn } from "../../services/API";
+import { useAuthUser } from "react-auth-kit";
+import { useMutation } from "react-query";
 
 export default function EntranceThrough() {
   const SelectMedicineRef = useRef(null);
@@ -12,17 +15,56 @@ export default function EntranceThrough() {
     reset,
     control,
     setValue,
+    setFocus,
     watch,
     formState: { errors },
   } = useForm();
+  const [medicine, setMedicine] = useState("");
+  const { entranceTrough } = useEntranceTrough();
+  const { entrance } = useEntrance();
+  const user = useAuthUser();
 
-  const selectMedicine = () => {};
-  const handleCloseFocus = () => {};
-  const EntranceThroughSubmit = () => {};
+  const selectMedicine = (data) => {
+    setMedicine(data);
+  };
+
+  const handleCloseFocus = () => {
+    setFocus("number_in_factor")
+  };
+
+  const { mutate: submitEntranceThrough } = useMutation({
+    mutationFn: (data) => postDataFn(data, "entrance-throug/"),
+    onSuccess: (res) => {
+      successFn("", () => {
+        queryClient.invalidateQueries(['entrance-throug/'])
+      });
+    },
+  });
+
+  useEffect(() => {
+    reset({
+      number_in_factor: '',
+      each_price_factor: '',
+      each_quantity: '',
+      no_box: medicine.no_box || '',
+      each_quantity: medicine.each_quantity || '',
+      interest_percent: '',
+      each_sell_price_afg: '',
+      quantity_bonus: '',
+      expire_date: '',
+      batch_number: '',
+      discount_money: '',
+      discount_percent: '',
+      entrance: entrance.id,
+      medician: medicine.id
+    })
+  }, [medicine, entrance, entranceTrough])
   return (
     <form
       className="entrance-through"
-      onSubmit={handleSubmit(EntranceThroughSubmit)}
+      onSubmit={handleSubmit((data) =>
+        handleFormData(data, submitEntranceThrough, user)
+      )}
     >
       <label>قلم:</label>
       <div className="entrance-through-medician-input">
@@ -37,7 +79,6 @@ export default function EntranceThrough() {
       <input
         type="text"
         {...register("number_in_factor")}
-        id="number-in-factor-input"
         className="entrance--inputs"
       />
       <label>قیمت فی:</label>

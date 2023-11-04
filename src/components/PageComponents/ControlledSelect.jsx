@@ -17,6 +17,8 @@ export default function ControlledSelect({
   autoFocus,
   tabindex,
   isMulti,
+  error,
+  required=false
 }) {
   const IndicatorDropDown = (props) => {
     return (
@@ -30,8 +32,9 @@ export default function ControlledSelect({
     <Controller
       control={control}
       name={name}
+      rules={{ required: required }}
       render={({ ref, field }) => (
-        <div className="react-select-container">
+        <div className={`react-select-container ${error ? 'react-select-container-error' : ''}`}>
           <Select
             inputRef={ref}
             options={options}

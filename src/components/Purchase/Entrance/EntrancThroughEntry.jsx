@@ -10,6 +10,17 @@ function EntrancThroughEntry({ through, keyValue, num }) {
   const AlertHighlighter = () => {};
   const DateComprison = () => {};
   const MedicineDelete = () => {};
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    setValue,
+    setFocus,
+    watch,
+    formState: { errors },
+  } = useForm();
   return (
     <form>
       <div
@@ -102,7 +113,7 @@ function EntrancThroughEntry({ through, keyValue, num }) {
             calendarIcon={null}
             clearIcon={null}
             disableCalendar={true}
-            value={expireDate}
+            // value={expireDate}
             // onChange={(e) => {
             //   setExpireDate(e.toISOString().slice(0, 10));
             //   minDetail = "month";
