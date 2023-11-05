@@ -73,7 +73,7 @@ export default function CompanyLists() {
     setEditItem("");
   };
 
-  let companyQuery = `big-company/`;
+  let companyQuery = `big-company/?name=${filter.name}`;
   const { data: countries } = useQuery([companyQuery]);
 
   const listRef = useRef(null);

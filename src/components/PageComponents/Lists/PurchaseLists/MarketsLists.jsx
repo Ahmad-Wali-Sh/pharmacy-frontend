@@ -73,7 +73,7 @@ export default function MarketsLists() {
     setEditItem("");
   };
 
-  let marketQuery = `market/`;
+  let marketQuery = `market/?name=${filter.name}`;
   const { data: markets } = useQuery([marketQuery]);
 
   const listRef = useRef(null)

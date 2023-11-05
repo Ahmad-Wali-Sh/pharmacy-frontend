@@ -81,7 +81,7 @@ export default function StoreList() {
     setEditItem("");
   };
 
-  let storeQuery = `store/`;
+  let storeQuery = `store/?name=${filter.name}`;
   const { data: stores } = useQuery([storeQuery]);
 
   useEffect(() => {

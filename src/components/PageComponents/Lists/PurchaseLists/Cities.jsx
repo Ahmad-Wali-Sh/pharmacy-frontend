@@ -73,7 +73,7 @@ export default function CitiesLists() {
     setEditItem("");
   };
 
-  let cityQuery = `city/`;
+  let cityQuery = `city/?name=${filter.name}`;
   const { data: cities } = useQuery([cityQuery]);
 
   const listRef = useRef(null)
