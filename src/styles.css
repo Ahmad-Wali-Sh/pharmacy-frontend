@@ -490,6 +490,13 @@ button:focus {
   cursor: pointer;
 }
 
+.revert-button {
+  background-color: var(--color-seventh) !important;
+}
+.revert-button:disabled {
+  background-color: var(--color-nine) !important;
+}
+
 /* Entrance */
 
 .entrance-box {
@@ -564,7 +571,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   grid-area: 1 / 2 / 2 / 3;
   display: grid;
-  grid-template-columns: 0.31fr 0.9fr 0.3fr 0.9fr 0.3fr 0.9fr;
+  grid-template-columns: 6% 26% 5% 26% 5% 26%;
   grid-template-rows: 15% 15% 15% 15% 15%;
   gap: 0.7rem;
   padding: 1rem;
@@ -1053,7 +1060,7 @@ input[type="date"]:disabled {
 .medician-format {
   height: 9.5rem;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 100%;
+  grid-template-columns: 1fr 1fr 1fr 5fr;
   text-align: left;
   justify-content: start;
   direction: ltr;
@@ -1067,13 +1074,68 @@ input[type="date"]:disabled {
 
 .medician-text-field {
   height: 9.5rem;
-  display: grid;
-  grid-template-columns: 60% 40%;
-  grid-template-rows: 1fr;
   padding: 0.2rem;
+  display: grid;
+  grid-template-rows: 2rem 4rem 3rem;
   padding-left: 1rem;
   font-size: 1rem;
-  width: 50%;
+  width: 100%;
+}
+
+.generics-text {
+  opacity: 0;
+  overflow: visible;
+  position: relative;
+  top: -2rem;
+  background-color: var(--color-sex);
+  border: 1px solid black;
+  color: black;
+  border-radius: 1rem;
+  padding: 1rem;
+  font-size: 1rem;
+  z-index: 12;
+}
+
+.generics-selecting {
+  width: 40rem;
+}
+
+.generics-text-header {
+  padding: 1em;
+  font-size: calc(0.6vw + 0.6em);
+  direction: ltr;
+  display: block;
+  position: relative;
+  top: -1.5rem;
+  line-height: 1.4rem;
+  text-overflow: ellipsis;
+  max-height: 3.8rem;
+  height: 3.8rem;
+  min-height: 3.8rem;
+  word-break: break-word;
+  white-space: pre-line;
+  overflow-wrap: break-word;
+  -ms-word-break: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.generics-selecting:hover > .generics-text {
+  opacity: 1;
+}
+
+.medicine-info-fields > h4 {
+  direction: rtl;
+}
+
+.medicine-info-fields {
+  display: flex;
+  justify-content: space-around;
 }
 
 .medician-big-text-fields {
@@ -3150,6 +3212,11 @@ input[type="date"]:disabled {
   background-image: var(--color-five);
   cursor: pointer;
 }
+.form-button:disabled {
+  background-image: var(--color-nine);
+  color: grey;
+  cursor:not-allowed;
+}
 .alert-button {
   background-color: var(--color-nine) !important;
 }
@@ -3168,12 +3235,18 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   position: relative;
   top: -0.5rem;
+  height: 5vh;
 }
 
 .react-select-container {
   height: 10px;
   min-height: 10px;
 }
+
+.react-select-container-error {
+  box-shadow: 1px 1px 10px red !important;
+  border-radius: 1rem !important;
+} 
 
 .test {
   height: 1rem;
@@ -3554,11 +3627,19 @@ input[type="date"]:disabled {
   padding: 1rem;
   min-width: 20rem;
   display: grid;
-  line-height: 26pt;
 }
 
 .medicine-show-info span {
-  color: grey
+  color: grey;
+}
+
+.medicine-show-info h4 {
+  height: 2.2rem;
+  line-height: 1.2rem;
+  margin: 0;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 

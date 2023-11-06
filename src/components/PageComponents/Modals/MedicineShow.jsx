@@ -51,7 +51,7 @@ const MedicineShowModal = forwardRef((props, ref) => {
                 <span>نام:</span> {item.medicine_full}
               </h4>
               <h4>
-                <span>ترکیب:</span> {item?.generic_name?.toString()}
+                <span>ترکیب:</span><small>{item?.generic_name?.toString()}</small>
               </h4>
               <h4>
                 <span>مکان:</span> {item.location}

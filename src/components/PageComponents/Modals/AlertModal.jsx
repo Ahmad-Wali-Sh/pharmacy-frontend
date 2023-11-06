@@ -4,8 +4,10 @@ import Modal from "react-modal";
 import { AlertModalStyle } from "../../../styles";
 
 const AlertModal = forwardRef(
-  ({ errorText, errorTitle, OkFunc, NoFunc }, ref) => {
+  ({ errorText, errorTitle, OkFunc, NoFunc, CheckerComponent }, ref) => {
     const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+    const Checker = CheckerComponent
 
     useImperativeHandle(ref, () => ({
       Opener() {
@@ -39,7 +41,7 @@ const AlertModal = forwardRef(
               <h4>{errorText}</h4>
             </div>
             <div className="alert-button-box">
-              <button
+              {OkFunc && <button
                 onClick={() => {
                   OkFunc();
                   onClose();
@@ -47,16 +49,17 @@ const AlertModal = forwardRef(
                 autoFocus
                 tabIndex={0}
               >
-                بله
-              </button>
-              <button
+                تایید
+              </button>}
+              {NoFunc && <button
                 onClick={() => {
                   NoFunc();
                   onClose();
                 }}
               >
                 نخیر
-              </button>
+              </button>}
+              {CheckerComponent && <CheckerComponent />}
             </div>
           </div>
         </>

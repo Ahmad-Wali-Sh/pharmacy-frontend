@@ -73,7 +73,7 @@ export default function PaymentsLists() {
     setEditItem("");
   };
 
-  let paymentQuery = `payment-method/`;
+  let paymentQuery = `payment-method/?name=${filter.name}`;
   const { data: payments } = useQuery([paymentQuery]);
 
   useEffect(() => {

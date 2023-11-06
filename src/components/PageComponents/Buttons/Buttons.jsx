@@ -46,23 +46,25 @@ export function DepartButton({ Func, name }) {
   );
 }
 
-export function FormButton({ Func, name, className }) {
+export function FormButton({ Func, name, className, disabled=false }) {
   return (
     <input
       type="button"
       onClick={() => Func()}
       className={`form-button ${className}`}
+      disabled={disabled}
       value={name}
     ></input>
   );
 }
-export function SubmitButton({ Func, name, className }) {
+export function SubmitButton({ Func, name, className, disabled=false }) {
   return (
     <input
       type="submit"
       onClick={() => Func()}
       className={`form-button ${className} `}
       value={name}
+      disabled={disabled}
     ></input>
   );
 }
