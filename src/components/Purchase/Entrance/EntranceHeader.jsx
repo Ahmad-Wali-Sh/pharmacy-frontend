@@ -44,7 +44,6 @@ export default function EntranceHeader() {
       total_interest: "",
       discount_percent_entrance: "",
       wholesale: "",
-      entrance_id: "",
       payment_method: "",
     },
   });

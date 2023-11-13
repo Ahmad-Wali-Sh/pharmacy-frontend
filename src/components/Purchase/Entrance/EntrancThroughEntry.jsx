@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -7,8 +7,12 @@ import DatePicker from "react-date-picker";
 import "../../../datePicker.css";
 
 function EntrancThroughEntry({ through, keyValue, num }) {
-  const AlertHighlighter = () => {};
-  const DateComprison = () => {};
+  const AlertHighlighter = () => {
+    return true
+  };
+  const DateComprison = (date) => {
+    return true
+  };
   const MedicineDelete = () => {};
 
   const {
@@ -21,6 +25,21 @@ function EntrancThroughEntry({ through, keyValue, num }) {
     watch,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    reset({
+      number_in_factor: through.number_in_factor,
+      each_price_factor: through.each_price_factor,
+      discount_money: through.discount_money,
+      discount_percent: through.discount_percent,
+      quantity_bonus: through.quantity_bonus,
+      shortage: through.shortage,
+      interest_percent: through.interest_percent,
+      each_sell_price_afg: through.each_sell_price_afg,
+    })
+  },[through])
+
+
   return (
     <form>
       <div
@@ -38,14 +57,12 @@ function EntrancThroughEntry({ through, keyValue, num }) {
         </div>
         <input
           type="text"
-          defaultValue={through.number_in_factor}
           {...register("number_in_factor")}
         />
         <div className="input-with-currency">
           <span className="currency-span">{through.rate_name}</span>
           <input
             type="text"
-            defaultValue={through.each_price_factor}
             className="transparent-inputs"
             {...register("each_price_factor")}
           />
@@ -54,7 +71,6 @@ function EntrancThroughEntry({ through, keyValue, num }) {
           <span className="currency-span">{through.rate_name}</span>
           <input
             type="text"
-            defaultValue={through.discount_money}
             {...register("discount_money")}
             className="transparent-inputs"
           />
@@ -63,7 +79,6 @@ function EntrancThroughEntry({ through, keyValue, num }) {
           <span className="currency-span-percent">%</span>
           <input
             type="text"
-            defaultValue={through.discount_percent}
             {...register("discount_percent")}
             className="transparent-inputs-percent"
           />
@@ -98,7 +113,6 @@ function EntrancThroughEntry({ through, keyValue, num }) {
         </div>
         <input
           type="text"
-          defaultValue={through.quantity_bonus}
           {...register("quantity_bonus")}
         />
 
@@ -113,7 +127,7 @@ function EntrancThroughEntry({ through, keyValue, num }) {
             calendarIcon={null}
             clearIcon={null}
             disableCalendar={true}
-            // value={expireDate}
+            value={through.timestamp.slice(0,10)}
             // onChange={(e) => {
             //   setExpireDate(e.toISOString().slice(0, 10));
             //   minDetail = "month";
@@ -151,7 +165,6 @@ function EntrancThroughEntry({ through, keyValue, num }) {
           <span className={"currency-span-percent"}>%</span>
           <input
             type="text"
-            defaultValue={through.interest_percent}
             {...register("interest_percent")}
             className={
               through.interest_percent > 0 && through.interest_percent <= 100
@@ -167,7 +180,6 @@ function EntrancThroughEntry({ through, keyValue, num }) {
           </span>
           <input
             type="text"
-            defaultValue={through.each_sell_price_afg}
             className="transparent-inputs"
             {...register("each_sell_price_afg")}
             style={{ cursor: "default" }}
