@@ -11,7 +11,7 @@ export const PrescriptionThroughForm = forwardRef(
   ({ prescription, prescriptionThrough, updatePrescription }, ref) => {
     const SameMedicineAlertModalRef = React.useRef(null);
     const user = useAuthUser();
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [medicine, setMedicine] = React.useState(null);
 
     const { mutateAsync: prescriptionThroughPost } = useMutation({
@@ -114,7 +114,8 @@ export const PrescriptionThroughForm = forwardRef(
           <label>تعداد:</label>
           <input
             type="text"
-            {...register("quantity")}
+            {...register("quantity", { required: true })}
+            className={errors.quantity && 'error-input'}
             id="number-in-factor-input"
           />
           <div className="prescription-button">

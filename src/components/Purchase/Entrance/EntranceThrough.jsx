@@ -79,11 +79,12 @@ export default function EntranceThrough() {
     },
     onSuccess: (res) => {
       successFn("", () => {
-        queryClient.invalidateQueries({ queryKey: [
-          `entrance-throug/?entrance=${entrance.id}`
-        ],
-        refetchInactive: true
-      });
+        setTimeout(() => {
+          queryClient.invalidateQueries(
+            { queryKey: [`entrance-throug/?entrance=${entrance.id}`] },
+            20000
+          );
+        });
         setFocus("number_in_factor");
         resetThrough();
         SelectMedicineRef.current.Opener();
@@ -100,8 +101,6 @@ export default function EntranceThrough() {
   };
 
   const SubmitChecklist = (data) => {
-    console.log(SubmitedAlert(data));
-
     if (SubmitedAlert(data) != false) {
       SubmitedAlertRef.current.Opener();
     }
@@ -192,14 +191,18 @@ export default function EntranceThrough() {
         <label>تعداد:</label>
         <input
           type="text"
-          {...register("number_in_factor")}
-          className="entrance--inputs"
+          {...register("number_in_factor", { required: true })}
+          className={`entrance--inputs ${
+            errors.number_in_factor && "error-input"
+          }`}
         />
         <label>قیمت فی:</label>
         <input
           type="text"
-          {...register("each_price_factor")}
-          className="entrance--inputs"
+          {...register("each_price_factor", { required: true })}
+          className={`entrance--inputs ${
+            errors.each_price_factor && "error-input"
+          }`}
         />
         <label>
           <h5> ت.د.پاکت:</h5>
@@ -224,14 +227,18 @@ export default function EntranceThrough() {
         <label>فایده٪:</label>
         <input
           type="text"
-          {...register("interest_percent")}
-          className="entrance--inputs"
+          {...register("interest_percent", { required: true })}
+          className={`entrance--inputs ${
+            errors.interest_percent && "error-input"
+          }`}
         />
         <label>فی_فروش:</label>
         <input
           type="text"
-          {...register("each_sell_price_afg")}
-          className="entrance--inputs"
+          {...register("each_sell_price_afg", { required: true })}
+          className={`entrance--inputs ${
+            errors.each_sell_price_afg && "error-input"
+          }`}
           onBlur={() => setValue("interest_percent", interest_get())}
         />
         <label>
@@ -255,8 +262,10 @@ export default function EntranceThrough() {
         <label>انقضا.م:</label>
         <input
           type="date"
-          {...register("expire_date")}
-          className="entrance--inputs date--inputs"
+          {...register("expire_date", { required: true })}
+          className={`entrance--inputs date--inputs ${
+            errors.expire_date && "error-input"
+          }`}
         />
         <label>انقضا.ش:</label>
         <DateInputSimple />

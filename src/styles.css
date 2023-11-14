@@ -1253,11 +1253,11 @@ input[type="date"]:disabled {
 
 .entrance-report-map-box {
   width: 100%;
-  height: 2rem;
+  height: 1.6rem;
   background-color: var(--color-thirth);
   padding: 0.3rem;
   border-bottom: 1px solid var(--color-one);
-  font-size: medium;
+  font-size: small;
   display: flex;
   justify-content: space-between;
   padding-right: 1rem;
@@ -3215,7 +3215,7 @@ input[type="date"]:disabled {
 .form-button:disabled {
   background-image: var(--color-nine);
   color: grey;
-  cursor:not-allowed;
+  cursor: not-allowed;
 }
 .alert-button {
   background-color: var(--color-nine) !important;
@@ -3246,7 +3246,7 @@ input[type="date"]:disabled {
 .react-select-container-error {
   box-shadow: 1px 1px 10px red !important;
   border-radius: 1rem !important;
-} 
+}
 
 .test {
   height: 1rem;
@@ -3595,7 +3595,7 @@ input[type="date"]:disabled {
   margin: 1rem 1rem 1rem 1rem;
   display: flex;
   overflow: hidden;
-  gap:1rem;
+  gap: 1rem;
 }
 
 .medicine-show-pic {
@@ -3603,7 +3603,7 @@ input[type="date"]:disabled {
   height: 100%;
   background-color: var(--color-three);
   border-radius: 1rem;
-  border: 2px solid white
+  border: 2px solid white;
 }
 
 .error-input {
@@ -3612,7 +3612,7 @@ input[type="date"]:disabled {
 }
 
 .error-text-input {
-  position:absolute;
+  position: absolute;
   margin-top: 1rem;
 }
 
@@ -3642,5 +3642,23 @@ input[type="date"]:disabled {
   overflow: hidden;
 }
 
+.expire_date_transparent {
+  background-color: #00000000;
+  z-index: 0;
+  position: relative;
+  left: 40px;
+  align-self: center;
+  align-items: center;
+  align-content: center;
+  border: none;
+  scale: 0.8;
+  direction: ltr;
+}
 
-
+.container-data-expire {
+  align-items: center;
+  align-self: center;
+  align-content: center;
+  vertical-align: middle;
+  height: 1.5rem;
+}
