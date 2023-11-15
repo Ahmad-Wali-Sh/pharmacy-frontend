@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import SmallModal from "../PageComponents/Modals/SmallModal";
 import { useTemplateLogo } from "../States/States";
+import './color-template.css'
 
 function ColorTemplates() {
   const TemplateColorsRef = useRef(null);

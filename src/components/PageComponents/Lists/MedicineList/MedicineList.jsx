@@ -96,21 +96,28 @@ export default function MedicineList({
           newdata.append("department", item)
         );
       }
-
+      newdata.delete("barcode");
+      let barcode = watch('barcode').toString().split(',')
+      console.log(barcode);
+        barcode.forEach((item) =>
+          newdata.append("barcode", item)
+        );
       putDataFn(newdata, `medician/${editItem.id}/`);
     },
     onSuccess: (res) =>
-      successFn("", async () => {
+       {
         setActive("list");
         if (res?.data) {
           setSelectedMedician && res.data && setSelectedMedician(res.data);
           selectAutoCompleteData(res.data);
         }
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           predicate: (query) => query.queryKey[0].startsWith("medician"),
         });
         getTwiceMedicine();
-      }),
+      },
+    onError: (res) => 
+      toast.error('what the fuckk')
   });
 
   const { mutateAsync: deleteMedicine } = useMutation({
@@ -678,6 +685,7 @@ function MedicineForm(props) {
           type="text"
           {...props.register("barcode")}
           style={{ direction: "ltr", textAlign: "right" }}
+          
         />
         <label>عکس:</label>
         <div className="flex">

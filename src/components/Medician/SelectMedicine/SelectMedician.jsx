@@ -106,7 +106,7 @@ export const SelectMedician = forwardRef(
     }, [stringArray]);
 
     const isBarcode = (stringArray) => {
-      let string = stringArray.join("").replace(/\s/g, "").slice(0, 1);
+      let string = stringArray.join("").replace(/\s/g, "").slice(0, 5);
       return !isNaN(string);
     };
 
