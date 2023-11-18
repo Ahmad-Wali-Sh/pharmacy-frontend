@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useEntrance, useEntranceTrough, useFactorTotal } from "../../States/States";
+import {
+  useEntrance,
+  useEntranceTrough,
+  useFactorTotal,
+} from "../../States/States";
 
 export default function EntranceReport() {
   // const { entranceThrough, setEntranceThrough } = useEntranceTrough();
 
-  const { entrance, setEntrance} = useEntrance()
-  const { data: entranceThrough } = useQuery(`entrance-throug/?entrance=${entrance.id}`)
+  const { entrance, setEntrance } = useEntrance();
+  const { data: entranceThrough } = useQuery(
+    `entrance-throug/?entrance=${entrance.id}`
+  );
 
   const { FactorTotal, setFactorTotal } = useFactorTotal();
   const [report, setReport] = useState({
@@ -67,7 +73,6 @@ export default function EntranceReport() {
       totalBeforeDiscount()
     ).toFixed(1);
 
-    
     setReport({
       number: entranceThrough?.length,
       total_before_discount: totalBeforeDiscount().toFixed(1),
@@ -122,6 +127,12 @@ export default function EntranceReport() {
         <div className="entrance-report-map-box">
           <label>مجموعه</label>
           <label>{report.grandTotal}</label>
+        </div>
+        <div className="entrance-report-map-box">
+          <label>ارز</label>
+          <label>
+            {entrance.currency_name && entrance.currency_name + "(" + entrance.currency_rate + ")"}
+          </label>
         </div>
         <div className="entrance-report-map-box">
           <label>مجموع فاکتور</label>

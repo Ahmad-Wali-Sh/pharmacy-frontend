@@ -33,20 +33,6 @@ export default function Entrance({ button, icon, title }) {
       )}
       <BigModal title="ثبت فاکتور" ref={EntranceModalRef}>
         <AlertModal
-          errorTitle="این دوا قبلا ثبت شده است"
-          errorText="آیا میخواهید به تعداد آن اضافه نمایید؟"
-          // OkFunc={handleSubmit(MedicineIncluder)}
-          NoFunc={() => SubmitedAlertRef.current.Closer()}
-          ref={SubmitedAlertRef}
-        />
-        <AlertModal
-          errorTitle="خطای قیمت!"
-          errorText="قیمت دوای ثبت شده با قیمت قبلی مطابقت ندارد"
-          OkFunc={() => PreviousPriceAlertRef.current.Closer()}
-          ref={PreviousPriceAlertRef}
-          CheckerComponent={() => <Entrance button={1} />}
-        />
-        <AlertModal
           errorTitle="خطا در مجموع فاکتور!"
           errorText="آیا با بستن صفحه موافقید؟"
           OkFunc={() => {

@@ -230,7 +230,7 @@ button:focus {
   width: 8rem;
   aspect-ratio: 4/3;
   border-radius: 1rem;
-  border: 3px solid white;
+  border: 3px solid var(--color-ten);
 }
 
 .image-preview-text {
@@ -257,7 +257,7 @@ button:focus {
 }
 .filterlists-button-standard:hover {
   background-color: var(--color-two);
-  color: white;
+  color: var(--color-ten);
 }
 
 /* Page Component */
@@ -303,7 +303,7 @@ button:focus {
   border: none;
   padding-left: 0.7rem;
   height: 1.5rem;
-  background-color: rgb(25, 25, 25);
+  background-color: var(--color-sex);
   flex-shrink: 0;
 }
 .search-input {
@@ -311,8 +311,8 @@ button:focus {
   width: 85%;
   border: none;
   padding-left: 0.7rem;
-  height: 1.5rem;
-  background-color: rgb(25, 25, 25);
+  height: 1.3rem;
+  background-color: var(--color-sex);
   flex-shrink: 0;
   color: rgb(79, 79, 79);
 }
@@ -954,7 +954,7 @@ input[type="date"]:disabled {
 .entrance-medician-map > input[type="submit"] {
   width: 70%;
   background-color: var(--color-eleven);
-  color: white;
+  color: var(--color-ten);
   border-radius: 1rem;
   padding: 0.2rem;
   font-size: smaller;
@@ -972,7 +972,7 @@ input[type="date"]:disabled {
 .entrance-medician-map-alert > input[type="submit"] {
   width: 70%;
   background-color: var(--color-eleven);
-  color: white;
+  color: var(--color-ten);
   border-radius: 1rem;
   padding: 0.2rem;
   font-size: smaller;
@@ -1253,11 +1253,11 @@ input[type="date"]:disabled {
 
 .entrance-report-map-box {
   width: 100%;
-  height: 2rem;
+  height: 1.6rem;
   background-color: var(--color-thirth);
   padding: 0.3rem;
   border-bottom: 1px solid var(--color-one);
-  font-size: medium;
+  font-size: small;
   display: flex;
   justify-content: space-between;
   padding-right: 1rem;
@@ -1306,7 +1306,7 @@ input[type="date"]:disabled {
   background-color: var(--color-three);
   padding: 0rem 1rem 0rem 1rem;
   border-radius: 1rem;
-  color: white;
+  color: var(--color-ten);
   display: flex;
   justify-content: space-between;
   height: 1.5rem;
@@ -1379,7 +1379,7 @@ input[type="date"]:disabled {
   padding-right: 1rem;
   position: relative;
   font-size: large;
-  color: white;
+  color: var(--color-ten);
   font-weight: bold;
 }
 .listing-form > input:focus {
@@ -1395,7 +1395,7 @@ input[type="date"]:disabled {
   position: relative;
   margin-left: 9rem;
   font-size: large;
-  color: white;
+  color: var(--color-ten);
   font-weight: bold;
 }
 .company-form > input:focus {
@@ -1411,7 +1411,7 @@ input[type="date"]:disabled {
   position: relative;
   margin-left: 9rem;
   font-size: large;
-  color: white;
+  color: var(--color-ten);
   font-weight: bold;
 }
 
@@ -1432,7 +1432,7 @@ input[type="date"]:disabled {
   position: relative;
   margin-left: 9rem;
   font-size: large;
-  color: white;
+  color: var(--color-ten);
   font-weight: bold;
 }
 
@@ -1452,7 +1452,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   background-color: var(--color-three);
   padding: 1rem;
-  color: white;
+  color: var(--color-ten);
   margin-left: 9rem;
 }
 .company-form > textarea:focus {
@@ -1477,7 +1477,7 @@ input[type="date"]:disabled {
   width: 10%;
   height: 90%;
   background-color: var(--color-two);
-  color: white;
+  color: var(--color-ten);
 }
 
 .company-submit > input:hover {
@@ -1529,7 +1529,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   padding-right: 1rem;
   font-size: large;
-  color: white;
+  color: var(--color-ten);
   font-weight: bold;
 }
 
@@ -1554,7 +1554,7 @@ input[type="date"]:disabled {
   width: 20%;
   height: 95%;
   background-color: var(--color-two);
-  color: white;
+  color: var(--color-ten);
 }
 .store-submit > input:hover {
   background-image: var(--color-five);
@@ -1566,7 +1566,7 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   background-color: var(--color-three);
   padding: 1rem;
-  color: white;
+  color: var(--color-ten);
 }
 .store-form > textarea:focus {
   box-shadow: -4px -4px 4px var(--color-two);
@@ -1620,7 +1620,7 @@ input[type="date"]:disabled {
   padding: 0.4rem;
   padding-right: 1rem;
   font-size: large;
-  color: white;
+  color: var(--color-ten);
 }
 
 .bar_batch_box > input[type="text"] {
@@ -1634,7 +1634,7 @@ input[type="date"]:disabled {
   padding: 0.4rem;
   padding-right: 1rem;
   font-size: large;
-  color: white;
+  color: var(--color-ten);
 }
 
 .bar_batch_box > input[type="text"]:focus {
@@ -1699,7 +1699,7 @@ input[type="date"]:disabled {
   width: 10%;
   height: 100%;
   background-color: var(--color-two);
-  color: white;
+  color: var(--color-ten);
 }
 .medician-inter-submit > input:hover {
   background-image: var(--color-five);
@@ -1813,7 +1813,7 @@ input[type="date"]:disabled {
   border: none;
   border-radius: 2rem;
   padding-right: 1rem;
-  color: white;
+  color: var(--color-ten);
 }
 
 .prescription-through-map {
@@ -1889,7 +1889,7 @@ input[type="date"]:disabled {
   height: 2rem;
   margin-left: 0.2rem;
   background-color: var(--color-thirth);
-  color: white;
+  color: var(--color-ten);
 }
 
 .prescription-create-button:hover {
@@ -1955,7 +1955,7 @@ input[type="date"]:disabled {
 }
 .kind-list-search-btn:hover {
   background-image: var(--color-five);
-  color: white;
+  color: var(--color-ten);
 }
 
 .kind-list-map-box {
@@ -1984,7 +1984,7 @@ input[type="date"]:disabled {
   display: grid;
   grid-template-columns: 5% 20% 20% 20% 10% 20% 10%;
   padding-right: 1rem;
-  color: white;
+  color: var(--color-ten);
   padding: 0.3rem;
   text-align: right;
   padding-right: 2rem;
@@ -1996,7 +1996,7 @@ input[type="date"]:disabled {
 .kind-list-map > input[type="text"] {
   border: none;
   background-color: #600f0f00;
-  color: white;
+  color: var(--color-ten);
   font-size: large;
 }
 
@@ -2080,7 +2080,7 @@ input[type="date"]:disabled {
 .medician-list-map {
   display: grid;
   grid-template-columns: 5% 22% 8% 10% 12% 12% 6% 18% 20%;
-  color: white;
+  color: var(--color-ten);
   padding: 0.3rem;
   direction: rtl;
   padding-right: 1rem;
@@ -2092,7 +2092,7 @@ input[type="date"]:disabled {
 .medician-list-map > input[type="text"] {
   border: none;
   background-color: #600f0f00;
-  color: white;
+  color: var(--color-ten);
 }
 
 .medician-image-preview {
@@ -2281,7 +2281,7 @@ input[type="date"]:disabled {
 }
 .traz-date-filters > input[type="button"]:hover {
   background-color: var(--color-two);
-  color: white;
+  color: var(--color-ten);
 }
 
 .traz-list {
@@ -2372,7 +2372,7 @@ input[type="date"]:disabled {
 }
 
 .fa-circle-info:hover {
-  color: white;
+  color: var(--color-ten);
 }
 
 /* Store List Filtering */
@@ -2789,7 +2789,7 @@ input[type="date"]:disabled {
   background-color: var(--color-three);
   border-radius: 1rem;
   font-size: large;
-  color: white;
+  color: var(--color-ten);
   padding-right: 1rem;
   font-weight: bold;
 }
@@ -3185,7 +3185,7 @@ input[type="date"]:disabled {
 
 .input-picker-menu {
   background-color: var(--color-three);
-  color: white;
+  color: var(--color-ten);
 }
 .input-picker-menu:hover {
   background-color: var(--color-three);
@@ -3215,7 +3215,7 @@ input[type="date"]:disabled {
 .form-button:disabled {
   background-image: var(--color-nine);
   color: grey;
-  cursor:not-allowed;
+  cursor: not-allowed;
 }
 .alert-button {
   background-color: var(--color-nine) !important;
@@ -3246,7 +3246,7 @@ input[type="date"]:disabled {
 .react-select-container-error {
   box-shadow: 1px 1px 10px red !important;
   border-radius: 1rem !important;
-} 
+}
 
 .test {
   height: 1rem;
@@ -3513,7 +3513,7 @@ input[type="date"]:disabled {
 .pagination-group > h4 {
   box-shadow: 1px 1px 10px black;
   background-color: var(--color-three);
-  color: white;
+  color: var(--color-ten);
   padding: 0.2rem;
   border-radius: 0.2rem;
   user-select: none;
@@ -3530,7 +3530,7 @@ input[type="date"]:disabled {
 .pagination-group > h4:hover {
   box-shadow: 1px 1px 10px black;
   background-image: var(--color-five);
-  color: white;
+  color: var(--color-ten);
   padding: 0.2rem;
   border-radius: 0.2rem;
 }
@@ -3595,7 +3595,7 @@ input[type="date"]:disabled {
   margin: 1rem 1rem 1rem 1rem;
   display: flex;
   overflow: hidden;
-  gap:1rem;
+  gap: 1rem;
 }
 
 .medicine-show-pic {
@@ -3603,7 +3603,7 @@ input[type="date"]:disabled {
   height: 100%;
   background-color: var(--color-three);
   border-radius: 1rem;
-  border: 2px solid white
+  border: 2px solid var(--color-ten);
 }
 
 .error-input {
@@ -3612,7 +3612,7 @@ input[type="date"]:disabled {
 }
 
 .error-text-input {
-  position:absolute;
+  position: absolute;
   margin-top: 1rem;
 }
 
@@ -3623,7 +3623,7 @@ input[type="date"]:disabled {
   direction: rtl;
   background-color: var(--color-three);
   border-radius: 1rem;
-  color: white;
+  color: var(--color-ten);
   padding: 1rem;
   min-width: 20rem;
   display: grid;
@@ -3642,5 +3642,24 @@ input[type="date"]:disabled {
   overflow: hidden;
 }
 
+.expire_date_transparent {
+  background-color: #00000000;
+  z-index: 0;
+  position: relative;
+  left: 40px;
+  align-self: center;
+  align-items: center;
+  align-content: center;
+  border: none;
+  scale: 0.8;
+  direction: ltr;
+}
 
+.container-data-expire {
+  align-items: center;
+  align-self: center;
+  align-content: center;
+  vertical-align: middle;
+  height: 1.5rem;
+}
 

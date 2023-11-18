@@ -25,7 +25,11 @@ export const postDataFn = (data, api) => {
 };
 
 export const putDataFn = (data, api) => {
-  return axios.put(API_URL + api, data);
+  return axios.put(API_URL + api, data).then(() => toast.success('درخواست موفقانه بود')).catch((e) => {
+    toast.error(`خطا! ${e.message}`)
+    console.log(e);
+    return Promise.reject(e.message)
+  })
 };
 
 export const patchDataFn = (data, api) => {
@@ -38,7 +42,6 @@ export const deleteDataFn = (api) => {
 
 // it is a default success function to do its job
 export const successFn = (invalidKey, func) => {
-  toast.success("درخواست موفقانه بود");
   queryClient.invalidateQueries(invalidKey, {refetchInactive: true, refetchType: 'all'});
   func();
 };

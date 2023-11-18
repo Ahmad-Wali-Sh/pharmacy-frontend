@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React from "react";
 import { useAuthUser } from "react-auth-kit";
 import axios from "axios";
+import { useTemplateLogo } from "../States/States";
 
 function Navbar() {
   const auth = useAuthUser();
@@ -12,14 +13,12 @@ function Navbar() {
     ] = `Token ${localStorage._auth}`;
   }
 
+  const { templateLogo, setTemplateLogo } = useTemplateLogo();
   return (
     <div className="navbar">
       <div className="navbar-elements">
         <div className="colorfull-image">
-          <img
-            className="colorfull-image"
-            src="./images/frontend/colorful.png"
-          />
+          <img className="colorfull-image" src={templateLogo} />
         </div>
         <div className="profile">
           <img

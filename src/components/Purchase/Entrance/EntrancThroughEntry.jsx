@@ -1,28 +1,127 @@
-import React from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
-import DatePicker from "react-date-picker";
 import "../../../datePicker.css";
+import { useMutation } from "react-query";
+import {
+  deleteDataFn,
+  handleFormData,
+  patchDataFn,
+  queryClient,
+  successFn,
+} from "../../services/API";
+import { useEntrance } from "../../States/States";
 
 function EntrancThroughEntry({ through, keyValue, num }) {
-  const AlertHighlighter = () => {};
-  const DateComprison = () => {};
-  const MedicineDelete = () => {};
+  const user = useAuthUser();
+  const { entrance, setEntrance } = useEntrance();
+  const AlertHighlighter = () => {
+    return true;
+  };
+  const DateComprison = (date) => {
+    return true;
+  };
+
+  const { mutate: medicineUpdate } = useMutation({
+    mutationFn: (data) => patchDataFn(data, `entrance-throug/${through.id}/`),
+    onSuccess: (res) => {
+      successFn("", () => {
+        queryClient.invalidateQueries([
+          `entrance-throug/?entrance=${entrance.id}`,
+        ]);
+      });
+    },
+  });
+
+  const sell_price_get = () => {
+    let each_price_factor = parseFloat(watch("each_price_factor"));
+    let interest_percent = parseFloat(watch("interest_percent"));
+    let result =
+      ((each_price_factor + (interest_percent * each_price_factor) / 100) / 1) *
+      entrance?.currency_rate;
+    return parseFloat(result).toFixed(2);
+  };
+
+  const interest_get = () => {
+    let each_sell_price_afg = parseFloat(watch("each_sell_price_afg"));
+    let each_price_factor = parseFloat(watch("each_price_factor"));
+    let result =
+      (100 *
+        ((each_sell_price_afg / entrance?.currency_rate) * 1 -
+          each_price_factor)) /
+      each_price_factor;
+    return parseFloat(result).toFixed(2);
+  };
+
+  const { mutate: interestPercentUpdate } = useMutation({
+    mutationFn: (data) => {
+      data.set("each_sell_price_afg", sell_price_get());
+      patchDataFn(data, `entrance-throug/${through.id}/`);
+    },
+    onSuccess: (res) => {
+      successFn("", () => {
+        setTimeout(() => {
+          queryClient.invalidateQueries([
+            `entrance-throug/?entrance=${entrance.id}`,
+          ]);
+        }, 200);
+      });
+    },
+  });
+  const { mutate: afghanPriceUpdate } = useMutation({
+    mutationFn: (data) => {
+      data.set("interest_percent", interest_get());
+      patchDataFn(data, `entrance-throug/${through.id}/`);
+    },
+    onSuccess: (res) => {
+      successFn("", () => {
+        setTimeout(() => {
+          queryClient.invalidateQueries([
+            `entrance-throug/?entrance=${entrance.id}`,
+          ]);
+        }, 200);
+      });
+    },
+  });
+
+  const { mutate: MedicineDelete } = useMutation({
+    mutationFn: () => {
+      deleteDataFn(`entrance-throug/${through.id}/`);
+    },
+    onSuccess: () => {
+      successFn("", () => {
+        setTimeout(() => {
+          queryClient.invalidateQueries([
+            `entrance-throug/?entrance=${entrance.id}`,
+          ]);
+        }, 200);
+      });
+    },
+  });
 
   const {
     register,
     handleSubmit,
     reset,
-    control,
-    setValue,
-    setFocus,
     watch,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    reset({
+      number_in_factor: through.number_in_factor,
+      each_price_factor: through.each_price_factor,
+      discount_money: through.discount_money,
+      discount_percent: through.discount_percent,
+      quantity_bonus: through.quantity_bonus,
+      shortage: through.shortage,
+      interest_percent: through.interest_percent,
+      each_sell_price_afg: through.each_sell_price_afg,
+    });
+  }, [through]);
+
   return (
-    <form>
+    <form key={keyValue}>
       <div
         className={
           AlertHighlighter()
@@ -38,34 +137,42 @@ function EntrancThroughEntry({ through, keyValue, num }) {
         </div>
         <input
           type="text"
-          defaultValue={through.number_in_factor}
           {...register("number_in_factor")}
+          onBlurCapture={handleSubmit((data) =>
+            handleFormData(data, medicineUpdate, user)
+          )}
         />
         <div className="input-with-currency">
           <span className="currency-span">{through.rate_name}</span>
           <input
             type="text"
-            defaultValue={through.each_price_factor}
             className="transparent-inputs"
             {...register("each_price_factor")}
+            onBlurCapture={handleSubmit((data) =>
+              handleFormData(data, medicineUpdate, user)
+            )}
           />
         </div>
         <div className="input-with-currency">
           <span className="currency-span">{through.rate_name}</span>
           <input
             type="text"
-            defaultValue={through.discount_money}
             {...register("discount_money")}
             className="transparent-inputs"
+            onBlurCapture={handleSubmit((data) =>
+              handleFormData(data, medicineUpdate, user)
+            )}
           />
         </div>
         <div className="input-with-currency">
           <span className="currency-span-percent">%</span>
           <input
             type="text"
-            defaultValue={through.discount_percent}
             {...register("discount_percent")}
             className="transparent-inputs-percent"
+            onBlurCapture={handleSubmit((data) =>
+              handleFormData(data, medicineUpdate, user)
+            )}
           />
         </div>
         <input
@@ -98,43 +205,47 @@ function EntrancThroughEntry({ through, keyValue, num }) {
         </div>
         <input
           type="text"
-          defaultValue={through.quantity_bonus}
           {...register("quantity_bonus")}
+          style={{ zIndex: "10" }}
+          onBlurCapture={handleSubmit((data) =>
+            handleFormData(data, medicineUpdate, user)
+          )}
         />
 
         <div
           className={
             DateComprison(through.expire_date)
-              ? ""
-              : "transparent-inputs-date-alert"
+              ? "container-data-expire"
+              : "container-data-expire transparent-inputs-date-alert"
           }
         >
-          <DatePicker
-            calendarIcon={null}
-            clearIcon={null}
-            disableCalendar={true}
-            // value={expireDate}
-            // onChange={(e) => {
-            //   setExpireDate(e.toISOString().slice(0, 10));
-            //   minDetail = "month";
-            //   format = "y-MM-dd";
-            // }}
-            // onBlur={handleSubmit(MedicianUpdate)}
-            className="date-picker-expire"
-            calendarClassName="date-picker-expire"
-            style={{ border: "none" }}
+          <input
+            type="date"
+            defaultValue={through.timestamp?.slice(0, 10)}
+            {...register("timestamp")}
+            className="expire_date_transparent"
+            onBlurCapture={handleSubmit((data) =>
+              handleFormData(data, medicineUpdate, user)
+            )}
           />
         </div>
         <input
           type="text"
           defaultValue={through.shortage}
           {...register("shortage")}
+          style={{ zIndex: "10" }}
+          onBlurCapture={handleSubmit((data) =>
+            handleFormData(data, medicineUpdate, user)
+          )}
         />
         <input
           type="checkbox"
           defaultChecked={through.lease}
           {...register("lease")}
           style={{ width: "1rem", marginRight: "0rem" }}
+          onBlurCapture={handleSubmit((data) =>
+            handleFormData(data, medicineUpdate, user)
+          )}
         />
         <div className="input-with-currency">
           <span className="currency-span" style={{ cursor: "default" }}>
@@ -151,13 +262,15 @@ function EntrancThroughEntry({ through, keyValue, num }) {
           <span className={"currency-span-percent"}>%</span>
           <input
             type="text"
-            defaultValue={through.interest_percent}
             {...register("interest_percent")}
             className={
               through.interest_percent > 0 && through.interest_percent <= 100
                 ? "transparent-inputs-percent"
                 : "transparent-inputs-percent-alert"
             }
+            onBlurCapture={handleSubmit((data) =>
+              handleFormData(data, interestPercentUpdate, user)
+            )}
           />
         </div>
 
@@ -167,10 +280,12 @@ function EntrancThroughEntry({ through, keyValue, num }) {
           </span>
           <input
             type="text"
-            defaultValue={through.each_sell_price_afg}
             className="transparent-inputs"
             {...register("each_sell_price_afg")}
             style={{ cursor: "default" }}
+            onBlurCapture={handleSubmit((data) =>
+              handleFormData(data, afghanPriceUpdate, user)
+            )}
           />
         </div>
         <div className="medician-map-buttons">

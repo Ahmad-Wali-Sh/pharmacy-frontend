@@ -1,5 +1,6 @@
 import React from "react";
 import { useSignOut, useIsAuthenticated } from "react-auth-kit";
+import ColorTemplates from "../Settings/ColorTemplates";
 
 function Header() {
   const isAuthenticated = useIsAuthenticated();
@@ -8,6 +9,7 @@ function Header() {
     <div className="header">
       <div className="header-elements">
         <div className="icons">
+          <ColorTemplates />
           <i className="fa-solid fa-bell"></i>
           <i className="fa-solid fa-gear"></i>
           <div className="log-in" onClick={() => signOut()}>

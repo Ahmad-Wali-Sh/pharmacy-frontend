@@ -44,7 +44,6 @@ export default function EntranceHeader() {
       total_interest: "",
       discount_percent_entrance: "",
       wholesale: "",
-      entrance_id: "",
       payment_method: "",
     },
   });
@@ -273,7 +272,7 @@ export default function EntranceHeader() {
         placeholder=""
         error={errors.currency ? true : false}
         required={true}
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option) => option.name + '(' + option.rate + ")"}
         getOptionValue={(option) => option.id}
         uniqueKey={`entrance-unique${reKey}`}
         defaultValue={currency?.find((c) =>

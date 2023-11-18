@@ -16,3 +16,8 @@ export const useFactorTotal = create((set) => ({
   factorTotal: [],
   setFactorTotal: (state) => set(() => ({ factorTotal: state })),
 }));
+
+export const useTemplateLogo = create((set) => ({
+  templateLogo: "./images/frontend/colorful.png",
+  setTemplateLogo: (state) => set(() => ({ templateLogo: state })),
+}));
