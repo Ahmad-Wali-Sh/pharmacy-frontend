@@ -336,7 +336,7 @@ export default function EntranceHeader() {
         //     props.setFile(e.target.files[0]);
         //   }}
       ></input>
-      <a
+      {/* <a
         href={entrance?.image && new URL(entrance?.image).pathname.slice(16)}
         target="_blank"
         style={{
@@ -345,7 +345,7 @@ export default function EntranceHeader() {
         }}
       >
         {entrance?.image ? "Show_Photo" : ""}
-      </a>
+      </a> */}
       <ButtonGroup>
         <FormButton
           name="حذف"
