@@ -25,15 +25,11 @@ export const postDataFn = (data, api) => {
 };
 
 export const putDataFn = (data, api) => {
-  return axios.put(API_URL + api, data).then(() => toast.success('درخواست موفقانه بود')).catch((e) => {
-    toast.error(`خطا! ${e.message}`)
-    console.log(e);
-    return Promise.reject(e.message)
-  })
+  return axios.put(API_URL + api, data)
 };
 
 export const patchDataFn = (data, api) => {
-  return axios.patch(API_URL + api, data);
+  return axios.patch(API_URL + api, data)
 };
 
 export const deleteDataFn = (api) => {
@@ -42,8 +38,15 @@ export const deleteDataFn = (api) => {
 
 // it is a default success function to do its job
 export const successFn = (invalidKey, func) => {
-  queryClient.invalidateQueries(invalidKey, {refetchInactive: true, refetchType: 'all'});
-  func();
+  toast.success('در خواست موفقانه بود')
+  // queryClient.invalidateQueries(invalidKey, {
+  //   refetchInactive: true,
+  //   refetchType: "all",
+  // });
+  setTimeout(() => {
+    queryClient.invalidateQueries()
+  }, 200)
+  func && func();
 };
 
 // it is a function that gets data from react hook form and translate it into Form for submiting.

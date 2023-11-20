@@ -26,6 +26,7 @@ import axios from "axios";
 import MedicinesLists from "./MedicinesLists";
 import Select from "react-select";
 import { SelectInputStyle } from "../../../../styles";
+import { useMedicine } from "../../../States/States";
 
 export default function MedicineList({
   edit,
@@ -87,6 +88,8 @@ export default function MedicineList({
       }),
   });
 
+  const { medicine, setMedicine } = useMedicine()
+
   const { mutateAsync: handleEditMedicine } = useMutation({
     mutationFn: (data) => {
       let newdata = data;
@@ -104,20 +107,22 @@ export default function MedicineList({
         );
       putDataFn(newdata, `medician/${editItem.id}/`);
     },
-    onSuccess: (res) =>
-       {
+    onSuccess: (data) => {
         setActive("list");
-        if (res?.data) {
-          setSelectedMedician && res.data && setSelectedMedician(res.data);
-          selectAutoCompleteData(res.data);
+        if (data?.data) {
+          setSelectedMedician && data.data && setSelectedMedician(data.data);
+          selectAutoCompleteData(data.data);
         }
-        queryClient.invalidateQueries({
-          predicate: (query) => query.queryKey[0].startsWith("medician"),
-        });
+        setTimeout(() => {
+          // queryClient.invalidateQueries({
+          //   predicate: (query) => query.queryKey[0].startsWith("medician"),
+          // });
+          // queryClient.refetchQueries();
+          successFn('')
+        }, 500)
         getTwiceMedicine();
+        geteditedMedicine()
       },
-    onError: (res) => 
-      toast.error('what the fuckk')
   });
 
   const { mutateAsync: deleteMedicine } = useMutation({
@@ -164,6 +169,14 @@ export default function MedicineList({
   }`;
   const { data: medicines, refetch: getTwiceMedicine } = useQuery({
     queryKey: [medicineQuery],
+  });
+  const { data: editedMedicine, refetch: geteditedMedicine } = useQuery({
+    queryKey: `medician/${edit?.id}`,
+    enabled: false,
+    onSuccess: (data) => {
+      console.log(data)
+      setMedicine(data)
+    }
   });
 
   const FormResetToItem = (item) => {
@@ -466,9 +479,9 @@ export default function MedicineList({
 }
 
 function MedicineForm(props) {
-  let results = props.department.filter((depart, index) => {
-    if (props.medicine) {
-      return props.medicine?.department.find((medicineDepart) => {
+  let results = props?.department?.filter((depart, index) => {
+    if (props?.medicine) {
+      return props?.medicine?.department.find((medicineDepart) => {
         return medicineDepart === depart.id && depart;
       });
     }

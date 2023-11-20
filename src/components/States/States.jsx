@@ -8,6 +8,10 @@ export const useEntrance = create((set) => ({
   entrance: [],
   setEntrance: (state) => set(() => ({ entrance: state })),
 }));
+export const useMedicine = create((set) => ({
+  medicine: [],
+  setMedicine: (state) => set(() => ({ medicine: state })),
+}));
 export const useEntranceTrough = create((set) => ({
   entranceThrough: [],
   setEntranceThrough: (state) => set(() => ({ entranceThrough: state })),

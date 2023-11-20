@@ -5,7 +5,7 @@ import EntrancThroughEntry from "./EntrancThroughEntry";
 export default function EntrancBottom(props) {
   // const { entranceThrough, setEntranceTrough } = useEntranceTrough();
   const { entrance, setEntrance} = useEntrance()
-  const { data: entranceThrough } = useQuery(`entrance-throug/?entrance=${entrance.id}`, {cacheTime:10})
+  const { data: entranceThrough } = useQuery(`entrance-throug/?entrance=${entrance?.id}`, {cacheTime:10})
   return (
     <form className="entrance-medician">
       <div className="entrance-medician-header">
