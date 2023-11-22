@@ -8,6 +8,7 @@ import {
   successFn,
   putDataFn,
   deleteDataFn,
+  queryClient,
 } from "../../../services/API";
 import { toast } from "react-toastify";
 import {
@@ -20,6 +21,7 @@ import {
 } from "../SellLists/ListingComponents";
 
 export default function PaymentsLists() {
+
   const ListFilterRef = useRef(null);
   const [active, setActive] = useState("list");
   const [editItem, setEditItem] = useState("");
@@ -34,7 +36,7 @@ export default function PaymentsLists() {
   const { mutateAsync: newPayment } = useMutation({
     mutationFn: (data) => postDataFn(data, "payment-method/"),
     onSuccess: () =>
-      successFn([paymentQuery], () => {
+      successFn('payment-method', () => {
         setActive("list");
       }),
   });
@@ -42,7 +44,7 @@ export default function PaymentsLists() {
   const { mutateAsync: handleEditPayment } = useMutation({
     mutationFn: (data) => putDataFn(data, `payment-method/${editItem.id}/`),
     onSuccess: () =>
-      successFn([paymentQuery], () => {
+      successFn('payment-method', () => {
         setActive("list");
       }),
   });
@@ -50,7 +52,7 @@ export default function PaymentsLists() {
   const { mutateAsync: deletePayment } = useMutation({
     mutationFn: (id) => deleteDataFn(`payment-method/${id}/`),
     onSuccess: () =>
-      successFn([paymentQuery], () => {
+      successFn('payment-method', () => {
         setActive("list");
       }),
     onError: (e) => {

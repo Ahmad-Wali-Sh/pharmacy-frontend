@@ -5,6 +5,7 @@ import {
   useEntrance,
   useEntranceTrough,
   useFactorTotal,
+  useMedicine,
 } from "../../States/States";
 import { useForm } from "react-hook-form";
 import {
@@ -34,10 +35,10 @@ export default function EntranceThrough() {
     watch,
     formState: { errors },
   } = useForm();
-  const [medicine, setMedicine] = useState("");
+  const {medicine, setMedicine} = useMedicine()
   const { entrance } = useEntrance();
   const { data: entranceThrough, refetch: entranceRefetch } = useQuery(
-    `entrance-throug/?entrance=${entrance.id}`
+    `entrance-throug/?entrance=${entrance?.id}`
   );
   const user = useAuthUser();
 
@@ -109,13 +110,14 @@ export default function EntranceThrough() {
     }
   };
 
+
   const resetThrough = () => {
     reset({
       number_in_factor: "",
-      each_price_factor: medicine.last_purchased,
+      each_price_factor: medicine?.last_purchased,
       each_sell_price_afg: sell_price_get(),
-      each_quantity: medicine.each_quantity || 1,
-      no_box: medicine.no_box || 1,
+      each_quantity: medicine?.no_pocket || 1,
+      no_box: medicine?.no_box || 1,
       interest_percent: entrance ? entrance.total_interest : "",
       each_sell_price_afg: "",
       quantity_bonus: "",
@@ -123,8 +125,8 @@ export default function EntranceThrough() {
       batch_number: "",
       discount_money: "",
       discount_percent: "",
-      entrance: entrance.id,
-      medician: medicine.id,
+      entrance: entrance?.id,
+      medician: medicine?.id,
     });
   };
 

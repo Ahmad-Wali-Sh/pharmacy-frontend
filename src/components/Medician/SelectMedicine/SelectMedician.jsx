@@ -9,6 +9,7 @@ import { AsyncPaginate } from "react-select-async-paginate";
 import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLists";
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 import MedicineShowModal from "../../PageComponents/Modals/MedicineShow";
+import { useMedicine } from "../../States/States";
 
 export const SelectMedician = forwardRef(
   (
@@ -32,7 +33,7 @@ export const SelectMedician = forwardRef(
     }));
     const SelectMedicineModalRef = useRef(null);
 
-    const [selectedMedician, setSelectedMedician] = React.useState("");
+    const { medicine, setMedicine} = useMedicine()
     const [textHighlight, setTextHighlight] = React.useState({
       barcode: "on",
       generic: "",
@@ -64,7 +65,7 @@ export const SelectMedician = forwardRef(
     }, []);
 
     React.useEffect(() => {
-      setSelectedMedician(purchaseMedicine);
+      setMedicine(purchaseMedicine);
     }, [purchaseMedicine]);
 
     const { data: BookmarkedMedicine } = useQuery({
@@ -132,11 +133,12 @@ export const SelectMedician = forwardRef(
     const handleMedicineSelect = (item) => {
       MedicineShowRef.current.Opener(item);
     };
+
     
     const ApproveMedicine = (item) => {
       selectAutoCompleteData(item);
       SelectMedicineModalRef.current.Closer();
-      setSelectedMedician(item);
+      setMedicine(item);
       UpdateChangedMedicine(item)
       // Medicine With Including Functionality
       // Medicine Expires Including Functionality
@@ -163,24 +165,24 @@ export const SelectMedician = forwardRef(
             انتخاب دارو
           </div>
           <div className="selected-medician-show">
-            <h4>{selectedMedician && selectedMedician.medicine_full}</h4>
+            <h4>{medicine && medicine.medicine_full}</h4>
           </div>
-          {selectedMedician && (
+          {medicine && (
             <div className="flex ">
               <div className="selected-with-button">
                 <SellingLists
                   title="لست ها"
                   activeKey="purhase-list"
                   ref={SellRef}
-                  selectedMedicine={selectedMedician}
+                  selectedMedicine={medicine}
                   button="plus"
                 />
               </div>
               <MedicinesLists
                 title="لست ها"
                 activeKey="medicines"
-                medicine={selectedMedician}
-                setSelectedMedician={setSelectedMedician}
+                medicine={medicine}
+                setMedicine={setMedicine}
                 selectAutoCompleteData={selectAutoCompleteData}
                 button="none"
                 name="ثبت دوا"

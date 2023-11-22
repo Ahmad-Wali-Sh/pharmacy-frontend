@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import BigModal from "../../PageComponents/Modals/BigModal";
 import AlertModal from "../../PageComponents/Modals/AlertModal";
 import EntranceForm from "./EntranceForm";
+import { useFactorTotal, useEntrance } from "../../States/States";
+import axios from "axios";
 
 export default function Entrance({ button, icon, title }) {
   const EntranceModalRef = useRef(null);
@@ -10,6 +12,25 @@ export default function Entrance({ button, icon, title }) {
   const PreviousPriceAlertRef = useRef(null);
   const TotalPriceAlertRef = useRef(null);
   const PriceAppliedAlertRef = useRef(null);
+  const { entrance } = useEntrance();
+  const { factorTotal } = useFactorTotal();
+
+  const API_URL = import.meta.env.VITE_API;
+
+  const ClosingCheckList = () => {
+    axios
+      .get(API_URL + `entrance/${entrance?.id}`)
+      .then((ent) => {
+        if (factorTotal == ent.data.entrance_total) {
+          EntranceModalRef.current.Closer();
+        } else {
+          TotalPriceAlertRef.current.Opener();
+        }
+      })
+      .catch(() => {
+        EntranceModalRef.current.Closer();
+      });
+  };
 
   return (
     <>
@@ -31,7 +52,12 @@ export default function Entrance({ button, icon, title }) {
           <i class="fa-solid fa-circle-info"></i>
         </div>
       )}
-      <BigModal title="ثبت فاکتور" ref={EntranceModalRef}>
+      <BigModal
+        title="ثبت فاکتور"
+        ref={EntranceModalRef}
+        closeFunc={() => ClosingCheckList()}
+        EscOff={() => ClosingCheckList()}
+      >
         <AlertModal
           errorTitle="خطا در مجموع فاکتور!"
           errorText="آیا با بستن صفحه موافقید؟"

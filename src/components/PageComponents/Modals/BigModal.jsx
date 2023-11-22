@@ -23,11 +23,11 @@ const BigModal = forwardRef((props, ref) => {
     <Modal
       style={ModalBigStyles}
       isOpen={registerModalOpen}
-      onRequestClose={onClose}
+      onRequestClose={() => props.EscOff ? props.EscOff() : onClose()}
     >
       <div className="modal-header">
         <h3>{props.title}</h3>
-        <div className="modal-close-btn" onClick={onClose}>
+        <div className="modal-close-btn" onClick={() => props.closeFunc ? props.closeFunc() : onClose()}>
           <i className="fa-solid fa-xmark"></i>
         </div>
       </div>

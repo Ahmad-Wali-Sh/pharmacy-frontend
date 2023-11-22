@@ -18,6 +18,7 @@ import {
 } from "../../services/API";
 import { useAuthUser } from "react-auth-kit";
 import { useState, useEffect } from "react";
+import MultipleImage from "../../PageComponents/MultipleImage";
 
 export default function EntranceHeader() {
   const {
@@ -66,11 +67,10 @@ export default function EntranceHeader() {
     },
   });
   const { mutate: updateEntrance } = useMutation({
-    mutationFn: (data) => putDataFn(data, `entrance/${entrance.id}/`),
+    mutationFn: (data) => putDataFn(data, `entrance/${entrance?.id}/`),
     onSuccess: (res) => {
       successFn("", () => {
         setEntrance(res.data);
-        reset({ isDirty: false });
       });
     },
   });
@@ -122,25 +122,25 @@ export default function EntranceHeader() {
   useEffect(() => {
     setReKey((prev) => prev + 1);
     reset({
-      final_register: entrance.final_register || "",
-      company: entrance.company || "",
-      store: entrance.store || "",
-      factor_number: entrance.factor_number || "",
+      final_register: entrance?.final_register || "",
+      company: entrance?.company || "",
+      store: entrance?.store || "",
+      factor_number: entrance?.factor_number || "",
       factor_date:
-        entrance.factor_date?.slice(0, 10) ||
+        entrance?.factor_date?.slice(0, 10) ||
         new Date().toISOString().slice(0, 10),
-      recived_by: entrance.recived_by || "",
-      deliver_by: entrance.deliver_by || "",
+      recived_by: entrance?.recived_by || "",
+      deliver_by: entrance?.deliver_by || "",
       entrance_search: "",
-      currency: entrance.currency || "",
-      description: entrance.description || "",
-      total_interest: entrance.total_interest || "",
-      discount_percent_entrance: entrance.discount_percent_entrance || "",
-      wholesale: entrance.wholesale || "",
-      entrance_id: entrance.id || "",
-      payment_method: entrance.payment_method || "",
+      currency: entrance?.currency || "",
+      description: entrance?.description || "",
+      total_interest: entrance?.total_interest || "",
+      discount_percent_entrance: entrance?.discount_percent_entrance || "",
+      wholesale: entrance?.wholesale || "",
+      entrance_id: entrance?.id || "",
+      payment_method: entrance?.payment_method || "",
     });
-    entrance.id && revertEntrance();
+    entrance?.id && revertEntrance();
   }, [entrance]);
 
   return (
@@ -330,12 +330,13 @@ export default function EntranceHeader() {
         className="entrance--inputs"
       ></input>
       <label>عکس:</label>
-      <input
+      {/* <input
         type="file"
-        //   onChange={(e) => {
-        //     props.setFile(e.target.files[0]);
-        //   }}
-      ></input>
+          onChange={(e) => {
+            props.setFile(e.target.files[0]);
+          }}
+      ></input> */}
+      <MultipleImage />
       <a
         href={entrance?.image && new URL(entrance?.image).pathname.slice(16)}
         target="_blank"
@@ -360,7 +361,7 @@ export default function EntranceHeader() {
         />
         <FormButton name="جدید" Func={() => newEntrance()} />
         <SubmitButton
-          Func={() => console.log("submited")}
+          Func={() => null}
           name={entrance?.id ? "آپدیت" : "ثبت"}
           disabled={errors.final_register ? true : false}
         />

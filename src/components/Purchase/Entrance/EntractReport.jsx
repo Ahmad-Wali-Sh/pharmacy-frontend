@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { toast } from "react-toastify";
 import {
   useEntrance,
   useEntranceTrough,
@@ -11,10 +13,45 @@ export default function EntranceReport() {
 
   const { entrance, setEntrance } = useEntrance();
   const { data: entranceThrough } = useQuery(
-    `entrance-throug/?entrance=${entrance.id}`
+    `entrance-throug/?entrance=${entrance?.id}`
   );
 
-  const { FactorTotal, setFactorTotal } = useFactorTotal();
+  const { data: nextEntrance, refetch: getNextEntrance } = useQuery(
+    `entrance/${parseInt(entrance?.id) + 1}`,
+    { enabled: false, onSuccess: (data) => setEntrance(data)},
+  );
+  const { data: prevEntrance, refetch: getPrevEntrance } = useQuery(
+    `entrance/${parseInt(entrance?.id) - 1}`,
+    { enabled: false, onSuccess: (data) => setEntrance(data)}
+  );
+  const { data: lastEntrance, refetch: getLastEntrance } = useQuery({
+    queryKey: `last-entrance/`,
+    enabled: false,
+    onSuccess: (data) => {
+      setEntrance(data[0])
+    } 
+  });
+
+  const API_URL = import.meta.env.VITE_API;
+
+  const PriceApply = () => {
+    entranceThrough.map((through) => {
+      const PriceForm = new FormData();
+      PriceForm.append("price", through.each_sell_price_afg);
+      axios
+        .patch(API_URL + 'medician/' + through.medician + "/", PriceForm)
+        .then(() => {
+          setPriceApplied(true)
+          toast.info(
+            `${through.medicine_full} > ${through.each_sell_price_afg}Af`
+          );
+        })
+        .catch(() => toast.error("New Item Added."));
+    });
+  };
+
+
+  const { factorTotal, setFactorTotal } = useFactorTotal();
   const [report, setReport] = useState({
     number: 0,
     total_before_discount: 0,
@@ -26,6 +63,8 @@ export default function EntranceReport() {
     net_profit: 0,
     purchase_total: 0,
   });
+
+  const [priceApplied, setPriceApplied] = useState(false)
 
   const Reporting = () => {
     const totalInterest = () => {
@@ -93,7 +132,11 @@ export default function EntranceReport() {
 
   useEffect(() => {
     Reporting();
+    setPriceApplied(false)
   }, [entranceThrough]);
+
+
+
 
   return (
     <div className="entrance-report">
@@ -131,7 +174,8 @@ export default function EntranceReport() {
         <div className="entrance-report-map-box">
           <label>ارز</label>
           <label>
-            {entrance.currency_name && entrance.currency_name + "(" + entrance.currency_rate + ")"}
+            {entrance?.currency_name &&
+              entrance?.currency_name + "(" + entrance?.currency_rate + ")"}
           </label>
         </div>
         <div className="entrance-report-map-box">
@@ -139,7 +183,7 @@ export default function EntranceReport() {
           <input
             type="text"
             onChange={(res) => setFactorTotal(res.target.value)}
-            value={FactorTotal}
+            value={factorTotal}
             tabIndex={-1}
           />
           <label
@@ -154,21 +198,26 @@ export default function EntranceReport() {
       <div className="entrance-report-footer">
         <button
           className="entrance-report-button"
-          onClick={() => console.log("left")}
+          onClick={() => {
+            entrance.id ? getPrevEntrance() : getLastEntrance()
+          }}
           tabIndex={-1}
         >
           <i class="fa-solid fa-left-long"></i>
         </button>
         <button
-          className="entrance-report-button"
-          onClick={() => console.log("middle")}
+          className={`entrance-report-button ${(entrance.id && priceApplied) ? '' : entranceThrough?.length > 0 && 'alerting-button'}`}
+          onClick={() => PriceApply()}
+          disabled={entranceThrough?.length > 0 ? false : true}
           tabIndex={-1}
         >
           <i class="fa-solid fa-comments-dollar"></i>
         </button>
         <button
           className="entrance-report-button"
-          onClick={() => console.log("right")}
+          onClick={() => {
+            entrance.id ? getNextEntrance() : getLastEntrance()
+          }}
           tabIndex={-1}
         >
           <i class="fa-solid fa-right-long"></i>
