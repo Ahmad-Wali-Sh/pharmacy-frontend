@@ -17,7 +17,7 @@ export const useEntranceTrough = create((set) => ({
   setEntranceThrough: (state) => set(() => ({ entranceThrough: state })),
 }));
 export const useFactorTotal = create((set) => ({
-  factorTotal: [],
+  factorTotal: 0,
   setFactorTotal: (state) => set(() => ({ factorTotal: state })),
 }));
 

@@ -2170,6 +2170,16 @@ input[type="date"]:disabled {
   font-size: medium;
 }
 
+.alerting-button {
+  background-color: rgb(126, 51, 51) !important;
+  box-shadow: 1px 1px 10px red;
+}
+
+.entrance-report-button:disabled {
+  background-color: var(--color-sex) !important;
+  box-shadow: none !important;
+}
+
 .prescription-list-filter > select {
   border-radius: 1rem;
   border: none;
@@ -3663,3 +3673,71 @@ input[type="date"]:disabled {
   height: 1.5rem;
 }
 
+.multiple-image-button {
+  cursor: pointer;
+  text-align: center;
+  background-color: var(--color-three);
+  color: var(--color-ten);
+  border-radius: 1rem;
+  height: 1.4rem;
+}
+
+.multiple-image-modal {
+  background-color: var(--color-sex);
+  width: 100%;
+  height: 90%;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 48% 48%;
+  gap: 1rem;
+  grid-template-rows: 10% 85%;
+}
+
+.multiple-image-webcam {
+  border-radius: 1rem;
+  background-color: var(--color-three);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.multiple-image-item {
+  width: 96%;
+  height: 2rem;
+  display: flex;
+  margin: 0.3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.4rem 0.4rem 0rem 0rem;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  direction: rtl;
+  background-color: var(--color-sex);
+  border-bottom: 1px solid black;
+  text-decoration: none;
+  color: var(--color-ten);
+}
+
+.multiple-image-image {
+  width: 5rem;
+  height: 4rem;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.multiple-image-browse {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0.5rem;
+  border-radius: 1rem;
+  background-color: var(--color-three);
+}
+
+.multiple-image-list {
+  background-color: var(--color-three);
+  grid-area: 2 / 1 / 2 / 3;
+  border-radius: 1rem;
+  overflow: auto;
+}

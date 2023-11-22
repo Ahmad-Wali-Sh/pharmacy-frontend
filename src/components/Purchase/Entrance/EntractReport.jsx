@@ -41,6 +41,7 @@ export default function EntranceReport() {
       axios
         .patch(API_URL + 'medician/' + through.medician + "/", PriceForm)
         .then(() => {
+          setPriceApplied(true)
           toast.info(
             `${through.medicine_full} > ${through.each_sell_price_afg}Af`
           );
@@ -50,7 +51,7 @@ export default function EntranceReport() {
   };
 
 
-  const { FactorTotal, setFactorTotal } = useFactorTotal();
+  const { factorTotal, setFactorTotal } = useFactorTotal();
   const [report, setReport] = useState({
     number: 0,
     total_before_discount: 0,
@@ -62,6 +63,8 @@ export default function EntranceReport() {
     net_profit: 0,
     purchase_total: 0,
   });
+
+  const [priceApplied, setPriceApplied] = useState(false)
 
   const Reporting = () => {
     const totalInterest = () => {
@@ -129,7 +132,11 @@ export default function EntranceReport() {
 
   useEffect(() => {
     Reporting();
+    setPriceApplied(false)
   }, [entranceThrough]);
+
+
+
 
   return (
     <div className="entrance-report">
@@ -176,7 +183,7 @@ export default function EntranceReport() {
           <input
             type="text"
             onChange={(res) => setFactorTotal(res.target.value)}
-            value={FactorTotal}
+            value={factorTotal}
             tabIndex={-1}
           />
           <label
@@ -199,8 +206,9 @@ export default function EntranceReport() {
           <i class="fa-solid fa-left-long"></i>
         </button>
         <button
-          className="entrance-report-button"
+          className={`entrance-report-button ${(entrance.id && priceApplied) ? '' : entranceThrough?.length > 0 && 'alerting-button'}`}
           onClick={() => PriceApply()}
+          disabled={entranceThrough?.length > 0 ? false : true}
           tabIndex={-1}
         >
           <i class="fa-solid fa-comments-dollar"></i>

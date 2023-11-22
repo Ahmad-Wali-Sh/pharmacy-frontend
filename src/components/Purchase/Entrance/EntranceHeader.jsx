@@ -18,6 +18,7 @@ import {
 } from "../../services/API";
 import { useAuthUser } from "react-auth-kit";
 import { useState, useEffect } from "react";
+import MultipleImage from "../../PageComponents/MultipleImage";
 
 export default function EntranceHeader() {
   const {
@@ -329,12 +330,13 @@ export default function EntranceHeader() {
         className="entrance--inputs"
       ></input>
       <label>عکس:</label>
-      <input
+      {/* <input
         type="file"
-        //   onChange={(e) => {
-        //     props.setFile(e.target.files[0]);
-        //   }}
-      ></input>
+          onChange={(e) => {
+            props.setFile(e.target.files[0]);
+          }}
+      ></input> */}
+      <MultipleImage />
       <a
         href={entrance?.image && new URL(entrance?.image).pathname.slice(16)}
         target="_blank"
