@@ -53,6 +53,7 @@ export function FormButton({ Func, name, className, disabled=false }) {
       onClick={() => Func()}
       className={`form-button ${className}`}
       disabled={disabled}
+      tabIndex={-1}
       value={name}
     ></input>
   );
@@ -62,6 +63,7 @@ export function SubmitButton({ Func, name, className, disabled=false }) {
     <input
       type="submit"
       onClick={() => Func()}
+      tabIndex={-1}
       className={`form-button ${className} `}
       value={name}
       disabled={disabled}

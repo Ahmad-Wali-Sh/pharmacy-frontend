@@ -93,6 +93,10 @@ export default function EntranceThrough() {
     },
   });
 
+  useEffect(() => {
+   entrance.id && SelectMedicineRef.current.Opener();
+  }, [entrance.id])
+
   const SubmitedAlert = (data) => {
     return entranceThrough.filter((through) => {
       if (through.medician == data.medician) {
@@ -284,6 +288,12 @@ export default function EntranceThrough() {
           type="text"
           {...register("discount_percent")}
           className="entrance--inputs"
+          onKeyDown={(e) => {
+            if (e.key === 'Tab') {
+              e.preventDefault()
+              handleSubmit(SubmitChecklist)()
+            }
+          }}
         />
         <div className="adding-box">
           <label>خرید.ق:</label>
