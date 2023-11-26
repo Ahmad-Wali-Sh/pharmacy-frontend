@@ -157,6 +157,7 @@ export default function EntranceHeader() {
       <label>وضعیت:</label>
       <ControlledSelect
         control={control}
+        autoFocus={entrance.id ? false : true}
         name="final_register"
         error={errors.final_register ? true : false}
         required={true}
@@ -272,7 +273,7 @@ export default function EntranceHeader() {
         placeholder=""
         error={errors.currency ? true : false}
         required={true}
-        getOptionLabel={(option) => option.name + '(' + option.rate + ")"}
+        getOptionLabel={(option) => option.name + "(" + option.rate + ")"}
         getOptionValue={(option) => option.id}
         uniqueKey={`entrance-unique${reKey}`}
         defaultValue={currency?.find((c) =>
@@ -327,6 +328,17 @@ export default function EntranceHeader() {
       <input
         {...register("description")}
         defaultValue={entrance?.description}
+        onKeyDown={(e) => {
+          if (e.key === "Tab") {
+            handleSubmit((data) =>
+              handleFormData(
+                data,
+                entrance.id ? updateEntrance : submitEntrance,
+                user
+              )
+            )();
+          }
+        }}
         className="entrance--inputs"
       ></input>
       <label>عکس:</label>
