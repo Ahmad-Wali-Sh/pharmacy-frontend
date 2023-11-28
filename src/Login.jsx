@@ -12,38 +12,54 @@ function Login() {
 
   const LOGIN_URL = import.meta.env.VITE_LOGIN;
   const ME_URL = import.meta.env.VITE_ME;
+  const AUTH_URL = import.meta.env.VITE_AUTH;
 
   const onSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post(LOGIN_URL, formData)
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
+
+    axios.post(LOGIN_URL, formData).then((res1) => {
+      axios
+        .post(
+          AUTH_URL + "token/logout/",
+          {},
+          {
+            headers: {
+              Authorization: `Token ${res1.data.auth_token}`,
+            },
+          }
+        )
+        .finally(() => {
           axios
-            .get(ME_URL, {
-              headers: {
-                Authorization: `Token ${res.data.auth_token}`,
-              },
+            .post(LOGIN_URL, formData)
+            .then((res) => {
+              console.log(res);
+              if (res.status === 200) {
+                axios
+                  .get(ME_URL, {
+                    headers: {
+                      Authorization: `Token ${res.data.auth_token}`,
+                    },
+                  })
+                  .then((me_res) => {
+                    signIn({
+                      token: res.data.auth_token,
+                      expiresIn: 120000,
+                      tokenType: "Token",
+                      authState: me_res.data,
+                    });
+                    toast.success(`${me_res.data.first_name}: خوش آمدید`);
+                  });
+                axios.defaults.headers.common[
+                  "Authorization"
+                ] = `Token ${res.data.auth_token}`;
+              }
             })
-            .then((me_res) => {
-              signIn({
-                token: res.data.auth_token,
-                expiresIn: 1200,
-                tokenType: "Token",
-                authState: me_res.data,
-              });
-              toast.success(`${me_res.data.first_name}: خوش آمدید`);
+            .catch((err) => {
+              toast.error("اطلاعات وارد شده درست نمیباشد");
+              console.log(err);
             });
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Token ${res.data.auth_token}`;
-        }
-      })
-      .catch((err) => {
-        toast.error("اطلاعات وارد شده درست نمیباشد");
-        console.log(err);
-      });
+        });
+    });
   };
 
   useEffect(() => {
@@ -51,7 +67,7 @@ function Login() {
     foo.setAttribute("autoComplete", "new-password");
   }, []);
 
-  const [readOnly, setReadonly] = useState(true)
+  const [readOnly, setReadonly] = useState(true);
   return (
     <div className="container">
       <div className="screen">
@@ -79,8 +95,8 @@ function Login() {
                 autoComplete="new-password"
                 placeholder="Password"
                 readOnly={readOnly}
-                onFocus={ () => setReadonly(false)}
-                onBlur={ () => setReadonly(true)}
+                onFocus={() => setReadonly(false)}
+                onBlur={() => setReadonly(true)}
                 onChange={(e) =>
                   setFormDate({ ...formData, password: e.target.value })
                 }
