@@ -36,6 +36,7 @@ function Header() {
             axios.post(AUTH_URL + 'token/logout/').finally(() => {
               signOut()
               delete axios.defaults.headers.common["Authorization"];
+              window.location.reload()
             })
             }}>
             <i className="fa-solid fa-user"></i>

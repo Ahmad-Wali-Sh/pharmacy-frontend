@@ -69,7 +69,6 @@ export default function MedicineList({
     formState: { errors },
   } = useForm();
 
-
   const { mutateAsync: newMedicine } = useMutation({
     mutationFn: (data) => {
       let newdata = data;
@@ -88,7 +87,7 @@ export default function MedicineList({
       }),
   });
 
-  const { medicine, setMedicine } = useMedicine()
+  const { medicine, setMedicine } = useMedicine();
 
   const { mutateAsync: handleEditMedicine } = useMutation({
     mutationFn: (data) => {
@@ -100,29 +99,27 @@ export default function MedicineList({
         );
       }
       newdata.delete("barcode");
-      let barcode = watch('barcode').toString().split(',')
+      let barcode = watch("barcode").toString().split(",");
       console.log(barcode);
-        barcode.forEach((item) =>
-          newdata.append("barcode", item)
-        );
+      barcode.forEach((item) => newdata.append("barcode", item));
       putDataFn(newdata, `medician/${editItem.id}/`);
     },
     onSuccess: (data) => {
-        setActive("list");
-        if (data?.data) {
-          setSelectedMedician && data.data && setSelectedMedician(data.data);
-          selectAutoCompleteData(data.data);
-        }
-        setTimeout(() => {
-          // queryClient.invalidateQueries({
-          //   predicate: (query) => query.queryKey[0].startsWith("medician"),
-          // });
-          // queryClient.refetchQueries();
-          successFn('')
-        }, 500)
-        getTwiceMedicine();
-        geteditedMedicine()
-      },
+      setActive("list");
+      if (data?.data) {
+        setSelectedMedician && data.data && setSelectedMedician(data.data);
+        selectAutoCompleteData(data.data);
+      }
+      setTimeout(() => {
+        // queryClient.invalidateQueries({
+        //   predicate: (query) => query.queryKey[0].startsWith("medician"),
+        // });
+        // queryClient.refetchQueries();
+        successFn("");
+      }, 500);
+      getTwiceMedicine();
+      geteditedMedicine();
+    },
   });
 
   const { mutateAsync: deleteMedicine } = useMutation({
@@ -174,17 +171,29 @@ export default function MedicineList({
     queryKey: `medician/${edit?.id}`,
     enabled: false,
     onSuccess: (data) => {
-      console.log(data)
-      setMedicine(data)
-    }
+      console.log(data);
+      setMedicine(data);
+    },
   });
 
   const FormResetToItem = (item) => {
+    console.log(item.barcode.toString().slice(-1) == ",");
+    const barcodeRetreive = () => {
+      if (item.barcode) {
+        if (item.barcode && item.barcode?.toString().slice(-1) == ",") {
+          if (item.barcode[0].slice(-1) == ",") {
+            return item.barcode[0].slice(0, -1);
+          } else {
+            return item.barcode[0];
+          }
+        } else return item.barcode;
+      } else return "";
+    };
     reset({
       id: item.id ? item.id : "",
       brand_name: item.brand_name ? item.brand_name : "",
       generic_name: item.generic_name ? item.generic_name : "",
-      barcode: item.barcode ? item.barcode : "",
+      barcode: barcodeRetreive(),
       no_pocket: item.no_pocket ? item.no_pocket : "",
       no_box: item.no_box ? item.no_box : "",
       ml: item.ml ? item.ml : "",
@@ -211,18 +220,19 @@ export default function MedicineList({
       department: item.department ? item.department : [],
       big_company: item.big_company ? item.big_company : "",
     });
-    axios(item.image)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const file = new File(
-          [blob],
-          item.medicine_full ? item.medicine_full + ".jpeg" : "no_name.jpeg",
-          { type: blob.type }
-        );
-        reset({
-          image: file ? file : "",
+    item.image &&
+      axios(item.image)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const file = new File(
+            [blob],
+            item.medicine_full ? item.medicine_full + ".jpeg" : "no_name.jpeg",
+            { type: blob.type }
+          );
+          reset({
+            image: file ? file : "",
+          });
         });
-      });
 
     setEditItem(item);
     setImage(item.image ? new URL(item.image).pathname.slice(16) : "");
@@ -494,7 +504,7 @@ function MedicineForm(props) {
         <input
           type="text"
           className={props.errors?.brand_name ? "error-input" : ""}
-          {...props.register("brand_name", {required: true})}
+          {...props.register("brand_name", { required: true })}
           style={{ direction: "ltr", textAlign: "right" }}
         />
         <label>ترکیب:</label>
@@ -622,7 +632,11 @@ function MedicineForm(props) {
           />
         </div>
         <label>قیمت:</label>
-        <input type="text" className={props.errors?.price ? "error-input" : ""} {...props.register("price", {required: true})} />
+        <input
+          type="text"
+          className={props.errors?.price ? "error-input" : ""}
+          {...props.register("price", { required: true })}
+        />
         <label>مکان:</label>
         <input
           type="text"
@@ -630,13 +644,13 @@ function MedicineForm(props) {
           style={{ direction: "ltr", textAlign: "right" }}
         />
         <label>حداقل:</label>
-        <input type="text"  {...props.register("minmum_existence")} />
+        <input type="text" {...props.register("minmum_existence")} />
         <label>حداکثر:</label>
-        <input type="text"  {...props.register("maximum_existence")} />
+        <input type="text" {...props.register("maximum_existence")} />
         <label>ت.پاکت:</label>
-        <input type="text"  {...props.register("no_pocket")} />
+        <input type="text" {...props.register("no_pocket")} />
         <label>ت.قطی:</label>
-        <input type="text"  {...props.register("no_box")} />
+        <input type="text" {...props.register("no_box")} />
 
         <div className="approving-box">
           <label>فعال:</label>
@@ -698,7 +712,6 @@ function MedicineForm(props) {
           type="text"
           {...props.register("barcode")}
           style={{ direction: "ltr", textAlign: "right" }}
-          
         />
         <label>عکس:</label>
         <div className="flex">

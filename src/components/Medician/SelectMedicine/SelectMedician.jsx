@@ -140,6 +140,7 @@ export const SelectMedician = forwardRef(
       SelectMedicineModalRef.current.Closer();
       setMedicine(item);
       UpdateChangedMedicine(item)
+      handleCloseFocus();
       // Medicine With Including Functionality
       // Medicine Expires Including Functionality
     };
