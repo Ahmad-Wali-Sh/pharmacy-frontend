@@ -78,7 +78,7 @@ export const SelectMedician = forwardRef(
         options:
           stringArray.join("").replace(/\s/g, "") != "" &&
           !MedicineLoading &&
-          MedicianSearched?.results,
+          isBarcode(stringArray) ? [MedicianSearched?.results[0].medician] : MedicianSearched?.results,
         hasMore: false,
       };
     };
@@ -111,21 +111,25 @@ export const SelectMedician = forwardRef(
       return !isNaN(string);
     };
 
+    let medicineQuery = `medician/?${
+      isBarcode(stringArray) ? "barcode__contains" : "brand_name"
+    }=${stringArray[0] ? encodeURIComponent(stringArray[0]) : ""}&ml=${
+      stringArray[1] ? encodeURIComponent(stringArray[1]) : ""
+    }&search=${stringArray[2] ? encodeURIComponent(stringArray[2]) : ""}&kind__name_persian=${
+      stringArray[3] ? encodeURIComponent(stringArray[3]) : ""
+    }&kind__name_english=${
+      stringArray[4] ? encodeURIComponent(stringArray[4]) : ""
+    }&country__name=${
+      stringArray[5] ? encodeURIComponent(stringArray[5]) : ""
+    }&big_company__name=${stringArray[6] ? encodeURIComponent(stringArray[6]) : ""}&all=${
+      stringArray[7] ? encodeURIComponent(stringArray[7]) : ""
+    }`
+
+    let medicineBarcodeQuery = `medicine-barcode/?barcode=${stringArray[0] ? encodeURIComponent(stringArray[0]) : ''}`
+
     const { data: MedicianSearched, isFetching: MedicineLoading } = useQuery({
       queryKey: [
-        `medician/?${
-          isBarcode(stringArray) ? "barcode__contains" : "brand_name"
-        }=${stringArray[0] ? encodeURIComponent(stringArray[0]) : ""}&ml=${
-          stringArray[1] ? encodeURIComponent(stringArray[1]) : ""
-        }&search=${stringArray[2] ? encodeURIComponent(stringArray[2]) : ""}&kind__name_persian=${
-          stringArray[3] ? encodeURIComponent(stringArray[3]) : ""
-        }&kind__name_english=${
-          stringArray[4] ? encodeURIComponent(stringArray[4]) : ""
-        }&country__name=${
-          stringArray[5] ? encodeURIComponent(stringArray[5]) : ""
-        }&big_company__name=${stringArray[6] ? encodeURIComponent(stringArray[6]) : ""}&all=${
-          stringArray[7] ? encodeURIComponent(stringArray[7]) : ""
-        }`,
+        isBarcode(stringArray) ? medicineBarcodeQuery : medicineQuery
       ],
       enabled: stringArray.join("").replace(/\s/g, "") != "",
     });

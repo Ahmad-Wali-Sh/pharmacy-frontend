@@ -27,6 +27,7 @@ import MedicinesLists from "./MedicinesLists";
 import Select from "react-select";
 import { SelectInputStyle } from "../../../../styles";
 import { useMedicine } from "../../../States/States";
+import MultipleBarcode from "../../MultipleBarcode";
 
 export default function MedicineList({
   edit,
@@ -708,11 +709,16 @@ function MedicineForm(props) {
         {/* <label>سهمیه:</label>
         <input {...props.register("dividing_rules")} /> */}
         <label>بارکد:</label>
-        <input
+        {/* <input
           type="text"
           {...props.register("barcode")}
           style={{ direction: "ltr", textAlign: "right" }}
-        />
+        /> */}
+        {props.medicine.id ? <MultipleBarcode medicineID={props.medicine.id}/> : <input
+          type="text"
+          style={{ direction: "ltr", textAlign: "right" }}
+          disabled
+        />}
         <label>عکس:</label>
         <div className="flex">
           <input
