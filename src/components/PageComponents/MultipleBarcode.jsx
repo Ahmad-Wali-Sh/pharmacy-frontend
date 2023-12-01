@@ -1,44 +1,46 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { deleteDataFn, postDataFn, successFn } from "../services/API";
+import { useQuery } from "react-query";
+import { toast } from "react-toastify";
 import SmallModal from "./Modals/SmallModal";
 
-function MultipleBarcode({medicineID}) {
-    const multipleBarcodeRef = useRef(null)
-    const [barcoder, setBarcoder] = useState('')
-    const { data: multipleBarcode, refetch: medicineBarcodeRefetch} = useQuery(`medicine-barcode/?medicine=${medicineID}`)
-    
-    const { mutate: newBarcode } = useMutation({
-        mutationFn: () => {
-          const BarcodeForm = new FormData();
-          BarcodeForm.append("medicine", medicineID);
-          BarcodeForm.append("barcode", barcoder);
-          postDataFn(BarcodeForm, "medicine-barcode/");
-        },
-        onSuccess: () => {
-          successFn("", () => {
-              setTimeout(() => {
-                medicineBarcodeRefetch();
-            }, 10)
-            setBarcoder("");
-          });
-        },
-    });
+function MultipleBarcode({ medicineID }) {
+  const multipleBarcodeRef = useRef(null);
+  const [barcoder, setBarcoder] = useState("");
+  const { data: multipleBarcode, refetch: medicineBarcodeRefetch } = useQuery(
+    `medicine-barcode/?medicine=${medicineID}`
+  );
 
-    const { mutate: deleteBarcode } = useMutation({
-        mutationFn: (barcodeId) => {
-          deleteDataFn(`medicine-barcode/${barcodeId}`);
-        },
-        onSuccess: () => {
-          successFn("", () => {
-              setTimeout(() => {
-                medicineBarcodeRefetch();
-            }, 200)
-            setBarcoder("");
-          });
-        },
-    });
+  const API_URL = import.meta.env.VITE_API;
 
+  const newBarcode = () => {
+    const BarcodeForm = new FormData();
+    BarcodeForm.append("medicine", medicineID);
+    BarcodeForm.append("barcode", barcoder);
+    axios
+      .post(API_URL + "medicine-barcode/", BarcodeForm)
+      .then(() => {
+        toast.success("بارکد موفقانه ثبت شد");
+        setTimeout(() => {
+          medicineBarcodeRefetch();
+        }, 10);
+        setBarcoder("");
+      })
+      .catch((e) => toast.error(`مشکلی در ثبت بارکد وجود دارد`));
+  };
+
+  const deleteBarcode = (barcodeId) => {
+    axios
+      .delete(API_URL + "medicine-barcode/" + barcodeId)
+      .then(() => {
+        toast.success("بارکد موفقانه حذف شد");
+        setTimeout(() => {
+          medicineBarcodeRefetch();
+        }, 10);
+        setBarcoder("");
+      })
+      .catch((e) => toast.error(`مشکلی در حذف بارکد وجود دارد`));
+  };
 
   return (
     <>
@@ -50,17 +52,24 @@ function MultipleBarcode({medicineID}) {
       </div>
       <SmallModal title="مشخصات بارکد" ref={multipleBarcodeRef}>
         <div className="multiple-barcode-box">
-            <form className="multiple-barcode-new" onSubmit={(e) => {
-                e.preventDefault()
-                newBarcode()
-                }}>
-          <div className="multiple-barcode-new">
-            <input className="multiple-barcode-input" value={barcoder} onChange={(e) => setBarcoder(e.target.value)}/>
-          </div>
-            </form>
+          <form
+            className="multiple-barcode-new"
+            onSubmit={(e) => {
+              e.preventDefault();
+              newBarcode();
+            }}
+          >
+            <div className="multiple-barcode-new">
+              <input
+                className="multiple-barcode-input"
+                value={barcoder}
+                onChange={(e) => setBarcoder(e.target.value)}
+              />
+            </div>
+          </form>
           <div className="multiple-barcodes">
-              {multipleBarcode?.results.map((medicineBarcode) => (
-            <div className="multiple-barcode-item">
+            {multipleBarcode?.results.map((medicineBarcode) => (
+              <div className="multiple-barcode-item">
                 <h4>{medicineBarcode.barcode}</h4>
                 <div
                   className="medician-map-buttons"
@@ -70,8 +79,8 @@ function MultipleBarcode({medicineID}) {
                     <i className="fa-solid fa-trash"></i>
                   </div>
                 </div>
-            </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       </SmallModal>

@@ -1,7 +1,13 @@
 import { Popover } from "react-tiny-popover";
 
 export const MedicineListFormat = (item, { context }) => {
-
+  const imageReturn = (image) => {
+    try {
+      return new URL(image).pathname.slice(16);
+    } catch {
+      return image.slice(16);
+    }
+  };
   return context === "value" ? (
     item.medicine_full
   ) : (
@@ -9,11 +15,7 @@ export const MedicineListFormat = (item, { context }) => {
       <div className="medician-image">
         <img
           className="medician-image"
-          src={
-            item.image
-              ? new URL(item.image).pathname.slice(16)
-              : "./images/nophoto.jpg"
-          }
+          src={item.image ? imageReturn(item.image) : "./images/nophoto.jpg"}
         />
       </div>
       <div className="medician-image">
@@ -39,10 +41,14 @@ export const MedicineListFormat = (item, { context }) => {
       <div className="medician-text-field">
         <h4>{item.medicine_full}</h4>
         <h4 className="generics-selecting">
-           <h4 className="generics-text-header">{item?.generic_name?.toString()}</h4>
-            {item?.generic_name[0] && <div className="generics-text">
+          <h4 className="generics-text-header">
             {item?.generic_name?.toString()}
-            </div>}
+          </h4>
+          {item?.generic_name[0] && (
+            <div className="generics-text">
+              {item?.generic_name?.toString()}
+            </div>
+          )}
         </h4>
         <div className="medicine-info-fields">
           <h4>تعداد در پاکت: {item.no_pocket}</h4>

@@ -99,10 +99,6 @@ export default function MedicineList({
           newdata.append("department", item)
         );
       }
-      newdata.delete("barcode");
-      let barcode = watch("barcode").toString().split(",");
-      console.log(barcode);
-      barcode.forEach((item) => newdata.append("barcode", item));
       putDataFn(newdata, `medician/${editItem.id}/`);
     },
     onSuccess: (data) => {
@@ -177,6 +173,14 @@ export default function MedicineList({
     },
   });
 
+  const imageReturn = (image) => {
+    try {
+      return new URL(image).pathname.slice(16);
+    } catch {
+      return image.slice(16);
+    }
+  };
+
   const FormResetToItem = (item) => {
     console.log(item.barcode.toString().slice(-1) == ",");
     const barcodeRetreive = () => {
@@ -236,7 +240,7 @@ export default function MedicineList({
         });
 
     setEditItem(item);
-    setImage(item.image ? new URL(item.image).pathname.slice(16) : "");
+    setImage(item.image ? imageReturn(item.image) : "");
   };
 
   const ResetForm = () => {
@@ -714,11 +718,15 @@ function MedicineForm(props) {
           {...props.register("barcode")}
           style={{ direction: "ltr", textAlign: "right" }}
         /> */}
-        {props.medicine.id ? <MultipleBarcode medicineID={props.medicine.id}/> : <input
-          type="text"
-          style={{ direction: "ltr", textAlign: "right" }}
-          disabled
-        />}
+        {props.medicine.id ? (
+          <MultipleBarcode medicineID={props.medicine.id} />
+        ) : (
+          <input
+            type="text"
+            style={{ direction: "ltr", textAlign: "right" }}
+            disabled
+          />
+        )}
         <label>عکس:</label>
         <div className="flex">
           <input

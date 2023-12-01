@@ -104,22 +104,22 @@ function MedicianList({ Closer }) {
     axios
       .get(
         MEDICIAN_URL +
-        "?brand_name=" +
-        data.brand_name +
-        "&generic_name=" +
-        data.generic_name +
-        "&no_pocket=" +
-        data.no_pocket +
-        "&ml=" +
-        data.ml +
-        "&location=" +
-        data.location +
-        "&barcode=" +
-        data.barcode +
-        "&company=" +
-        data.company +
-        "&price=" +
-        data.price +
+          "?brand_name=" +
+          data.brand_name +
+          "&generic_name=" +
+          data.generic_name +
+          "&no_pocket=" +
+          data.no_pocket +
+          "&ml=" +
+          data.ml +
+          "&location=" +
+          data.location +
+          "&barcode=" +
+          data.barcode +
+          "&company=" +
+          data.company +
+          "&price=" +
+          data.price +
           "&existence=" +
           data.existence +
           "&pharm_group=" +
@@ -127,13 +127,12 @@ function MedicianList({ Closer }) {
           "&kind=" +
           autoCompleteData.kind +
           "&country=" +
-          autoCompleteData.country + 
+          autoCompleteData.country +
           "&ordering=id"
       )
       .then((res) => setMedicianList(res.data.results));
   };
 
-  
   const ResetForm = () => {
     setMedicianList([]);
     setAutoCompleteData({
@@ -157,40 +156,41 @@ function MedicianList({ Closer }) {
 
   const ExcelExport = (data) => {
     axios({
-      url: MEDICIAN_URL_EXCEL +
-      '?format=xml&' +
-      "brand_name=" +
-      data.brand_name +
-      "&generic_name=" +
-      data.generic_name +
-      "&no_pocket=" +
-      data.no_pocket +
-      "&ml=" +
-      data.ml +
-      "&location=" +
-      data.location +
-      "&barcode=" +
-      data.barcode +
-      "&company=" +
-      data.company +
-      "&price=" +
-      data.price +
-      "&existence=" +
-      data.existence +
-      "&pharm_group=" +
-      autoCompleteData.pharm_group +
-      "&kind=" +
-      autoCompleteData.kind +
-      "&country=" +
-      autoCompleteData.country + 
-      "&ordering=id", 
-      method: 'GET',
-      responseType: 'blob'
+      url:
+        MEDICIAN_URL_EXCEL +
+        "?format=xml&" +
+        "brand_name=" +
+        data.brand_name +
+        "&generic_name=" +
+        data.generic_name +
+        "&no_pocket=" +
+        data.no_pocket +
+        "&ml=" +
+        data.ml +
+        "&location=" +
+        data.location +
+        "&barcode=" +
+        data.barcode +
+        "&company=" +
+        data.company +
+        "&price=" +
+        data.price +
+        "&existence=" +
+        data.existence +
+        "&pharm_group=" +
+        autoCompleteData.pharm_group +
+        "&kind=" +
+        autoCompleteData.kind +
+        "&country=" +
+        autoCompleteData.country +
+        "&ordering=id",
+      method: "GET",
+      responseType: "blob",
     }).then((response) => {
-      console.log(response)
-      fileDownload(response.data, 'medicine_report.xml')
-    })
-  }
+      console.log(response);
+      fileDownload(response.data, "medicine_report.xml");
+    });
+  };
 
   return (
     <>
@@ -211,8 +211,8 @@ function MedicianList({ Closer }) {
         <div className="list-items">
           <KindList Closer={registerModalCloser} />
           <div></div>
-          <PharmGroupList Closer={registerModalCloser}/>
-          <CountryList Closer={registerModalCloser}/>
+          <PharmGroupList Closer={registerModalCloser} />
+          <CountryList Closer={registerModalCloser} />
         </div>
         <div className="medician-list-box">
           <div className="medician-list-filter-box">
@@ -289,11 +289,11 @@ function MedicianList({ Closer }) {
             <div></div>
             <div></div>
             <input
-                type="button"
-                value="اکسل"
-                className="kind-list-search-btn"
-                onClick={handleSubmit(ExcelExport)}
-              />
+              type="button"
+              value="اکسل"
+              className="kind-list-search-btn"
+              onClick={handleSubmit(ExcelExport)}
+            />
             <div className="medician-filter-buttons">
               <input
                 type="button"
@@ -307,7 +307,6 @@ function MedicianList({ Closer }) {
                 className="kind-list-search-btn"
                 onClick={ResetForm}
               />
-              
             </div>
           </div>
           <div className="medician-list-header">

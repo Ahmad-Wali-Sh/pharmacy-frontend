@@ -7,6 +7,14 @@ const MedicineShowModal = forwardRef((props, ref) => {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [item, setItem] = React.useState("");
 
+  const imageReturn = (image) => {
+    try {
+      return new URL(image).pathname.slice(16);
+    } catch {
+      return image.slice(16);
+    }
+  };
+
   useImperativeHandle(ref, () => ({
     Opener(item) {
       setRegisterModalOpen(true);
@@ -24,7 +32,7 @@ const MedicineShowModal = forwardRef((props, ref) => {
   const ApproveHandle = (e) => {
     e.preventDefault();
     props.ApproveMedicine(item);
-    onClose()
+    onClose();
   };
 
   return (
@@ -34,15 +42,13 @@ const MedicineShowModal = forwardRef((props, ref) => {
       onRequestClose={onClose}
     >
       <div className="modal-box">
-        <form className="modal-box" >
+        <form className="modal-box">
           <div className="meidince-show-box">
             <div className="medicine-show-pic">
               <img
                 className="medicine-show-pic"
                 src={
-                  item.image
-                    ? new URL(item.image).pathname.slice(16)
-                    : "./images/nophoto.jpg"
+                  item.image ? imageReturn(item.image) : "./images/nophoto.jpg"
                 }
               />
             </div>
@@ -51,7 +57,8 @@ const MedicineShowModal = forwardRef((props, ref) => {
                 <span>نام:</span> {item.medicine_full}
               </h4>
               <h4>
-                <span>ترکیب:</span><small>{item?.generic_name?.toString()}</small>
+                <span>ترکیب:</span>
+                <small>{item?.generic_name?.toString()}</small>
               </h4>
               <h4>
                 <span>مکان:</span> {item.location}
@@ -80,7 +87,12 @@ const MedicineShowModal = forwardRef((props, ref) => {
                 <span>استفاده:</span>
                 <small>{item.usages}</small>
               </div>
-              <input type='button' onClick={ApproveHandle} autoFocus value='تایید'/>
+              <input
+                type="button"
+                onClick={ApproveHandle}
+                autoFocus
+                value="تایید"
+              />
             </div>
           </div>
         </form>
