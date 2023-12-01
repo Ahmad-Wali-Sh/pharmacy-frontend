@@ -123,7 +123,6 @@ export default function EntranceThrough() {
       each_quantity: medicine?.no_pocket || 1,
       no_box: medicine?.no_box || 1,
       interest_percent: entrance ? entrance.total_interest : "",
-      each_sell_price_afg: "",
       quantity_bonus: "",
       expire_date: "",
       batch_number: "",
@@ -290,8 +289,8 @@ export default function EntranceThrough() {
           className="entrance--inputs"
           onKeyDown={(e) => {
             if (e.key === 'Tab') {
-              e.preventDefault()
               handleSubmit(SubmitChecklist)()
+              setFocus('number_in_factor')
             }
           }}
         />

@@ -3741,3 +3741,57 @@ input[type="date"]:disabled {
   border-radius: 1rem;
   overflow: auto;
 }
+
+
+.multiple-barcode-box {
+  width: 98%;
+  height: 89%;
+  margin: 0.2rem;
+  background-color: var(--color-sex);
+  border-radius: 1rem;
+  display: grid;
+  grid-template-rows: 15% 85%;
+}
+
+.multiple-barcode-new {
+  width: 100%;
+  height: 3rem;
+  border-radius: 0.4rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.multiple-barcode-input {
+  width: 90%;
+  height: 2rem;
+  margin: 0rem 0rem 0rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  color: var(--color-ten);
+  padding: 1rem;
+  background-color: var(--color-three);
+  font-size: medium;
+}
+
+.multiple-barcodes {
+  background-color: var(--color-three);
+  width: 100%;
+  padding: 1rem;
+  overflow-y: auto;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.multiple-barcode-item {
+  width: 100%;
+  border-bottom: 1px solid black;
+  display: flex;
+  grid-template-columns: 20% 80%;
+  direction: rtl;
+  justify-content: space-between;
+  padding: 0.4rem;
+  color: var(--color-ten)
+}
