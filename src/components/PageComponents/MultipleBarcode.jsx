@@ -26,7 +26,36 @@ function MultipleBarcode({ medicineID }) {
         }, 10);
         setBarcoder("");
       })
-      .catch((e) => toast.error(`مشکلی در ثبت بارکد وجود دارد`));
+      .catch((e) => {
+        axios
+          .get(API_URL + `medicine-barcode/?barcode=${barcoder}`)
+          .then((res) => {
+            toast.error(
+              <>
+                <h5>ID: {`${res.data.results[0].medician.id}`}</h5>
+                <h5>Name: {`${res.data.results[0].medician.medicine_full}`}</h5>
+                <hr />
+                <h5>barcode: {barcoder}</h5>
+                <button
+                  onClick={() => {
+                    axios
+                      .delete(
+                        API_URL + "medicine-barcode/" + res.data.results[0].id
+                      )
+                      .then(() => {
+                        medicineBarcodeRefetch();
+                        newBarcode()
+                        toast.success("موفقانه بود");
+                      });
+                  }}
+                >
+                  حذف بارکد!
+                </button>
+              </>,
+              { autoClose: 5000, pauseOnHover: true }
+            );
+          });
+      });
   };
 
   const deleteBarcode = (barcodeId) => {
@@ -39,7 +68,9 @@ function MultipleBarcode({ medicineID }) {
         }, 10);
         setBarcoder("");
       })
-      .catch((e) => toast.error(`مشکلی در حذف بارکد وجود دارد`));
+      .catch((e) => {
+        toast.error(`مشکلی در حذف بارکد وجود دارد`);
+      });
   };
 
   return (
