@@ -17,7 +17,7 @@ import {
   ListMap,
   FilterModal,
   FilterInput,
-} from "../SellLists/ListingComponents";
+} from "../../ListingComponents";
 
 export default function Currencies() {
   const ListFilterRef = useRef(null);

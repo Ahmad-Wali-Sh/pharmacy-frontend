@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { InfoButton, DeleteButton } from "../../Buttons/Buttons";
+import { InfoButton, DeleteButton } from "../../PageComponents/Buttons/Buttons";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
 import { useMutation, useQuery } from "react-query";
@@ -9,7 +9,7 @@ import {
   putDataFn,
   deleteDataFn,
   patchDataFn
-} from "../../../services/API";
+} from "../../services/API";
 import { toast } from "react-toastify";
 import {
   Form,
@@ -20,8 +20,8 @@ import {
   FilterInput,
   FilterDate,
   FilterSelect,
-} from "../../ListingComponents";
-import { SelectMedician } from "../../../Medician/SelectMedicine/SelectMedician";
+} from "../../PageComponents/ListingComponents";
+import { SelectMedician } from "../../Medician/SelectMedicine/SelectMedician";
 
 function PurchaseListItem(props) {
   const { register, handleSubmit} = useForm()
@@ -58,7 +58,7 @@ function PurchaseListItem(props) {
   );
 }
 
-export default function PurchaseListManual({ selectedMedicine }) {
+export default function ManualShopingList({ selectedMedicine }) {
   const ListFilterRef = useRef(null);
   const [active, setActive] = useState("list");
   const [editItem, setEditItem] = useState("");

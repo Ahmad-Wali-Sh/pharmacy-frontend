@@ -18,7 +18,7 @@ import {
   ListMap,
   FilterModal,
   FilterInput,
-} from "../SellLists/ListingComponents";
+} from "../../ListingComponents";
 
 export default function PaymentsLists() {
 

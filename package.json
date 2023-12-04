@@ -26,6 +26,7 @@
     "npm": "^9.6.7",
     "react": "^18.2.0",
     "react-auth-kit": "^2.12.2",
+    "react-csv": "^2.2.2",
     "react-date-picker": "^10.5.0",
     "react-dom": "^18.2.0",
     "react-hichestan-datetimepicker": "^3.0.24",

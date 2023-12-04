@@ -17,7 +17,7 @@ import {
   ListMap,
   FilterModal,
   FilterInput,
-} from "./ListingComponents";
+} from "../../ListingComponents";
 
 export default function DepartmentsList() {
   const ListFilterRef = useRef(null);

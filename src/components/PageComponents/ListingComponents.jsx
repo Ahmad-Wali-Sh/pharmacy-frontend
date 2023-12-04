@@ -1,5 +1,10 @@
 import React, { useRef } from "react";
-import { ButtonGroup, DepartButton, FormButton, InfoButton, SubmitButton } from "../../Buttons/Buttons";
+import {
+  ButtonGroup,
+  DepartButton,
+  FormButton,
+  SubmitButton,
+} from "./Buttons/Buttons";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
 import { useMutation, useQuery } from "react-query";
@@ -9,11 +14,12 @@ import {
   handleFormData,
   putDataFn,
   deleteDataFn,
-} from "../../../services/API";
+} from "../services/API";
 import { toast } from "react-toastify";
-import SmallModal from "../../Modals/SmallModal";
+import SmallModal from "./Modals/SmallModal";
 import axios from "axios";
 import fileDownload from "js-file-download";
+import {CSVLink} from 'react-csv';
 
 export default function PatientList() {
   const ListFilterRef = useRef(null);
@@ -295,17 +301,17 @@ export function FilterSelect({
 }
 
 export function FilterModal(props) {
-  const API_URL = import.meta.env.VITE_API
+  const API_URL = import.meta.env.VITE_API;
 
   const ExcelExport = () => {
     axios({
-      url: API_URL + props.url + '&format=xml',
-      method: 'GET',
-      responseType: 'blob'
+      url: API_URL + props.url + "&format=xml",
+      method: "GET",
+      responseType: "blob",
     }).then((response) => {
-      fileDownload(response.data, `${props.fileName}.xml`)
-    })
-  }
+      fileDownload(response.data, `${props.fileName}.xml`);
+    });
+  };
 
   return (
     <div>
@@ -322,8 +328,14 @@ export function FilterModal(props) {
             {props.children}
             <label></label>
             <ButtonGroup>
-            <SubmitButton name="تایید" Func={() => props.current.Closer()} />
-            <FormButton name="Excel" Func={() => ExcelExport()} />
+              <SubmitButton name="تایید" Func={() => props.current.Closer()} />
+              {(props.headers && props.excel_data) ? (
+                <CSVLink data={props.excel_data} headers={props.headers}>
+                  <FormButton name="Excel" Func={() => null} />
+                </CSVLink>
+              ) : (
+                <FormButton name="Excel" Func={() => ExcelExport()} />
+              )}
             </ButtonGroup>
           </div>
         </form>

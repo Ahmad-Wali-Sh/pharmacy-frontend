@@ -17,7 +17,7 @@ import {
   ListMap,
   FilterModal,
   FilterInput,
-} from "./ListingComponents";
+} from "../../ListingComponents";
 
 export default function DoctorList() {
   const ListFilterRef = useRef(null);

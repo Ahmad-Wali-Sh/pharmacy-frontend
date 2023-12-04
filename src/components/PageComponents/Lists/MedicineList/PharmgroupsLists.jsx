@@ -17,7 +17,7 @@ import {
   ListMap,
   FilterModal,
   FilterInput,
-} from "../SellLists/ListingComponents";
+} from "../../ListingComponents";
 import axios from "axios";
 
 export default function PharmGroupLists() {

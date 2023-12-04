@@ -17,7 +17,7 @@ import {
   ListMap,
   FilterModal,
   FilterInput,
-} from "../SellLists/ListingComponents";
+} from "../../ListingComponents";
 import ControlledSelect from "../../ControlledSelect";
 
 import WebCamModal from "../../WebCamModal";

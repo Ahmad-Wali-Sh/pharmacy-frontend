@@ -3795,3 +3795,83 @@ input[type="date"]:disabled {
   padding: 0.4rem;
   color: var(--color-ten)
 }
+
+.auto-shop-box {
+  width: 100%;
+  overflow-x: auto;
+  direction: ltr;
+  padding: 0.4rem;
+  height: 100%;
+}
+
+.auto-shop-header{
+  direction: ltr;
+  display: grid;
+  grid-template-columns: 2rem 15rem repeat(22, 5rem);
+  background-image: var(--color-five);
+  padding: 0.3rem;
+  border-radius: 1.5rem;
+  width: 202%;
+  gap: 0.5rem;
+}
+
+.auto-shop-items-box{
+  direction: ltr;
+  display: grid;
+  grid-template-columns: 2rem 15rem repeat(22, 5rem);
+  padding: 0.3rem;
+  border-bottom: 1px solid black;
+  border-radius: 0.5rem;
+  width: 202%;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.auto-shop-items-box > h5 {
+  overflow: hidden;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+
+.traz-list-box {
+  width: 100%;
+  overflow-x: auto;
+  direction: rtl;
+  padding: 0.4rem;
+  height: 100%;
+}
+
+.traz-list-header{
+  direction: rtl;
+  display: grid;
+  grid-template-columns: repeat(17, 6rem);
+  background-image: var(--color-five);
+  padding: 0.3rem;
+  border-radius: 1.5rem;
+  width: 170%;
+  gap: 0.5rem;
+}
+
+.traz-list-items-box {
+  direction: rtl;
+  display: grid;
+  grid-template-columns: repeat(17, 6rem);
+  padding: 0.3rem;
+  border-bottom: 1px solid black;
+  border-radius: 0.5rem;
+  width: 170%;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.traz-list-items-box > h5 {
+  overflow: hidden;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+
+.select-medicine-filterr{
+  width: 500%;
+}
