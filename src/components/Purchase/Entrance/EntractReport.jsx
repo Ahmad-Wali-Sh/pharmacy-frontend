@@ -9,27 +9,87 @@ import {
 } from "../../States/States";
 
 export default function EntranceReport() {
-  // const { entranceThrough, setEntranceThrough } = useEntranceTrough();
 
   const { entrance, setEntrance } = useEntrance();
   const { data: entranceThrough } = useQuery(
     `entrance-throug/?entrance=${entrance?.id}`
   );
 
-  const { data: nextEntrance, refetch: getNextEntrance } = useQuery(
-    `entrance/${parseInt(entrance?.id) + 1}`,
-    { enabled: false, onSuccess: (data) => setEntrance(data)},
-  );
-  const { data: prevEntrance, refetch: getPrevEntrance } = useQuery(
-    `entrance/${parseInt(entrance?.id) - 1}`,
-    { enabled: false, onSuccess: (data) => setEntrance(data)}
-  );
+
+  const [entranceId, setEntranceId] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+    const fetchEntrance = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get(`${API_URL}entrance/${entranceId}/`);
+        setEntrance(response.data);
+      } catch (error) {
+        // If there's an error, such as entrance not found, adjust entranceId until an existing entrance is found
+        let adjustedId = entranceId;
+        while (adjustedId > 0) {
+          adjustedId--;
+          try {
+            const response = await axios.get(`${API_URL}entrance/${adjustedId}/`);
+            setEntrance(response.data);
+            setEntranceId(adjustedId);
+            return;
+          } catch (fetchError) {
+            console.error('Error fetching entrance:', fetchError);
+          }
+        }
+        // If no existing entrance is found, set error state
+        setError('No existing entrance found');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEntrance();
+  }, [entranceId]);
+
+  const handleNextEntrance = async () => {
+    for (let i = entranceId + 1; i <= entranceId + 5; i++) {
+      try {
+        const response = await axios.get(`${API_URL}entrance/${i}/`);
+        setEntrance(response.data);
+        setEntranceId(i);
+        return;
+      } catch (error) {
+        console.error('Error fetching entrance:', error);
+      }
+    }
+    setError('No existing entrance found');
+  };
+
+  const handlePreviousEntrance = async () => {
+    for (let i = entranceId - 1; i >= entranceId - 5 && i >= 1; i--) {
+      try {
+        const response = await axios.get(`${API_URL}entrance/${i}/`);
+        setEntrance(response.data);
+        setEntranceId(i);
+        return;
+      } catch (error) {
+        console.error('Error fetching entrance:', error);
+      }
+    }
+    setError('No existing entrance found');
+  };
+
+  useEffect(() => {
+    entrance.id && setEntranceId(entrance.id)
+  }, [entrance?.id])
+
   const { data: lastEntrance, refetch: getLastEntrance } = useQuery({
     queryKey: `last-entrance/`,
     enabled: false,
     onSuccess: (data) => {
       setEntrance(data[0])
-    } 
+    }
   });
 
   const API_URL = import.meta.env.VITE_API;
@@ -148,28 +208,28 @@ export default function EntranceReport() {
         </div>
         <div className="entrance-report-map-box">
           <label>مجموع قبل از تخفیف</label>
-          <label>{report.total_before_discount}</label>
+          <label>{report.total_before_discount} </label>
         </div>
         <div className="entrance-report-map-box">
           <label>مجموع تخفیفات</label>
-          <label>{report.total_discount}</label>
+          <label>{report.total_discount} </label>
         </div>
         <div className="entrance-report-map-box">
           <label>مجموع عاید بونوس</label>
-          <label>{report.total_bonous_value}</label>
+          <label>{report.total_bonous_value} </label>
         </div>
         <div className="entrance-report-map-box">
           <label>مجموع فروش</label>
-          <label>{report.sell_total}</label>
+          <label>{report.sell_total} </label>
         </div>
         <div className="entrance-report-map-box">
           <label>مجموع فایده </label>
           <label>{report.total_interest_percent}%</label>
-          <label>{report.total_interest}</label>
+          <label>{report.total_interest} </label>
         </div>
         <div className="entrance-report-map-box">
           <label>مجموعه</label>
-          <label>{report.grandTotal}</label>
+          <label>{report.grandTotal} </label>
         </div>
         <div className="entrance-report-map-box">
           <label>ارز</label>
@@ -182,16 +242,18 @@ export default function EntranceReport() {
           <label>مجموع فاکتور</label>
           <input
             type="text"
+            style={{width: '8rem', height: '1rem', paddingLeft:'3rem'}}
             onChange={(res) => setFactorTotal(res.target.value)}
             value={factorTotal}
             tabIndex={-1}
           />
           <label
             style={{
-              fontSize: "0.9rem",
+              fontSize: "0.7rem",
+              paddingRight: "1rem"
             }}
           >
-            {entranceThrough?.rate_name}
+            {entrance?.currency_name}
           </label>
         </div>
       </div>
@@ -199,7 +261,7 @@ export default function EntranceReport() {
         <button
           className="entrance-report-button"
           onClick={() => {
-            entrance.id ? getPrevEntrance() : getLastEntrance()
+            entrance?.id ? handlePreviousEntrance() : getLastEntrance()
           }}
           tabIndex={-1}
         >
@@ -216,7 +278,7 @@ export default function EntranceReport() {
         <button
           className="entrance-report-button"
           onClick={() => {
-            entrance.id ? getNextEntrance() : getLastEntrance()
+            entrance?.id ? handleNextEntrance() : getLastEntrance()
           }}
           tabIndex={-1}
         >

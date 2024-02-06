@@ -3,9 +3,8 @@ import { DateInputSimple } from "react-hichestan-datetimepicker";
 import { useEffect, useRef, useState } from "react";
 import {
   useEntrance,
-  useEntranceTrough,
-  useFactorTotal,
   useMedicine,
+  useMedicineShow,
 } from "../../States/States";
 import { useForm } from "react-hook-form";
 import {
@@ -41,6 +40,7 @@ export default function EntranceThrough() {
     `entrance-throug/?entrance=${entrance?.id}`
   );
   const user = useAuthUser();
+
 
   const selectMedicine = (data) => {
     setMedicine(data);
@@ -92,10 +92,16 @@ export default function EntranceThrough() {
       });
     },
   });
+  const {medicineShow} = useMedicineShow()
+  const [initialRender, setInitialRender] = useState(true)
 
   useEffect(() => {
-   entrance.id && SelectMedicineRef.current.Opener();
-  }, [entrance.id])
+    if (!initialRender) {
+      entrance.id && SelectMedicineRef.current.Opener();
+    } else {
+      setInitialRender(false)
+    }
+  }, [medicineShow])
 
   const SubmitedAlert = (data) => {
     return entranceThrough.filter((through) => {

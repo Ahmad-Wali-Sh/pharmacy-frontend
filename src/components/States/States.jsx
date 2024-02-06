@@ -25,3 +25,13 @@ export const useTemplateLogo = create((set) => ({
   templateLogo: "./images/frontend/colorful.png",
   setTemplateLogo: (state) => set(() => ({ templateLogo: state })),
 }));
+
+export const useSubmitedEntrance = create((set) => ({
+  submitedEntrance: "",
+  setSubmitedEntrance: (state) => set(() => ({ submitedEntrance: state })),
+}));
+
+export const useMedicineShow = create((set) => ({
+  medicineShow: "",
+  setMedicineShow: (state) => set(() => ({ medicineShow: state })),
+}));

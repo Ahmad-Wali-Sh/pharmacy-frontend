@@ -13,6 +13,8 @@ function MultipleImage() {
     enabled: false,
   });
   const [image, setImage] = useState("");
+  const API_URL = import.meta.env.VITE_API
+  let IMAGE_URL = API_URL.slice(0,-5)
 
   const { mutate: newImage } = useMutation({
     mutationFn: () => {
@@ -32,7 +34,7 @@ function MultipleImage() {
   });
   const { mutate: deleteImage } = useMutation({
     mutationFn: (data) => {
-      deleteDataFn(`entrance-image/${data?.id}`);
+      deleteDataFn(`entrance-image/${data?.id}/`);
     },
     onSuccess: () => {
       successFn("", () => {
@@ -54,9 +56,9 @@ function MultipleImage() {
         className="multiple-image-button"
         onClick={() => MultipleImageRef.current.Opener()}
       >
-        مشخصات تصویر
+        تصاویر
       </div>
-      <SmallModal title="مشخصات تصویر" ref={MultipleImageRef}>
+      <SmallModal title="تصاویر" ref={MultipleImageRef}>
         <div className="multiple-image-modal">
           <div className="multiple-image-webcam">
             <WebCamModal
@@ -78,17 +80,18 @@ function MultipleImage() {
                   alignItems: "center",
                   padding: "0.2rem",
                 }}
+                key={image?.id}
               >
                 <a
                   className="multiple-image-item"
                   target="_blank"
-                  href={image?.image?.slice(16)}
+                  href={`${IMAGE_URL}${image?.image}`}
                 >
                   <h6>{num + 1}</h6>
-                  <h6>{image?.image?.slice(39)}</h6>
+                  <h6>{image?.image.slice(39)}</h6>
                   <img
                     className="multiple-image-image"
-                    src={image?.image?.slice(16)}
+                    src={`${IMAGE_URL}${image?.image}`}
                   ></img>
                 </a>
                 <div

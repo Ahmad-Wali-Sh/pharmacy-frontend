@@ -8,7 +8,7 @@ import {
 } from "../../PageComponents/Buttons/Buttons";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { useEntrance } from "../../States/States";
+import { useEntrance, useMedicineShow, useSubmitedEntrance } from "../../States/States";
 import {
   deleteDataFn,
   handleFormData,
@@ -17,8 +17,10 @@ import {
   successFn,
 } from "../../services/API";
 import { useAuthUser } from "react-auth-kit";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MultipleImage from "../../PageComponents/MultipleImage";
+import AlertModal from "../../PageComponents/Modals/AlertModal";
+import { toast } from "react-toastify";
 
 export default function EntranceHeader() {
   const {
@@ -46,6 +48,7 @@ export default function EntranceHeader() {
       discount_percent_entrance: "",
       wholesale: "",
       payment_method: "",
+      currency_rate: ""
     },
   });
   const user = useAuthUser();
@@ -63,6 +66,7 @@ export default function EntranceHeader() {
     onSuccess: (res) => {
       successFn("", () => {
         setEntrance(res.data);
+        setMedicineShow(new Date())
       });
     },
   });
@@ -81,12 +85,17 @@ export default function EntranceHeader() {
         newEntrance();
       });
     },
+    onError: () => {
+      toast.error('اقلام وارد شده را حذف کرده دوباره سعی کنید')
+    }
   });
 
   const newEntrance = () => {
     setReKey((prev) => prev + 1);
     setEntrance([]);
   };
+
+  const {  setSubmitedEntrance } = useSubmitedEntrance()
 
   const revertEntrance = () => {
     setReKey((prev) => prev + 1);
@@ -106,6 +115,7 @@ export default function EntranceHeader() {
       wholesale: entrance?.wholesale,
       entrance_id: entrance?.id,
       payment_method: entrance?.payment_method,
+      currency_rate: entrance?.currency_rate
     });
   };
 
@@ -139,11 +149,26 @@ export default function EntranceHeader() {
       wholesale: entrance?.wholesale || "",
       entrance_id: entrance?.id || "",
       payment_method: entrance?.payment_method || "",
+      currency_rate: entrance?.currency_rate || ""
     });
     entrance?.id && revertEntrance();
   }, [entrance]);
 
+  useEffect(() => {
+    const currency_rater = () => {
+      return currency?.filter(cur => { return cur.id == parseInt(watch('currency')) }) || ''
+    }
+    currency_rater && setValue('currency_rate', currency_rater()[0]?.rate)
+  }, [watch('currency')])
+
+  const deleteAlertRef = useRef(null)
+
+  const {medicineShow, setMedicineShow} = useMedicineShow()
+
   return (
+    <>
+      <AlertModal errorText={'آیا موافق با حذف این حواله ورودی هستید؟'} errorTitle={"این عمل غیر قابل بازگشت است!"} OkFunc={() => deleteEntrance()} NoFunc={() => deleteAlertRef.current.Closer()} ref={deleteAlertRef}>
+      </AlertModal>
     <form
       className="entrance-entrance"
       onSubmit={handleSubmit((data) =>
@@ -266,21 +291,32 @@ export default function EntranceHeader() {
         className="entrance--inputs"
       />
       <label>واحد_پول:</label>
-      <ControlledSelect
-        control={control}
-        name="currency"
-        options={currency}
-        placeholder=""
-        error={errors.currency ? true : false}
-        required={true}
-        getOptionLabel={(option) => option.name + "(" + option.rate + ")"}
-        getOptionValue={(option) => option.id}
-        uniqueKey={`entrance-unique${reKey}`}
-        defaultValue={currency?.find((c) =>
-          c.id === entrance?.currency ? c.name : ""
-        )}
-        NewComponent={<PurchasingLists button="plus" activeKey="currencies" />}
-      />
+      <div style={{ display: 'grid', gridTemplateColumns: '50% 10% 40%' }}>
+        <ControlledSelect
+          control={control}
+          name="currency"
+          options={currency}
+          placeholder=""
+          isClearable={false}
+          error={errors.currency ? true : false}
+          required={true}
+          getOptionLabel={(option) => option.name + "(" + option.rate + ")"}
+          getOptionValue={(option) => option.id}
+          uniqueKey={`entrance-unique${reKey}`}
+          defaultValue={currency?.find((c) =>
+            c.id === entrance?.currency ? c.name : ""
+          )}
+          NewComponent={<PurchasingLists button="plus" activeKey="currencies" />}
+        />
+        <label></label>
+        <input
+          type="text"
+          disabled={watch('currency') == 1 ? true : false}
+          {...register("currency_rate")}
+          defaultValue={entrance?.recived_by}
+          className="entrance--inputs"
+        />
+      </div>
       <label>پرداخت:</label>
       <ControlledSelect
         control={control}
@@ -305,9 +341,8 @@ export default function EntranceHeader() {
           type="text"
           defaultValue={entrance?.total_interest}
           {...register("total_interest", { required: true })}
-          className={`entrance--inputs ${
-            errors.total_interest ? "error-input" : ""
-          }`}
+          className={`entrance--inputs ${errors.total_interest ? "error-input" : ""
+            }`}
         />
         <lable>تخفیف%:</lable>
         <input
@@ -341,28 +376,15 @@ export default function EntranceHeader() {
         }}
         className="entrance--inputs"
       ></input>
-      <label>عکس:</label>
-      {/* <input
-        type="file"
-          onChange={(e) => {
-            props.setFile(e.target.files[0]);
-          }}
-      ></input> */}
+      <label></label>
       <MultipleImage />
-      <a
-        href={entrance?.image && new URL(entrance?.image).pathname.slice(16)}
-        target="_blank"
-        style={{
-          textDecoration: "none",
-          color: "grey",
-        }}
-      >
-        {entrance?.image ? "Show_Photo" : ""}
-      </a>
+      <label></label>
       <ButtonGroup>
         <FormButton
           name="حذف"
-          Func={() => deleteEntrance()}
+          Func={() => {
+            deleteAlertRef.current.Opener()
+          }}
           disabled={entrance?.id ? false : true}
         />
         <FormButton
@@ -373,11 +395,15 @@ export default function EntranceHeader() {
         />
         <FormButton name="جدید" Func={() => newEntrance()} />
         <SubmitButton
-          Func={() => null}
+          Func={() => {
+            entrance?.currency_rate != watch('currency_rate') &&
+              setSubmitedEntrance({ id: new Date()})
+          }}
           name={entrance?.id ? "آپدیت" : "ثبت"}
           disabled={errors.final_register ? true : false}
         />
       </ButtonGroup>
     </form>
+    </>
   );
 }

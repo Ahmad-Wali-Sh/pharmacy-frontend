@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
 import "../../../datePicker.css";
@@ -10,7 +10,8 @@ import {
   queryClient,
   successFn,
 } from "../../services/API";
-import { useEntrance } from "../../States/States";
+import { useEntrance, useSubmitedEntrance } from "../../States/States";
+import { toast } from "react-toastify";
 
 function EntrancThroughEntry({ through, keyValue, num }) {
   const user = useAuthUser();
@@ -22,14 +23,32 @@ function EntrancThroughEntry({ through, keyValue, num }) {
     return true;
   };
 
+  const { submitedEntrance } = useSubmitedEntrance()
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
+  useEffect(() => {
+
+    if (!isInitialRender) {
+      submitedEntrance.id && entrance.id && setTimeout(() => {
+        handleSubmit((data) =>
+          handleFormData(data, medicineUpdate, user)
+        )()
+      }, 1000)
+      submitedEntrance.id && entrance.id && toast.warning('...قیمت ارز در حال آپدیت')
+    } else {
+      setIsInitialRender(false)
+    }
+  }, [submitedEntrance?.id])
   const { mutate: medicineUpdate } = useMutation({
+
     mutationFn: (data) => patchDataFn(data, `entrance-throug/${through.id}/`),
     onSuccess: (res) => {
-      successFn("", () => {
-        queryClient.invalidateQueries([
-          `entrance-throug/?entrance=${entrance.id}`,
-        ]);
-      });
+      handleSubmit((data) =>
+        handleFormData(data, interestPercentUpdate, user)
+      )()
+      queryClient.invalidateQueries([
+        `entrance-throug/?entrance=${entrance.id}`,
+      ]);
     },
   });
 
@@ -59,13 +78,11 @@ function EntrancThroughEntry({ through, keyValue, num }) {
       patchDataFn(data, `entrance-throug/${through.id}/`);
     },
     onSuccess: (res) => {
-      successFn("", () => {
-        setTimeout(() => {
-          queryClient.invalidateQueries([
-            `entrance-throug/?entrance=${entrance.id}`,
-          ]);
-        }, 200);
-      });
+      setTimeout(() => {
+        queryClient.invalidateQueries([
+          `entrance-throug/?entrance=${entrance.id}`,
+        ]);
+      }, 200);
     },
   });
   const { mutate: afghanPriceUpdate } = useMutation({

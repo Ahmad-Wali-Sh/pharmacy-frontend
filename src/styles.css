@@ -1184,6 +1184,20 @@ input[type="date"]:disabled {
   background-color: var(--color-sex);
 }
 
+.entrance--inputs {
+  height: 1.47rem;
+  border-radius: 1rem;
+  border: none;
+  background-color: var(--color-three);
+  color: var(--color-ten);
+  padding-left: 0.5rem;
+  padding-right: 0.7rem;
+}
+
+.entrance--inputs:focus {
+  box-shadow: -4px -4px 4px var(--color-two);
+}
+
 .none {
   display: none;
 }
