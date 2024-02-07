@@ -85,7 +85,7 @@ export default function KindList() {
         });
 
     setEditItem(item);
-    setImage(item.image ? new URL(item.image).pathname.slice(16) : "");
+    setImage(item.image ? item.image : "");
   };
 
   const ResetForm = () => {
@@ -184,7 +184,7 @@ export default function KindList() {
                 <h4>{kind.name_english}</h4>
                 <h4>{kind.name_persian}</h4>
                 <img
-                  src={kind.image ? new URL(kind.image).pathname.slice(16) : ""}
+                  src={kind.image ? kind.image : ""}
                   className="image-preview-list"
                 />
                 <div className="flex">

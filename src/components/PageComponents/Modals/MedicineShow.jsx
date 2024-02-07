@@ -7,13 +7,6 @@ const MedicineShowModal = forwardRef((props, ref) => {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [item, setItem] = React.useState("");
 
-  const imageReturn = (image) => {
-    try {
-      return new URL(image).pathname.slice(16);
-    } catch {
-      return image.slice(16);
-    }
-  };
 
   useImperativeHandle(ref, () => ({
     Opener(item) {
@@ -48,7 +41,7 @@ const MedicineShowModal = forwardRef((props, ref) => {
               <img
                 className="medicine-show-pic"
                 src={
-                  item.image ? imageReturn(item.image) : "./images/nophoto.jpg"
+                  item.image ? item.image : "./images/nophoto.jpg"
                 }
               />
             </div>

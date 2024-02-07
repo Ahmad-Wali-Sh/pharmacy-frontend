@@ -40,7 +40,7 @@ function MultipleBarcode({ medicineID }) {
                   onClick={() => {
                     axios
                       .delete(
-                        API_URL + "medicine-barcode/" + res.data.results[0].id
+                        API_URL + "medicine-barcode/" + res.data.results[0].id + '/'
                       )
                       .then(() => {
                         medicineBarcodeRefetch();
@@ -60,7 +60,7 @@ function MultipleBarcode({ medicineID }) {
 
   const deleteBarcode = (barcodeId) => {
     axios
-      .delete(API_URL + "medicine-barcode/" + barcodeId)
+      .delete(API_URL + "medicine-barcode/" + barcodeId + '/')
       .then(() => {
         toast.success("بارکد موفقانه حذف شد");
         setTimeout(() => {

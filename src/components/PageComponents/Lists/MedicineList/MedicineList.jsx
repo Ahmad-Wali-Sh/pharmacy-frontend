@@ -182,7 +182,6 @@ export default function MedicineList({
   };
 
   const FormResetToItem = (item) => {
-    console.log(item.barcode.toString().slice(-1) == ",");
     const barcodeRetreive = () => {
       if (item.barcode) {
         if (item.barcode && item.barcode?.toString().slice(-1) == ",") {
@@ -240,7 +239,7 @@ export default function MedicineList({
         });
 
     setEditItem(item);
-    setImage(item.image ? imageReturn(item.image) : "");
+    setImage(item.image ? item.image : "");
   };
 
   const ResetForm = () => {

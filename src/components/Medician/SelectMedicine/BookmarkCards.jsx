@@ -10,7 +10,7 @@ function BookmarkCards({ medicine, Func }) {
         className="bookmark-image"
         src={
           medicine.image
-            ? new URL(medicine.image).pathname.slice(16)
+            ? medicine.image
             : "./images/nophoto.jpg"
         }
       />

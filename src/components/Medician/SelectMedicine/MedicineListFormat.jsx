@@ -1,13 +1,9 @@
 import { Popover } from "react-tiny-popover";
 
 export const MedicineListFormat = (item, { context }) => {
-  const imageReturn = (image) => {
-    try {
-      return new URL(image).pathname.slice(16);
-    } catch {
-      return image.slice(16);
-    }
-  };
+  const API_URL = import.meta.env.VITE_API;
+  const IMAGE_URL = API_URL.slice(0,-4)
+
   return context === "value" ? (
     item.medicine_full
   ) : (
@@ -15,7 +11,7 @@ export const MedicineListFormat = (item, { context }) => {
       <div className="medician-image">
         <img
           className="medician-image"
-          src={item.image ? imageReturn(item.image) : "./images/nophoto.jpg"}
+          src={item.image ? item.image : "./images/nophoto.jpg"}
         />
       </div>
       <div className="medician-image">
@@ -23,7 +19,7 @@ export const MedicineListFormat = (item, { context }) => {
           className="medician-image"
           src={
             item.kind_image
-              ? new URL(item.kind_image).pathname.slice(16)
+              ? IMAGE_URL + item.kind_image
               : "./images/nophoto.jpg"
           }
         />
@@ -33,7 +29,7 @@ export const MedicineListFormat = (item, { context }) => {
           className="medician-image"
           src={
             item.country_image
-              ? new URL(item?.country_image)?.pathname.slice(16)
+              ? IMAGE_URL + item.country_image
               : "./images/nophoto.jpg"
           }
         />

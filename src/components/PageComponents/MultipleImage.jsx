@@ -8,7 +8,7 @@ import WebCamModal from "./WebCamModal";
 function MultipleImage() {
   const MultipleImageRef = useRef(null);
   const { entrance, setEntrance } = useEntrance();
-  const { refetch: entranceRefetch } = useQuery(`entrance/${entrance?.id}`, {
+  const { refetch: entranceRefetch } = useQuery(`entrance/${entrance?.id}/`, {
     onSuccess: (data) => setEntrance(data),
     enabled: false,
   });
@@ -27,7 +27,7 @@ function MultipleImage() {
       successFn("", () => {
         setTimeout(() => {
           entranceRefetch();
-        }, 200)
+        }, 1000)
         setImage("");
       });
     },

@@ -255,7 +255,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       <div></div>
       <a
         href={
-          prescription.image && new URL(prescription.image).pathname.slice(16)
+          prescription.image && prescription.image
         }
         target="_blank"
         style={{ textDecoration: "none", color: "grey" }}

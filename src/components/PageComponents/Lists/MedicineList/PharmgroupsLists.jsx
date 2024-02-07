@@ -85,7 +85,7 @@ export default function PharmGroupLists() {
         });
 
     setEditItem(item);
-    setImage(item.image ? new URL(item.image).pathname.slice(16) : "");
+    setImage(item.image ? item.image : "");
   };
 
   const ResetForm = () => {
@@ -185,7 +185,7 @@ export default function PharmGroupLists() {
                   <h4>{kind.name_persian}</h4>
                   <img
                     src={
-                      kind.image ? new URL(kind.image).pathname.slice(16) : ""
+                      kind.image ? kind.image : ""
                     }
                     className="image-preview-list"
                   />

@@ -29,9 +29,8 @@ class PrescriptionPrint extends React.Component {
                     className="barcode-image-print"
                     src={
                       this.props.prescription.barcode
-                        ? new URL(
-                            this.props.prescription.barcode
-                          ).pathname.slice(16)
+                        ? 
+                          this.props.prescription.barcode
                         : "./images/nophoto.jpg"
                     }
                   />

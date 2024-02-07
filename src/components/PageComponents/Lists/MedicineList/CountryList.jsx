@@ -82,7 +82,7 @@ export default function CountryList() {
         });
 
     setEditItem(item);
-    setImage(item.image ? new URL(item.image).pathname.slice(16) : "");
+    setImage(item.image ? item.image : "");
   };
 
   const ResetForm = () => {
@@ -172,7 +172,7 @@ export default function CountryList() {
                 <img
                   src={
                     country.image
-                      ? new URL(country.image).pathname.slice(16)
+                      ? country.image
                       : ""
                   }
                   className="image-preview-list"

@@ -113,7 +113,7 @@ export default function Prescription(props) {
 
   const departmentSubmit = () => {
     PrescriptionModalRef.current.Opener();
-    axios.get(DEPARTMENT_URL + props.department.id).then((res) => {
+    axios.get(DEPARTMENT_URL + props.department.id + '/').then((res) => {
       const DepartmentForm = new FormData();
       DepartmentForm.append("name", "");
       DepartmentForm.append("doctor", "");
@@ -132,7 +132,7 @@ export default function Prescription(props) {
           toast.success("Data Submited Successfuly.");
 
           axios
-            .get(DEPARTMENT_URL + props.department.id)
+            .get(DEPARTMENT_URL + props.department.id + '/')
             .then((res) => setDepartmentSelected(res.data))
             .catch((err) => console.log(err));
         })
