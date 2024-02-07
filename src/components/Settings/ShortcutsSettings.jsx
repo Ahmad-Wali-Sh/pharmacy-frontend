@@ -4,49 +4,49 @@ const ShortcutInput = ({ name, shortcut, setShortcut }) => {
     useEffect(() => {
         const savedShortcut = localStorage.getItem(name);
         if (savedShortcut && savedShortcut !== shortcut) {
-          setShortcut(savedShortcut);
+            setShortcut(savedShortcut);
         }
-      }, [name]);
-  
+    }, [name]);
+
     const handleInputChange = (event) => {
-      const { value } = event.target;
-      setShortcut(value);
+        const { value } = event.target;
+        setShortcut(value);
     };
-  
+
     const handleKeyPress = (event) => {
-      const { key, ctrlKey, shiftKey, altKey } = event;
-      // Check if Ctrl, Shift, or Alt keys are pressed
-      const modifiers = [];
-      if (ctrlKey) modifiers.push('Ctrl');
-      if (shiftKey) modifiers.push('Shift');
-      if (altKey) modifiers.push('Alt');
-  
-      // Build the shortcut string with modifiers and the pressed key
-      const newShortcut = `${modifiers.join('+')}${modifiers.length > 0 ? '+' : ''}${key}`;
-      setShortcut(newShortcut);
+        const { key, ctrlKey, shiftKey, altKey } = event;
+        // Check if Ctrl, Shift, or Alt keys are pressed
+        const modifiers = [];
+        if (ctrlKey) modifiers.push('Ctrl');
+        if (shiftKey) modifiers.push('Shift');
+        if (altKey) modifiers.push('Alt');
+
+        // Build the shortcut string with modifiers and the pressed key
+        const newShortcut = `${modifiers.join('+')}${modifiers.length > 0 ? '+' : ''}${key}`;
+        setShortcut(newShortcut);
     };
-  
+
     const handleBlur = () => {
-      // Save shortcut to localStorage when input loses focus
-      localStorage.setItem(name, shortcut);
+        // Save shortcut to localStorage when input loses focus
+        localStorage.setItem(name, shortcut);
     };
-  
+
     return (
-      <div>
-        <label>
-          <input 
-            type="text" 
-            value={shortcut} 
-            style={{direction: 'ltr', backgroundColor: 'rgba(0,0,0,0)', border: 'none'}}
-            onChange={handleInputChange} 
-            onKeyDown={handleKeyPress} 
-            onBlur={handleBlur}
-          />
-        </label>
-      </div>
+        <div>
+            <label>
+                <input
+                    type="text"
+                    value={shortcut}
+                    style={{ direction: 'ltr', backgroundColor: 'rgba(0,0,0,0)', border: 'none' }}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyPress}
+                    onBlur={handleBlur}
+                />
+            </label>
+        </div>
     );
-  };
-  
+};
+
 
 function GeneralShortcuts() {
     const [generalShortcuts, setShortcuts] = useState({
@@ -56,18 +56,17 @@ function GeneralShortcuts() {
         medician: localStorage.getItem('medician') || "F4",
         revenue: localStorage.getItem('revenue') || "F6",
         reports: localStorage.getItem('reports') || "F7",
-        new_medicine: localStorage.getItem('new_medicine') || "Ctrl+m",
-      });
-      const handleShortcutChange = (name, value) => {
+    });
+    const handleShortcutChange = (name, value) => {
         // Check if the new shortcut value is the same as any existing generalShortcuts
         const existingShortcut = Object.keys(generalShortcuts).find(key => generalShortcuts[key] === value);
         if (existingShortcut) {
-          // Delete the existing shortcut
-          localStorage.removeItem(existingShortcut);
-          setShortcuts(prevShortcuts => ({
-            ...prevShortcuts,
-            [existingShortcut]: '',
-          }));
+            // Delete the existing shortcut
+            localStorage.removeItem(existingShortcut);
+            setShortcuts(prevShortcuts => ({
+                ...prevShortcuts,
+                [existingShortcut]: '',
+            }));
         }
         // Set the new shortcut
         setShortcuts(prevShortcuts => ({
@@ -75,9 +74,9 @@ function GeneralShortcuts() {
             [name]: value,
         }));
     };
-        useEffect(( )=> {
+    useEffect(() => {
         localStorage.setItem('generalShortcuts', JSON.stringify(generalShortcuts));
-      }, [generalShortcuts])
+    }, [generalShortcuts])
 
 
     return (<div className="container-shortcuts">
@@ -110,47 +109,44 @@ function GeneralShortcuts() {
             <div>گذارشات</div>
             <ShortcutInput name="reports" shortcut={generalShortcuts.reports} setShortcut={value => handleShortcutChange('reports', value)} />
         </div>
-        <div className="shortcut-item">
-            <div>داروی جدید</div>
-            <ShortcutInput name="new_medicine" shortcut={generalShortcuts.new_medicine} setShortcut={value => handleShortcutChange('new_medicine', value)} />
-        </div>
-
-    </div>);
+    </div>
+    );
 }
 function EntranceShortcuts() {
+    const [entranceShortcuts, setEntranceShortcuts] = useState({
+        edit_medicine: localStorage.getItem('edit_medicine') || "F9",
+    });
+    const handleShortcutChange = (name, value) => {
+        // Check if the new shortcut value is the same as any existing entranceShortcuts
+        const existingShortcut = Object.keys(entranceShortcuts).find(key => entranceShortcuts[key] === value);
+        if (existingShortcut) {
+            // Delete the existing shortcut
+            localStorage.removeItem(existingShortcut);
+            setEntranceShortcuts(prevShortcuts => ({
+                ...prevShortcuts,
+                [existingShortcut]: '',
+            }));
+        }
+        // Set the new shortcut
+        setEntranceShortcuts(prevShortcuts => ({
+            ...prevShortcuts,
+            [name]: value,
+        }));
+    };
+    useEffect(() => {
+        localStorage.setItem('entranceShortcuts', JSON.stringify(entranceShortcuts));
+    }, [entranceShortcuts])
+
+
     return (<div className="container-shortcuts">
         <div className="shortcut-item">
             <div style={{
                 color: 'white'
-            }}>خریداری و حواله ورودی:</div>
+            }}>خریداری و حواله ورود:</div>
         </div>
         <div className="shortcut-item">
-            <div>داشبورد</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>فروشات</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>خریداری</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>داروخانه</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>صندوق</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>گذارشات</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>داروی جدید</div>
-            <div>F1</div>
+            <div>ویرایش دارو</div>
+            <ShortcutInput name="edit_medicine" shortcut={entranceShortcuts.edit_medicine} setShortcut={value => handleShortcutChange('edit_medicine', value)} />
         </div>
 
     </div>);
@@ -164,34 +160,17 @@ function PrescriptionShortcuts() {
             }}>ثبت نسخه:</div>
         </div>
         <div className="shortcut-item">
-            <div>داشبورد</div>
-            <div>F1</div>
+            <div>جستوجو نسخه</div>
+            <div>Ctrl + B</div>
         </div>
         <div className="shortcut-item">
-            <div>فروشات</div>
-            <div>F1</div>
+            <div>نسخه جدید</div>
+            <div>Ctrl + D</div>
         </div>
         <div className="shortcut-item">
-            <div>خریداری</div>
-            <div>F1</div>
+            <div>ذخیره یا آپدیت نسخه</div>
+            <div>Ctrl + S</div>
         </div>
-        <div className="shortcut-item">
-            <div>داروخانه</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>صندوق</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>گذارشات</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>داروی جدید</div>
-            <div>F1</div>
-        </div>
-
     </div>);
 }
 
@@ -203,34 +182,17 @@ function ListShortcuts() {
             }}>لست ها:</div>
         </div>
         <div className="shortcut-item">
-            <div>داشبورد</div>
-            <div>F1</div>
+            <div>جدید</div>
+            <div>Ctrl + E</div>
         </div>
         <div className="shortcut-item">
-            <div>فروشات</div>
-            <div>F1</div>
+            <div>لست</div>
+            <div>Ctrl + L</div>
         </div>
         <div className="shortcut-item">
-            <div>خریداری</div>
-            <div>F1</div>
+            <div>فلتر</div>
+            <div>Ctrl + F</div>
         </div>
-        <div className="shortcut-item">
-            <div>داروخانه</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>صندوق</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>گذارشات</div>
-            <div>F1</div>
-        </div>
-        <div className="shortcut-item">
-            <div>داروی جدید</div>
-            <div>F1</div>
-        </div>
-
     </div>);
 }
 

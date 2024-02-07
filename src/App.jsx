@@ -29,7 +29,7 @@ function App() {
             element={
               <RequireAuth>
                 <PageComponent>
-                  <Layount />
+                <Purchase />
                 </PageComponent>
               </RequireAuth>
             }
@@ -44,7 +44,7 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route
+          {/* <Route
             path="/dashboard"
             element={
               <RequireAuth>
@@ -53,7 +53,7 @@ function App() {
                 </PageComponent>
               </RequireAuth>
             }
-          />
+          /> */}
           <Route
             path="/sell"
             element={

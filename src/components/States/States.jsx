@@ -35,3 +35,7 @@ export const useMedicineShow = create((set) => ({
   medicineShow: "",
   setMedicineShow: (state) => set(() => ({ medicineShow: state })),
 }));
+export const useNewMedicineShow = create((set) => ({
+  newMedicineShow: "",
+  setNewMedicineShow: (state) => set(() => ({ newMedicineShow: state })),
+}));

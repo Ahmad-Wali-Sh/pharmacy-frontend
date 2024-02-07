@@ -35,9 +35,9 @@ function Navbar() {
           </div>
         </div>
         <div className="navbar-buttons">
-          <Link to="/dashboard" className="button">
+          {/* <Link to="/dashboard" className="button">
             <div className="button">داشبورد</div>
-          </Link>
+          </Link> */}
           <Link to="/sell" className="button">
             <div className="button">فروشات</div>
           </Link>

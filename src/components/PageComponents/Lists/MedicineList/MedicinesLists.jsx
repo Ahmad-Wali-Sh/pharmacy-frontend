@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BigModal from "../../Modals/BigModal";
 import { MainButton, PlusButton } from "../../Buttons/Buttons";
 import MedicineList from "./MedicineList";
@@ -10,9 +10,10 @@ import CompanyLists from "./CompanyLists";
 const MedicinesLists = ({ title, activeKey, button, name, icon, medicine, setSelectedMedician,selectAutoCompleteData }) => {
   const ListDashboardRef = useRef(null);
 
-  React.useEffect(() => {
+  
+  useEffect(() => {
     const listener = (e) => {
-      if (e.code === "F9" && medicine) {
+      if (e.code === localStorage.getItem('edit_medicine') && medicine) {
         ListDashboardRef.current.Opener()
       }
     };
@@ -23,8 +24,9 @@ const MedicinesLists = ({ title, activeKey, button, name, icon, medicine, setSel
       document.removeEventListener("keydown", listener);
     };
   }, []);
+  
 
-  const [active, setActive] = React.useState(activeKey);
+  const [active, setActive] = useState(activeKey);
   return (
     <>
       {button == 'plus' && <PlusButton

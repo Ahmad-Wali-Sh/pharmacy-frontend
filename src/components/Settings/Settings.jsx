@@ -22,27 +22,27 @@ const Settings = ({ title, activeKey, button, name, icon }) => {
                         >
                             میانبر ها
                         </div>
-                        <div
+                        {/* <div
                             onClick={() => setActive("theme")}
                             className={`list-item ${active == "theme" && "list-item-active"
                                 }`}
                         >
                             رنگ بندی و تم
-                        </div>
-                        <div
+                        </div> */}
+                        {/* <div
                             onClick={() => setActive("entrance")}
                             className={`list-item ${active == "entrance" && "list-item-active"
                                 }`}
                         >
                             حواله ورود
-                        </div>
+                        </div> */}
                     </div>
                     <div className="list-box">
                         <div className="list-box-header">اطلاعات</div>
                         <div className="list-box-container">
                             {active == "shortcuts" && <ShortcutsSettings />}
-                            {active == "theme" && <ShortcutsSettings />}
-                            {active == "entrance" && <ShortcutsSettings />}
+                            {/* {active == "theme" && <ShortcutsSettings />} */}
+                            {/* {active == "entrance" && <ShortcutsSettings />} */}
                         </div>
                     </div>
                 </div>

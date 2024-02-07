@@ -48,6 +48,7 @@ body {
   background-color: var(--color-three);
   --jb-date-input-bgcolor: var(--color-sex);
   text-align: initial;
+  user-select: none;
 }
 
 .date-picker-expire {
