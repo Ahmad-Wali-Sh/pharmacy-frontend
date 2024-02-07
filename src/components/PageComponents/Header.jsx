@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { useSignOut, useIsAuthenticated } from "react-auth-kit";
 import { useQuery } from "react-query";
 import ColorTemplates from "../Settings/ColorTemplates";
+import Settings from "../Settings/Settings";
+import ShortcutListener from "../Settings/ShortcutListener";
 
 function Header() {
   const AUTH_URL = import.meta.env.VITE_AUTH;
@@ -30,20 +32,21 @@ function Header() {
       <div className="header-elements">
         <div className="icons">
           <ColorTemplates />
+          <ShortcutListener />
           <i className="fa-solid fa-bell"></i>
-          <i className="fa-solid fa-gear"></i>
           <div className="log-in" onClick={() => {
             axios.post(AUTH_URL + 'token/logout/').finally(() => {
               signOut()
               delete axios.defaults.headers.common["Authorization"];
               window.location.reload()
             })
-            }}>
+          }}>
             <i className="fa-solid fa-user"></i>
             <span className="log-in-text">
               {isAuthenticated ? "Log-Out" : "Log-in"}
             </span>
           </div>
+              <Settings />
         </div>
         <div className="flex-item"></div>
         <div>

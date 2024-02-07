@@ -3885,7 +3885,29 @@ input[type="date"]:disabled {
   word-wrap: break-word;
 }
 
-
 .select-medicine-filterr{
   width: 500%;
+}
+
+.shortcuts-container {
+  display: grid;
+  grid-template-columns: 23% 23% 23% 23%; 
+  width: 100%;
+  overflow: auto;
+  height: 100%;
+  gap: 1rem
+}
+
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(77, 77, 77);
+  padding: 0.5rem;
+}
+
+.container-shortcuts {
+  width: 100%;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 1rem;
 }
