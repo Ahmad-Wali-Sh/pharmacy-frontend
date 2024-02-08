@@ -1,15 +1,41 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSignOut, useIsAuthenticated } from "react-auth-kit";
 import { useQuery } from "react-query";
 import ColorTemplates from "../Settings/ColorTemplates";
 import Settings from "../Settings/Settings";
 import ShortcutListener from "../Settings/ShortcutListener";
 
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
 function Header() {
-  const AUTH_URL = import.meta.env.VITE_AUTH;
+  const [AUTH_URL, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('VITE_AUTH')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
+  useEffect(() => {
+    console.log(AUTH_URL);
+  }, [AUTH_URL])
+
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
+
+  
 
   const {
     data: departments,

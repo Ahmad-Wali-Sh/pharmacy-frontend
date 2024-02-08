@@ -3,16 +3,36 @@ import React, { useEffect, useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import { toast } from "react-toastify";
 
+async function loadEnvVariables(key) {
+  try {
+    const response = await fetch("/env.json");
+    const data = await response.json();
+    return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+    console.error("Error loading environment variables:", error);
+    return null; // Return null if there's an error
+  }
+}
+
 function Login() {
   const signIn = useSignIn();
   const [formData, setFormDate] = React.useState({
     username: "",
     password: "",
   });
-
-  const LOGIN_URL = import.meta.env.VITE_LOGIN;
-  const ME_URL = import.meta.env.VITE_ME;
-  const AUTH_URL = import.meta.env.VITE_AUTH;
+  const [API, setAUTH_URL] = useState("");
+  useEffect(() => {
+    loadEnvVariables("API")
+      .then((apiValue) => {
+        setAUTH_URL(apiValue);
+      })
+      .catch((error) => {
+        console.error("Error loading VITE_API:", error);
+      });
+  }, []);
+  const LOGIN_URL = API + "/auth/token/login/";
+  const ME_URL = API + "/auth/users/me/";
+  const AUTH_URL = API + "/auth/";
 
   const onSubmit = (e) => {
     e.preventDefault();

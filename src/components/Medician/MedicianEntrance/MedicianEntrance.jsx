@@ -12,6 +12,17 @@ import BigModal from "../../PageComponents/Modals/BigModal";
 import ControlledSelect from "../../PageComponents/ControlledSelect";
 import { useQuery } from "react-query";
 
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
 function MedicianEntrance({
   title,
   icon,
@@ -22,7 +33,18 @@ function MedicianEntrance({
 }) {
   const MedicineEntranceRef = useRef(null);
 
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
+
+  const MEDICIAN_URL = API + '/api/medician/';
   const user = useAuthUser();
 
   const { register, handleSubmit, reset, control,  } = useForm();

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import LoadingDNA from "../../../PageComponents/LoadingDNA";
@@ -17,18 +17,40 @@ import PrescriptionThroughMapForm from "./PrescriptionThroughMapForm";
 import { useQuery } from "react-query";
 import { usePrescription } from "../../../States/States";
 
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
+
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
   const SelectMedicineModalRef = useRef(null);
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('VITE_API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
 
   let loading = true;
-  const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
-  const PRESCRIPTION_THOURGH_URL = import.meta.env.VITE_PRESCRIPTION_THROUGH;
-  const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
-  const LAST_PRESCRIPTION_URL = import.meta.env.VITE_LAST_PRESCRIPTION;
+  const PRESCRIPTION_URL = API + '/api/prescription/';
+  const PRESCRIPTION_THOURGH_URL = API + '/api/prescription-through/';
+  const DEPARTMENT_URL = API + '/api/department/';
+  const LAST_PRESCRIPTION_URL = API + '/api/last-prescription/';
   const user = useAuthUser();
 
-  const { prescription, setPrescription } = usePrescription()
+  const { prescription, setPrescription } = usePrescription();
   const [departmentSelected, setDepartmentSelected] = React.useState("");
 
   const [report, setReport] = React.useState({
@@ -57,7 +79,6 @@ export default function Prescription(props) {
       });
       return result;
     };
-
 
     const totalToSaleCalculate = () => {
       let result =
@@ -104,16 +125,16 @@ export default function Prescription(props) {
       number: prescriptionThrough?.length,
       total_to_sale: Math.round(totalToSaleCalculate()) + CellingHandler(),
       rounded_number: CellingHandler(),
-      disount_value:
-        (prescription.discount_money +
-        (report.total * prescription.discount_percent) / 100).toFixed(2),
+      disount_value: (
+        prescription.discount_money +
+        (report.total * prescription.discount_percent) / 100
+      ).toFixed(2),
     });
   };
 
-
   const departmentSubmit = () => {
     PrescriptionModalRef.current.Opener();
-    axios.get(DEPARTMENT_URL + props.department.id + '/').then((res) => {
+    axios.get(DEPARTMENT_URL + props.department.id + "/").then((res) => {
       const DepartmentForm = new FormData();
       DepartmentForm.append("name", "");
       DepartmentForm.append("doctor", "");
@@ -128,11 +149,11 @@ export default function Prescription(props) {
         .post(PRESCRIPTION_URL, DepartmentForm)
         .then((res) => {
           setPrescription(res.data);
-          SelectMedicineModalRef.current.Opener()
+          SelectMedicineModalRef.current.Opener();
           toast.success("Data Submited Successfuly.");
 
           axios
-            .get(DEPARTMENT_URL + props.department.id + '/')
+            .get(DEPARTMENT_URL + props.department.id + "/")
             .then((res) => setDepartmentSelected(res.data))
             .catch((err) => console.log(err));
         })
@@ -223,17 +244,16 @@ export default function Prescription(props) {
   const updatePrescription = () => {
     axios
       .get(PRESCRIPTION_URL + prescription.id)
-      .then((res) => setPrescription(res.data))
-  }
+      .then((res) => setPrescription(res.data));
+  };
 
-
-  const { data: pres, refetch:updatePrescrip } = useQuery({
+  const { data: pres, refetch: updatePrescrip } = useQuery({
     queryKey: [`prescription/${prescription?.id}`],
     onSuccess: (res) => {
-      setPrescription(res)
+      setPrescription(res);
     },
-    enabled: prescription?.id != undefined
-  })
+    enabled: prescription?.id != undefined,
+  });
 
   return (
     <>
@@ -270,8 +290,15 @@ export default function Prescription(props) {
                 update={updatePrescrip}
                 setPrescription={(data) => setPrescription(data)}
               />
-              <PrescriptionThroughForm prescription={prescription} prescriptionThrough={prescriptionThrough} ref={SelectMedicineModalRef}/>
-              <PrescriptionThroughMapForm prescription={prescription} updatePrescription={updatePrescription}/>
+              <PrescriptionThroughForm
+                prescription={prescription}
+                prescriptionThrough={prescriptionThrough}
+                ref={SelectMedicineModalRef}
+              />
+              <PrescriptionThroughMapForm
+                prescription={prescription}
+                updatePrescription={updatePrescription}
+              />
             </div>
           </div>
         ) : (

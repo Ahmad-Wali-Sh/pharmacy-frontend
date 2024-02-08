@@ -4,6 +4,18 @@ import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import SmallModal from "./Modals/SmallModal";
 
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
+
 function MultipleBarcode({ medicineID }) {
   const multipleBarcodeRef = useRef(null);
   const [barcoder, setBarcoder] = useState("");
@@ -11,7 +23,17 @@ function MultipleBarcode({ medicineID }) {
     `medicine-barcode/?medicine=${medicineID}`
   );
 
-  const API_URL = import.meta.env.VITE_API;
+  const [API_URL, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('VITE_API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
+  
 
   const newBarcode = () => {
     const BarcodeForm = new FormData();

@@ -1,6 +1,18 @@
 import Modal from "react-modal";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
 
 export default function RevenueInfo({ revenue }) {
   const ModalStyles = {
@@ -17,7 +29,17 @@ export default function RevenueInfo({ revenue }) {
     },
   };
 
-  const REVENUE_THROUGH_URL = import.meta.env.VITE_REVENUE_THROUGH;
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
+  const REVENUE_THROUGH_URL = API + '/api/revenue-through/';
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [revenueTrough, setRevenueThrough] = React.useState([]);

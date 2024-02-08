@@ -5,6 +5,18 @@ import { useEntrance } from "../States/States";
 import SmallModal from "./Modals/SmallModal";
 import WebCamModal from "./WebCamModal";
 
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
+
 function MultipleImage() {
   const MultipleImageRef = useRef(null);
   const { entrance, setEntrance } = useEntrance();
@@ -12,9 +24,19 @@ function MultipleImage() {
     onSuccess: (data) => setEntrance(data),
     enabled: false,
   });
+
+  const [AUTH_URL, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('VITE_API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
   const [image, setImage] = useState("");
-  const API_URL = import.meta.env.VITE_API
-  let IMAGE_URL = API_URL.slice(0,-5)
+  let IMAGE_URL = AUTH_URL.slice(0,-5)
 
   const { mutate: newImage } = useMutation({
     mutationFn: () => {

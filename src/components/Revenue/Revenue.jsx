@@ -1,8 +1,19 @@
 import Modal from "react-modal";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
+
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
 
 export default function Revenue(props) {
   const ModalStyles = {
@@ -19,11 +30,21 @@ export default function Revenue(props) {
     },
   };
 
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
   const barcodeRef = useRef('')
 
-  const REVENUE_URL = import.meta.env.VITE_REVENUE;
-  const REVENUE_THROUGH_URL = import.meta.env.VITE_REVENUE_THROUGH;
-  const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
+  const REVENUE_URL = API + '/api/revenue/';
+  const REVENUE_THROUGH_URL = API + '/api/revenue-through/';
+  const PRESCRIPTION_URL = API + '/api/prescription/';
   const user = useAuthUser();
   let today = new Date().toISOString().slice(0, 10);
 

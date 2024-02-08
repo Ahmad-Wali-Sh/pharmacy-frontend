@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
@@ -8,6 +8,17 @@ import RevenueInfo from "./RevenueInfo";
 import Revenue from "./Revenue";
 import { useQuery } from "react-query";
 import AlertModal from "../PageComponents/Modals/AlertModal";
+
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
 
 export default function RevenueManager(props) {
   const ModalStyles = {
@@ -50,8 +61,19 @@ export default function RevenueManager(props) {
     setRegisterModalOpen(false);
   }
 
-  const REVENUE_URL = import.meta.env.VITE_REVENUE;
-  const USERS_URL = import.meta.env.VITE_USERS;
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
+
+  const REVENUE_URL = API + '/api/revenue/';
+  const USERS_URL = API + '/auth/users/';
 
   const [users, setUsers] = React.useState([]);
 

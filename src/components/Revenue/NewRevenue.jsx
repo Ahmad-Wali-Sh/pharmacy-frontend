@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
 import { queryClient } from "../services/API";
+
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
 
 function NewRevenue({ users }) {
 
@@ -24,8 +36,18 @@ function NewRevenue({ users }) {
     },
   };
 
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
   const user = useAuthUser();
-  const REVENUE_URL = import.meta.env.VITE_REVENUE;
+  const REVENUE_URL = API + '/api/revenue/';
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const {
