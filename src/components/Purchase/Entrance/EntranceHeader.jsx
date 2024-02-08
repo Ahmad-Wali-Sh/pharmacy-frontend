@@ -119,6 +119,11 @@ export default function EntranceHeader() {
     });
   };
 
+
+  useEffect(() => {
+    console.log(currency?.filter(item => {return item.name =='AFG' && item.id})[0].id);
+  }, [currency])
+
   const { refetch: searchEntrance } = useQuery({
     queryKey: [`entrance/${watch("entrance_search")}/`],
     enabled: false,
@@ -311,9 +316,8 @@ export default function EntranceHeader() {
         <label></label>
         <input
           type="text"
-          disabled={watch('currency') == 1 ? true : false}
+          disabled={watch('currency') == currency?.filter(item => {return item.name =='AFG' && item.id})[0].id ? true : false}
           {...register("currency_rate")}
-          defaultValue={entrance?.recived_by}
           className="entrance--inputs"
         />
       </div>
