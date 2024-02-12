@@ -8,6 +8,17 @@ import axios from "axios";
 import { FixedSizeList as List } from "react-window";
 import fileDownload from "js-file-download";
 
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
 function PrescriptionList({ Closer }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
@@ -18,6 +29,16 @@ function PrescriptionList({ Closer }) {
     setRegisterModalOpen(false);
     Closer();
   }
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
 
   const {
     register,
@@ -39,8 +60,8 @@ function PrescriptionList({ Closer }) {
     },
   };
 
-  const DEPARTMENT_URL = import.meta.env.VITE_DEPARTMENT;
-  const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
+  const DEPARTMENT_URL = API + '/api/department/';
+  const PRESCRIPTION_URL = API + '/api/prescription/';
 
   const [department, setDepartment] = React.useState([]);
   const [prescriptionList, setPrescriptionList] = React.useState([]);

@@ -122,6 +122,17 @@ export default function AutoShopingList() {
   );
 }
 
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
 function AutoShopItem(props) {
   const [shorted, setShorted] = useState(props.shopItem?.shorted);
 
@@ -129,7 +140,17 @@ function AutoShopItem(props) {
     setShorted(props.shopItem?.shorted);
   }, [props.shopItem?.shorted]);
 
-  const API_URL = import.meta.env.VITE_API;
+  const [API_URL, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('VITE_API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
+
 
   const MedicineUpdate = () => {
     const MedicineForm = new FormData();

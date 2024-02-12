@@ -96,8 +96,6 @@ export default function EntranceReport() {
     }
   });
 
-
-
   const PriceApply = () => {
     entranceThrough?.map((through) => {
       const PriceForm = new FormData();

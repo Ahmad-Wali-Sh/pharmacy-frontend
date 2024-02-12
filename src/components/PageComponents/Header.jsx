@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSignOut, useIsAuthenticated } from "react-auth-kit";
 import { useQuery } from "react-query";
 import ColorTemplates from "../Settings/ColorTemplates";
@@ -7,9 +7,13 @@ import Settings from "../Settings/Settings";
 import ShortcutListener from "../Settings/ShortcutListener";
 import useServerIP from "../services/ServerIP";
 
+
 function Header() {
+
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
+
+  
 
   const {
     data: departments,

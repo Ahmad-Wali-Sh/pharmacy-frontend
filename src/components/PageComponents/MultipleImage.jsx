@@ -6,6 +6,7 @@ import SmallModal from "./Modals/SmallModal";
 import WebCamModal from "./WebCamModal";
 import useServerIP from "../services/ServerIP";
 
+
 function MultipleImage() {
   const MultipleImageRef = useRef(null);
   const { entrance, setEntrance } = useEntrance();
@@ -13,6 +14,17 @@ function MultipleImage() {
     onSuccess: (data) => setEntrance(data),
     enabled: false,
   });
+
+  const [AUTH_URL, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('VITE_API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
   const [image, setImage] = useState("");
 
   const { serverIP} = useServerIP()

@@ -4,13 +4,26 @@ import { useSignIn } from "react-auth-kit";
 import { toast } from "react-toastify";
 import useServerIP from './components/services/ServerIP'
 
+async function loadEnvVariables(key) {
+  try {
+    const response = await fetch("/env.json");
+    const data = await response.json();
+    return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+    console.error("Error loading environment variables:", error);
+    return null; // Return null if there's an error
+  }
+}
+
 function Login() {
   const signIn = useSignIn();
   const [formData, setFormDate] = React.useState({
     username: "",
     password: "",
   });
+
   const { serverIP } = useServerIP()
+
 
   const onSubmit = (e) => {
     e.preventDefault();

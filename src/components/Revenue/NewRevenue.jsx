@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
 import { queryClient } from "../services/API";
 import useServerIP from "../services/ServerIP";
+
 
 function NewRevenue({ users }) {
 
@@ -25,6 +26,16 @@ function NewRevenue({ users }) {
     },
   };
 
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
   const user = useAuthUser();
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);

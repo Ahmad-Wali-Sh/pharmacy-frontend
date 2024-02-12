@@ -1,7 +1,8 @@
 import Modal from "react-modal";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useServerIP from "../services/ServerIP";
+
 
 export default function RevenueInfo({ revenue }) {
   const ModalStyles = {

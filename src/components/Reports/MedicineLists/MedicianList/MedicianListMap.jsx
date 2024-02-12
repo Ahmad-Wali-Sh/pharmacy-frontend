@@ -5,6 +5,17 @@ import { toast } from "react-toastify";
 import MedicianEntrance from "../../../Medician/MedicianEntrance/MedicianEntrance";
 import WebCamModal from "../../../PageComponents/WebCamModal";
 
+async function loadEnvVariables(key) {
+  try {
+      const response = await fetch('/env.json');
+      const data = await response.json();
+      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
+  } catch (error) {
+      console.error('Error loading environment variables:', error);
+      return null; // Return null if there's an error
+  }
+}
+
 function MedicianListMap({ num, country, medician, kind, pharmGroup, AutoReSearch}) {
   const [file, setFile] = React.useState("");
   const [imagePreview, setImagePreview] = React.useState("");
@@ -15,7 +26,18 @@ function MedicianListMap({ num, country, medician, kind, pharmGroup, AutoReSearc
     formState: { errors },
   } = useForm();
 
-  const MEDICIAN_URL = import.meta.env.VITE_MEDICIAN;
+  const [API, setAUTH_URL] = useState('');
+  useEffect(() => {
+    loadEnvVariables('API')
+      .then(apiValue => {
+        setAUTH_URL(apiValue);
+      })
+      .catch(error => {
+        console.error('Error loading VITE_API:', error);
+      });
+  }, []);
+
+  const MEDICIAN_URL = API + '/api/medician/';
 
   const MedicianUpdate = (data) => {
     const MedicianForm = new FormData();

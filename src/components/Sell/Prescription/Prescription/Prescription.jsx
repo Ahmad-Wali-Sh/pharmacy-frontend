@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import LoadingDNA from "../../../PageComponents/LoadingDNA";
@@ -18,6 +18,7 @@ import { useQuery } from "react-query";
 import { usePrescription } from "../../../States/States";
 import useServerIP from "../../../services/ServerIP";
 
+
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
   const SelectMedicineModalRef = useRef(null);
@@ -26,7 +27,7 @@ export default function Prescription(props) {
   let loading = true;
   const user = useAuthUser();
 
-  const { prescription, setPrescription } = usePrescription()
+  const { prescription, setPrescription } = usePrescription();
   const [departmentSelected, setDepartmentSelected] = React.useState("");
 
   const [report, setReport] = React.useState({
@@ -55,7 +56,6 @@ export default function Prescription(props) {
       });
       return result;
     };
-
 
     const totalToSaleCalculate = () => {
       let result =
@@ -102,15 +102,16 @@ export default function Prescription(props) {
       number: prescriptionThrough?.length,
       total_to_sale: Math.round(totalToSaleCalculate()) + CellingHandler(),
       rounded_number: CellingHandler(),
-      disount_value:
-        (prescription.discount_money +
-        (report.total * prescription.discount_percent) / 100).toFixed(2),
+      disount_value: (
+        prescription.discount_money +
+        (report.total * prescription.discount_percent) / 100
+      ).toFixed(2),
     });
   };
 
-
   const departmentSubmit = () => {
     PrescriptionModalRef.current.Opener();
+
     axios.get(`${serverIP}api/department/` + props.department.id + '/').then((res) => {
       const DepartmentForm = new FormData();
       DepartmentForm.append("name", "");
@@ -126,7 +127,7 @@ export default function Prescription(props) {
         .post(`${serverIP}api/prescription/`, DepartmentForm)
         .then((res) => {
           setPrescription(res.data);
-          SelectMedicineModalRef.current.Opener()
+          SelectMedicineModalRef.current.Opener();
           toast.success("Data Submited Successfuly.");
 
           axios
@@ -232,7 +233,8 @@ export default function Prescription(props) {
     },
     enabled: prescription?.id != undefined
   })
-
+  
+  
   return (
     <>
       {props.button == "main" && (
@@ -268,8 +270,15 @@ export default function Prescription(props) {
                 update={updatePrescrip}
                 setPrescription={(data) => setPrescription(data)}
               />
-              <PrescriptionThroughForm prescription={prescription} prescriptionThrough={prescriptionThrough} ref={SelectMedicineModalRef}/>
-              <PrescriptionThroughMapForm prescription={prescription} updatePrescription={updatePrescription}/>
+              <PrescriptionThroughForm
+                prescription={prescription}
+                prescriptionThrough={prescriptionThrough}
+                ref={SelectMedicineModalRef}
+              />
+              <PrescriptionThroughMapForm
+                prescription={prescription}
+                updatePrescription={updatePrescription}
+              />
             </div>
           </div>
         ) : (
