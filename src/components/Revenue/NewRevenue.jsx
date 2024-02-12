@@ -5,17 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
 import { queryClient } from "../services/API";
-
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
-}
+import useServerIP from "../services/ServerIP";
 
 
 function NewRevenue({ users }) {
@@ -47,7 +37,6 @@ function NewRevenue({ users }) {
       });
   }, []);
   const user = useAuthUser();
-  const REVENUE_URL = API + '/api/revenue/';
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const {
@@ -55,6 +44,8 @@ function NewRevenue({ users }) {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const { serverIP} = useServerIP()
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -69,7 +60,7 @@ function NewRevenue({ users }) {
     RevenueForm.append("employee", data.employee);
     RevenueForm.append("active", true);
 
-    axios.post(REVENUE_URL, RevenueForm).then((res) => {
+    axios.post(`${serverIP}api/revenue/`, RevenueForm).then((res) => {
       toast.success("Data Submited Succesfully");
       registerModalCloser();
       queryClient.invalidateQueries()

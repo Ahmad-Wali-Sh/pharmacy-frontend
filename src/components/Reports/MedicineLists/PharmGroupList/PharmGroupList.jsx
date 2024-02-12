@@ -79,7 +79,7 @@ function PharmGroupList({Closer}) {
           "&" +
           "name_persian=" +
           persianName + 
-          "&ordering=id"
+          "&ordering=id/"
       )
       .then((res) => {
         setKindList(res.data);

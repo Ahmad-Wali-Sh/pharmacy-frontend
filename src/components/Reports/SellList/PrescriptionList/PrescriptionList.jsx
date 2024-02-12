@@ -79,7 +79,7 @@ function PrescriptionList({ Closer }) {
     axios
       .get(
         PRESCRIPTION_URL +
-          `?prescription_number=${data.prescription_number}&department=${data.department}&created_after=${data.created_after}&created_before=${data.created_before}&name=${data.name}&doctor=${data.doctor}`
+          `?prescription_number=${data.prescription_number}&department=${data.department}&created_after=${data.created_after}&created_before=${data.created_before}&name=${data.name}&doctor=${data.doctor}/`
       )
       .then((res) => {
         setPrescriptionList(res.data);

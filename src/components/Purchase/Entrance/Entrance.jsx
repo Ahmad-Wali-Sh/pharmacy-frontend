@@ -5,17 +5,7 @@ import AlertModal from "../../PageComponents/Modals/AlertModal";
 import EntranceForm from "./EntranceForm";
 import { useFactorTotal, useEntrance } from "../../States/States";
 import axios from "axios";
-
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
-}
+import useServerIP from "../../services/ServerIP";
 
 export default function Entrance({ button, icon, title }) {
   const EntranceModalRef = useRef(null);
@@ -26,23 +16,11 @@ export default function Entrance({ button, icon, title }) {
   const { entrance } = useEntrance();
   const { factorTotal } = useFactorTotal();
 
-  const [API_URL, setAUTH_URL] = useState('');
-  useEffect(() => {
-    loadEnvVariables('VITE_API')
-      .then(apiValue => {
-        setAUTH_URL(apiValue);
-      })
-      .catch(error => {
-        console.error('Error loading VITE_API:', error);
-      });
-  }, []);
-
-
-  
+  const { serverIP} = useServerIP()
 
   const ClosingCheckList = () => {
     axios
-      .get(API_URL + `entrance/${entrance?.id}`)
+      .get(serverIP + 'api/' + `entrance/${entrance?.id}/`)
       .then((ent) => {
         if (factorTotal == ent.data.entrance_total) {
           EntranceModalRef.current.Closer();

@@ -28,6 +28,7 @@ import Select from "react-select";
 import { SelectInputStyle } from "../../../../styles";
 import { useMedicine } from "../../../States/States";
 import MultipleBarcode from "../../MultipleBarcode";
+import useServerIP from "../../../services/ServerIP";
 
 export default function MedicineList({
   edit,
@@ -99,7 +100,7 @@ export default function MedicineList({
           newdata.append("department", item)
         );
       }
-      putDataFn(newdata, `medician/${editItem.id}/`);
+      putDataFn(newdata, `medician/${editItem?.id}/`);
     },
     onSuccess: (data) => {
       setActive("list");
@@ -164,14 +165,20 @@ export default function MedicineList({
   const { data: medicines, refetch: getTwiceMedicine } = useQuery({
     queryKey: [medicineQuery],
   });
-  const { data: editedMedicine, refetch: geteditedMedicine } = useQuery({
-    queryKey: `medician/${edit?.id}`,
-    enabled: false,
-    onSuccess: (data) => {
-      console.log(data);
-      setMedicine(data);
-    },
-  });
+  // const { data: editedMedicine, refetch: geteditedMedicine } = useQuery({
+  //   queryKey: `medician/${edit?.id}`,
+  //   enabled: edit?.id ? true : false,
+  //   onSuccess: (data) => {
+  //     data && setMedicine(data);
+  //   },
+  // });
+
+  const { serverIP } = useServerIP()
+  const geteditedMedicine = () => {
+    edit?.id && axios.get(`${serverIP}api/medician/${edit?.id}`).then((res) => {
+      setMedicine(res)
+    })
+  }
 
   const imageReturn = (image) => {
     try {

@@ -11,6 +11,7 @@ import WebCamModal from "../../PageComponents/WebCamModal";
 import BigModal from "../../PageComponents/Modals/BigModal";
 import ControlledSelect from "../../PageComponents/ControlledSelect";
 import { useQuery } from "react-query";
+import useServerIP from "../../services/ServerIP";
 
 async function loadEnvVariables(key) {
   try {
@@ -33,18 +34,7 @@ function MedicianEntrance({
 }) {
   const MedicineEntranceRef = useRef(null);
 
-  const [API, setAUTH_URL] = useState('');
-  useEffect(() => {
-    loadEnvVariables('API')
-      .then(apiValue => {
-        setAUTH_URL(apiValue);
-      })
-      .catch(error => {
-        console.error('Error loading VITE_API:', error);
-      });
-  }, []);
-
-  const MEDICIAN_URL = API + '/api/medician/';
+  const { serverIP } = useServerIP()
   const user = useAuthUser();
 
   const { register, handleSubmit, reset, control,  } = useForm();
@@ -122,7 +112,7 @@ function MedicianEntrance({
     {
       button == 1 &&
         axios
-          .post(MEDICIAN_URL, MedicianForm)
+          .post(serverIP + 'api/medician/', MedicianForm)
           .then((res) => {
             toast.success("Data Updated Successfuly.");
           })
@@ -134,7 +124,7 @@ function MedicianEntrance({
     {
       button == 2 &&
         axios
-          .post(MEDICIAN_URL, MedicianForm)
+          .post(serverIP + 'api/medician/', MedicianForm)
           .then((res) => {
             toast.success("Data Updated Successfuly.");
           })
@@ -147,7 +137,7 @@ function MedicianEntrance({
     {
       button == 3 &&
         axios
-          .patch(MEDICIAN_URL + medician.id + "/", MedicianForm)
+          .patch(serverIP + 'api/medician/' + medician.id + "/", MedicianForm)
           .then((res) => {
             toast.success("Data Updated Successfuly.");
             UpdateMedicine && UpdateMedicine(res.data);

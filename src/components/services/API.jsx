@@ -2,34 +2,23 @@ import axios from "axios";
 import { QueryClient } from "react-query";
 import { toast } from "react-toastify";
 
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
+const EndpointsURL = "http://127.0.0.1:4000/api/endpoints";
+
+try {
+  const endpointsResponse = await axios.get(EndpointsURL);
+  var serverIP = endpointsResponse.data.server_ip;
+} catch (error) {
+  console.log(error);
 }
 
 // It is a Default Query For more usablitiy.
 const defaultQueryFn = async ({ queryKey }) => {
   try {
-    // Get the value of VITE_API from env.json
-    const api = await loadEnvVariables('VITE_API');
-    
-    // Ensure api is not null or undefined
-    if (!api) {
-      throw new Error('VITE_API value not found');
-    }
-    
-    // Make the axios request using the api value
-    const { data } = await axios.get(api + queryKey[0]);
-    return data;
+    const response = await axios.get(serverIP + "api/" + queryKey[0]);
+    return response.data;
   } catch (error) {
-    console.error('Error in defaultQueryFn:', error);
-    throw error; // Re-throw the error to be handled by React Query
+    toast.error('خطا در بارگیری اطلاعات.')
+    throw error; // Rethrow the error to be caught by React Query
   }
 };
 
@@ -44,55 +33,56 @@ export const queryClient = new QueryClient({
 
 // it is a default posting function to be used for api
 export const postDataFn = async (data, api) => {
+  console.log(serverIP);
   try {
-    const API_URL = await loadEnvVariables('VITE_API'); // Retrieve the API_URL value from env.json
-    return axios.post(API_URL + api, data);
+    const response = await axios.post(serverIP + "api/" + api, data);
+    return response.data;
   } catch (error) {
-    console.error('Error performing POST request:', error);
-    throw error; // Re-throw the error to be handled by the caller
+    console.error("Error posting data:", error);
+    throw error; // Rethrow the error to be caught by React Query
   }
 };
 
 export const putDataFn = async (data, api) => {
   try {
-    const API_URL = await loadEnvVariables('VITE_API'); // Retrieve the API_URL value from env.json
-    return axios.put(API_URL + api, data);
+    const response = await axios.put(serverIP + "api/" + api, data);
+    return response.data;
   } catch (error) {
-    console.error('Error performing PUT request:', error);
-    throw error; // Re-throw the error to be handled by the caller
+    console.error("Error putting data:", error);
+    throw error; // Rethrow the error to be caught by React Query
   }
 };
 
 export const patchDataFn = async (data, api) => {
   try {
-    const API_URL = await loadEnvVariables('VITE_API'); // Retrieve the API_URL value from env.json
-    return axios.patch(API_URL + api, data);
+    const response = await axios.patch(serverIP + "api/" + api, data);
+    return response.data;
   } catch (error) {
-    console.error('Error performing PATCH request:', error);
-    throw error; // Re-throw the error to be handled by the caller
+    console.error("Error patching data:", error);
+    throw error; // Rethrow the error to be caught by React Query
   }
 };
 
 export const deleteDataFn = async (api) => {
   try {
-    const API_URL = await loadEnvVariables('VITE_API'); // Retrieve the API_URL value from env.json
-    return axios.delete(API_URL + api);
+    const response = await axios.delete(serverIP + "api/" + api);
+    return response.data;
   } catch (error) {
-    console.error('Error performing DELETE request:', error);
-    throw error; // Re-throw the error to be handled by the caller
+    console.error("Error deleting data:", error);
+    throw error; // Rethrow the error to be caught by React Query
   }
 };
 
 // it is a default success function to do its job
 export const successFn = (invalidKey, func) => {
-  toast.success("در خواست موفقانه بود");
+  toast.success('در خواست موفقانه بود')
   // queryClient.invalidateQueries(invalidKey, {
   //   refetchInactive: true,
   //   refetchType: "all",
   // });
   setTimeout(() => {
-    queryClient.invalidateQueries();
-  }, 200);
+    queryClient.invalidateQueries()
+  }, 200)
   func && func();
 };
 

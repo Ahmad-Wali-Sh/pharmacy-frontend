@@ -25,7 +25,7 @@ export const SelectMedician = forwardRef(
     useImperativeHandle(ref, () => ({
       Opener() {
         SelectMedicineModalRef.current.Opener();
-        handleCloseFocus();
+        handleCloseFocus && handleCloseFocus();
       },
       Closer() {
         SelectMedicineModalRef.current.Closer();
@@ -143,8 +143,8 @@ export const SelectMedician = forwardRef(
       selectAutoCompleteData(item);
       SelectMedicineModalRef.current.Closer();
       setMedicine(item);
-      UpdateChangedMedicine(item)
-      handleCloseFocus();
+      UpdateChangedMedicine && UpdateChangedMedicine(item)
+      handleCloseFocus && handleCloseFocus();
       // Medicine With Including Functionality
       // Medicine Expires Including Functionality
     };
@@ -160,7 +160,7 @@ export const SelectMedician = forwardRef(
             className="select-medician-button"
             onClick={() => {
               SelectMedicineModalRef.current.Opener();
-              handleCloseFocus();
+              handleCloseFocus && handleCloseFocus();
             }}
             onKeyDown={(e) =>
               e.key === "Enter" && SelectMedicineModalRef.current.Opener()

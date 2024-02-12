@@ -62,7 +62,7 @@ function StoreList({ Closer }) {
     axios
       .get(
         STORE_URL +
-          `?name=${data.name}&phone=${data.phone}&address=${data.address}`
+          `?name=${data.name}&phone=${data.phone}&address=${data.address}/`
       )
       .then((res) => setStore(res.data))
       .catch((err) => console.log(err));

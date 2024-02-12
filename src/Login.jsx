@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import { toast } from "react-toastify";
+import useServerIP from './components/services/ServerIP'
 
 async function loadEnvVariables(key) {
   try {
@@ -20,27 +21,18 @@ function Login() {
     username: "",
     password: "",
   });
-  const [API, setAUTH_URL] = useState("");
-  useEffect(() => {
-    loadEnvVariables("API")
-      .then((apiValue) => {
-        setAUTH_URL(apiValue);
-      })
-      .catch((error) => {
-        console.error("Error loading VITE_API:", error);
-      });
-  }, []);
-  const LOGIN_URL = API + "/auth/token/login/";
-  const ME_URL = API + "/auth/users/me/";
-  const AUTH_URL = API + "/auth/";
+
+  const { serverIP } = useServerIP()
+
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    axios.post(LOGIN_URL, formData).then((res1) => {
+    toast.warn('در حال ورود. لطفا منتظر بمانید', { autoClose: 3000})
+    axios.post(`${serverIP}auth/token/login/`, formData).then((res1) => {
       axios
         .post(
-          AUTH_URL + "token/logout/",
+          `${serverIP}auth/` + "token/logout/",
           {},
           {
             headers: {
@@ -50,12 +42,12 @@ function Login() {
         )
         .finally(() => {
           axios
-            .post(LOGIN_URL, formData)
+            .post(`${serverIP}auth/token/login/`, formData)
             .then((res) => {
               console.log(res);
               if (res.status === 200) {
                 axios
-                  .get(ME_URL, {
+                  .get(`${serverIP}auth/users/me/`, {
                     headers: {
                       Authorization: `Token ${res.data.auth_token}`,
                     },
@@ -79,6 +71,10 @@ function Login() {
               console.log(err);
             });
         });
+    }).catch((error) => {
+      serverIP ? toast.error("اطلاعات وارد شده درست نمیباشد", { autoClose: 3000}) :
+      toast.error(" خطا! سرور در دسترس نیست", { autoClose: 3000})
+      
     });
   };
 

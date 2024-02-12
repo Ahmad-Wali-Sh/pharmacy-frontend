@@ -15,7 +15,7 @@ export default function TrazList() {
   });
 
   let TrazQuery = `traz/?medician=${filter.medician}`;
-  const { data: TrazQueryList } = useQuery([TrazQuery]);
+  const { data: TrazQueryList } = useQuery([TrazQuery], { enabled: filter.medician ? true : false});
 
   const [sortedTraz, setSortedTraz] = useState([]);
   useEffect(() => {

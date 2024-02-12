@@ -8,17 +8,7 @@ import RevenueInfo from "./RevenueInfo";
 import Revenue from "./Revenue";
 import { useQuery } from "react-query";
 import AlertModal from "../PageComponents/Modals/AlertModal";
-
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
-}
+import useServerIP from "../services/ServerIP";
 
 export default function RevenueManager(props) {
   const ModalStyles = {
@@ -61,24 +51,12 @@ export default function RevenueManager(props) {
     setRegisterModalOpen(false);
   }
 
-  const [API, setAUTH_URL] = useState('');
-  useEffect(() => {
-    loadEnvVariables('API')
-      .then(apiValue => {
-        setAUTH_URL(apiValue);
-      })
-      .catch(error => {
-        console.error('Error loading VITE_API:', error);
-      });
-  }, []);
-
-  const REVENUE_URL = API + '/api/revenue/';
-  const USERS_URL = API + '/auth/users/';
+  const { serverIP} = useServerIP()
 
   const [users, setUsers] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get(USERS_URL).then((res) => setUsers(res.data));
+    axios.get(`${serverIP}auth/users/`).then((res) => setUsers(res.data));
   }, []);
 
   const QueryRevenue = `revenue/?created_after=${watch(
@@ -90,14 +68,6 @@ export default function RevenueManager(props) {
   )}`;
   const { data: revenue, refetch: revenueGet } = useQuery([QueryRevenue]);
 
-  // const RevenueSearch = (data) => {
-  //   setRevenue([])
-  //   axios
-  //     .get(REVENUE_URL + `?created_after=${data.created}&created_before=${data.created}&active=${data.active}&employee=${data.employee}&revenue_through__prescription_number=${data.revenue_through}`)
-  //     .then((res) => {
-  //       setRevenue(res.data)
-  //     })
-  // }
 
     const [editRevenue,setEditRevenue] = React.useState('')
   const AlertingRef = useRef(null);
@@ -125,7 +95,7 @@ export default function RevenueManager(props) {
             const RevenueForm = new FormData();
             RevenueForm.append("active", false);
             axios
-              .patch(REVENUE_URL + editRevenue.id + "/", RevenueForm)
+              .patch(`${serverIP}api/revenue/` + editRevenue.id + "/", RevenueForm)
               .then(() => {
                 console.log("done");
                 revenueGet();
@@ -227,14 +197,6 @@ export default function RevenueManager(props) {
                       if (res.target.value === true) {
                         alert("باز شدن صندوق های بسته شده امکان پذیر نیست.");
                       } else {
-                        // const RevenueForm = new FormData();
-                        // RevenueForm.append("active", false);
-                        // axios
-                        //   .patch(REVENUE_URL + revenue.id + "/", RevenueForm)
-                        //   .then(() => {
-                        //     console.log("done");
-                        //     revenueGet();
-                        //   });
                         setEditRevenue(revenue)
                         AlertingRef.current.Opener();
                       }

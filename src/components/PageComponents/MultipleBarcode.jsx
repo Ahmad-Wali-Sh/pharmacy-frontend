@@ -3,44 +3,22 @@ import React, { useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import SmallModal from "./Modals/SmallModal";
-
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
-}
-
+import useServerIP from "../services/ServerIP";
 
 function MultipleBarcode({ medicineID }) {
   const multipleBarcodeRef = useRef(null);
+  const { serverIP} = useServerIP()
   const [barcoder, setBarcoder] = useState("");
   const { data: multipleBarcode, refetch: medicineBarcodeRefetch } = useQuery(
     `medicine-barcode/?medicine=${medicineID}`
   );
-
-  const [API_URL, setAUTH_URL] = useState('');
-  useEffect(() => {
-    loadEnvVariables('VITE_API')
-      .then(apiValue => {
-        setAUTH_URL(apiValue);
-      })
-      .catch(error => {
-        console.error('Error loading VITE_API:', error);
-      });
-  }, []);
-  
 
   const newBarcode = () => {
     const BarcodeForm = new FormData();
     BarcodeForm.append("medicine", medicineID);
     BarcodeForm.append("barcode", barcoder);
     axios
-      .post(API_URL + "medicine-barcode/", BarcodeForm)
+      .post(`${serverIP}api/` + "medicine-barcode/", BarcodeForm)
       .then(() => {
         toast.success("بارکد موفقانه ثبت شد");
         setTimeout(() => {
@@ -50,7 +28,7 @@ function MultipleBarcode({ medicineID }) {
       })
       .catch((e) => {
         axios
-          .get(API_URL + `medicine-barcode/?barcode=${barcoder}`)
+          .get(`${serverIP}api/` + `medicine-barcode/?barcode=${barcoder}/`)
           .then((res) => {
             toast.error(
               <>
@@ -62,7 +40,7 @@ function MultipleBarcode({ medicineID }) {
                   onClick={() => {
                     axios
                       .delete(
-                        API_URL + "medicine-barcode/" + res.data.results[0].id + '/'
+                        `${serverIP}api/`  + "medicine-barcode/" + res.data.results[0].id + '/'
                       )
                       .then(() => {
                         medicineBarcodeRefetch();
@@ -82,7 +60,7 @@ function MultipleBarcode({ medicineID }) {
 
   const deleteBarcode = (barcodeId) => {
     axios
-      .delete(API_URL + "medicine-barcode/" + barcodeId + '/')
+      .delete(`${serverIP}api/`  + "medicine-barcode/" + barcodeId + '/')
       .then(() => {
         toast.success("بارکد موفقانه حذف شد");
         setTimeout(() => {

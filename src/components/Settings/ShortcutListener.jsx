@@ -22,7 +22,7 @@ const ShortcutListener = () => {
       // Check if the pressed shortcut matches any stored shortcut
 
       // Perform the corresponding action based on the matched shortcut
-      switch (generalMatchedShortcut[0]) {
+      switch (generalMatchedShortcut?.[0]) {
         case 'dashboard':
           event.preventDefault()
           navigate('/dashboard')
@@ -80,8 +80,7 @@ const { setNewMedicineShow } = useNewMedicineShow()
       const generalMatchedShortcut = Object.entries(generalStoredShortcuts).find(([_, value]) => value === shortcut);
       // Check if the pressed shortcut matches any stored shortcut
       // Perform the corresponding action based on the matched shortcut
-      console.log(generalMatchedShortcut[0]);
-      switch (generalMatchedShortcut[0]) {
+      switch (generalMatchedShortcut?.[0]) {
         case 'new_medicine':
           setNewMedicineShow(new Date())
           break;

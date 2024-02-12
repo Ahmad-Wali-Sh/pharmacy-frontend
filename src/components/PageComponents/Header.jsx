@@ -5,32 +5,10 @@ import { useQuery } from "react-query";
 import ColorTemplates from "../Settings/ColorTemplates";
 import Settings from "../Settings/Settings";
 import ShortcutListener from "../Settings/ShortcutListener";
+import useServerIP from "../services/ServerIP";
 
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
-}
 
 function Header() {
-  const [AUTH_URL, setAUTH_URL] = useState('');
-  useEffect(() => {
-    loadEnvVariables('VITE_AUTH')
-      .then(apiValue => {
-        setAUTH_URL(apiValue);
-      })
-      .catch(error => {
-        console.error('Error loading VITE_API:', error);
-      });
-  }, []);
-  useEffect(() => {
-    console.log(AUTH_URL);
-  }, [AUTH_URL])
 
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
@@ -41,7 +19,10 @@ function Header() {
     data: departments,
     isLoading,
     isError,
-  } = useQuery({ queryKey: ["department/?ordering=id"], retry: 2 });
+  } = useQuery({ queryKey: ["department/?ordering=id"], retry: false });
+
+
+  const { serverIP } = useServerIP()
 
 
   if (isLoading) {
@@ -61,7 +42,7 @@ function Header() {
           <ShortcutListener />
           <i className="fa-solid fa-bell"></i>
           <div className="log-in" onClick={() => {
-            axios.post(AUTH_URL + 'token/logout/').finally(() => {
+            axios.post(`${serverIP}auth/` + 'token/logout/').finally(() => {
               signOut()
               delete axios.defaults.headers.common["Authorization"];
               window.location.reload()
