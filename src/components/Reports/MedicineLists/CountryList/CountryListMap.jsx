@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
+import useServerIP from "../../../services/ServerIP";
 
 function CountryListMap({ kind, num, Update }) {
   const {
@@ -12,7 +13,7 @@ function CountryListMap({ kind, num, Update }) {
   const [file, setFile] = React.useState("");
   const [imagePreview, setImagePreview] = React.useState("");
 
-  const KIND_URL = import.meta.env.VITE_COUNTRY;
+  const { serverIP} = useServerIP()
 
   const UpdateKindList = (data) => {
     console.log(file);
@@ -25,7 +26,7 @@ function CountryListMap({ kind, num, Update }) {
       file && KindForm.append("image", file);
     }
     axios
-      .patch(KIND_URL + kind.id + "/", KindForm)
+      .patch(`${serverIP}api/country/` + kind.id + "/", KindForm)
       .then((res) => {
         console.log(res);
       })
@@ -34,7 +35,7 @@ function CountryListMap({ kind, num, Update }) {
 
   const DeleteKind = () => {
     axios
-      .delete(KIND_URL + kind.id + "/")
+      .delete(`${serverIP}api/country/`+ kind.id + "/")
       .then((res) => {
         console.log(res);
         Update();

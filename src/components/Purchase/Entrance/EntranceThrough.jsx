@@ -37,8 +37,8 @@ export default function EntranceThrough() {
   const {medicine, setMedicine} = useMedicine()
   const { entrance } = useEntrance();
   const { data: entranceThrough, refetch: entranceRefetch } = useQuery(
-    `entrance-throug/?entrance=${entrance?.id}`
-  );
+    `entrance-throug/?entrance=${entrance?.id}`, { enabled: entrance?.id ? true : false}
+  ) 
   const user = useAuthUser();
 
 
@@ -58,8 +58,8 @@ export default function EntranceThrough() {
     mutationFn: (data) => postDataFn(data, "entrance-throug/"),
     onSuccess: (res) => {
       successFn("", () => {
-        queryClient.invalidateQueries([
-          `entrance-throug/?entrance=${entrance.id}`,
+        entrance?.id && queryClient.invalidateQueries([
+          `entrance-throug/?entrance=${entrance?.id}`,
         ]);
         setFocus("number_in_factor");
         resetThrough();
@@ -81,8 +81,8 @@ export default function EntranceThrough() {
     onSuccess: (res) => {
       successFn("", () => {
         setTimeout(() => {
-          queryClient.invalidateQueries(
-            { queryKey: [`entrance-throug/?entrance=${entrance.id}`] },
+          entrance?.id && queryClient.invalidateQueries(
+            { queryKey: [`entrance-throug/?entrance=${entrance?.id}`] },
             20000
           );
         });
@@ -97,14 +97,14 @@ export default function EntranceThrough() {
 
   useEffect(() => {
     if (!initialRender) {
-      entrance.id && SelectMedicineRef.current.Opener();
+      entrance?.id && SelectMedicineRef.current.Opener();
     } else {
       setInitialRender(false)
     }
   }, [medicineShow])
 
   const SubmitedAlert = (data) => {
-    return entranceThrough.filter((through) => {
+    return entranceThrough?.filter((through) => {
       if (through.medician == data.medician) {
         return through;
       }

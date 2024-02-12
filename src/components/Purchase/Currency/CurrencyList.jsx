@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
 import Currency from "./Currency";
+import useServerIP from "../../services/ServerIP";
 
 function CurrencyList({ Update }) {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
@@ -13,7 +14,7 @@ function CurrencyList({ Update }) {
 
   function registerModalOpener() {
     axios
-      .get(CURRENCY_URL + "?ordering=id")
+      .get(`${serverIP}api/currency/` + "?ordering=id/")
       .then((res) => {
         setCurrencyList(res.data);
         setRegisterModalOpen(true);
@@ -46,12 +47,13 @@ function CurrencyList({ Update }) {
     formState: { errors },
   } = useForm();
 
-  const CURRENCY_URL = import.meta.env.VITE_CURRENCY;
+  const { serverIP} = useServerIP()
+
   const [currencyList, setCurrencyList] = React.useState([]);
 
   React.useEffect(() => {
     axios
-      .get(CURRENCY_URL)
+      .get(`${serverIP}api/currency/`)
       .then((res) => setCurrencyList(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -62,7 +64,7 @@ function CurrencyList({ Update }) {
     CurrencyForm.append("user", user().id);
 
     axios
-      .patch(CURRENCY_URL + data.id, CurrencyForm)
+      .patch(`${serverIP}api/currency/` + data.id, CurrencyForm)
       .then((e) => {
         registerModalCloser();
         Update();
@@ -78,7 +80,7 @@ function CurrencyList({ Update }) {
 
   const CurrencyUpdate = () => {
     axios
-      .get(CURRENCY_URL + "?ordering=id")
+      .get(`${serverIP}api/currency/` + "?ordering=id/")
       .then((res) => {
         setCurrencyList(res.data);
         Update();
@@ -124,7 +126,7 @@ function CurrencyList({ Update }) {
                     CurrencyForm.append("rate", e.target.value);
                     CurrencyForm.append("user", user().id);
                     axios
-                      .patch(CURRENCY_URL + currency.id + "/", CurrencyForm)
+                      .patch(`${serverIP}api/currency/` + currency.id + "/", CurrencyForm)
                       .then((res) => {
                         console.log(res);
                         Update();
@@ -133,7 +135,7 @@ function CurrencyList({ Update }) {
                 ></input>
                 <div className="medician-map-buttons-1" onClick={() => {
                     axios
-                        .delete(CURRENCY_URL + currency.id)
+                        .delete(`${serverIP}api/currency/` + currency.id)
                         .then((res) => {
                             Update()
                             CurrencyUpdate()

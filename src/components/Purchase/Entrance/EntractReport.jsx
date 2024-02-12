@@ -7,13 +7,18 @@ import {
   useEntranceTrough,
   useFactorTotal,
 } from "../../States/States";
+import useServerIP from "../../services/ServerIP";
 
 export default function EntranceReport() {
 
+  const { serverIP } = useServerIP()
   const { entrance, setEntrance } = useEntrance();
-  const { data: entranceThrough } = useQuery(
-    `entrance-throug/?entrance=${entrance?.id}`
-  );
+  // let entranceThrough;
+  const { data: entranceThrough } = useQuery({
+    queryKey: [`entrance-throug/?entrance=${entrance?.id}`],
+    enabled: false
+  }
+  ) 
 
 
   const [entranceId, setEntranceId] = useState();
@@ -26,7 +31,7 @@ export default function EntranceReport() {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`${API_URL}entrance/${entranceId}/`);
+        const response = await axios.get(`${serverIP}api/entrance/${entranceId}/`);
         setEntrance(response.data);
       } catch (error) {
         // If there's an error, such as entrance not found, adjust entranceId until an existing entrance is found
@@ -34,12 +39,11 @@ export default function EntranceReport() {
         while (adjustedId > 0) {
           adjustedId--;
           try {
-            const response = await axios.get(`${API_URL}entrance/${adjustedId}/`);
+            const response = await axios.get(`${serverIP}/api/entrance/${adjustedId}/`);
             setEntrance(response.data);
             setEntranceId(adjustedId);
             return;
           } catch (fetchError) {
-            console.error('Error fetching entrance:', fetchError);
           }
         }
         // If no existing entrance is found, set error state
@@ -49,13 +53,13 @@ export default function EntranceReport() {
       }
     };
 
-    fetchEntrance();
+    entranceId && fetchEntrance();
   }, [entranceId]);
 
   const handleNextEntrance = async () => {
     for (let i = entranceId + 1; i <= entranceId + 5; i++) {
       try {
-        const response = await axios.get(`${API_URL}entrance/${i}/`);
+        const response = await axios.get(`${serverIP}api/entrance/${i}/`);
         setEntrance(response.data);
         setEntranceId(i);
         return;
@@ -69,7 +73,7 @@ export default function EntranceReport() {
   const handlePreviousEntrance = async () => {
     for (let i = entranceId - 1; i >= entranceId - 5 && i >= 1; i--) {
       try {
-        const response = await axios.get(`${API_URL}entrance/${i}/`);
+        const response = await axios.get(`${serverIP}api/entrance/${i}/`);
         setEntrance(response.data);
         setEntranceId(i);
         return;
@@ -81,7 +85,7 @@ export default function EntranceReport() {
   };
 
   useEffect(() => {
-    entrance.id && setEntranceId(entrance.id)
+    entrance?.id && setEntranceId(entrance.id)
   }, [entrance?.id])
 
   const { data: lastEntrance, refetch: getLastEntrance } = useQuery({
@@ -92,14 +96,14 @@ export default function EntranceReport() {
     }
   });
 
-  const API_URL = import.meta.env.VITE_API;
+
 
   const PriceApply = () => {
-    entranceThrough.map((through) => {
+    entranceThrough?.map((through) => {
       const PriceForm = new FormData();
       PriceForm.append("price", through.each_sell_price_afg);
       axios
-        .patch(API_URL + 'medician/' + through.medician + "/", PriceForm)
+        .patch(`${serverIP}api/medician/` + through.medician + "/", PriceForm)
         .then(() => {
           setPriceApplied(true)
           toast.info(
@@ -193,7 +197,7 @@ export default function EntranceReport() {
   useEffect(() => {
     Reporting();
     setPriceApplied(false)
-  }, [entranceThrough]);
+  }, [entranceThrough && entranceThrough]);
 
 
 
@@ -268,7 +272,7 @@ export default function EntranceReport() {
           <i class="fa-solid fa-left-long"></i>
         </button>
         <button
-          className={`entrance-report-button ${(entrance.id && priceApplied) ? '' : entranceThrough?.length > 0 && 'alerting-button'}`}
+          className={`entrance-report-button ${(entrance?.id && priceApplied) ? '' : entranceThrough?.length > 0 && 'alerting-button'}`}
           onClick={() => PriceApply()}
           disabled={entranceThrough?.length > 0 ? false : true}
           tabIndex={-1}

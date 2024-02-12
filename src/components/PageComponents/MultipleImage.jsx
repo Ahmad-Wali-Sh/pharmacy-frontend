@@ -4,6 +4,7 @@ import { deleteDataFn, postDataFn, successFn } from "../services/API";
 import { useEntrance } from "../States/States";
 import SmallModal from "./Modals/SmallModal";
 import WebCamModal from "./WebCamModal";
+import useServerIP from "../services/ServerIP";
 
 function MultipleImage() {
   const MultipleImageRef = useRef(null);
@@ -13,8 +14,8 @@ function MultipleImage() {
     enabled: false,
   });
   const [image, setImage] = useState("");
-  const API_URL = import.meta.env.VITE_API
-  let IMAGE_URL = API_URL.slice(0,-5)
+
+  const { serverIP} = useServerIP()
 
   const { mutate: newImage } = useMutation({
     mutationFn: () => {
@@ -85,13 +86,13 @@ function MultipleImage() {
                 <a
                   className="multiple-image-item"
                   target="_blank"
-                  href={`${IMAGE_URL}${image?.image}`}
+                  href={`${serverIP}${image?.image}`}
                 >
                   <h6>{num + 1}</h6>
                   <h6>{image?.image.slice(39)}</h6>
                   <img
                     className="multiple-image-image"
-                    src={`${IMAGE_URL}${image?.image}`}
+                    src={`${serverIP}${image?.image}`}
                   ></img>
                 </a>
                 <div

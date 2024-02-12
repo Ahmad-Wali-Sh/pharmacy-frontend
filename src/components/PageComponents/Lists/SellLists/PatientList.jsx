@@ -102,7 +102,7 @@ export default function PatientList() {
   let patientQuery = `patient/?name=${filter.name}&id=${filter.id}&contact_number=${filter.contact_number}&gender=${filter.gender}&tazkira_number=${filter.tazkira_number}`;
 
   const { data: patients } = useQuery([patientQuery]);
-
+ 
   switch (active) {
     case "list":
       return (

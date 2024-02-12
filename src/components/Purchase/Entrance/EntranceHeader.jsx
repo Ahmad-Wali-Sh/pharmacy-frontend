@@ -54,18 +54,18 @@ export default function EntranceHeader() {
   const user = useAuthUser();
   const [reKey, setReKey] = useState(0);
 
-  const { data: finalRegister } = useQuery("final-register");
-  const { data: company } = useQuery("pharm-companies");
-  const { data: store } = useQuery("store");
-  const { data: currency } = useQuery("currency");
-  const { data: paymentMethod } = useQuery("payment-method");
+  const { data: finalRegister } = useQuery("final-register/");
+  const { data: company } = useQuery("pharm-companies/");
+  const { data: store } = useQuery("store/");
+  const { data: currency } = useQuery("currency/");
+  const { data: paymentMethod } = useQuery("payment-method/");
   const { entrance, setEntrance } = useEntrance();
 
   const { mutate: submitEntrance } = useMutation({
     mutationFn: (data) => postDataFn(data, "entrance/"),
     onSuccess: (res) => {
       successFn("", () => {
-        setEntrance(res.data);
+        setEntrance(res);
         setMedicineShow(new Date())
       });
     },
@@ -73,9 +73,9 @@ export default function EntranceHeader() {
   const { mutate: updateEntrance } = useMutation({
     mutationFn: (data) => putDataFn(data, `entrance/${entrance?.id}/`),
     onSuccess: (res) => {
-      successFn("", () => {
-        setEntrance(res.data);
-      });
+        console.clear()
+        toast.success('موفقانه بود')
+        setEntrance(res);
     },
   });
   const { mutate: deleteEntrance } = useMutation({
@@ -119,10 +119,6 @@ export default function EntranceHeader() {
     });
   };
 
-
-  useEffect(() => {
-    console.log(currency?.filter(item => {return item.name =='AFG' && item.id})[0].id);
-  }, [currency])
 
   const { refetch: searchEntrance } = useQuery({
     queryKey: [`entrance/${watch("entrance_search")}/`],
@@ -179,7 +175,7 @@ export default function EntranceHeader() {
       onSubmit={handleSubmit((data) =>
         handleFormData(
           data,
-          entrance.id ? updateEntrance : submitEntrance,
+          entrance?.id ? updateEntrance : submitEntrance,
           user
         )
       )}
@@ -187,7 +183,7 @@ export default function EntranceHeader() {
       <label>وضعیت:</label>
       <ControlledSelect
         control={control}
-        autoFocus={entrance.id ? false : true}
+        autoFocus={entrance?.id ? false : true}
         name="final_register"
         error={errors.final_register ? true : false}
         required={true}
@@ -316,7 +312,7 @@ export default function EntranceHeader() {
         <label></label>
         <input
           type="text"
-          disabled={watch('currency') == currency?.filter(item => {return item.name =='AFG' && item.id})[0].id ? true : false}
+          disabled={watch('currency') == currency?.filter(item => {return item.name =='AFG' && item.id})?.[0].id ? true : false}
           {...register("currency_rate")}
           className="entrance--inputs"
         />

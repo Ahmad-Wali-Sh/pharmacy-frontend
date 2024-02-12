@@ -2,12 +2,24 @@ import axios from "axios";
 import { QueryClient } from "react-query";
 import { toast } from "react-toastify";
 
-const API_URL = import.meta.env.VITE_API;
+const EndpointsURL = "http://127.0.0.1:4000/api/endpoints";
+
+try {
+  const endpointsResponse = await axios.get(EndpointsURL);
+  var serverIP = endpointsResponse.data.server_ip;
+} catch (error) {
+  console.log(error);
+}
 
 // It is a Default Query For more usablitiy.
 const defaultQueryFn = async ({ queryKey }) => {
-  const { data } = await axios.get(API_URL + queryKey[0]);
-  return data;
+  try {
+    const response = await axios.get(serverIP + "api/" + queryKey[0]);
+    return response.data;
+  } catch (error) {
+    toast.error('خطا در بارگیری اطلاعات.')
+    throw error; // Rethrow the error to be caught by React Query
+  }
 };
 
 // our main queryClient
@@ -20,20 +32,45 @@ export const queryClient = new QueryClient({
 });
 
 // it is a default posting function to be used for api
-export const postDataFn = (data, api) => {
-  return axios.post(API_URL + api, data);
+export const postDataFn = async (data, api) => {
+  console.log(serverIP);
+  try {
+    const response = await axios.post(serverIP + "api/" + api, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error posting data:", error);
+    throw error; // Rethrow the error to be caught by React Query
+  }
 };
 
-export const putDataFn = (data, api) => {
-  return axios.put(API_URL + api, data)
+export const putDataFn = async (data, api) => {
+  try {
+    const response = await axios.put(serverIP + "api/" + api, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error putting data:", error);
+    throw error; // Rethrow the error to be caught by React Query
+  }
 };
 
-export const patchDataFn = (data, api) => {
-  return axios.patch(API_URL + api, data)
+export const patchDataFn = async (data, api) => {
+  try {
+    const response = await axios.patch(serverIP + "api/" + api, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error patching data:", error);
+    throw error; // Rethrow the error to be caught by React Query
+  }
 };
 
-export const deleteDataFn = (api) => {
-  return axios.delete(API_URL + api);
+export const deleteDataFn = async (api) => {
+  try {
+    const response = await axios.delete(serverIP + "api/" + api);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting data:", error);
+    throw error; // Rethrow the error to be caught by React Query
+  }
 };
 
 // it is a default success function to do its job

@@ -3,6 +3,7 @@ import React, { useRef } from "react";
 import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
+import useServerIP from "../services/ServerIP";
 
 export default function Revenue(props) {
   const ModalStyles = {
@@ -20,10 +21,8 @@ export default function Revenue(props) {
   };
 
   const barcodeRef = useRef('')
+  const { serverIP } = useServerIP()
 
-  const REVENUE_URL = import.meta.env.VITE_REVENUE;
-  const REVENUE_THROUGH_URL = import.meta.env.VITE_REVENUE_THROUGH;
-  const PRESCRIPTION_URL = import.meta.env.VITE_PRESCRIPTION;
   const user = useAuthUser();
   let today = new Date().toISOString().slice(0, 10);
 
@@ -48,7 +47,7 @@ export default function Revenue(props) {
     RevneueForm.append("user", user().id);
 
     axios
-      .post(REVENUE_THROUGH_URL + "?revenue=" + revenue.id, RevneueForm)
+      .post(`${serverIP}api/revenue-through/` + "?revenue=" + revenue.id, RevneueForm)
       .then((res) => {
         UpdateUI();
       })
@@ -56,25 +55,25 @@ export default function Revenue(props) {
   };
 
   const ClearPay = (revenue) => {
-    axios.delete(REVENUE_THROUGH_URL + revenue.id).then(() => UpdateUI());
+    axios.delete(`${serverIP}api/revenue-through/` + revenue.id + '/').then(() => UpdateUI());
   };
 
   const UpdateUI = () => {
     axios
       .get(
-        REVENUE_URL +
+        `${serverIP}api/revenue/` +
           "?employee=" +
           user().id +
           "&active=" +
           true +
-          "&ordering=-id"
+          "&ordering=-id/"
       )
       .then((res) => {
         setRevenue(res.data && res.data[0]);
         res.data &&
           res.data[0] &&
           axios
-            .get(REVENUE_THROUGH_URL + "?revenue=" + res.data[0].id)
+            .get(`${serverIP}api/revenue-through/` + "?revenue=" + res.data[0].id )
             .then((resthroug) => {
               setRevenueThrough(resthroug.data);
             });
@@ -82,7 +81,7 @@ export default function Revenue(props) {
 
     axios
       .get(
-        PRESCRIPTION_URL +
+        `${serverIP}api/prescription/` +
           "?sold=false"
       )
       .then((res) => setPrescription(res.data));
@@ -91,19 +90,19 @@ export default function Revenue(props) {
   React.useEffect(() => {
     axios
       .get(
-        REVENUE_URL +
+        `${serverIP}api/revenue/` +
           "?employee=" +
           user().id +
           "&active=" +
           true +
-          "&ordering=-id"
+          "&ordering=-id/"
       )
       .then((res) => {
         setRevenue(res.data && res.data[0]);
         res.data &&
           res.data[0] &&
           axios
-            .get(REVENUE_THROUGH_URL + "?revenue=" + res.data[0].id)
+            .get(`${serverIP}api/revenue-through/` + "?revenue=" + res.data[0].id)
             .then((resthroug) => {
               setRevenueThrough(resthroug.data);
             });
@@ -111,16 +110,16 @@ export default function Revenue(props) {
 
     axios
       .get(
-        PRESCRIPTION_URL +
-          "?sold=false" 
+        `${serverIP}api/prescription/` +
+          "?sold=false/" 
       )
       .then((res) => setPrescription(res.data));
   }, []);
 
   const handleBarcodePay = (barcode) => {
     axios.get(
-      PRESCRIPTION_URL +
-        "?sold=false" + "&barcode_str=" + barcode)
+      `${serverIP}api/prescription/` +
+        "?sold=false" + "&barcode_str=" + barcode + '/')
       .then((res) => {
         const RevneueForm = new FormData();
         RevneueForm.append("revenue", revenue.id);
@@ -129,7 +128,7 @@ export default function Revenue(props) {
         RevneueForm.append("user", user().id);
     
         barcode && axios
-          .post(REVENUE_THROUGH_URL + "?revenue=" + revenue.id, RevneueForm)
+          .post(`${serverIP}api/revenue-through/` + "?revenue=" + revenue.id, RevneueForm)
           .then((res) => {
             toast.success('پرداخت شد')
             UpdateUI();

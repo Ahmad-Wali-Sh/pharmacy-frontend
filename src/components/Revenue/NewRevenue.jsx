@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuthUser } from "react-auth-kit";
 import { queryClient } from "../services/API";
+import useServerIP from "../services/ServerIP";
 
 function NewRevenue({ users }) {
 
@@ -25,7 +26,6 @@ function NewRevenue({ users }) {
   };
 
   const user = useAuthUser();
-  const REVENUE_URL = import.meta.env.VITE_REVENUE;
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const {
@@ -33,6 +33,8 @@ function NewRevenue({ users }) {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const { serverIP} = useServerIP()
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -47,7 +49,7 @@ function NewRevenue({ users }) {
     RevenueForm.append("employee", data.employee);
     RevenueForm.append("active", true);
 
-    axios.post(REVENUE_URL, RevenueForm).then((res) => {
+    axios.post(`${serverIP}api/revenue/`, RevenueForm).then((res) => {
       toast.success("Data Submited Succesfully");
       registerModalCloser();
       queryClient.invalidateQueries()

@@ -5,9 +5,9 @@ import { useQuery } from "react-query";
 import ColorTemplates from "../Settings/ColorTemplates";
 import Settings from "../Settings/Settings";
 import ShortcutListener from "../Settings/ShortcutListener";
+import useServerIP from "../services/ServerIP";
 
 function Header() {
-  const AUTH_URL = import.meta.env.VITE_AUTH;
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
 
@@ -15,7 +15,10 @@ function Header() {
     data: departments,
     isLoading,
     isError,
-  } = useQuery({ queryKey: ["department/?ordering=id"], retry: 2 });
+  } = useQuery({ queryKey: ["department/?ordering=id"], retry: false });
+
+
+  const { serverIP } = useServerIP()
 
 
   if (isLoading) {
@@ -35,7 +38,7 @@ function Header() {
           <ShortcutListener />
           <i className="fa-solid fa-bell"></i>
           <div className="log-in" onClick={() => {
-            axios.post(AUTH_URL + 'token/logout/').finally(() => {
+            axios.post(`${serverIP}auth/` + 'token/logout/').finally(() => {
               signOut()
               delete axios.defaults.headers.common["Authorization"];
               window.location.reload()

@@ -1,6 +1,7 @@
 import Modal from "react-modal";
 import React from "react";
 import axios from "axios";
+import useServerIP from "../services/ServerIP";
 
 export default function RevenueInfo({ revenue }) {
   const ModalStyles = {
@@ -17,7 +18,7 @@ export default function RevenueInfo({ revenue }) {
     },
   };
 
-  const REVENUE_THROUGH_URL = import.meta.env.VITE_REVENUE_THROUGH;
+  const { serverIP} = useServerIP()
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [revenueTrough, setRevenueThrough] = React.useState([]);
@@ -32,7 +33,7 @@ export default function RevenueInfo({ revenue }) {
 
   const RevenueSearch = () => {
     axios
-      .get(REVENUE_THROUGH_URL + "?revenue=" + revenue.id)
+      .get(`${serverIP}api/revenue-through/` + "?revenue=" + revenue.id)
       .then((res) => setRevenueThrough(res.data));
   };
 

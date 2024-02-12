@@ -46,8 +46,8 @@ function EntrancThroughEntry({ through, keyValue, num }) {
       handleSubmit((data) =>
         handleFormData(data, interestPercentUpdate, user)
       )()
-      queryClient.invalidateQueries([
-        `entrance-throug/?entrance=${entrance.id}`,
+      entrance?.id &&  queryClient.invalidateQueries([
+        `entrance-throug/?entrance=${entrance?.id}`,
       ]);
     },
   });
@@ -79,8 +79,8 @@ function EntrancThroughEntry({ through, keyValue, num }) {
     },
     onSuccess: (res) => {
       setTimeout(() => {
-        queryClient.invalidateQueries([
-          `entrance-throug/?entrance=${entrance.id}`,
+        entrance?.id &&  queryClient.invalidateQueries([
+          `entrance-throug/?entrance=${entrance?.id}`,
         ]);
       }, 200);
     },
@@ -93,8 +93,8 @@ function EntrancThroughEntry({ through, keyValue, num }) {
     onSuccess: (res) => {
       successFn("", () => {
         setTimeout(() => {
-          queryClient.invalidateQueries([
-            `entrance-throug/?entrance=${entrance.id}`,
+          entrance?.id &&  queryClient.invalidateQueries([
+            `entrance-throug/?entrance=${entrance?.id}`,
           ]);
         }, 200);
       });
@@ -108,8 +108,8 @@ function EntrancThroughEntry({ through, keyValue, num }) {
     onSuccess: () => {
       successFn("", () => {
         setTimeout(() => {
-          queryClient.invalidateQueries([
-            `entrance-throug/?entrance=${entrance.id}`,
+          entrance?.id && queryClient.invalidateQueries([
+            `entrance-throug/?entrance=${entrance?.id}`,
           ]);
         }, 200);
       });

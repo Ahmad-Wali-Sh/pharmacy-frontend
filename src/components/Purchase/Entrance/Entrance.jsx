@@ -5,6 +5,7 @@ import AlertModal from "../../PageComponents/Modals/AlertModal";
 import EntranceForm from "./EntranceForm";
 import { useFactorTotal, useEntrance } from "../../States/States";
 import axios from "axios";
+import useServerIP from "../../services/ServerIP";
 
 export default function Entrance({ button, icon, title }) {
   const EntranceModalRef = useRef(null);
@@ -15,11 +16,11 @@ export default function Entrance({ button, icon, title }) {
   const { entrance } = useEntrance();
   const { factorTotal } = useFactorTotal();
 
-  const API_URL = import.meta.env.VITE_API;
+  const { serverIP} = useServerIP()
 
   const ClosingCheckList = () => {
     axios
-      .get(API_URL + `entrance/${entrance?.id}`)
+      .get(serverIP + 'api/' + `entrance/${entrance?.id}/`)
       .then((ent) => {
         if (factorTotal == ent.data.entrance_total) {
           EntranceModalRef.current.Closer();

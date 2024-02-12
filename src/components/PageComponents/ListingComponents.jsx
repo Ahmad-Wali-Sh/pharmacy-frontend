@@ -20,6 +20,7 @@ import SmallModal from "./Modals/SmallModal";
 import axios from "axios";
 import fileDownload from "js-file-download";
 import {CSVLink} from 'react-csv';
+import useServerIP from "../services/ServerIP";
 
 export default function PatientList() {
   const ListFilterRef = useRef(null);
@@ -301,11 +302,10 @@ export function FilterSelect({
 }
 
 export function FilterModal(props) {
-  const API_URL = import.meta.env.VITE_API;
 
   const ExcelExport = () => {
     axios({
-      url: API_URL + props.url + "&format=xml",
+      url: `${serverIP}/api/` + props.url + "&format=xml",
       method: "GET",
       responseType: "blob",
     }).then((response) => {
