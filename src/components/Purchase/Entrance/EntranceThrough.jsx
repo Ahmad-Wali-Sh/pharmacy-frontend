@@ -150,8 +150,9 @@ export default function EntranceThrough() {
   const sell_price_get = () => {
     let each_price_factor = parseFloat(watch("each_price_factor"));
     let interest_percent = parseFloat(watch("interest_percent"));
+    let no_box = parseFloat(watch("no_box"));
     let result =
-      ((each_price_factor + (interest_percent * each_price_factor) / 100) / 1) *
+      (((each_price_factor / no_box) + (interest_percent * (each_price_factor / no_box)) / 100) / 1) *
       entrance?.currency_rate;
     return parseFloat(result).toFixed(2);
   };
@@ -159,11 +160,12 @@ export default function EntranceThrough() {
   const interest_get = () => {
     let each_sell_price_afg = parseFloat(watch("each_sell_price_afg"));
     let each_price_factor = parseFloat(watch("each_price_factor"));
+    let no_box = parseFloat(watch("no_box"));
     let result =
       (100 *
         ((each_sell_price_afg / entrance?.currency_rate) * 1 -
-          each_price_factor)) /
-      each_price_factor;
+        (each_price_factor / no_box))) /
+        (each_price_factor / no_box);
     return parseFloat(result).toFixed(2);
   };
 

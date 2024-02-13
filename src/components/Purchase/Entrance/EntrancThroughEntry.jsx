@@ -55,10 +55,14 @@ function EntrancThroughEntry({ through, keyValue, num }) {
   const sell_price_get = () => {
     let each_price_factor = parseFloat(watch("each_price_factor"));
     let interest_percent = parseFloat(watch("interest_percent"));
+    console.clear();
+    console.log(through.each_purchase_price);
     let result =
-      ((each_price_factor + (interest_percent * each_price_factor) / 100) / 1) *
+      ((through.each_purchase_price + (interest_percent * through.each_purchase_price) / 100) / 1) *
       entrance?.currency_rate;
-    return parseFloat(result).toFixed(2);
+
+    console.log(result);
+    return parseFloat(result).toFixed(3);
   };
 
   const interest_get = () => {
@@ -67,9 +71,9 @@ function EntrancThroughEntry({ through, keyValue, num }) {
     let result =
       (100 *
         ((each_sell_price_afg / entrance?.currency_rate) * 1 -
-          each_price_factor)) /
-      each_price_factor;
-    return parseFloat(result).toFixed(2);
+        through.each_purchase_price)) /
+          through.each_purchase_price;
+    return parseFloat(result).toFixed(3);
   };
 
   const { mutate: interestPercentUpdate } = useMutation({
