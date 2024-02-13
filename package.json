@@ -19,6 +19,7 @@
     "env-cmd": "^10.1.0",
     "fuse.js": "^6.6.2",
     "install": "^0.13.0",
+    "jalali-moment": "^3.3.11",
     "jb-date-input": "^3.8.0",
     "js-file-download": "^0.4.12",
     "less": "^4.2.0",

@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import ControlledSelect from "../../../PageComponents/ControlledSelect";
 import { usePrescription } from "../../../States/States";
 import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
+import moment from "jalali-moment";
 
 function PrescriptionForm({ prescriptionThrough, update }) {
   const user = useAuthUser();
@@ -45,13 +46,8 @@ function PrescriptionForm({ prescriptionThrough, update }) {
   }, [prescription]);
 
   React.useEffect(() => {
-    let date = new Date();
-    let year = date.getFullYear().toString().slice(2, 4);
-    let month =
-      date.getMonth() + 1 <= 9
-        ? "0" + (date.getMonth() + 1).toString()
-        : (date.getMonth() + 1).toString();
-    let day = date.getDate() <= 9 ? "0" + date.getDate() : date.getDate();
+    const date = moment();
+    const jalaliDate = date.format("jYYYY-jMM");
 
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
@@ -61,7 +57,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           case "ذ":
             e.preventDefault();
             document.getElementById("search-number").focus();
-            setSearchNumber(`${year}-${month}-${day}-`);
+            setSearchNumber(`${jalaliDate}-`);
             break;
           case "d":
           case "D":
@@ -254,9 +250,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       <input type="text" {...register("discount_percent")} />
       <div></div>
       <a
-        href={
-          prescription.image && prescription.image
-        }
+        href={prescription.image && prescription.image}
         target="_blank"
         style={{ textDecoration: "none", color: "grey" }}
       >
