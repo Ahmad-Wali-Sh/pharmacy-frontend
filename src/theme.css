@@ -1,0 +1,93 @@
+:root {
+    /* Light Theme */
+    --color-one-light: #F3D9DD; /* Coral */
+    --color-two-light: #C9BACF; /* Steel Blue */
+    --color-three-light: #2a2417; /* Navy */
+    --color-four-light: #ADD8E6; /* Orange */
+    --color-five-light: #98FF98; /* Green */
+    --color-six-light: #FFDAB9; /* Deep Pink */
+    --color-seven-light: #FFF8DC; /* Royal Blue */
+    --color-eight-light: #FF6F61; /* Orange Red */
+    /* Add more light theme colors as needed */
+  
+    /* Dark Theme */
+    --color-one-dark: #302624; /* Coral */
+    --color-two-dark: #121619; /* Steel Blue */
+    --color-three-dark: #0b0b13; /* Navy */
+    --color-four-dark: #7e7158; /* Orange */
+    --color-five-dark: #466946; /* Green */
+    --color-six-dark: #45152f; /* Deep Pink */
+    --color-seven-dark: #2e323d; /* Royal Blue */
+    --color-eight-dark: #62514b; /* Orange Red */
+    /* Add more dark theme colors as needed */
+  
+    /* Classic Theme */
+    --color-one-classic: #ff6347; /* Coral */
+    --color-two-classic: #4682b4; /* Steel Blue */
+    --color-three-classic: #000080; /* Navy */
+    --color-four-classic: #ffa500; /* Orange */
+    --color-five-classic: #008000; /* Green */
+    --color-six-classic: #ff1493; /* Deep Pink */
+    --color-seven-classic: #4169e1; /* Royal Blue */
+    --color-eight-classic: #ff4500; /* Orange Red */
+    /* Add more classic theme colors as needed */
+  
+    /* Modern Theme */
+    --color-one-modern: #ff6347; /* Coral */
+    --color-two-modern: #4682b4; /* Steel Blue */
+    --color-three-modern: #000080; /* Navy */
+    --color-four-modern: #ffa500; /* Orange */
+    --color-five-modern: #008000; /* Green */
+    --color-six-modern: #ff1493; /* Deep Pink */
+    --color-seven-modern: #4169e1; /* Royal Blue */
+    --color-eight-modern: #ff4500; /* Orange Red */
+    /* Add more modern theme colors as needed */
+  }
+  
+  [data-theme='light'] {
+    --color-one: var(--color-one-light);
+    --color-two: var(--color-two-light);
+    --color-three: var(--color-three-light);
+    --color-four: var(--color-four-light);
+    --color-five: var(--color-five-light);
+    --color-six: var(--color-six-light);
+    --color-seven: var(--color-seven-light);
+    --color-eight: var(--color-eight-light);
+    /* Add more light theme colors as needed */
+  }
+  
+  [data-theme='dark'] {
+    --color-one: var(--color-one-dark);
+    --color-two: var(--color-two-dark);
+    --color-three: var(--color-three-dark);
+    --color-four: var(--color-four-dark);
+    --color-five: var(--color-five-dark);
+    --color-six: var(--color-six-dark);
+    --color-seven: var(--color-seven-dark);
+    --color-eight: var(--color-eight-dark);
+    /* Add more dark theme colors as needed */
+  }
+  
+  [data-theme='classic'] {
+    --color-one: var(--color-one-classic);
+    --color-two: var(--color-two-classic);
+    --color-three: var(--color-three-classic);
+    --color-four: var(--color-four-classic);
+    --color-five: var(--color-five-classic);
+    --color-six: var(--color-six-classic);
+    --color-seven: var(--color-seven-classic);
+    --color-eight: var(--color-eight-classic);
+    /* Add more classic theme colors as needed */
+  }
+  
+  [data-theme='modern'] {
+    --color-one: var(--color-one-modern);
+    --color-two: var(--color-two-modern);
+    --color-three: var(--color-three-modern);
+    --color-four: var(--color-four-modern);
+    --color-five: var(--color-five-modern);
+    --color-six: var(--color-six-modern);
+    --color-seven: var(--color-seven-modern);
+    --color-eight: var(--color-eight-modern);
+    /* Add more modern theme colors as needed */
+  }

@@ -39,3 +39,7 @@ export const useNewMedicineShow = create((set) => ({
   newMedicineShow: "",
   setNewMedicineShow: (state) => set(() => ({ newMedicineShow: state })),
 }));
+export const useTheme = create((set) => ({
+  theme: "dark",
+  setTheme: (state) => set(() => ({ theme: state })),
+}));

@@ -9,6 +9,7 @@ import Sell from "./components/Sell/Sell";
 import Login from "./Login";
 import { useIsAuthenticated } from "react-auth-kit";
 import RevenueDashboard from "./components/Revenue/RevenueDashboard";
+import { useTheme } from "./components/States/States";
 
 function App() {
   const RequireAuth = ({ children }) => {
@@ -19,8 +20,9 @@ function App() {
     return children;
   };
 
+  const { theme, setTheme } = useTheme()
   return (
-    <div className="app">
+    <div className="app" data-theme='light'>
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
