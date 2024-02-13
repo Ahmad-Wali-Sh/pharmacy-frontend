@@ -24,7 +24,7 @@ function PrescriptionThroughEntry({
     });
   }, [prescriptionThroughs]);
 
-  const { data: conflicts } = useQuery(['medicine-conflict'])
+  const { data: conflicts } = useQuery(['medicine-conflict/'])
 
   React.useEffect(() => {
     let conflicts_with = conflicts?.map((conflict) => {

@@ -200,7 +200,7 @@ function EntranceList({ Closer }) {
             <div className="entrance-filters-buttons">
               <input
                 type="button"
-                value={"جستوجو"}
+                value={"جستجو"}
                 className="filterlists-button-standard"
                 onClick={handleSubmit(SearchHandle)}
               />

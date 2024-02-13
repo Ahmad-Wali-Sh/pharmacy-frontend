@@ -184,7 +184,7 @@ function PharmGroupList({Closer}) {
             />
             <input
               type="button"
-              value="جستوجو"
+              value="جستجو"
               className="kind-list-search-btn"
               onClick={SearchHandle}
             />

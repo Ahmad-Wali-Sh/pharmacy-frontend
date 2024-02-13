@@ -164,7 +164,7 @@ export default function Companies() {
             ListFilterRef={ListFilterRef}
           >
             <FilterInput
-              label="جستوجو"
+              label="جستجو"
               value={filter.name}
               autoFocus={true}
               handleChange={(e) =>

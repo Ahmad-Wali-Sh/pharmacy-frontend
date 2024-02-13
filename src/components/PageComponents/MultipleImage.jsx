@@ -15,16 +15,7 @@ function MultipleImage() {
     enabled: false,
   });
 
-  const [AUTH_URL, setAUTH_URL] = useState('');
-  useEffect(() => {
-    loadEnvVariables('VITE_API')
-      .then(apiValue => {
-        setAUTH_URL(apiValue);
-      })
-      .catch(error => {
-        console.error('Error loading VITE_API:', error);
-      });
-  }, []);
+
   const [image, setImage] = useState("");
 
   const { serverIP} = useServerIP()

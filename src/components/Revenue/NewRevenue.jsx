@@ -26,16 +26,6 @@ function NewRevenue({ users }) {
     },
   };
 
-  const [API, setAUTH_URL] = useState('');
-  useEffect(() => {
-    loadEnvVariables('API')
-      .then(apiValue => {
-        setAUTH_URL(apiValue);
-      })
-      .catch(error => {
-        console.error('Error loading VITE_API:', error);
-      });
-  }, []);
   const user = useAuthUser();
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);

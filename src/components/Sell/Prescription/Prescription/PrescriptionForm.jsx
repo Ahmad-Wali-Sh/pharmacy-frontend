@@ -225,7 +225,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
         value={prescription.prescription_number}
         disabled
       />
-      <label>جستوجو:</label>
+      <label>جستجو:</label>
       <div className="flex">
         <form className="search-form">
           <input

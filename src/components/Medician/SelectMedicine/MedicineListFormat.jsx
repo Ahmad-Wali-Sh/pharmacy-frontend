@@ -1,28 +1,13 @@
-import { useEffect, useState } from "react";
+import axios from "axios";
 
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
+try {
+  const response = await axios.get('http://127.0.0.1:4000/api/endpoints');
+  var api = (response.data.server_ip);
+} catch {
+
 }
 
 export const MedicineListFormat = (item, { context }) => {
-  // const [API_URL, setAUTH_URL] = useState('');
-  // useEffect(() => {
-  //   loadEnvVariables('VITE_API')
-  //     .then(apiValue => {
-  //       setAUTH_URL(apiValue);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error loading VITE_API:', error);
-  //     });
-  //   }, []);
-  //   const IMAGE_URL = API_URL.slice(0,-4)
 
   return context === "value" ? (
     item.medicine_full
@@ -39,7 +24,7 @@ export const MedicineListFormat = (item, { context }) => {
           className="medician-image"
           src={
             item.kind_image
-              ?  item.kind_image
+              ?  api + item.kind_image
               : "./images/nophoto.jpg"
           }
         />
@@ -49,7 +34,7 @@ export const MedicineListFormat = (item, { context }) => {
           className="medician-image"
           src={
             item.country_image
-              ?  item.country_image
+              ? api + item.country_image
               : "./images/nophoto.jpg"
           }
         />

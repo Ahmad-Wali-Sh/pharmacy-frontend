@@ -141,7 +141,7 @@ function Traz({ Closer }) {
                     }}
                     format={"YYYY/MM/DD"}
                     />
-                <input type="button" value="جستوجو" onClick={SearchHandle}/>
+                <input type="button" value="جستجو" onClick={SearchHandle}/>
               </div>
 
           </div>

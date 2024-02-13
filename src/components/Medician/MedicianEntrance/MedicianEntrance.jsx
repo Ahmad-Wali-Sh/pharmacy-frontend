@@ -13,16 +13,7 @@ import ControlledSelect from "../../PageComponents/ControlledSelect";
 import { useQuery } from "react-query";
 import useServerIP from "../../services/ServerIP";
 
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
-}
+
 
 function MedicianEntrance({
   title,

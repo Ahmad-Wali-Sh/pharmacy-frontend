@@ -88,7 +88,7 @@ function CompanyList({ Closer }) {
             <div className="company-list-buttons">
               <input
                 type="button"
-                value={"جستوجو"}
+                value={"جستجو"}
                 className="filterlists-button-standard"
                 onClick={SearchHandle}
               />

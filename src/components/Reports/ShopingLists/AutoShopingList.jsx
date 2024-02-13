@@ -6,6 +6,7 @@ import {
   FilterSelect,
 } from "../../PageComponents/ListingComponents";
 import axios from "axios";
+import useServerIP from "../../services/ServerIP";
 
 
 export default function AutoShopingList() {
@@ -122,16 +123,6 @@ export default function AutoShopingList() {
   );
 }
 
-async function loadEnvVariables(key) {
-  try {
-      const response = await fetch('/env.json');
-      const data = await response.json();
-      return data[key] || null; // Return the value corresponding to the provided key, or null if not found
-  } catch (error) {
-      console.error('Error loading environment variables:', error);
-      return null; // Return null if there's an error
-  }
-}
 
 function AutoShopItem(props) {
   const [shorted, setShorted] = useState(props.shopItem?.shorted);
@@ -140,23 +131,14 @@ function AutoShopItem(props) {
     setShorted(props.shopItem?.shorted);
   }, [props.shopItem?.shorted]);
 
-  const [API_URL, setAUTH_URL] = useState('');
-  useEffect(() => {
-    loadEnvVariables('VITE_API')
-      .then(apiValue => {
-        setAUTH_URL(apiValue);
-      })
-      .catch(error => {
-        console.error('Error loading VITE_API:', error);
-      });
-  }, []);
+  const { serverIP} = useServerIP()
 
 
   const MedicineUpdate = () => {
     const MedicineForm = new FormData();
     MedicineForm.append("shorted", shorted);
     axios
-      .patch(API_URL + "medician/" + props.shopItem.id + "/", MedicineForm)
+      .patch(serverIP + 'api/' + "medician/" + props.shopItem.id + "/", MedicineForm)
       .then((res) => {
         toast.success("ذخیره شد");
       })

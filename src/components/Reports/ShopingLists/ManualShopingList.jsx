@@ -238,7 +238,7 @@ export default function ManualShopingList({ selectedMedicine }) {
               ref={selectMedicineRef}
               purchaseMedicine={selectedMedicine}
             />
-            <label>نیاز:</label>
+            <label>تعداد_مورد_نیاز:</label>
             <input type="text" {...register("quantity")} />
           </Form>
           <ListFooter
@@ -254,7 +254,7 @@ export default function ManualShopingList({ selectedMedicine }) {
       return (
         <>
           <Form>
-            <label>نیاز:</label>
+            <label>تعداد_مورد_نیاز:</label>
             <input type="text" {...register("quantity")} />
             <h3></h3>
             <h3>{watch("medicine_full")}</h3>

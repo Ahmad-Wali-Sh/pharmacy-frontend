@@ -160,7 +160,7 @@ function PrescriptionShortcuts() {
             }}>ثبت نسخه:</div>
         </div>
         <div className="shortcut-item">
-            <div>جستوجو نسخه</div>
+            <div>جستجو نسخه</div>
             <div>Ctrl + B</div>
         </div>
         <div className="shortcut-item">

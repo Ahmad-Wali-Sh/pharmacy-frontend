@@ -297,7 +297,7 @@ function MedicianList({ Closer }) {
             <div className="medician-filter-buttons">
               <input
                 type="button"
-                value="جستوجو"
+                value="جستجو"
                 className="kind-list-search-btn"
                 onClick={handleSubmit(SearchHandle)}
               />

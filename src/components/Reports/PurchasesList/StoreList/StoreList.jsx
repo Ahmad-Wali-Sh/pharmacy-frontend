@@ -115,7 +115,7 @@ function StoreList({ Closer }) {
             <div className="store-filters-buttons">
               <input
                 type="button"
-                value={"جستوجو"}
+                value={"جستجو"}
                 className="filterlists-button-standard"
                 onClick={handleSubmit(SearchHandle)}
               />
