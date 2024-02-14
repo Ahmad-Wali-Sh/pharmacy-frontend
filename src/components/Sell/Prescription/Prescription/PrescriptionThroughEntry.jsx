@@ -118,14 +118,14 @@ function PrescriptionThroughEntry({
             {through.medicine_cautions}
           </h5>
         </Popover>
-        <h4>{through.each_price}AFG</h4>
+        <h4>{through.each_price}AFN</h4>
         <input
           type="text"
           defaultValue={through.quantity}
           {...register("quantity")}
           onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault()}}
         />
-        <h4>{through.total_price}AFG</h4>
+        <h4>{through.total_price}AFN</h4>
         <div className="medician-map-buttons">
           <div onClick={prescriptionThroughDelete}>
             <i className="fa-solid fa-trash"></i>

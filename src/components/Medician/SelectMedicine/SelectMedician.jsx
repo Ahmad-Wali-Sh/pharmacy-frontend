@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useImperativeHandle, useMemo } from "react";
+import React, { useRef, forwardRef, useImperativeHandle, useMemo, useState, useEffect } from "react";
 import MedicianEntrance from "../MedicianEntrance/MedicianEntrance";
 import BigModal from "../../PageComponents/Modals/BigModal";
 import { MedicineListFormat } from "./MedicineListFormat";
@@ -33,6 +33,8 @@ export const SelectMedician = forwardRef(
     }));
     const SelectMedicineModalRef = useRef(null);
 
+
+
     const { medicine, setMedicine} = useMedicine()
     const [textHighlight, setTextHighlight] = React.useState({
       barcode: "on",
@@ -64,6 +66,8 @@ export const SelectMedician = forwardRef(
       };
     }, []);
 
+
+
     React.useEffect(() => {
       setMedicine(purchaseMedicine);
     }, [purchaseMedicine]);
@@ -73,13 +77,23 @@ export const SelectMedician = forwardRef(
       enabled: department != undefined,
     });
 
+    
+
     const loadMedicine = (search, loadedOptions) => {
+      const options = stringArray.join("").replace(/\s/g, "") !== "" &&
+                      !MedicineLoading &&
+                      isBarcode(stringArray) 
+                        ? [MedicianSearched?.results[0].medician] 
+                        : MedicianSearched?.results;
+    
+      const optionsWithIndex = options.map((option, index) => ({
+        ...option,
+        index: index + 1 // Adding 1 to make the index 1-based instead of 0-based
+      }));
+    
       return {
-        options:
-          stringArray.join("").replace(/\s/g, "") != "" &&
-          !MedicineLoading &&
-          isBarcode(stringArray) ? [MedicianSearched?.results[0].medician] : MedicianSearched?.results,
-        hasMore: false,
+        options: optionsWithIndex,
+        hasMore: false
       };
     };
 
@@ -136,6 +150,8 @@ export const SelectMedician = forwardRef(
 
     const handleMedicineSelect = (item) => {
       MedicineShowRef.current.Opener(item);
+      const newIndex = MedicianSearched?.results?.findIndex(option => option.value === item.value);
+      setCurrentIndex(newIndex);
     };
 
     
@@ -152,6 +168,24 @@ export const SelectMedician = forwardRef(
     const SellRef = useRef();
 
     const MedicineShowRef = useRef();
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'ArrowDown' && currentIndex === MedicianSearched?.results?.length - 1) {
+        event.preventDefault(); // Prevent default behavior
+      } else if (event.key === 'ArrowDown') {
+        setCurrentIndex(prevIndex => Math.min(prevIndex + 1, MedicianSearched?.results?.length - 1));
+      } else if (event.key === 'ArrowUp' && currentIndex === 0) {
+        event.preventDefault(); // Prevent default behavior
+      } else if (event.key === 'ArrowUp') {
+        setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
+      }
+    };
+
+    useEffect(() => {
+      setCurrentIndex(0)
+    }, [MedicianSearched?.results?.length])
 
     return (
       <>
@@ -221,11 +255,12 @@ export const SelectMedician = forwardRef(
                 defaultValue={MedicianSearched?.results?.[0]}
                 filterOption={() => true}
                 onInputChange={(string) => setStringArray(string.split("  "))}
-                formatOptionLabel={MedicineListFormat}
+                formatOptionLabel={(option) => MedicineListFormat(MedicianSearched?.results?.length)(option)}
                 styles={MedicineSelectStyle}
                 onChange={handleMedicineSelect}
                 isLoading={MedicineLoading}
                 loadOptionsOnMenuOpen={false}
+                onKeyDown={handleKeyDown}
               />
               <div className="bookmarks-box">
                 {BookmarkedMedicine?.results.map((medicine) => (

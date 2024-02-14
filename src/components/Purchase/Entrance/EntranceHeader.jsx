@@ -312,7 +312,7 @@ export default function EntranceHeader() {
         <label></label>
         <input
           type="text"
-          disabled={watch('currency') == currency?.filter(item => {return item.name =='AFG' && item.id})?.[0].id ? true : false}
+          disabled={watch('currency') == currency?.filter(item => {return item.name =='AFN' && item.id})?.[0]?.id ? true : false}
           {...register("currency_rate")}
           className="entrance--inputs"
         />

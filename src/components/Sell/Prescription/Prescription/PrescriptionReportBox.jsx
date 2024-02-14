@@ -22,43 +22,37 @@ function PrescriptionReportBox({
         </div>
         <div className="entrance-report-map-box">
           <label>
-            {report?.total ? report.total : ""}
-            <span style={{ fontSize: "small" }}>AF</span>
+            {report?.total ? report.total : 0}
           </label>
           <label>:مجموع فروش</label>
         </div>
         <div className="entrance-report-map-box">
           <label>
-            {report?.disount_value ? report.disount_value : ""}{" "}
-            <span style={{ fontSize: "small" }}>AF</span>
+            {report?.disount_value ? report.disount_value : 0}{" "}
           </label>
           <label>:تخفیف</label>
         </div>
         <div className="entrance-report-map-box">
           <label>
-            {prescription?.khairat ? prescription.khairat : ""}
-            <span style={{ fontSize: "small" }}>AF</span>
+            {prescription?.khairat ? prescription.khairat : 0}
           </label>
           <label>:خیرات</label>
         </div>
         <div className="entrance-report-map-box">
           <label>
-            {prescription?.zakat ? prescription.zakat : ""}
-            <span style={{ fontSize: "small" }}>AF</span>
+            {prescription?.zakat ? prescription.zakat : 0}
           </label>
-          <label>:ذکات</label>
+          <label>:زکات</label>
         </div>
         <div className="entrance-report-map-box">
           <label>
-            {report.total_to_sale ? report.total_to_sale : ""}
-            <span style={{ fontSize: "small" }}>AF</span>
+            {report.total_to_sale ? report.total_to_sale : 0}
           </label>
           <label>:قابل پرداخت</label>
         </div>
         <div className="entrance-report-map-box">
           <label>
             {report.rounded_number ? report.rounded_number : ""}
-            <span style={{ fontSize: "small" }}>AF</span>
           </label>
           <label>:مقدار روند شده </label>
         </div>

@@ -175,7 +175,7 @@ export default function RevenueManager(props) {
               <h4>مجموع</h4>
               <h4>تخفیفات</h4>
               <h4>خیرات</h4>
-              <h4>ذکات</h4>
+              <h4>زکات</h4>
               <h4>مقدار روند</h4>
               <h4>بیشتر</h4>
             </div>

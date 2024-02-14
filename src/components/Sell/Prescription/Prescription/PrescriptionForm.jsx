@@ -88,7 +88,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     mutationFn: (data) => postDataFn(data, "prescription/"),
     onSuccess: (res) => {
       successFn("", () => {
-        setPrescription(res.data);
+        setPrescription(res);
       });
     },
   });
@@ -114,13 +114,13 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     mutationFn: (data) => postDataFn(data, "prescription/"),
     onSuccess: (res) => {
       successFn("", () => {
-        setPrescription(res.data);
+        setPrescription(res);
         prescriptionThrough?.map((item) => {
           const PrescriptionThroughForm = new FormData();
           PrescriptionThroughForm.append("quantity", item.quantity);
           PrescriptionThroughForm.append("each_price", item.each_price);
           PrescriptionThroughForm.append("medician", item.medician);
-          PrescriptionThroughForm.append("prescription", res.data.id);
+          PrescriptionThroughForm.append("prescription", res.id);
           PrescriptionThroughForm.append("user", user().id);
           prescriptionThroughPost(PrescriptionThroughForm);
         });
@@ -129,13 +129,13 @@ function PrescriptionForm({ prescriptionThrough, update }) {
   });
 
   const { refetch: deletePrescription } = useQuery({
-    queryKey: [`prescription-through/delete/?prescription=${prescription.id}`],
+    queryKey: [`prescription-through/delete/?prescription=${prescription?.id}`],
     enabled: false,
     onSuccess: () => successFn("", () => {}),
   });
 
   const { refetch: prescriptionThroughSearch } = useQuery({
-    queryKey: [`prescription-through/?prescription=${prescription.id}`],
+    queryKey: [`prescription-through/?prescription=${prescription?.id}`],
     enabled: false,
   });
 
@@ -157,15 +157,15 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       onSubmit={handleSubmit((data) =>
         handleFormData(
           data,
-          prescription.id ? updatePrescription : newPrescription,
+          prescription?.id ? updatePrescription : newPrescription,
           user
         )
       )}
     >
       <label>نوع نسخه:</label>
       <select {...register("department")} autoFocus>
-        <option value={prescription.department} selected>
-          {prescription.department_name}
+        <option value={prescription?.department} selected>
+          {prescription?.department_name}
         </option>
         {department?.map((depart) => (
           <option value={depart.id}>{depart.name}</option>
@@ -179,7 +179,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
         placeholder=""
         getOptionLabel={(option) => option.code_name}
         getOptionValue={(option) => option.code_name}
-        uniqueKey={`patient-unique${prescription.id}`}
+        uniqueKey={`patient-unique${prescription?.id}`}
         defaultValue={patient?.find((c) =>
           c.id === prescription?.name ? c.code_name : ""
         )}
@@ -200,7 +200,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
         placeholder=""
         getOptionLabel={(option) => option.code_name}
         getOptionValue={(option) => option.code_name}
-        uniqueKey={`doctor-unique${prescription.id}`}
+        uniqueKey={`doctor-unique${prescription?.id}`}
         defaultValue={doctor?.find((c) =>
           c.id === prescription?.doctor ? c.code_name : ""
         )}
@@ -218,7 +218,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
         required
         type="text"
         {...register("prescription_number")}
-        value={prescription.prescription_number}
+        value={prescription?.prescription_number}
         disabled
       />
       <label>جستجو:</label>
@@ -250,13 +250,13 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       <input type="text" {...register("discount_percent")} />
       <div></div>
       <a
-        href={prescription.image && prescription.image}
+        href={prescription?.image && prescription?.image}
         target="_blank"
         style={{ textDecoration: "none", color: "grey" }}
       >
-        {prescription.image ? "Image <<" : ""}
+        {prescription?.image ? "Image <<" : ""}
       </a>
-      <label>ذکات:</label>
+      <label>زکات:</label>
       <input type="text" {...register("zakat")} />
       <label>خیرات:</label>
       <input type="text" {...register("khairat")} />
@@ -264,7 +264,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       <ButtonGroup>
         <FormButton
           Func={() => {
-            prescription.sold == false
+            prescription?.sold == false
               ? deletePrescription()
               : toast.error("این نسخه به صندوق ثبت شده است");
           }}
@@ -287,7 +287,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           )}
           name="جدید"
         />
-        <SubmitButton name={prescription.id ? "آپدیت" : "ذخیره"} />
+        <SubmitButton name={prescription?.id ? "آپدیت" : "ذخیره"} />
       </ButtonGroup>
     </form>
   );

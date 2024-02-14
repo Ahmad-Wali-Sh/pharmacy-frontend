@@ -297,7 +297,7 @@ function EntrancThroughEntry({ through, keyValue, num }) {
 
         <div className="input-with-currency">
           <span className="currency-span" style={{ cursor: "default" }}>
-            AFG
+            AFN
           </span>
           <input
             type="text"

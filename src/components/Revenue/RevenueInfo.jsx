@@ -74,7 +74,7 @@ export default function RevenueInfo({ revenue }) {
               <h4>صندوقدار</h4>
               <h4>تخفیفات</h4>
               <h4>خیرات</h4>
-              <h4>ذکات</h4>
+              <h4>زکات</h4>
               <h4>مقدار روند</h4>
             </div>
             <div className="revenue-info-content">

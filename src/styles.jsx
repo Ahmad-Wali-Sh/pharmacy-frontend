@@ -18,6 +18,10 @@ export const ModalBigStyles = {
   content: {
     backgroundColor: "rgb(30,30,30)",
     border: "none",
+    width: '99%',
+    left: '0.5%',
+    height: '99%',
+    top: '0.5%', 
     borderRadius: "1rem",
     overflow: "hidden",
     padding: "0px",

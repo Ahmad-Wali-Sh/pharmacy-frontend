@@ -188,9 +188,9 @@ export default function Currencies() {
         <>
           <Form>
           <label>نام:</label>
-            <input type="text" {...register("name")} />
+            <input type="text" disabled={editItem?.name == 'AFN' ? true : false} {...register("name")} />
             <label>نرخ:</label>
-            <input type="text" {...register("rate")} />
+            <input type="text" disabled={editItem?.name == 'AFN' ? true : false} {...register("rate")} />
             <label>توضیحات:</label>
             <input type="text" {...register("description")} />
           </Form>

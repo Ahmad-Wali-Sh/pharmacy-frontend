@@ -1,7 +1,7 @@
 const http = require('http');
 const url = require('url');
 
-const server_ip = 'http://192.168.88.92:8000/'
+const server_ip = 'http://127.0.0.1:8000/'
 const apiEndpoints = {
     server_ip: server_ip,
 };

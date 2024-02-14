@@ -11,16 +11,16 @@ class PrescriptionPrint extends React.Component {
             <tbody>
               <tr>
                 <td>زمان</td>
-                <td colspan="2">{this.props.prescription?.timestamp?.slice(11,16)}</td>
+                <td colspan="2">{this.props?.prescription?.timestamp?.slice(11,16)}</td>
               </tr>
               <tr>
                 <td>نوع</td>
-                <td colspan="2">{this.props.prescription.department_name}</td>
+                <td colspan="2">{this.props?.prescription?.department_name}</td>
               </tr>
               <tr>
                 <td>شماره</td>
                 <td colspan="2">
-                  {this.props.prescription.prescription_number}
+                  {this.props?.prescription?.prescription_number}
                 </td>
               </tr>
               <tr>
@@ -28,9 +28,9 @@ class PrescriptionPrint extends React.Component {
                   <img
                     className="barcode-image-print"
                     src={
-                      this.props.prescription.barcode
+                      this.props?.prescription?.barcode
                         ? 
-                          this.props.prescription.barcode
+                          this.props?.prescription?.barcode
                         : "./images/nophoto.jpg"
                     }
                   />
@@ -38,7 +38,7 @@ class PrescriptionPrint extends React.Component {
               </tr>
               <tr>
                 <td>پرداخت</td>
-                <td colspan="1" className="persian-number">{this.props.prescription.refund ? this.props.prescription.refund : this.props.report.total_to_sale} Af</td>
+                <td colspan="1" className="persian-number">{this.props?.prescription?.refund ? this.props?.prescription?.refund : this.props?.report?.total_to_sale} افغانی</td>
               </tr>
             </tbody>
           </table>

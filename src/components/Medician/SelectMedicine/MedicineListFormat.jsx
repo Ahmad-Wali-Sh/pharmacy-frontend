@@ -7,11 +7,9 @@ try {
 
 }
 
-export const MedicineListFormat = (item, { context }) => {
+export const MedicineListFormat = (resultsLength) => (item) => {
 
-  return context === "value" ? (
-    item.medicine_full
-  ) : (
+  return (
     <div className="medician-format">
       <div className="medician-image">
         <img

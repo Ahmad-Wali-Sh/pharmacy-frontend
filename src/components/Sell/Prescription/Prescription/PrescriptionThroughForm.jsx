@@ -49,7 +49,7 @@ export const PrescriptionThroughForm = forwardRef(
       PrescriptionThroughForm.append("quantity", data.quantity);
       PrescriptionThroughForm.append("each_price", medicine.price);
       PrescriptionThroughForm.append("medician", medicine.id);
-      PrescriptionThroughForm.append("prescription", prescription.id);
+      PrescriptionThroughForm.append("prescription", prescription?.id);
       PrescriptionThroughForm.append("user", user().id);
       console.log(medicineIncludesCheck());
 
@@ -107,7 +107,7 @@ export const PrescriptionThroughForm = forwardRef(
             <SelectMedician
               ref={ref}
               selectAutoCompleteData={handleMedicineSelect}
-              department={prescription.department}
+              department={prescription?.department}
               handleCloseFocus={handleQuantityFocus}
             />
           </div>

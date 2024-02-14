@@ -4,8 +4,8 @@ import { useQuery } from "react-query";
 
 function PrescriptionThroughMapForm({ prescription, updatePrescription }) {
   const { data: prescriptionThrough, isLoading } = useQuery({
-    queryKey: [`prescription-through/?prescription=${prescription.id}`],
-    enabled: prescription.id != null,
+    queryKey: [`prescription-through/?prescription=${prescription?.id}`],
+    enabled: prescription?.id != null,
   });
 
   if (isLoading) return "Is Loading...";
