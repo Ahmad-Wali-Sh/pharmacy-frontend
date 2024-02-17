@@ -196,6 +196,7 @@ export default function EntranceThrough() {
         <div className="entrance-through-medician-input">
           <SelectMedician
             selectAutoCompleteData={selectMedicine}
+            ready={entrance?.id ? true : false}
             select
             ref={SelectMedicineRef}
             handleCloseFocus={handleCloseFocus}
@@ -208,6 +209,7 @@ export default function EntranceThrough() {
           className={`entrance--inputs ${
             errors.number_in_factor && "error-input"
           }`}
+          disabled={entrance?.id ? false : true}
         />
         <label>قیمت فی:</label>
         <input
@@ -216,6 +218,7 @@ export default function EntranceThrough() {
           className={`entrance--inputs ${
             errors.each_price_factor && "error-input"
           }`}
+          disabled={entrance?.id ? false : true}
         />
         <label>
           <h5> ت.د.پاکت:</h5>
@@ -244,6 +247,7 @@ export default function EntranceThrough() {
           className={`entrance--inputs ${
             errors.interest_percent && "error-input"
           }`}
+          disabled={entrance?.id ? false : true}
         />
         <label>فی_فروش:</label>
         <input
@@ -253,6 +257,7 @@ export default function EntranceThrough() {
             errors.each_sell_price_afg && "error-input"
           }`}
           onBlur={() => setValue("interest_percent", interest_get())}
+          disabled={entrance?.id ? false : true}
         />
         <label>
           <h5> بونوس:</h5>
@@ -262,6 +267,7 @@ export default function EntranceThrough() {
             type="text"
             {...register("quantity_bonus")}
             className="entrance--inputs"
+            disabled={entrance?.id ? false : true}
           />
           <lable>امانتی:</lable>
           <input
@@ -270,6 +276,7 @@ export default function EntranceThrough() {
             style={{
               width: "1rem",
             }}
+            disabled={entrance?.id ? false : true}
           />
         </div>
         <label>انقضا.م:</label>
@@ -279,16 +286,18 @@ export default function EntranceThrough() {
           className={`entrance--inputs date--inputs ${
             errors.expire_date && "error-input"
           }`}
+          disabled={entrance?.id ? false : true}
         />
         <label>انقضا.ش:</label>
-        <DateInputSimple />
+        <DateInputSimple disabled={entrance?.id ? false : true} className={`${!entrance?.id && 'disabled-input'}`}/>
         <label>بچ نمبر:</label>
-        <input type="text" {...register("batch_number")} />
+        <input type="text" {...register("batch_number")}           disabled={entrance?.id ? false : true}/>
         <label>تخفیف:</label>
         <input
           type="text"
           {...register("discount_money")}
           className="entrance--inputs"
+          disabled={entrance?.id ? false : true}
         />
         <label>تخفیف ٪:</label>
         <input
@@ -301,11 +310,12 @@ export default function EntranceThrough() {
               setFocus('number_in_factor')
             }
           }}
+          disabled={entrance?.id ? false : true}
         />
         <div className="adding-box">
-          <label>خرید.ق:</label>
-          <label className="old-price">{medicine?.last_purchased} AF</label>
-          <input type="submit" value="⤵ Add" className="add-button"></input>
+        <label></label>
+        <label></label>
+          <input type="submit" value="⤵ ذخیره" className="add-button"></input>
         </div>
       </form>
     </>

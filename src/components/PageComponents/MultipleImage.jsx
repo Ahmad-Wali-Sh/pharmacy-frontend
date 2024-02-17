@@ -57,10 +57,10 @@ function MultipleImage() {
   return (
     <>
       <div
-        className="multiple-image-button"
-        onClick={() => MultipleImageRef.current.Opener()}
+        className={`multiple-image-button ${!entrance?.id && 'disabled-select'}`}
+        onClick={() => entrance?.id && MultipleImageRef.current.Opener()}
       >
-        تصاویر
+        <span>تصاویر {entrance?.entrance_image?.length ? '(' + entrance?.entrance_image?.length + ')': ''}</span>
       </div>
       <SmallModal title="تصاویر" ref={MultipleImageRef}>
         <div className="multiple-image-modal">

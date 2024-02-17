@@ -13,7 +13,7 @@ export default function Entrance({ button, icon, title }) {
   const PreviousPriceAlertRef = useRef(null);
   const TotalPriceAlertRef = useRef(null);
   const PriceAppliedAlertRef = useRef(null);
-  const { entrance } = useEntrance();
+  const { entrance, setEntrance } = useEntrance();
   const { factorTotal } = useFactorTotal();
 
   const { serverIP} = useServerIP()
@@ -38,7 +38,10 @@ export default function Entrance({ button, icon, title }) {
       {!button && (
         <div
           className="purchase-card"
-          onClick={() => EntranceModalRef.current.Opener()}
+          onClick={() => {
+            setEntrance('')
+            EntranceModalRef.current.Opener()
+          }}
         >
           <div>
             <h3>{title}</h3>
@@ -49,7 +52,9 @@ export default function Entrance({ button, icon, title }) {
         </div>
       )}
       {button && button == 1 && (
-        <div onClick={() => EntranceModalRef.current.Opener()}>
+        <div onClick={() => {
+          EntranceModalRef.current.Opener()
+          }}>
           <i class="fa-solid fa-circle-info"></i>
         </div>
       )}

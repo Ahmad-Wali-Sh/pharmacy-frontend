@@ -13,6 +13,8 @@ export default function EntranceReport() {
 
   const { serverIP } = useServerIP()
   const { entrance, setEntrance } = useEntrance();
+
+
   // let entranceThrough;
   const { data: entranceThrough } = useQuery({
     queryKey: [`entrance-throug/?entrance=${entrance?.id}`],
@@ -172,20 +174,20 @@ export default function EntranceReport() {
       totalBonusValue() +
       totalDiscount() -
       totalBeforeDiscount()
-    ).toFixed(1);
+    ).toFixed(2);
 
     setReport({
       number: entranceThrough?.length,
-      total_before_discount: totalBeforeDiscount().toFixed(1),
-      total_discount: totalDiscount().toFixed(1),
+      total_before_discount: totalBeforeDiscount().toFixed(2),
+      total_discount: totalDiscount().toFixed(2),
       total: 0,
-      total_bonous_value: totalBonusValue().toFixed(1),
+      total_bonous_value: totalBonusValue().toFixed(2),
       total_interest: totalInterester,
       total_interest_percent: (
         (totalInterester / totalBeforeDiscount()) *
         100
-      ).toFixed(1),
-      sell_total: totalSell().toFixed(1),
+      ).toFixed(2),
+      sell_total: totalSell().toFixed(2),
       purchase_total: totalPurchase(),
       purchase_after_discount: totalPurchase() - totalDiscount(),
       grandTotal: totalBeforeDiscount() - totalDiscount(),
@@ -198,7 +200,9 @@ export default function EntranceReport() {
   }, [entranceThrough && entranceThrough]);
 
 
-
+  useEffect(() => {
+    setFactorTotal(0)
+  }, [entrance])
 
   return (
     <div className="entrance-report">
@@ -241,7 +245,7 @@ export default function EntranceReport() {
           </label>
         </div>
         <div className="entrance-report-map-box">
-          <label>مجموع فاکتور</label>
+          <label>مجموع_فاکتور</label>
           <input
             type="text"
             style={{width: '8rem', height: '1rem', paddingLeft:'3rem'}}

@@ -19,12 +19,13 @@ export const SelectMedician = forwardRef(
       UpdateChangedMedicine,
       handleCloseFocus,
       purchaseMedicine,
+      ready=true
     },
     ref
   ) => {
     useImperativeHandle(ref, () => ({
       Opener() {
-        SelectMedicineModalRef.current.Opener();
+        ready && SelectMedicineModalRef.current.Opener();
         handleCloseFocus && handleCloseFocus();
       },
       Closer() {
@@ -189,11 +190,11 @@ export const SelectMedician = forwardRef(
 
     return (
       <>
-        <div className="select-medician">
+        <div className={`select-medician ${!ready && 'disabled-select'}`} >
           <div
-            className="select-medician-button"
+            className={`select-medician-button ${!ready && 'disabled-select'}`}
             onClick={() => {
-              SelectMedicineModalRef.current.Opener();
+             ready && SelectMedicineModalRef.current.Opener();
               handleCloseFocus && handleCloseFocus();
             }}
             onKeyDown={(e) =>
@@ -201,7 +202,7 @@ export const SelectMedician = forwardRef(
             }
             tabIndex={0}
           >
-            انتخاب دارو
+            {ready ? 'انتخاب دارو' : 'انتخاب دارو' }
           </div>
           <div className="selected-medician-show">
             <h4>{medicine && medicine.medicine_full}</h4>

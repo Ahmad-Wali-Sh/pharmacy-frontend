@@ -13,7 +13,7 @@ import {
 import { useEntrance, useSubmitedEntrance } from "../../States/States";
 import { toast } from "react-toastify";
 
-function EntrancThroughEntry({ through, keyValue, num }) {
+function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBluring }) {
   const user = useAuthUser();
   const { entrance, setEntrance } = useEntrance();
   const AlertHighlighter = () => {
@@ -43,9 +43,11 @@ function EntrancThroughEntry({ through, keyValue, num }) {
 
     mutationFn: (data) => patchDataFn(data, `entrance-throug/${through.id}/`),
     onSuccess: (res) => {
-      handleSubmit((data) =>
-        handleFormData(data, interestPercentUpdate, user)
-      )()
+      setTimeout(() => {
+        handleSubmit((data) =>
+          handleFormData(data, interestPercentUpdate, user)
+        )()
+      }, 500)
       entrance?.id &&  queryClient.invalidateQueries([
         `entrance-throug/?entrance=${entrance?.id}`,
       ]);
@@ -83,6 +85,8 @@ function EntrancThroughEntry({ through, keyValue, num }) {
     },
     onSuccess: (res) => {
       setTimeout(() => {
+        console.clear();
+        console.log('it happend');
         entrance?.id &&  queryClient.invalidateQueries([
           `entrance-throug/?entrance=${entrance?.id}`,
         ]);
@@ -142,12 +146,14 @@ function EntrancThroughEntry({ through, keyValue, num }) {
   }, [through]);
 
   return (
-    <form key={keyValue}>
+    <form key={keyValue} onClick={() => onClick()}
+    onBlurCapture={onBluring}>
       <div
+      id={id}
         className={
           AlertHighlighter()
-            ? "entrance-medician-map"
-            : "entrance-medician-map-alert"
+            ? `entrance-medician-map ${styled}`
+            : `entrance-medician-map-alert ${styled}`
         }
       >
         <label>{num + 1}</label>
@@ -159,6 +165,7 @@ function EntrancThroughEntry({ through, keyValue, num }) {
         <input
           type="text"
           {...register("number_in_factor")}
+          style={{backgroundColor: 'inherit'}}
           onBlurCapture={handleSubmit((data) =>
             handleFormData(data, medicineUpdate, user)
           )}
@@ -199,7 +206,7 @@ function EntrancThroughEntry({ through, keyValue, num }) {
         <input
           type="text"
           value={through.no_box}
-          style={{ cursor: "default" }}
+          style={{ cursor: "default", backgroundColor: 'inherit'}}
           {...register("no_box")}
         />
         <div className="input-with-currency">
@@ -227,7 +234,7 @@ function EntrancThroughEntry({ through, keyValue, num }) {
         <input
           type="text"
           {...register("quantity_bonus")}
-          style={{ zIndex: "10" }}
+          style={{ zIndex: "10",  backgroundColor: 'inherit'}}
           onBlurCapture={handleSubmit((data) =>
             handleFormData(data, medicineUpdate, user)
           )}
@@ -254,7 +261,7 @@ function EntrancThroughEntry({ through, keyValue, num }) {
           type="text"
           defaultValue={through.shortage}
           {...register("shortage")}
-          style={{ zIndex: "10" }}
+          style={{ zIndex: "10", backgroundColor: 'inherit'}}
           onBlurCapture={handleSubmit((data) =>
             handleFormData(data, medicineUpdate, user)
           )}
