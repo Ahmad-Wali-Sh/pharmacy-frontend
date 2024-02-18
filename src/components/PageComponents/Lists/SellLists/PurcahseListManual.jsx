@@ -8,7 +8,7 @@ import {
   successFn,
   putDataFn,
   deleteDataFn,
-  patchDataFn
+  patchDataFn,
 } from "../../../services/API";
 import { toast } from "react-toastify";
 import {
@@ -22,14 +22,16 @@ import {
   FilterSelect,
 } from "../../ListingComponents";
 import { SelectMedician } from "../../../Medician/SelectMedicine/SelectMedician";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
 
 function PurchaseListItem(props) {
-  const { register, handleSubmit} = useForm()
+  const { register, handleSubmit } = useForm();
   const { mutateAsync: handleArrival } = useMutation({
     mutationFn: (data) =>
-    patchDataFn(data, `purchase-list-manual/${props.purchase.id}/`),
+      patchDataFn(data, `purchase-list-manual/${props.purchase.id}/`),
     onSuccess: () =>
-      successFn([''], () => {
+      successFn([""], () => {
         // setActive("list");
       }),
   });
@@ -40,7 +42,13 @@ function PurchaseListItem(props) {
       <h4>{props.purchase.medicine_full}</h4>
       <h4>{props.purchase.existence}</h4>
       <h4>{props.purchase.quantity}</h4>
-      <input type='text' className='transparent-inputs' defaultValue={props.purchase.arrival} {...register('arrival')} onBlur={handleSubmit(handleArrival)}/>
+      <input
+        type="text"
+        className="transparent-inputs"
+        defaultValue={props.purchase.arrival}
+        {...register("arrival")}
+        onBlur={handleSubmit(handleArrival)}
+      />
       <div className="flex">
         <InfoButton
           Func={() => {
@@ -58,14 +66,56 @@ function PurchaseListItem(props) {
   );
 }
 
+function isValidDate(dateString) {
+  // Attempt to create a new Date object from the provided string
+  const date = new Date(dateString);
+
+  // Check if the new Date object is valid
+  // and if the provided string does not contain non-numeric characters
+  return !isNaN(date) && !isNaN(Date.parse(dateString));
+}
+
 export default function PurchaseListManual({ selectedMedicine }) {
+
+  const currendDate = new Date()
+  currendDate.setDate(currendDate.getDate() + 1)
+  const tomorrow = currendDate.toISOString().substring(0,10)
   const ListFilterRef = useRef(null);
   const [active, setActive] = useState("list");
   const [editItem, setEditItem] = useState("");
   const [filter, setFilter] = useState({
     created: new Date().toISOString().substring(0, 10),
     approved: false,
+    createdAfter: new Date().toISOString().substring(0, 10),
+    createdAfterTime: new Date().setHours(0, 0, 0, 0),
+    createdBeforeTime: new Date().setHours(0, 0, 0, 0),
+    createdBefore: tomorrow
   });
+
+  const combinedDateTimeAfter = () => {
+    if (isValidDate(filter.createdAfterTime)) {
+      const time = new Date(filter.createdAfterTime);
+      return `${new Date(filter.createdAfter).toISOString().slice(0, 10)}T${time
+        .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+        .toUpperCase()}`;
+    } else if (isValidDate(filter.createdAfter)){
+      return `${new Date(filter.createdAfter).toISOString().slice(0, 10)}T00:00:00`;
+    } else {
+      return ''
+    }
+  };
+  const combinedDateTimeBefore = () => {
+    if (isValidDate(filter.createdBeforeTime)) {
+      const time = new Date(filter.createdBeforeTime);
+      return `${new Date(filter.createdBefore).toISOString().slice(0, 10)}T${time
+        .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+        .toUpperCase()}`;
+      } else if (isValidDate(filter.createdBefore)){
+        return `${new Date(filter.createdBefore).toISOString().slice(0, 10)}T00:00:00`;
+      } else {
+        return ''
+      }
+  };
 
   const user = useAuthUser();
 
@@ -130,7 +180,7 @@ export default function PurchaseListManual({ selectedMedicine }) {
     setEditItem("");
   };
 
-  let PurchaseQuery = `purchase-list-manual/?approved=${filter.approved}&created=${filter.created}`;
+  let PurchaseQuery = `purchase-list-manual/?approved=${filter.approved}&created_after=${combinedDateTimeAfter()}&created_before=${combinedDateTimeBefore()}`;
   const { data: Purchases } = useQuery([PurchaseQuery]);
 
   useEffect(() => {
@@ -181,7 +231,7 @@ export default function PurchaseListManual({ selectedMedicine }) {
             current={ListFilterRef.current}
             ListFilterRef={ListFilterRef}
             url={PurchaseQuery}
-            fileName={new Date().toISOString().slice(0,10) + 'purchase-list'}
+            fileName={new Date().toISOString().slice(0, 10) + "purchase-list"}
           >
             <FilterSelect
               label="خریداری.شده"
@@ -195,14 +245,41 @@ export default function PurchaseListManual({ selectedMedicine }) {
               <option value={false}>نخیر</option>
               <option value={true}>بله</option>
             </FilterSelect>
+
             <FilterDate
-              label="تاریخ"
-              value={filter.created}
+              label="از تاریخ:"
+              value={filter.createdAfter}
               autoFocus={true}
               handleChange={(e) =>
-                setFilter({ ...filter, created: e.target.value })
+                setFilter({ ...filter, createdAfter: e.target.value })
               }
-            />
+              />
+              <label>ساعت:</label>
+            <Datetime
+              value={filter.createdAfterTime}
+              onChange={(e) => setFilter({ ...filter, createdAfterTime: e})}
+              dateFormat={false}
+              timeFormat="hh:mm A"
+              />
+            <FilterDate
+              label="تا تاریخ:"
+              value={filter.createdBefore}
+              autoFocus={true}
+              handleChange={(e) =>
+                setFilter({ ...filter, createdBefore: e.target.value })
+              }
+              />
+              <div>ساعت:</div>
+            <Datetime
+              value={filter.createdBeforeTime}
+              onChange={(e) => setFilter({ ...filter, createdBeforeTime: e})}
+              dateFormat={false}
+              timeFormat="hh:mm A"
+              />
+              <b></b>
+              <b></b>
+              <b></b>
+              <b></b>
           </FilterModal>
           <div className="patient-list-header-purchase">
             <h4>No</h4>

@@ -81,6 +81,36 @@ body {
   opacity: 0;
 }
 
+.datetime-picker {
+  margin-bottom: 20px;
+  background-color: #523558;
+}
+
+.rdt > input {
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-three);
+  padding-right: 01rem;
+  font-size: 0.9rem;
+  height: 1.6rem;
+  color: var(--color-ten);
+
+  &:focus {
+    box-shadow: -4px -4px 4px var(--color-two);
+  }
+}
+
+
+.react-datetime {
+  /* Your custom styles for the datetime picker container */
+  background-color: #523558;
+}
+
+.react-datetime-picker {
+  /* Your custom styles for the datetime picker */
+  background-color: #523558;
+}
+
 .ReactModal__Overlay--before-close {
   opacity: 0;
 }
@@ -3618,7 +3648,7 @@ input[type="date"]:disabled {
 .filter-button {
   position: absolute;
   left: 2%;
-  top: 13%;
+  top: 10%;
   background-color: var(--color-three);
   width: 2rem;
   height: 1.5rem;

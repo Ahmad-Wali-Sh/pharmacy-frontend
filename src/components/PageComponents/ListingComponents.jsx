@@ -304,6 +304,8 @@ export function FilterSelect({
 
 export function FilterModal(props) {
 
+  const { serverIP } = useServerIP()
+
   const ExcelExport = () => {
     axios({
       url: `${serverIP}/api/` + props.url + "&format=xml",
