@@ -166,8 +166,7 @@ export default function Prescription(props) {
             .get(
               `${serverIP}api/prescription-through/` +
                 "?prescription=" +
-                res.data[0].id +
-                "/"
+                res.data[0].id
             )
             .then((res) => {});
         })
@@ -175,8 +174,7 @@ export default function Prescription(props) {
           .get(
             `${serverIP}api/prescription/` +
               "?prescription_number=" +
-              next_pres +
-              "/"
+              next_pres
           )
           .then((res) => {
             setPrescription([]);
@@ -187,8 +185,7 @@ export default function Prescription(props) {
                 .get(
                   `${serverIP}api/prescription-through/` +
                     "?prescription=" +
-                    res.data[0].id +
-                    "/"
+                    res.data[0].id
                 )
                 .then((res) => {});
           });
@@ -218,17 +215,17 @@ export default function Prescription(props) {
             .get(
               `${serverIP}api/prescription-through/` +
                 "?prescription=" +
-                res.data[0].id +
-                "/"
+                res.data[0].id
             )
-            .then((res) => {});
+            .then((res) => {
+              console.log(res);
+            });
         })
       : axios
           .get(
             `${serverIP}api/prescription/` +
               "?prescription_number=" +
-              next_pres +
-              "/"
+              next_pres
           )
           .then((res) => {
             setPrescription([]);
@@ -239,10 +236,11 @@ export default function Prescription(props) {
                 .get(
                   `${serverIP}api/prescription-through/` +
                     "?prescription=" +
-                    res.data[0].id +
-                    "/"
+                    res.data[0].id
                 )
-                .then((res) => {});
+                .then((res) => {
+                  console.log(res);
+                });
           });
   };
 

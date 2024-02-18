@@ -57,8 +57,8 @@ function PrescriptionReportBox({
           <label>:مقدار روند شده </label>
         </div>
       <div className="entrance-report-footer"style={{margin: '1rems'}}>
-        <button className="entrance-report-button" onClick={() => BackFunc()}>
-          <i class="fa-solid fa-left-long"></i>
+        <button className="entrance-report-button" onClick={() => FrontFunc()}>
+          <i class="fa-solid fa-right-long"></i>
         </button>
         <ReactToPrint
           trigger={() => (
@@ -73,8 +73,8 @@ function PrescriptionReportBox({
         <div style={{display: 'none'}}>
         <PrescriptionPrint ref={(el) => (PrescriptiontoPrintRef = el)} prescription={prescription} report={report}/>
         </div>
-        <button className="entrance-report-button" onClick={() => FrontFunc()}>
-          <i class="fa-solid fa-right-long"></i>
+        <button className="entrance-report-button" onClick={() => BackFunc()}>
+          <i class="fa-solid fa-left-long"></i>
         </button>
       </div>
       </div>
