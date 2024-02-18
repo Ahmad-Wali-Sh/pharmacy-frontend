@@ -4,12 +4,21 @@ import { toast } from "react-toastify";
 
 const EndpointsURL = "http://127.0.0.1:4000/api/endpoints";
 
-try {
-  const endpointsResponse = await axios.get(EndpointsURL);
-  var serverIP = endpointsResponse.data.server_ip;
-} catch (error) {
-  console.log(error);
+let serverIP = null;
+function fetchServerIP() {
+  return axios.get(EndpointsURL)
+    .then(response => {
+      serverIP = response.data.server_ip;
+      return serverIP;
+    })
+    .catch(error => {
+      console.log(error);
+      // Handle the error if necessary
+      return null; // Return null or handle the error accordingly
+    });
 }
+
+fetchServerIP()
 
 // It is a Default Query For more usablitiy.
 const defaultQueryFn = async ({ queryKey }) => {

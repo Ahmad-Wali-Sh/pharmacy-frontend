@@ -1,11 +1,20 @@
 import axios from "axios";
 
-try {
-  const response = await axios.get('http://127.0.0.1:4000/api/endpoints');
-  var api = (response.data.server_ip);
-} catch {
-
+let api = null;
+function fetchServerIP() {
+  return axios.get('http://127.0.0.1:4000/api/endpoints')
+    .then(response => {
+      api = response.data.server_ip;
+      return api;
+    })
+    .catch(error => {
+      console.log(error);
+      // Handle the error if necessary
+      return null; // Return null or handle the error accordingly
+    });
 }
+
+fetchServerIP()
 
 export const MedicineListFormat = (resultsLength) => (item) => {
 

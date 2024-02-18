@@ -34,8 +34,8 @@ export default function RevenueInfo({ revenue }) {
 
   const RevenueSearch = () => {
     axios
-      .get(`${serverIP}api/revenue-through/` + "?revenue=" + revenue.id)
-      .then((res) => setRevenueThrough(res.data));
+      .get(`${serverIP}api/revenue-through/` + "?revenue=" + revenue?.id)
+      .then((res) => setRevenueThrough(res?.data));
   };
 
   return (
@@ -78,7 +78,7 @@ export default function RevenueInfo({ revenue }) {
               <h4>مقدار روند</h4>
             </div>
             <div className="revenue-info-content">
-              {revenueTrough.map((revenuethrough, key) => (
+              {revenueTrough?.map((revenuethrough, key) => (
                 <div className="revenue-info-map">
                   <h4></h4>
                   <h4>{key + 1}</h4>

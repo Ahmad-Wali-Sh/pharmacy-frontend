@@ -56,7 +56,7 @@ export default function RevenueManager(props) {
   const [users, setUsers] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get(`${serverIP}auth/users/`).then((res) => setUsers(res.data));
+   serverIP && axios.get(`${serverIP}auth/users/`).then((res) => setUsers(res.data));
   }, []);
 
   const QueryRevenue = `revenue/?created_after=${watch(
@@ -127,8 +127,8 @@ export default function RevenueManager(props) {
                 {...register("employee")}
               >
                 <option value=""></option>
-                {users.map((user) => (
-                  <option value={user.id}>{user.username}</option>
+                {users?.map((user) => (
+                  <option value={user?.id}>{user?.username}</option>
                 ))}
               </select>
               <label>تاریخ:</label>

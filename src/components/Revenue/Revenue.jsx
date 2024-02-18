@@ -88,7 +88,7 @@ export default function Revenue(props) {
   };
 
   React.useEffect(() => {
-    axios
+    serverIP && axios
       .get(
         `${serverIP}api/revenue/` +
           "?employee=" +
@@ -108,7 +108,7 @@ export default function Revenue(props) {
             });
       });
 
-    axios
+      serverIP && axios
       .get(
         `${serverIP}api/prescription/` +
           "?sold=false/" 
@@ -197,7 +197,7 @@ export default function Revenue(props) {
               <div className="revneue-content-open">
                 <div className="mini-content-headers">نسخه های قابل پرداخت</div>
                 {revenue &&
-                  prescription.map((pres, key) => (
+                  prescription?.map((pres, key) => (
                     <div className="revenue-map-content">
                       <h3>{key + 1}</h3>
                       <h3>{pres.prescription_number}</h3>
@@ -218,7 +218,7 @@ export default function Revenue(props) {
               <div className="revneue-content-close">
                 <div className="mini-content-headers">نسخه های پرداخت شده</div>
                 {revenue &&
-                  revenueTrough.map(
+                  revenueTrough?.map(
                     (through, key) =>
                       through.sold && (
                         <div className="revenue-map-content">
