@@ -59,12 +59,15 @@ function Login() {
             })
             .catch((err) => {
               toast.error("اطلاعات وارد شده درست نمیباشد");
-              console.log(err);
             });
         });
     }).catch((error) => {
-      serverIP ? toast.error("اطلاعات وارد شده درست نمیباشد", { autoClose: 3000}) :
-      toast.error(" خطا! سرور در دسترس نیست", { autoClose: 3000})
+      if (error.toString() === 'AxiosError: Network Error') {
+        toast.error('سرور در دسترس نیست')
+      } else {
+        serverIP ? toast.error("اطلاعات وارد شده درست نمیباشد", { autoClose: 3000}) :
+        toast.error("خطا! سرور ای.پ.آی در دسترس نیست", { autoClose: 3000})
+      }
       
     });
   };
