@@ -50,14 +50,13 @@ function PrescriptionReportBox({
           </label>
           <label>:قابل پرداخت</label>
         </div>
-        <div className="entrance-report-map-box">
+        <div className="entrance-report-map-box" style={{ marginBottom: '1rem'}}>
           <label>
             {report.rounded_number ? report.rounded_number : ""}
           </label>
           <label>:مقدار روند شده </label>
         </div>
-      </div>
-      <div className="entrance-report-footer">
+      <div className="entrance-report-footer"style={{margin: '1rems'}}>
         <button className="entrance-report-button" onClick={() => BackFunc()}>
           <i class="fa-solid fa-left-long"></i>
         </button>
@@ -77,6 +76,7 @@ function PrescriptionReportBox({
         <button className="entrance-report-button" onClick={() => FrontFunc()}>
           <i class="fa-solid fa-right-long"></i>
         </button>
+      </div>
       </div>
     </div>
   );

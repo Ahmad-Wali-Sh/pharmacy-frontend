@@ -86,7 +86,7 @@ body {
 }
 
 .highlighted-item {
-  background-color: #683175 !important;
+  background-color: #523558 !important;
 }
 
 .disabled-select {
@@ -294,6 +294,13 @@ button:focus {
   overflow: hidden;
 }
 
+.pres-item-highlight{
+  background-color: rgb(102, 52, 94) !important;
+}
+
+.fa-edit {
+  color: rgb(32, 32, 117);
+}
 /* Header */
 
 .header {
@@ -1780,13 +1787,34 @@ input[type="date"]:disabled {
 
 .prescription-box {
   width: 100%;
-  height: 100%;
+  height: 92dvh;
   padding: 0.2rem;
   background-color: var(--color-three);
-  gap: 0.2rem;
   display: grid;
-  grid-template-columns: 20% 79.7%;
-  grid-template-rows: 30% 22.5% 36%;
+  gap: 0.2rem;
+  grid-template-columns: 17% 82.7%;
+}
+
+.more-less-button {
+  position: absolute;
+  right:0.3rem;
+  margin: 0.2rem;
+  scale: 0.9;
+  font-size: 1.1rem;
+  width: 2rem;
+  text-align: center;
+  border: 1px solid rgb(43, 42, 42);
+  padding: 0.2rem;
+  height: 2rem;
+  border-radius: 2rem;
+  &:hover {
+    background-color: #6b4a99;
+  }
+}
+.prescription-details {
+  display: flex;
+  gap: 0.2rem;
+  flex-direction: column;
 }
 
 .prescription-through {
@@ -1852,7 +1880,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 0% 3% 25% 20% 1% 20.7% 9% 7% 10% 10%;
+  grid-template-columns: 0% 3% 25% 12% 12% 9% 9% 8% 7% 9% 9%;
   direction: rtl;
   justify-content: space-between;
   align-items: center;
@@ -1890,7 +1918,7 @@ input[type="date"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 1% 3% 25% 20% 1% 20% 9% 7% 10% 10%;
+  grid-template-columns: 1% 3% 25% 12% 12% 9% 9% 8% 7% 9% 9%;
   font-size: 0.9rem;
   direction: rtl;
 }

@@ -18,11 +18,10 @@ import { useQuery } from "react-query";
 import { usePrescription } from "../../../States/States";
 import useServerIP from "../../../services/ServerIP";
 
-
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
   const SelectMedicineModalRef = useRef(null);
-  const { serverIP} = useServerIP()
+  const { serverIP } = useServerIP();
 
   let loading = true;
   const user = useAuthUser();
@@ -38,7 +37,7 @@ export default function Prescription(props) {
     disount_value: 0,
   });
 
-  const { data: prescriptionThrough } = useQuery({
+  const { data: prescriptionThrough, refetch: updatePrescriptionThrough } = useQuery({
     queryKey: [`prescription-through/?prescription=${prescription?.id}`],
     enabled: prescription?.id != null,
   });
@@ -112,34 +111,36 @@ export default function Prescription(props) {
   const departmentSubmit = () => {
     PrescriptionModalRef.current.Opener();
 
-    axios.get(`${serverIP}api/department/` + props.department.id + '/').then((res) => {
-      const DepartmentForm = new FormData();
-      DepartmentForm.append("name", "");
-      DepartmentForm.append("doctor", "");
-      DepartmentForm.append("department", props.department.id);
-      DepartmentForm.append("discount_money", res.data.discount_money);
-      DepartmentForm.append("discount_percent", res.data.discount_percent);
-      DepartmentForm.append("zakat", "");
-      DepartmentForm.append("khairat", "");
-      DepartmentForm.append("user", user().id);
+    axios
+      .get(`${serverIP}api/department/` + props.department.id + "/")
+      .then((res) => {
+        const DepartmentForm = new FormData();
+        DepartmentForm.append("name", "");
+        DepartmentForm.append("doctor", "");
+        DepartmentForm.append("department", props.department.id);
+        DepartmentForm.append("discount_money", res.data.discount_money);
+        DepartmentForm.append("discount_percent", res.data.discount_percent);
+        DepartmentForm.append("zakat", "");
+        DepartmentForm.append("khairat", "");
+        DepartmentForm.append("user", user().id);
 
-      axios
-        .post(`${serverIP}api/prescription/`, DepartmentForm)
-        .then((res) => {
-          setPrescription(res.data);
-          SelectMedicineModalRef.current.Opener();
-          toast.success("Data Submited Successfuly.");
+        axios
+          .post(`${serverIP}api/prescription/`, DepartmentForm)
+          .then((res) => {
+            setPrescription(res.data);
+            SelectMedicineModalRef.current.Opener();
+            toast.success("Data Submited Successfuly.");
 
-          axios
-            .get(`${serverIP}api/department/` + props.department.id + '/')
-            .then((res) => setDepartmentSelected(res.data))
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("Check Your Input And Try Again!");
-        });
-    });
+            axios
+              .get(`${serverIP}api/department/` + props.department.id + "/")
+              .then((res) => setDepartmentSelected(res.data))
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => {
+            console.log(err);
+            toast.error("Check Your Input And Try Again!");
+          });
+      });
   };
 
   const BackPrescription = () => {
@@ -162,11 +163,21 @@ export default function Prescription(props) {
           setPrescription([]);
           setPrescription(res.data[0]);
           axios
-            .get(`${serverIP}api/prescription-through/` + "?prescription=" + res.data[0].id +'/')
+            .get(
+              `${serverIP}api/prescription-through/` +
+                "?prescription=" +
+                res.data[0].id +
+                "/"
+            )
             .then((res) => {});
         })
       : axios
-          .get(`${serverIP}api/prescription/` + "?prescription_number=" + next_pres +'/')
+          .get(
+            `${serverIP}api/prescription/` +
+              "?prescription_number=" +
+              next_pres +
+              "/"
+          )
           .then((res) => {
             setPrescription([]);
             res.data[0] && setPrescription(res.data[0]);
@@ -174,7 +185,10 @@ export default function Prescription(props) {
             res.data[0] &&
               axios
                 .get(
-                  `${serverIP}api/prescription-through/` + "?prescription=" + res.data[0].id +'/'
+                  `${serverIP}api/prescription-through/` +
+                    "?prescription=" +
+                    res.data[0].id +
+                    "/"
                 )
                 .then((res) => {});
           });
@@ -201,11 +215,21 @@ export default function Prescription(props) {
           setPrescription(res.data[0]);
 
           axios
-            .get(`${serverIP}api/prescription-through/` + "?prescription=" + res.data[0].id + '/')
+            .get(
+              `${serverIP}api/prescription-through/` +
+                "?prescription=" +
+                res.data[0].id +
+                "/"
+            )
             .then((res) => {});
         })
       : axios
-          .get(`${serverIP}api/prescription/` + "?prescription_number=" + next_pres + '/')
+          .get(
+            `${serverIP}api/prescription/` +
+              "?prescription_number=" +
+              next_pres +
+              "/"
+          )
           .then((res) => {
             setPrescription([]);
             res.data[0] && setPrescription(res.data[0]);
@@ -213,7 +237,10 @@ export default function Prescription(props) {
             res.data[0] &&
               axios
                 .get(
-                  `${serverIP}api/prescription-through/` + "?prescription=" + res.data[0].id + '/'
+                  `${serverIP}api/prescription-through/` +
+                    "?prescription=" +
+                    res.data[0].id +
+                    "/"
                 )
                 .then((res) => {});
           });
@@ -221,20 +248,20 @@ export default function Prescription(props) {
 
   const updatePrescription = () => {
     axios
-      .get(`${serverIP}api/prescription/` + prescription.id + '/')
-      .then((res) => setPrescription(res.data))
-  }
+      .get(`${serverIP}api/prescription/` + prescription.id + "/")
+      .then((res) => setPrescription(res.data));
+  };
 
-
-  const { data: pres, refetch:updatePrescrip } = useQuery({
+  const { data: pres, refetch: updatePrescrip } = useQuery({
     queryKey: [`prescription/${prescription?.id}/`],
     onSuccess: (res) => {
-      setPrescription(res)
+      setPrescription(res);
     },
-    enabled: prescription?.id != undefined
-  })
-  
-  
+    enabled: prescription?.id != undefined,
+  });
+
+
+
   return (
     <>
       {props.button == "main" && (
@@ -257,28 +284,33 @@ export default function Prescription(props) {
         {loading ? (
           <div className="modal">
             <div className="prescription-box">
-              <PrescriptionReportBox
-                report={report}
-                prescription={prescription}
-                BackFunc={() => BackPrescription()}
-                FrontFunc={() => FrontPrescription()}
-              />
-              <PrescriptionForm
-                prescription={prescription}
-                prescriptionThrough={prescriptionThrough}
-                updatePrescription={updatePrescription}
-                update={updatePrescrip}
-                setPrescription={(data) => setPrescription(data)}
-              />
-              <PrescriptionThroughForm
-                prescription={prescription}
-                prescriptionThrough={prescriptionThrough}
-                ref={SelectMedicineModalRef}
-              />
-              <PrescriptionThroughMapForm
-                prescription={prescription}
-                updatePrescription={updatePrescription}
-              />
+              <div className="prescription-report">
+                <PrescriptionReportBox
+                  report={report}
+                  prescription={prescription}
+                  BackFunc={() => BackPrescription()}
+                  FrontFunc={() => FrontPrescription()}
+                />
+              </div>
+              <div className="prescription-details">
+                  <PrescriptionForm
+                    prescription={prescription}
+                    prescriptionThrough={prescriptionThrough}
+                    updatePrescription={updatePrescription}
+                    update={updatePrescrip}
+                    setPrescription={(data) => setPrescription(data)}
+                  />
+                <PrescriptionThroughForm
+                  prescription={prescription}
+                  prescriptionThrough={prescriptionThrough}
+                  ref={SelectMedicineModalRef}
+                />
+                <PrescriptionThroughMapForm
+                  prescription={prescription}
+                  updatePrescription={updatePrescription}
+                  updatePrescriptionThrough={updatePrescriptionThrough}
+                />
+              </div>
             </div>
           </div>
         ) : (

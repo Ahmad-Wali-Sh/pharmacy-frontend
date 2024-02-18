@@ -5,15 +5,24 @@ import { Popover } from "react-tiny-popover";
 import { useMutation } from "react-query";
 import { successFn, patchDataFn, deleteDataFn } from "../../../services/API";
 import { useQuery } from "react-query";
+import { SelectMedician } from "../../../Medician/SelectMedicine/SelectMedician";
+import axios from "axios";
+import useServerIP from "../../../services/ServerIP";
+import { toast } from "react-toastify";
 
 function PrescriptionThroughEntry({
   through,
   num,
+  onClick,
   prescription,
   prescriptionThroughs,
-  updatePrescription
+  updatePrescription,
+  highlighted,
+  id,
+  updatePrescriptionThrough
 }) {
   const user = useAuthUser();
+  const { serverIP } = useServerIP();
 
   const { register, handleSubmit, reset } = useForm();
   const [alert, setAlert] = React.useState("");
@@ -24,7 +33,7 @@ function PrescriptionThroughEntry({
     });
   }, [prescriptionThroughs]);
 
-  const { data: conflicts } = useQuery(['medicine-conflict/'])
+  const { data: conflicts } = useQuery(["medicine-conflict/"]);
 
   React.useEffect(() => {
     let conflicts_with = conflicts?.map((conflict) => {
@@ -35,9 +44,8 @@ function PrescriptionThroughEntry({
         : "";
     });
     let result = prescriptionThroughs.some(
-      (other) => other.medician === conflicts_with && conflicts_with[0] 
+      (other) => other.medician === conflicts_with && conflicts_with[0]
     );
-    console.log(result);
     result ? setAlert("alert_on") : setAlert("");
   }, [prescriptionThroughs]);
 
@@ -48,9 +56,9 @@ function PrescriptionThroughEntry({
       successFn(
         `prescription-through/?prescription=${prescription?.id}`,
         () => {
-          updatePrescription()
+          updatePrescription();
         }
-        );
+      );
     },
   });
 
@@ -60,7 +68,7 @@ function PrescriptionThroughEntry({
       successFn(
         `prescription-through/?prescription=${prescription?.id}`,
         () => {
-          updatePrescription()
+          updatePrescription();
         }
       );
     },
@@ -74,16 +82,25 @@ function PrescriptionThroughEntry({
     prescriptionThroughPatch(MedicianUpdateForm);
   };
 
-
   const [isCautionsOpen, setIsCautionsOpen] = React.useState(false);
   const [isUsagesOpen, setIsUsagesOpen] = React.useState(false);
 
+  const selectAutoCompleteData = (data) => {
+    const Form = new FormData();
+    Form.append("medician", data?.id);
+    Form.append("each_price", data?.price);
+    Form.append("user", user().id);
+    axios
+      .patch(`${serverIP}api/prescription-through/${through.id}/`, Form)
+      .then(() => {
+          updatePrescriptionThrough();
+          toast.success('دارو موفقانه تعویض شد')
+      });
+  };
+
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
-      <div
-        className={`prescription-through-map ${alert}`}
-        onBlurCapture={handleSubmit(prescriptionThroughUpdate)}
-      >
+    <form onSubmit={(e) => e.preventDefault()} id={id}>
+      <div className={`prescription-through-map ${alert} ${highlighted ? 'pres-item-highlight' : ''}`} onClick={onClick}>
         <label></label>
         <label>{num + 1}</label>
         <h4 className="entrance-medician-map-name">
@@ -102,7 +119,6 @@ function PrescriptionThroughEntry({
             {through.medicine_usage}
           </h5>
         </Popover>
-        <h5></h5>
         <Popover
           isOpen={isCautionsOpen}
           position={["top"]}
@@ -118,15 +134,24 @@ function PrescriptionThroughEntry({
             {through.medicine_cautions}
           </h5>
         </Popover>
-        <h4>{through.each_price}AFN</h4>
+        <h4>{through.medicine_no_quantity}</h4>
+        <h4>{through.medicine_no_box}</h4>
+        <h4>{through.each_price}</h4>
         <input
           type="text"
           defaultValue={through.quantity}
           {...register("quantity")}
-          onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault()}}
+          onKeyDown={(e) => {
+            e.key === "Enter" && e.preventDefault();
+          }}
+          onBlurCapture={handleSubmit(prescriptionThroughUpdate)}
         />
-        <h4>{through.total_price}AFN</h4>
+        <h4>{through.total_price}</h4>
         <div className="medician-map-buttons">
+          <SelectMedician
+            edit={true}
+            selectAutoCompleteData={selectAutoCompleteData}
+          />
           <div onClick={prescriptionThroughDelete}>
             <i className="fa-solid fa-trash"></i>
           </div>

@@ -19,7 +19,8 @@ export const SelectMedician = forwardRef(
       UpdateChangedMedicine,
       handleCloseFocus,
       purchaseMedicine,
-      ready=true
+      ready=true,
+      edit=false
     },
     ref
   ) => {
@@ -190,7 +191,7 @@ export const SelectMedician = forwardRef(
 
     return (
       <>
-        <div className={`select-medician ${!ready && 'disabled-select'}`} >
+        {!edit && <div className={`select-medician ${!ready && 'disabled-select'}`} >
           <div
             className={`select-medician-button ${!ready && 'disabled-select'}`}
             onClick={() => {
@@ -273,7 +274,58 @@ export const SelectMedician = forwardRef(
               </div>
             </div>
           </BigModal>
+        </div>}
+        {edit && (
+          <>
+          <div onClick={() =>SelectMedicineModalRef.current.Opener() }>
+          <i className="fa-solid fa-edit"></i>
         </div>
+        <BigModal title="انتخاب دارو" ref={SelectMedicineModalRef}>
+            <MedicineShowModal
+              ref={MedicineShowRef}
+              ApproveMedicine={ApproveMedicine}
+            />
+            <div className="medician-select-input-box">
+              <div>
+                <span className={textHighlight?.all}>همه</span> |{" "}
+                <span className={textHighlight?.company}>کمپنی</span> |{" "}
+                <span className={textHighlight?.country}>کشور</span> |{" "}
+                <span className={textHighlight?.kind_english}>
+                  نوع "انگلیسی"
+                </span>{" "}
+                |{" "}
+                <span className={textHighlight?.kind_persian}>نوع "فارسی"</span>{" "}
+                | <span className={textHighlight?.generic}>ترکیب</span> |{" "}
+                <span className={textHighlight?.ml}>میزان موثریت</span> |{" "}
+                <span className={textHighlight?.barcode}>بارکد/نام برند</span>
+              </div>
+              <AsyncPaginate
+                loadOptions={!MedicineLoading && loadMedicine}
+                getOptionLabel={(option) => option?.medicine_full}
+                getOptionValue={(option) => option?.medicine_full}
+                autoFocus
+                defaultValue={MedicianSearched?.results?.[0]}
+                filterOption={() => true}
+                onInputChange={(string) => setStringArray(string.split("  "))}
+                formatOptionLabel={(option) => MedicineListFormat(MedicianSearched?.results?.length)(option)}
+                styles={MedicineSelectStyle}
+                onChange={handleMedicineSelect}
+                isLoading={MedicineLoading}
+                loadOptionsOnMenuOpen={false}
+                onKeyDown={handleKeyDown}
+              />
+              <div className="bookmarks-box">
+                {BookmarkedMedicine?.results.map((medicine) => (
+                  <BookmarkCards
+                    medicine={medicine}
+                    Func={handleMedicineSelect}
+                  />
+                ))}
+              </div>
+            </div>
+          </BigModal>
+          </>
+        )}
       </>
     );
   }

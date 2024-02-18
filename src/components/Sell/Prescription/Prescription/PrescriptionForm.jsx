@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useForm } from "react-hook-form";
 import {
@@ -20,6 +20,7 @@ import ControlledSelect from "../../../PageComponents/ControlledSelect";
 import { usePrescription } from "../../../States/States";
 import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 import moment from "jalali-moment";
+import MultiplePrescriptionImage from "../../../PageComponents/MultiplePrescriptionImage";
 
 function PrescriptionForm({ prescriptionThrough, update }) {
   const user = useAuthUser();
@@ -39,7 +40,6 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       khairat: prescription.khairat || 0,
       department: prescription.department || 0,
       prescription_number: prescription.prescription_number || "",
-      image: prescription.image ? prescription.image : "",
       name: "",
       doctor: prescription.doctor ? prescription.doctor : "",
     });
@@ -150,146 +150,198 @@ function PrescriptionForm({ prescriptionThrough, update }) {
   });
 
   const ListRef = useRef(null);
+  const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
 
   return (
-    <form
-      className="prescription-prescription"
-      onSubmit={handleSubmit((data) =>
-        handleFormData(
-          data,
-          prescription?.id ? updatePrescription : newPrescription,
-          user
-        )
-      )}
-    >
-      <label>نوع نسخه:</label>
-      <select {...register("department")} autoFocus>
-        <option value={prescription?.department} selected>
-          {prescription?.department_name}
-        </option>
-        {department?.map((depart) => (
-          <option value={depart.id}>{depart.name}</option>
-        ))}
-      </select>
-      <label>نام مریض:</label>
-      <ControlledSelect
-        control={control}
-        name="name"
-        options={patient}
-        placeholder=""
-        getOptionLabel={(option) => option.code_name}
-        getOptionValue={(option) => option.code_name}
-        uniqueKey={`patient-unique${prescription?.id}`}
-        defaultValue={patient?.find((c) =>
-          c.id === prescription?.name ? c.code_name : ""
-        )}
-        NewComponent={
-          <SellingLists
-            title="لست ها"
-            activeKey="patient"
-            ref={ListRef}
-            button="plus"
-          />
-        }
-      />
-      <label>نام داکتر:</label>
-      <ControlledSelect
-        control={control}
-        name="doctor"
-        options={doctor}
-        placeholder=""
-        getOptionLabel={(option) => option.code_name}
-        getOptionValue={(option) => option.code_name}
-        uniqueKey={`doctor-unique${prescription?.id}`}
-        defaultValue={doctor?.find((c) =>
-          c.id === prescription?.doctor ? c.code_name : ""
-        )}
-        NewComponent={
-          <SellingLists
-            title="لست ها"
-            activeKey="doctor"
-            ref={ListRef}
-            button="plus"
-          />
-        }
-      />
-      <label>شماره:</label>
-      <input
-        required
-        type="text"
-        {...register("prescription_number")}
-        value={prescription?.prescription_number}
-        disabled
-      />
-      <label>جستجو:</label>
-      <div className="flex">
-        <form className="search-form">
-          <input
-            type="text"
-            {...register("number")}
-            onChange={(e) => {
-              setSearchNumber(e.target.value);
-            }}
-            value={searchNumber}
-            id="search-number"
-            className="search-input"
-          />
-          <SearchButton Func={() => prescriptionSearch()} />
-        </form>
-      </div>
-      <label>عکس:</label>
-      <input
-        type="file"
-        onChange={(e) => {
-          setValue("image", e.target.files[0]);
-        }}
-      ></input>
-      <label>تخفیف:</label>
-      <input type="text" {...register("discount_money")} />
-      <label>تخفیف %:</label>
-      <input type="text" {...register("discount_percent")} />
-      <div></div>
-      <a
-        href={prescription?.image && prescription?.image}
-        target="_blank"
-        style={{ textDecoration: "none", color: "grey" }}
+    <>
+      <div
+        className="more-less-button"
+        onClick={() => setShowPrescriptionForm(!showPrescriptionForm)}
       >
-        {prescription?.image ? "Image <<" : ""}
-      </a>
-      <label>زکات:</label>
-      <input type="text" {...register("zakat")} />
-      <label>خیرات:</label>
-      <input type="text" {...register("khairat")} />
-      <div></div>
-      <ButtonGroup>
-        <FormButton
-          Func={() => {
-            prescription?.sold == false
-              ? deletePrescription()
-              : toast.error("این نسخه به صندوق ثبت شده است");
-          }}
-          name="حذف"
-          className="alert-button"
-        />
-        <FormButton
-          Func={() => {
+        {showPrescriptionForm ? ">" : "<"}
+      </div>
+      {showPrescriptionForm ? (
+        <form
+          className="prescription-prescription"
+          onSubmit={handleSubmit((data) =>
             handleFormData(
-              { ...prescription, image: "", doctor: "", name: "", sold: false },
-              duplicatePrescription,
+              data,
+              prescription?.id ? updatePrescription : newPrescription,
               user
-            );
-          }}
-          name="کپی"
-        />
-        <FormButton
-          Func={handleSubmit((data) =>
-            handleFormData(data, newPrescription, user)
+            )
           )}
-          name="جدید"
-        />
-        <SubmitButton name={prescription?.id ? "آپدیت" : "ذخیره"} />
-      </ButtonGroup>
-    </form>
+        >
+          <label>نوعیت:</label>
+          <select {...register("department")} autoFocus>
+            <option value={prescription?.department} selected>
+              {prescription?.department_name}
+            </option>
+            {department?.map((depart) => (
+              <option value={depart.id}>{depart.name}</option>
+            ))}
+          </select>
+          <label>شماره:</label>
+          <input
+            required
+            type="text"
+            {...register("prescription_number")}
+            value={prescription?.prescription_number}
+            disabled
+          />
+          <label>جستجو:</label>
+          <div className="flex">
+            <form className="search-form">
+              <input
+                type="text"
+                {...register("number")}
+                onChange={(e) => {
+                  setSearchNumber(e.target.value);
+                }}
+                value={searchNumber}
+                id="search-number"
+                className="search-input"
+              />
+              <SearchButton Func={() => prescriptionSearch()} />
+            </form>
+          </div>
+          <label>نام مریض:</label>
+          <ControlledSelect
+            control={control}
+            name="name"
+            options={patient}
+            placeholder=""
+            getOptionLabel={(option) => option.code_name}
+            getOptionValue={(option) => option.code_name}
+            uniqueKey={`patient-unique${prescription?.id}`}
+            defaultValue={patient?.find((c) =>
+              c.id === prescription?.name ? c.code_name : ""
+            )}
+            NewComponent={
+              <SellingLists
+                title="لست ها"
+                activeKey="patient"
+                ref={ListRef}
+                button="plus"
+              />
+            }
+          />
+          <label>نام داکتر:</label>
+          <ControlledSelect
+            control={control}
+            name="doctor"
+            options={doctor}
+            placeholder=""
+            getOptionLabel={(option) => option.code_name}
+            getOptionValue={(option) => option.code_name}
+            uniqueKey={`doctor-unique${prescription?.id}`}
+            defaultValue={doctor?.find((c) =>
+              c.id === prescription?.doctor ? c.code_name : ""
+            )}
+            NewComponent={
+              <SellingLists
+                title="لست ها"
+                activeKey="doctor"
+                ref={ListRef}
+                button="plus"
+              />
+            }
+          />
+          <label>عکس:</label>
+          <MultiplePrescriptionImage />
+          <label>تخفیف:</label>
+          <input type="text" {...register("discount_money")} />
+          <label>تخفیف %:</label>
+          <input type="text" {...register("discount_percent")} />
+          <div></div>
+          <div></div>
+          <label>زکات:</label>
+          <input type="text" {...register("zakat")} />
+
+          <label>خیرات:</label>
+          <input type="text" {...register("khairat")} />
+          <div></div>
+          <ButtonGroup>
+            <FormButton
+              Func={() => {
+                prescription?.sold == false
+                  ? deletePrescription()
+                  : toast.error("این نسخه به صندوق ثبت شده است");
+              }}
+              name="حذف"
+              className="alert-button"
+            />
+            <FormButton
+              Func={() => {
+                handleFormData(
+                  {
+                    ...prescription,
+                    image: "",
+                    doctor: "",
+                    name: "",
+                    sold: false,
+                  },
+                  duplicatePrescription,
+                  user
+                );
+              }}
+              name="کپی"
+            />
+            <FormButton
+              Func={handleSubmit((data) =>
+                handleFormData(data, newPrescription, user)
+              )}
+              name="جدید"
+            />
+            <SubmitButton name={prescription?.id ? "آپدیت" : "ذخیره"} />
+          </ButtonGroup>
+        </form>
+      ) : (
+        <form
+          className="prescription-prescription"
+          onSubmit={handleSubmit((data) =>
+            handleFormData(
+              data,
+              prescription?.id ? updatePrescription : newPrescription,
+              user
+            )
+          )}
+        >
+          <label>نوعیت:</label>
+          <select {...register("department")} autoFocus>
+            <option value={prescription?.department} selected>
+              {prescription?.department_name}
+            </option>
+            {department?.map((depart) => (
+              <option value={depart.id}>{depart.name}</option>
+            ))}
+          </select>
+          <label>شماره:</label>
+          <input
+            required
+            type="text"
+            {...register("prescription_number")}
+            value={prescription?.prescription_number}
+            disabled
+          />
+          <label>جستجو:</label>
+          <div className="flex">
+            <form className="search-form">
+              <input
+                type="text"
+                {...register("number")}
+                onChange={(e) => {
+                  setSearchNumber(e.target.value);
+                }}
+                value={searchNumber}
+                id="search-number"
+                className="search-input"
+              />
+              <SearchButton Func={() => prescriptionSearch()} />
+            </form>
+          </div>
+        </form>
+      )}
+    </>
   );
 }
 
