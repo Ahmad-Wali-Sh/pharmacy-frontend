@@ -171,7 +171,6 @@ export default function EntranceReport() {
     };
     const totalInterester = (
       totalSell() +
-      totalBonusValue() +
       totalDiscount() -
       totalBeforeDiscount()
     ).toFixed(2);
@@ -220,10 +219,10 @@ export default function EntranceReport() {
           <label>مجموع تخفیفات</label>
           <label>{report.total_discount} </label>
         </div>
-        <div className="entrance-report-map-box">
+        {/* <div className="entrance-report-map-box">
           <label>مجموع عاید بونوس</label>
           <label>{report.total_bonous_value} </label>
-        </div>
+        </div> */}
         <div className="entrance-report-map-box">
           <label>مجموع فروش</label>
           <label>{report.sell_total} </label>
