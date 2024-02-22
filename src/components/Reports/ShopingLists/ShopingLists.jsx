@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MainButton, PlusButton } from "../../PageComponents/Buttons/Buttons";
 import BigModal from "../../PageComponents/Modals/BigModal";
 import AutoShopingList from "./AutoShopingList";
@@ -11,8 +11,13 @@ const ShopingLists = ({
   button,
   name,
   icon,
+  trigger
 }) => {
   const ListDashboardRef = useRef(null);
+
+  useEffect(() => {
+    trigger && ListDashboardRef.current.Opener()
+  }, [trigger])
 
   const [active, setActive] = React.useState(activeKey);
   return (

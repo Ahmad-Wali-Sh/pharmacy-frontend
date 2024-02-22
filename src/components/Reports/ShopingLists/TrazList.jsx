@@ -15,7 +15,9 @@ export default function TrazList() {
   });
 
   let TrazQuery = `traz/?medician=${filter.medician}`;
-  const { data: TrazQueryList } = useQuery([TrazQuery], { enabled: filter.medician ? true : false});
+  const { data: TrazQueryList } = useQuery([TrazQuery], {
+    enabled: filter.medician ? true : false,
+  });
 
   const [sortedTraz, setSortedTraz] = useState([]);
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function TrazList() {
         />
         <FilterDate
           label="تا"
-          value={filter.from}
+          value={filter.to}
           name="to"
           handleChange={(e) => setFilter({ ...filter, to: e.target.value })}
         />
@@ -91,7 +93,7 @@ export default function TrazList() {
           <h5>قیمت</h5>
           <h5>منفی</h5>
           <h5>وضعیت</h5>
-          <h5>ش.ثبت</h5>
+          <h5>توضیحات</h5>
         </div>
         {filter.medician &&
           sortedTraz?.map((trazItem, num) => (
@@ -119,7 +121,7 @@ function TrazListItem(props) {
       </h4>
       <h4>
         {props.trazItem.type == "EntranceThrough"
-          ? props.trazItem.total_purchaseـafghani
+          ? props.trazItem.each_purchase_price
           : ""}
       </h4>
       <h4>
@@ -144,7 +146,7 @@ function TrazListItem(props) {
         {props.trazItem.type == "OutranceThrough"
           ? props.trazItem.outrance
           : props.trazItem.type == "PrescriptionThrough"
-          ? props.trazItem.prescription
+          ? props.trazItem.prescription_number
           : ""}
       </h4>
       <h4>
@@ -162,14 +164,20 @@ function TrazListItem(props) {
           : ""}
       </h4>
       <h4></h4>
-      <h4></h4>
       <h4>
         {props.trazItem.type == "OutranceThrough"
-          ? props.trazItem.outrance
+          ? props.trazItem.department_name
           : props.trazItem.type == "PrescriptionThrough"
-          ? props.trazItem.prescription
+          ? props.trazItem.department_name
           : ""}
       </h4>
+      <h5>
+        <samll>
+          {props.trazItem.type == "EntranceThrough"
+            ? props.trazItem.description
+            : ""}
+        </samll>
+      </h5>
     </div>
   );
 }

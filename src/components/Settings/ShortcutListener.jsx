@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ShopingLists from '../Reports/ShopingLists/ShopingLists';
 import { useNewMedicineShow } from '../States/States';
 
 const ShortcutListener = () => {
+
+  const [trigger, setTrigger] = useState('')
   const navigate = useNavigate()
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -23,13 +26,13 @@ const ShortcutListener = () => {
 
       // Perform the corresponding action based on the matched shortcut
       switch (generalMatchedShortcut?.[0]) {
-        case 'dashboard':
-          event.preventDefault()
-          navigate('/dashboard')
-          break;
         case 'sell':
           event.preventDefault()
           navigate('/sell')
+          break;
+        case 'traz':
+          event.preventDefault()
+          setTrigger(new Date())
           break;
         case 'purchase':
           event.preventDefault()
@@ -98,7 +101,9 @@ const { setNewMedicineShow } = useNewMedicineShow()
     };
   }, []); 
 
-  return null;
+  return (
+    <ShopingLists activeKey={'traz'} button='' title='لست خرید' trigger={trigger}/>
+  );
 };
 
 export default ShortcutListener;

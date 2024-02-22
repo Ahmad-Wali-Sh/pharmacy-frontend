@@ -17,7 +17,7 @@ function MultipleBarcode({ medicineID }) {
     const BarcodeForm = new FormData();
     BarcodeForm.append("medicine", medicineID);
     BarcodeForm.append("barcode", barcoder);
-    axios
+    barcoder && axios
       .post(`${serverIP}api/` + "medicine-barcode/", BarcodeForm)
       .then(() => {
         toast.success("بارکد موفقانه ثبت شد");
@@ -28,8 +28,9 @@ function MultipleBarcode({ medicineID }) {
       })
       .catch((e) => {
         axios
-          .get(`${serverIP}api/` + `medicine-barcode/?barcode=${barcoder}/`)
+          .get(`${serverIP}api/` + `medicine-barcode/?barcode=${barcoder}`)
           .then((res) => {
+            console.log(res);
             toast.error(
               <>
                 <h5>ID: {`${res.data.results[0].medician.id}`}</h5>
