@@ -119,7 +119,7 @@ export default function Revenue(props) {
   const handleBarcodePay = (barcode) => {
     axios.get(
       `${serverIP}api/prescription/` +
-        "?sold=false" + "&barcode_str=" + barcode + '/')
+        "?sold=false" + "&barcode_str=" + barcode)
       .then((res) => {
         const RevneueForm = new FormData();
         RevneueForm.append("revenue", revenue.id);
