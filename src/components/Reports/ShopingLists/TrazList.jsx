@@ -29,6 +29,8 @@ export default function TrazList() {
       );
   }, [TrazQueryList]);
 
+
+
   useEffect(() => {
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
@@ -38,6 +40,7 @@ export default function TrazList() {
           case "ب":
             e.preventDefault();
             ListFilterRef.current.Opener();
+            MedicineSelectRef?.current?.Opener()
             break;
         }
       }
@@ -48,6 +51,8 @@ export default function TrazList() {
       document.removeEventListener("keydown", handleKeyDowns);
     };
   }, []);
+
+  const MedicineSelectRef = useRef(null)
 
   return (
     <>
@@ -61,6 +66,7 @@ export default function TrazList() {
           selectAutoCompleteData={(medicine) => {
             setFilter({ ...filter, medician: medicine.id });
           }}
+          ref={MedicineSelectRef}
         />
         <FilterDate
           label="از"

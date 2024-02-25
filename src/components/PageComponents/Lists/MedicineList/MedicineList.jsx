@@ -48,6 +48,7 @@ export default function MedicineList({
     country: "",
     company: "",
     page: 1,
+    barcode:''
   });
 
   const user = useAuthUser();
@@ -151,7 +152,7 @@ export default function MedicineList({
 
   let medicineQuery = `medician/?brand_name=${encodeURIComponent(
     filter.brand_name
-  )}&search=${encodeURIComponent(filter.generic_name)}&ml=${encodeURIComponent(
+  )}&barcode__contains=${filter.barcode}&search=${encodeURIComponent(filter.generic_name)}&ml=${encodeURIComponent(
     filter.ml
   )}&kind__name_persian=${encodeURIComponent(
     filter.kind_persian
@@ -344,6 +345,13 @@ export default function MedicineList({
               autoFocus={true}
               handleChange={(e) =>
                 setFilter({ ...filter, brand_name: e.target.value })
+              }
+            />
+            <FilterInput
+              label="بارکد"
+              value={filter.barcode}
+              handleChange={(e) =>
+                setFilter({ ...filter, barcode: e.target.value })
               }
             />
             <FilterInput

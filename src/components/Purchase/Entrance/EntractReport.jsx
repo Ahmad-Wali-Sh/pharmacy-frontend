@@ -236,6 +236,10 @@ export default function EntranceReport() {
           <label>مجموعه</label>
           <label>{report.grandTotal} </label>
         </div>
+        {entrance?.currency_rate != 1 && <div className="entrance-report-map-box">
+          <label>مجموعه (AFN)</label>
+          <label>{report.grandTotal  * entrance?.currency_rate} AFN</label>
+        </div>}
         <div className="entrance-report-map-box">
           <label>ارز</label>
           <label>

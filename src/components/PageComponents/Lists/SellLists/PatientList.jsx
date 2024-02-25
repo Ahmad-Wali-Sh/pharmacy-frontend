@@ -358,7 +358,6 @@ function PatientFilterModal(props) {
       >
         <form>
           <div className="list-filter-form">
-
             <label>نام</label>
             <input
               className="text-input-standard"
