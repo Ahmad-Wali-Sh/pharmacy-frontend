@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layount from "./components/Dashboard/Layount";
 import Medician from "./components/Medician/Medician";
@@ -7,9 +7,10 @@ import Purchase from "./components/Purchase/Purchase";
 import Reports from "./components/Reports/Reports";
 import Sell from "./components/Sell/Sell";
 import Login from "./Login";
-import { useIsAuthenticated } from "react-auth-kit";
+import { useIsAuthenticated, useSignOut } from "react-auth-kit";
 import RevenueDashboard from "./components/Revenue/RevenueDashboard";
 import { useTheme } from "./components/States/States";
+import axios from "axios";
 
 function App() {
   const RequireAuth = ({ children }) => {
@@ -19,6 +20,12 @@ function App() {
     }
     return children;
   };
+
+  const signOut = useSignOut();
+  useEffect(() => {
+    signOut()
+    delete axios.defaults.headers.common["Authorization"];
+  }, [])
 
   const { theme, setTheme } = useTheme()
   return (
