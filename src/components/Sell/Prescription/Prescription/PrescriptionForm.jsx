@@ -17,15 +17,16 @@ import {
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import ControlledSelect from "../../../PageComponents/ControlledSelect";
-import { usePrescription } from "../../../States/States";
+import { usePrescription, useUserPermissions } from "../../../States/States";
 import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 import moment from "jalali-moment";
 import MultiplePrescriptionImage from "../../../PageComponents/MultiplePrescriptionImage";
 
 function PrescriptionForm({ prescriptionThrough, update }) {
+  const { userPremissions} = useUserPermissions()
   const user = useAuthUser();
-  const { data: patient } = useQuery(["patient/"]);
-  const { data: doctor } = useQuery(["doctor/"]);
+  const { data: patient } = useQuery(["patient/"], { enabled: userPremissions?.includes('core.add_patient') ? true : false});
+  const { data: doctor } = useQuery(["doctor/"], { enabled: userPremissions?.includes('core.add_doctor') ? true : false});
   const { data: department } = useQuery(["department/"]);
   const [searchNumber, setSearchNumber] = React.useState("");
   const { prescription, setPrescription } = usePrescription();
@@ -217,7 +218,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
               c.id === prescription?.name ? c.code_name : ""
             )}
             NewComponent={
-              <SellingLists
+             <SellingLists
                 title="لست ها"
                 activeKey="patient"
                 ref={ListRef}
@@ -238,7 +239,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
               c.id === prescription?.doctor ? c.code_name : ""
             )}
             NewComponent={
-              <SellingLists
+               <SellingLists
                 title="لست ها"
                 activeKey="doctor"
                 ref={ListRef}

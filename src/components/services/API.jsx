@@ -48,6 +48,7 @@ export const postDataFn = async (data, api) => {
     return response.data;
   } catch (error) {
     console.error("Error posting data:", error);
+    toast.warning('شما قابل به انجام این عملیات نیستید')
     throw error; // Rethrow the error to be caught by React Query
   }
 };
@@ -58,6 +59,7 @@ export const putDataFn = async (data, api) => {
     return response.data;
   } catch (error) {
     console.error("Error putting data:", error);
+    toast.warning('شما قابل به انجام این عملیات نیستید')
     throw error; // Rethrow the error to be caught by React Query
   }
 };
@@ -68,6 +70,7 @@ export const patchDataFn = async (data, api) => {
     return response.data;
   } catch (error) {
     console.error("Error patching data:", error);
+    toast.warning('شما قابل به انجام این عملیات نیستید')
     throw error; // Rethrow the error to be caught by React Query
   }
 };
@@ -78,6 +81,7 @@ export const deleteDataFn = async (api) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting data:", error);
+    toast.warning('شما قابل به انجام این عملیات نیستید')
     throw error; // Rethrow the error to be caught by React Query
   }
 };

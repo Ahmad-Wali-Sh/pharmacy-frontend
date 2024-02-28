@@ -2,6 +2,7 @@ import React from "react";
 import Prescription from "./Prescription/Prescription/Prescription";
 import { useQuery } from "react-query";
 import SellingLists from "../PageComponents/Lists/SellLists/SellingLists";
+import { useUserPermissions } from "../States/States";
 
 
 function Sell() {
@@ -10,6 +11,8 @@ function Sell() {
     isLoading,
     isError,
   } = useQuery({ queryKey: ["department/?ordering=id"] });
+
+  const {userPermissions} = useUserPermissions()
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -28,11 +31,11 @@ function Sell() {
         <SellingLists title='لست ها' activeKey='purhase-list' button='main' name='لست خرید' icon='fa-solid fa-list-alt'/>
       </div>
       <div className="sell-form">
-        <div className="sell-department-buttons">
+        {userPermissions?.includes('core.add_prescription') && <div className="sell-department-buttons">
           {departments?.map((depart) => (
             <Prescription button={2} department={depart} trigger={0} />
           ))}
-        </div>
+        </div>}
       </div>
     </div>
   );
