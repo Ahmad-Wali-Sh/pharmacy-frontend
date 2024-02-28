@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import { toast } from "react-toastify";
 import useServerIP from './components/services/ServerIP'
+import { useUserPermissions } from "./components/States/States";
 
 
 
@@ -14,6 +15,7 @@ function Login() {
   });
 
   const { serverIP } = useServerIP()
+  const { setUserPermissions } = useUserPermissions()
 
 
   const onSubmit = (e) => {
@@ -55,6 +57,9 @@ function Login() {
                 axios.defaults.headers.common[
                   "Authorization"
                 ] = `Token ${res.data.auth_token}`;
+                axios.get(`${serverIP}api/user/permissions/`).then((res) => {
+                  setUserPermissions(res.data.permissions)
+                })
               }
             })
             .catch((err) => {

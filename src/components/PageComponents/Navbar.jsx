@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import React from "react";
 import { useAuthUser } from "react-auth-kit";
 import axios from "axios";
-import { useTemplateLogo } from "../States/States";
+import { useTemplateLogo, useUserPermissions } from "../States/States";
 
 function Navbar() {
   const auth = useAuthUser();
@@ -12,6 +12,7 @@ function Navbar() {
       "Authorization"
     ] = `Token ${localStorage._auth}`;
   }
+  const { userPermissions } = useUserPermissions()
 
   const { templateLogo, setTemplateLogo } = useTemplateLogo();
   return (
@@ -38,21 +39,21 @@ function Navbar() {
           {/* <Link to="/dashboard" className="button">
             <div className="button">داشبورد</div>
           </Link> */}
-          <Link to="/sell" className="button">
+          {userPermissions?.includes('core.view_prescription') && <Link to="/sell" className="button">
             <div className="button">فروشات</div>
-          </Link>
-          <Link to="/purchase" className="button">
+          </Link>}
+          {userPermissions?.includes('core.view_entrance') && <Link to="/purchase" className="button">
             <div className="button">خریداری</div>
-          </Link>
-          <Link to="/medician" className="button">
+          </Link>}
+          {userPermissions?.includes('core.view_medician') && <Link to="/medician" className="button">
             <div className="button">داروخانه</div>
-          </Link>
-          <Link to="/revenue" className="button">
+          </Link>}
+          {userPermissions?.includes('core.view_revenue') && <Link to="/revenue" className="button">
             <div className="button">صندوق</div>
-          </Link>
-          <Link to="/reports" className="button">
+          </Link>}
+          {userPermissions?.includes('core.view_prescription') && userPermissions?.includes('core.view_entrance') && <Link to="/reports" className="button">
             <div className="button">گزارشات</div>
-          </Link>
+          </Link>}
         </div>
       </div>
     </div>

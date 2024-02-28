@@ -43,3 +43,7 @@ export const useTheme = create((set) => ({
   theme: "dark",
   setTheme: (state) => set(() => ({ theme: state })),
 }));
+export const useUserPermissions = create((set) => ({
+  userPermissions: [],
+  setUserPermissions: (state) => set(() => ({ userPermissions: state })),
+}));

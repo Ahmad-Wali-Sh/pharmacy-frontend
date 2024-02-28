@@ -15,13 +15,17 @@ import PrescriptionForm from "./PrescriptionForm";
 import { PrescriptionThroughForm } from "./PrescriptionThroughForm";
 import PrescriptionThroughMapForm from "./PrescriptionThroughMapForm";
 import { useQuery } from "react-query";
-import { usePrescription } from "../../../States/States";
+import { usePrescription, useUserPermissions } from "../../../States/States";
 import useServerIP from "../../../services/ServerIP";
+
 
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
   const SelectMedicineModalRef = useRef(null);
   const { serverIP } = useServerIP();
+
+
+  const { userPermissions} = useUserPermissions()
 
   let loading = true;
   const user = useAuthUser();
