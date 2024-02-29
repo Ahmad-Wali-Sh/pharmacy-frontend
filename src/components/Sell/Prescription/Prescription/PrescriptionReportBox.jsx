@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import ReactToPrint from "react-to-print";
+import React, { useEffect, useRef } from "react";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 import PrescriptionPrint from "./PrescriptionPrint";
 
 function PrescriptionReportBox({
@@ -10,6 +10,33 @@ function PrescriptionReportBox({
 }) {
 
   let PrescriptiontoPrintRef = useRef(null)
+
+  const handlePrint = useReactToPrint({
+    content: () => PrescriptiontoPrintRef.current,
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const { key, ctrlKey, shiftKey, altKey } = event;
+
+      if (ctrlKey) {
+        if (event.key === 'P' || event.key === 'ح' || event.key === 'p') {
+          event.preventDefault()
+            setTimeout(() => {
+              handlePrint() 
+            }, 200)
+        }
+      }
+    };
+
+    // Add event listener for keyboard events
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); 
 
 
   return (
@@ -60,18 +87,11 @@ function PrescriptionReportBox({
         <button className="entrance-report-button" onClick={() => FrontFunc()}>
           <i class="fa-solid fa-right-long"></i>
         </button>
-        <ReactToPrint
-          trigger={() => (
-            <button
-              className="entrance-report-button"
-            >
-              <i class="fa-solid fa-comments-dollar"></i>
-            </button>
-          )}
-          content={() => PrescriptiontoPrintRef}
-        />
+        <button onClick={() => {
+          handlePrint()
+        }} className="entrance-report-button"><i class="fa-solid fa-comments-dollar"></i></button>
         <div style={{display: 'none'}}>
-        <PrescriptionPrint ref={(el) => (PrescriptiontoPrintRef = el)} prescription={prescription} report={report}/>
+        <PrescriptionPrint ref={PrescriptiontoPrintRef} prescription={prescription} report={report}/>
         </div>
         <button className="entrance-report-button" onClick={() => BackFunc()}>
           <i class="fa-solid fa-left-long"></i>

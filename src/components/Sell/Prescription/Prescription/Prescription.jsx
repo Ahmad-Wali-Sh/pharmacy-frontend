@@ -25,7 +25,7 @@ export default function Prescription(props) {
   const { serverIP } = useServerIP();
 
 
-  const { userPermissions} = useUserPermissions()
+  const { userPermissions } = useUserPermissions()
 
   let loading = true;
   const user = useAuthUser();

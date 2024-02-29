@@ -21,6 +21,8 @@ import { usePrescription, useUserPermissions } from "../../../States/States";
 import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 import moment from "jalali-moment";
 import MultiplePrescriptionImage from "../../../PageComponents/MultiplePrescriptionImage";
+import axios from "axios";
+import useServerIP from "../../../services/ServerIP";
 
 function PrescriptionForm({ prescriptionThrough, update }) {
   const { userPremissions} = useUserPermissions()
@@ -84,15 +86,25 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       document.removeEventListener("keydown", handleKeyDowns);
     };
   }, []);
+  const {serverIP} = useServerIP()
 
-  const { mutateAsync: newPrescription } = useMutation({
-    mutationFn: (data) => postDataFn(data, "prescription/"),
-    onSuccess: (res) => {
-      successFn("", () => {
-        setPrescription(res);
-      });
-    },
-  });
+  const newPrescription = (data) => {
+    axios.get(`${serverIP}api/department/` + data.get('department') + "/").then((res) => {
+      const DepartmentForm = new FormData();
+      DepartmentForm.append("name", "");
+      DepartmentForm.append("doctor", "");
+      DepartmentForm.append("department", data.get('department'));
+      DepartmentForm.append("discount_money", res.data.discount_money);
+      DepartmentForm.append("discount_percent", res.data.discount_percent);
+      DepartmentForm.append("user", user().id);
+      axios.post(`${serverIP}api/prescription/`, DepartmentForm).then((res) => {
+        setPrescription(res.data)
+        toast.success('موفقانه بود')
+      })
+    })
+  }
+
+
 
   const { mutateAsync: updatePrescription } = useMutation({
     mutationFn: (data) => {

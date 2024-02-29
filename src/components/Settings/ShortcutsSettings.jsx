@@ -229,6 +229,10 @@ function PrescriptionShortcuts() {
         <div>ذخیره یا آپدیت نسخه</div>
         <div>Ctrl + S</div>
       </div>
+      <div className="shortcut-item">
+        <div>چاپ</div>
+        <div>Ctrl + P</div>
+      </div>
     </div>
   );
 }
