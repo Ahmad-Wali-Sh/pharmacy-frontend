@@ -248,21 +248,21 @@ export default function EntranceReport() {
           </label>
         </div>
         <div className="entrance-report-map-box">
-          <label>مجموع_فاکتور</label>
+          <label>مجموع.فاکتور</label>
           <input
             type="text"
-            style={{width: '8rem', height: '1rem', paddingLeft:'3rem'}}
+            className='total-price-input'
             onChange={(res) => setFactorTotal(res.target.value)}
             value={factorTotal}
+            placeholder="لطفا مجموع را وارد کنید"
             tabIndex={-1}
           />
           <label
             style={{
-              fontSize: "0.7rem",
+              fontSize: "1rem",
               paddingRight: "1rem"
             }}
           >
-            {entrance?.currency_name}
           </label>
         </div>
       </div>

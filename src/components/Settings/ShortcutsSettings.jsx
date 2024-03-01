@@ -42,6 +42,7 @@ const ShortcutInput = ({ name, shortcut, setShortcut }) => {
           style={{
             direction: "ltr",
             backgroundColor: "rgba(0,0,0,0)",
+            color: 'var(--text-100)',
             border: "none",
           }}
           onChange={handleInputChange}
@@ -211,7 +212,7 @@ function PrescriptionShortcuts() {
       <div className="shortcut-item">
         <div
           style={{
-            color: "white",
+            color: "var(--text-100)",
           }}
         >
           ثبت نسخه:

@@ -1,6 +1,6 @@
 export const ModalSmallStyles = {
   content: {
-    backgroundColor: "rgb(30,30,30)",
+    backgroundColor: "var(--bg-200)",
     border: "none",
     borderRadius: "1rem",
     overflow: "hidden",
@@ -16,7 +16,7 @@ export const ModalSmallStyles = {
 
 export const ModalBigStyles = {
   content: {
-    backgroundColor: "rgb(30,30,30)",
+    backgroundColor: "var(--bg-200)",
     border: "none",
     width: '99%',
     left: '0.5%',
@@ -35,7 +35,7 @@ export const ModalBigStyles = {
 
 export const MedicineShowModalStyles = {
   content: {
-    backgroundColor: "rgb(30,30,30)",
+    backgroundColor: "var(--bg-200)",
     border: "none",
     width: "85%",
     height: "30rem",
@@ -54,7 +54,7 @@ export const MedicineShowModalStyles = {
 
 export const AlertModalStyle = {
   content: {
-    backgroundColor: "rgb(120,120,120)",
+    backgroundColor: "var(--bg-100)",
     border: "none",
     borderRadius: "1rem",
     overflow: "hidden",
@@ -75,10 +75,10 @@ export const AutoCompleteStyle = {
   height: "1.5rem",
   borderRadius: "1rem",
   fontSize: "14px",
-  backgroundColor: "rgb(34, 34, 34)",
-  color: "white",
+  backgroundColor: "var(--bg-200)",
+  color: "var(--text-100)",
   border: "none",
-  hoverBackgroundColor: "grey",
+  hoverBackgroundColor: "var(--bg-300)",
   zIndex: "2",
   overflow: "scroll",
 };
@@ -86,23 +86,23 @@ export const AutoCompleteStyle = {
 export const MedicineSelectStyle = {
   control: (baseStyles, state) => ({
     ...baseStyles,
-    backgroundColor: "var(--color-three)",
-    color: "var(--color-ten)",
+    backgroundColor: "var(--bg-100)",
+    color: "var(--text-100)",
     border: "none",
     borderRadius: "1rem",
-    boxShadow: state.isFocused && "-4px -4px 4px var(--color-two);",
+    boxShadow: state.isFocused && "-4px -4px 4px var(--primary-100)",
   }),
   option: (styles, state) => ({
     ...styles,
-    backgroundColor: state.isFocused ? "var(--color-nine)" : "var(--color-sex)",
+    backgroundColor: state.isFocused ? "var(--bg-300)" : "var(--bg-100)",
   }),
   container: (styles) => ({
     ...styles,
-    backgroundColor: "var(--color-three)",
+    backgroundColor: "var(--bg-100)",
   }),
   input: (styles) => ({
     ...styles,
-    color: "var(--color-ten)",
+    color: "var(--text-100)",
   }),
   noOptionsMessage: (styles) => ({
     ...styles,
@@ -110,7 +110,7 @@ export const MedicineSelectStyle = {
   }),
   menuList: (styles) => ({
     ...styles,
-    backgroundColor: "var(--color-three)",
+    backgroundColor: "var(--bg-100)",
     maxHeight: "70vh",
   }),
 };
@@ -118,13 +118,13 @@ export const MedicineSelectStyle = {
 export const SelectInputStyle = {
   control: (baseStyles, state) => ({
     ...baseStyles,
-    backgroundColor: "var(--color-three)",
-    color: "white",
+    backgroundColor: "var(--bg-100)",
+    color: "var(--text-100)",
     minHeight: "1.3rem",
     height: "1.5rem",
     border: "none",
     borderRadius: "1rem",
-    boxShadow: state.isFocused && "-4px -4px 4px var(--color-two);",
+    boxShadow: state.isFocused && "-4px -4px 4px var(--primary-200);",
     width: "100%",
   }),
   indicatorsContainer: (base, state) => ({
@@ -144,11 +144,11 @@ export const SelectInputStyle = {
   }),
   menu: (base, state) => ({
     ...base,
-    backgroundColor: "var(--color-sex)",
+    backgroundColor: "var(--bg-200)",
   }),
   menuList: (base, state) => ({
     ...base,
-    backgroundColor: state.isFocused ? "var(--color-nine)" : "",
+    backgroundColor: state.isFocused ? "var(--bg-300)" : "",
     textAlign: "right",
   }),
   menuPortal: (base) => ({
@@ -157,14 +157,14 @@ export const SelectInputStyle = {
   }),
   option: (base, state) => ({
     ...base,
-    backgroundColor: state.isFocused ? "var(--color-nine)" : "var(--color-sex)",
-    color: "var(--color-ten)",
+    backgroundColor: state.isFocused ?  "var(--bg-300)" : "var(--bg-100)",
+    color: "var(--text-100)",
   }),
   input: (base, state) => ({
     ...base,
     height: "1rem",
     direction: "rtl",
-    color: "var(--color-ten)",
+    color: "var(--text-100)",
     fontSize: "0.9rem",
     marginTop: "-0.3rem",
   }),
@@ -172,12 +172,12 @@ export const SelectInputStyle = {
     ...base,
     direction: "rtl",
     textAlign: "right",
-    color: "var(--color-ten)",
+    color: "var(--text-100)",
   }),
   multiValue: (base, state) => ({
     ...base,
-    backgroundColor: "var(--color-nine)",
-    color: "var(--color-ten)",
+    backgroundColor: "var(--bg-100)",
+    color: "var(--text-100)",
     minHeight: "0.6rem",
     height: "1.2rem",
     position: "relative",

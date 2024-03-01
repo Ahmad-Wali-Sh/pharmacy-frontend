@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 import React from "react";
 import { useAuthUser } from "react-auth-kit";
 import axios from "axios";
@@ -19,7 +19,8 @@ function Navbar() {
     <div className="navbar">
       <div className="navbar-elements">
         <div className="colorfull-image">
-          <img className="colorfull-image" src={templateLogo} />
+          <img className="colorfull-image" src='./images/frontend/no-color-sharif.png' />
+        
         </div>
         <div className="profile">
           <img
@@ -36,24 +37,24 @@ function Navbar() {
           </div>
         </div>
         <div className="navbar-buttons">
-          {/* <Link to="/dashboard" className="button">
+          {/* <NavLink to="/dashboard" className="button">
             <div className="button">داشبورد</div>
-          </Link> */}
-          {userPermissions?.includes('core.view_prescription') && <Link to="/sell" className="button">
+          </NavLink> */}
+          {userPermissions?.includes('core.view_prescription') && <NavLink to="/sell"  className={({isActive}) => isActive ? 'active-navbar' : 'button'}> 
             <div className="button">فروشات</div>
-          </Link>}
-          {userPermissions?.includes('core.view_entrance') && <Link to="/purchase" className="button">
+          </NavLink>}
+          {userPermissions?.includes('core.view_entrance') && <NavLink to="/purchase" className={({isActive}) => isActive ? 'active-navbar' : 'button'}activeClassName="active-navbar">
             <div className="button">خریداری</div>
-          </Link>}
-          {userPermissions?.includes('core.view_medician') && <Link to="/medician" className="button">
+          </NavLink>}
+          {userPermissions?.includes('core.view_medician') && <NavLink to="/medician" className={({isActive}) => isActive ? 'active-navbar' : 'button'}>
             <div className="button">داروخانه</div>
-          </Link>}
-          {userPermissions?.includes('core.view_revenue') && <Link to="/revenue" className="button">
+          </NavLink>}
+          {userPermissions?.includes('core.view_revenue') && <NavLink to="/revenue" className={({isActive}) => isActive ? 'active-navbar' : 'button'}>
             <div className="button">صندوق</div>
-          </Link>}
-          {userPermissions?.includes('core.view_prescription') && userPermissions?.includes('core.view_entrance') && <Link to="/reports" className="button">
+          </NavLink>}
+          {userPermissions?.includes('core.view_prescription') && userPermissions?.includes('core.view_entrance') && <NavLink to="/reports" className={({isActive}) => isActive ? 'active-navbar' : 'button'}>
             <div className="button">گزارشات</div>
-          </Link>}
+          </NavLink>}
         </div>
       </div>
     </div>

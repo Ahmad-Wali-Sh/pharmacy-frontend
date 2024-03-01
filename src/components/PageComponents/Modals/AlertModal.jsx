@@ -41,7 +41,7 @@ const AlertModal = forwardRef(
               <h4>{errorText}</h4>
             </div>
             <div className="alert-button-box">
-              {OkFunc && <button style={{ backgroundColor: 'brown', cursor: 'pointer'}}
+              {OkFunc && <button style={{ backgroundColor: 'var(--accent-100)', cursor: 'pointer'}}
                 onClick={() => {
                   OkFunc();
                   onClose();
@@ -51,7 +51,7 @@ const AlertModal = forwardRef(
               >
                 تایید
               </button>}
-              {NoFunc && <button style={{ cursor: 'pointer'}}
+              {NoFunc && <button style={{ backgroundColor: 'brown', cursor: 'pointer'}}
                 onClick={() => {
                   NoFunc();
                   onClose();

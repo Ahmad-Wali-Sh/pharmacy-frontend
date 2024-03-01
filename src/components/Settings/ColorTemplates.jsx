@@ -11,62 +11,93 @@ function ColorTemplates() {
 
   const cyan = () => {
     setTemplateLogo("./images/frontend/cyan-sharif.png");
-    root.style.setProperty("--color-one", "#009aa3");
-    root.style.setProperty("--color-two", "#006c72");
-    root.style.setProperty("--color-eight", "#006c72");
-    root.style.setProperty("--color-eleven", "#006c72");
-    root.style.setProperty("--color-twelve", "#006c72");
-    root.style.setProperty("--color-four", "rgb(170, 170, 170)");
+    root.style.setProperty("--primary-100", "#0085ff");
+    root.style.setProperty("--primary-200", "#69b4ff");
+    root.style.setProperty("--primary-300", "#e0ffff");
+
+    root.style.setProperty("--bg-100", "#1E1E1E");
+    root.style.setProperty("--bg-200", "#2d2d2d");
+
+    root.style.setProperty("--bg-300", "#454545");
+    root.style.setProperty("--text-100", "#FFFFFF");
+    root.style.setProperty("--text-200", "#9e9e9e");
+    root.style.setProperty("--accent-100", "#006fff");
+    root.style.setProperty("--accent-200", "#e1ffff");
+
   };
 
   const green = () => {
     setTemplateLogo("./images/frontend/green-sharif.png");
-    root.style.setProperty("--color-one", "#1db853");
-    root.style.setProperty("--color-two", "#137b37");
-    root.style.setProperty("--color-eight", "#1db853");
-    root.style.setProperty("--color-eleven", "#1db853");
-    root.style.setProperty("--color-twelve", "#1db853");
-    root.style.setProperty("--color-four", "rgb(80, 80, 80)");
+    root.style.setProperty("--primary-100", "#7FB3D5");
+    root.style.setProperty("--primary-200", "#6296b7");
+    root.style.setProperty("--primary-300", "#195775");
+    root.style.setProperty("--bg-100", "#F5F5DC");
+    root.style.setProperty("--bg-200", "#ebebd2");
+    root.style.setProperty("--bg-300", "#c2c2aa");
+    root.style.setProperty("--text-100", "#333333");
+    root.style.setProperty("--text-200", "#5c5c5c");
+    root.style.setProperty("--accent-100", "#F7CAC9");
+    root.style.setProperty("--accent-200", "#926b6a");
+
   };
 
   const red = () => {
     setTemplateLogo("./images/frontend/red-sharif.png");
-    root.style.setProperty("--color-one", "#5f0609");
-    root.style.setProperty("--color-two", "#be0d12");
-    root.style.setProperty("--color-eight", "#5f0609");
-    root.style.setProperty("--color-eleven", "#5f0609");
-    root.style.setProperty("--color-twelve", "#5f0609");
-    root.style.setProperty("--color-four", "rgb(110, 110, 110)");
+    root.style.setProperty("--primary-100", "#596E79");
+    root.style.setProperty("--primary-200", "#788e98");
+    root.style.setProperty("--primary-300", "#F0F5F9");
+    root.style.setProperty("--bg-100", "#F0ECE3");
+    root.style.setProperty("--bg-200", "#DFD3C3");
+    root.style.setProperty("--bg-300", "#C7B198");
+    root.style.setProperty("--text-100", "#1E2022");
+    root.style.setProperty("--text-200", "#52616B");
+    root.style.setProperty("--accent-100", "#788189");
+    root.style.setProperty("--accent-200", "#e1e4e6");
   };
 
   const yellow = () => {
     setTemplateLogo("./images/frontend/yellow-sharif.png");
-    root.style.setProperty("--color-one", "#989802");
-    root.style.setProperty("--color-two", "#d1d102");
-    root.style.setProperty("--color-eight", "#989802");
-    root.style.setProperty("--color-eleven", "#989802");
-    root.style.setProperty("--color-twelve", "#989802");
-    root.style.setProperty("--color-four", "rgb(80, 80, 80)");
+    root.style.setProperty("--primary-100", "#00A896");
+    root.style.setProperty("--primary-200", "#008b7a");
+    root.style.setProperty("--primary-300", "#09554c");
+    root.style.setProperty("--bg-100", "#F2EFE9");
+    root.style.setProperty("--bg-200", "#e8e5df");
+    root.style.setProperty("--bg-300", "#bfbdb7");
+    root.style.setProperty("--text-100", "#333333");
+    root.style.setProperty("--text-200", "#5c5c5c");
+    root.style.setProperty("--accent-100", "#FF6B6B");
+    root.style.setProperty("--accent-200", "#8f001a");
+
   };
 
   const purple = () => {
     setTemplateLogo("./images/frontend/colorful.png");
-    root.style.setProperty("--color-one", "#533855");
-    root.style.setProperty("--color-two", "#6b4a99");
-    root.style.setProperty("--color-eight", "rgb(77, 37, 81)");
-    root.style.setProperty("--color-eleven", "rgb(74, 43, 80)");
-    root.style.setProperty("--color-twelve", "rgb(111, 63, 119)");
-    root.style.setProperty("--color-four", "rgb(110, 110, 110)");
+    root.style.setProperty("--primary-100", "#6c35de");
+    root.style.setProperty("--primary-200", "#a364ff");
+    root.style.setProperty("--primary-300", "#ffc7ff");
+    root.style.setProperty("--bg-100", "#241b35");
+    root.style.setProperty("--bg-200", "#342a45");
+    root.style.setProperty("--bg-300", "#4d425f");
+    root.style.setProperty("--text-100", "#ffffff");
+    root.style.setProperty("--text-200", "#e0e0e0");
+    root.style.setProperty("--accent-100", "#6e28a0");
+    root.style.setProperty("--accent-200", "#373737");
+
   };
 
   const blue = () => {
     setTemplateLogo("./images/frontend/blue-sharif.png");
-    root.style.setProperty("--color-one", "#063a92");
-    root.style.setProperty("--color-two", "#0754b6");
-    root.style.setProperty("--color-eight", "#063a88");
-    root.style.setProperty("--color-eleven", "#063a88");
-    root.style.setProperty("--color-twelve", "#063a88");
-    root.style.setProperty("--color-four", "rgb(110, 110, 110)");
+    root.style.setProperty("--primary-100", "#B0C5D1");
+    root.style.setProperty("--primary-200", "#93a8b3");
+    root.style.setProperty("--primary-300", "#536771");
+    root.style.setProperty("--bg-100", "#E6F2EA");
+    root.style.setProperty("--bg-200", "#dce8e0");
+    root.style.setProperty("--bg-300", "#b4bfb8");
+    root.style.setProperty("--text-100", "#4D4D4D");
+    root.style.setProperty("--text-200", "#797979");
+    root.style.setProperty("--accent-100", "#D1B0C5");
+    root.style.setProperty("--accent-200", "#715467");
+
   };
 
   const dark = () => {
@@ -110,10 +141,7 @@ function ColorTemplates() {
           <div className="color-pallete-item" onClick={() => yellow()}>
             <div className="color-pallete-yellow"></div>
           </div>
-          <div className="dark-light-container">
-            <div className="color-dark" onClick={() => dark()}></div>
-            <div className="color-light" onClick={() => light()}></div>
-          </div>
+
         </div>
       </SmallModal>
     </>

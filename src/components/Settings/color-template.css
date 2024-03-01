@@ -1,114 +1,85 @@
-.color-pallete-container {
-  background-color: var(--color-sex);
-  width: 94%;
-  margin: 1rem;
-  height: 85%;
-  border-radius: 1rem;
-  padding: 1rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-}
-
-.color-pallete-item {
-  background-color: var(--color-three);
-  height: 3rem;
-  width: 50%;
-  border-radius: 1rem;
-  padding: 0.5rem;
-  display: flex;
-  justify-content: center;
-}
-
-.color-pallete-item:hover {
-  background-color: rgb(22, 22, 22);
-  box-shadow: 1px 1px 10px rgb(32, 32, 32);
-}
-
-.color-pallete-cyan {
-  background-image: linear-gradient(
-    55deg,
-    rgb(41, 141, 223) 0%,
-    rgb(27, 60, 87) 80%
-  );
-  width: 90%;
-  height: 2rem;
-  border-radius: 0.5rem;
-}
-
 .color-pallete-green {
-  background-image: linear-gradient(
-    55deg,
-    rgb(54, 202, 74) 0%,
-    rgb(15, 68, 24) 80%
-  );
-  width: 90%;
-  height: 2rem;
-  border-radius: 0.5rem;
-}
+    background-image: linear-gradient(
+      90deg,
+      #7FB3D5 0%,  #7FB3D5 20%,
+      #6296b7 20% ,#6296b7 40%, 
+      #5c5c5c 40% , #5c5c5c 60%,
+      #ebebd2 60% , #ebebd2 80%,
+      #c2c2aa 80%,  #c2c2aa 100%
+    );
+    width: 90%;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
+  
+  .color-pallete-red {
+    background-image: linear-gradient(
+      90deg,
+      #596E79 0%,  #596E79 20%,
+      #4d425f 20% ,#4d425f 40%, 
+      #F0ECE3 40% , #F0ECE3 60%,
+      #C7B198 60% , #C7B198 80%,
+      #788e98 80%,  #788e98 100%
+    );
+    width: 90%;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
+    
+  
+  .color-pallete-purple {
+    background-image: linear-gradient(
+      90deg,
+      #6c35de 0%,  #6c35de 20%,
+      #a364ff 20% ,#a364ff 40%, 
+      #ffc7ff 40% , #ffc7ff 60%,
+      #6e28a0 60% , #6e28a0 80%,
+      #4d425f 80%,  #4d425f 100%
+    );
+    width: 90%;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
+  
+  .color-pallete-blue {
+    background-image: linear-gradient(
+      90deg,
+      #B0C5D1 0%,  #B0C5D1 20%,
+      #D1B0C5 20% ,#D1B0C5 40%, 
+      #4D4D4D 40% , #4D4D4D 60%,
+      #E6F2EA 60% , #E6F2EA 80%,
+      #b4bfb8 80%,  #b4bfb8 100%
+    );
+    width: 90%;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
+  
+  .color-pallete-yellow {
+    background-image: linear-gradient(
+      90deg,
+      #00A896 0%,  #00A896 20%,
+      #008b7a 20% ,#008b7a 40%, 
+      #09554c 40% , #09554c 60%,
+      #5c5c5c 60% , #5c5c5c 80%,
+      #e8e5df 80%,  #e8e5df 100%
+    );
+    width: 90%;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
+  .color-pallete-cyan {
+    background-image: linear-gradient(
+      90deg,
+      #0085ff 0%,  #0085ff 20%,
+      #69b4ff 20% ,#69b4ff 40%, 
+      #e0ffff 40% , #e0ffff 60%,
+      #9e9e9e 60% , #9e9e9e 80%,
+      #006fff 80%,  #006fff 100%
+    );
+    width: 90%;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
 
-.color-pallete-red {
-  background-image: linear-gradient(
-    55deg,
-    rgb(179, 49, 49) 0%,
-    rgb(68, 15, 15) 80%
-  );
-  width: 90%;
-  height: 2rem;
-  border-radius: 0.5rem;
-}
-
-.color-pallete-purple {
-  background-image: linear-gradient(55deg, #533855 0%, #6b4a99 80%);
-  width: 90%;
-  height: 2rem;
-  border-radius: 0.5rem;
-}
-
-.color-pallete-blue {
-  background-image: linear-gradient(55deg, #2932b3 0%, #0d1857 80%);
-  width: 90%;
-  height: 2rem;
-  border-radius: 0.5rem;
-}
-
-.color-pallete-yellow {
-  background-image: linear-gradient(55deg, #b1b329 0%, #57520d 80%);
-  width: 90%;
-  height: 2rem;
-  border-radius: 0.5rem;
-}
-
-.dark-light-container {
-  width: 50%;
-  height: 4rem;
-
-  border-radius: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.1rem;
-  background-color: rgb(43, 43, 43);
-}
-
-.color-dark {
-  background-color: rgb(12, 12, 12);
-  margin: 1rem;
-  border-radius: 1rem;
-}
-
-.color-dark:hover {
-  box-shadow: 1px 1px 10px rgb(88, 88, 88);
-}
-
-.color-light {
-  background-color: rgb(165, 165, 165);
-  margin: 1rem;
-  border-radius: 1rem;
-}
-
-.color-light:hover {
-  box-shadow: 1px 1px 10px grey;
-}
+  
