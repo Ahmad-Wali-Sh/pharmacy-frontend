@@ -89,7 +89,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
   const {serverIP} = useServerIP()
 
   const newPrescription = (data) => {
-    axios.get(`${serverIP}api/department/` + data.get('department') + "/").then((res) => {
+    serverIP && axios.get(`${serverIP}api/department/` + data.get('department') + "/").then((res) => {
       const DepartmentForm = new FormData();
       DepartmentForm.append("name", "");
       DepartmentForm.append("doctor", "");
