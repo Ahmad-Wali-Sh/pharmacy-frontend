@@ -16,27 +16,17 @@
 }
 
 :root {
-  --primary-100:#00A896;
-  --primary-200:#008b7a;
-  --primary-300:#09554c;
-  --accent-100:#FF6B6B;
-  --accent-200:#8f001a;
-  --text-100:#333333;
-  --text-200:#5c5c5c;
-  --bg-100:#F2EFE9;
-  --bg-200:#e8e5df;
-  --bg-300:#bfbdb7;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+  --primary-100:#6c35de;
+  --primary-200:#a364ff;
+  --primary-300:#ffc7ff;
+  --accent-100:#6e28a0;
+  --accent-200:#373737;
+  --text-100:#ffffff;
+  --text-200:#e0e0e0;
+  --bg-100:#241b35;
+  --bg-200:#342a45;
+  --bg-300:#4d425f;
+ 
 }
 
 .color-pallete-container {
@@ -511,7 +501,8 @@ button:focus {
 
 .colorfull-image {
   width: 100%;
-  filter: brightness(100%) drop-shadow(20px 7px 10px var(--primary-100))
+  opacity: 0.8;
+  filter: brightness(100%) drop-shadow(0px 0px 1px var(--primary-100));
 }
 
 .profile {
