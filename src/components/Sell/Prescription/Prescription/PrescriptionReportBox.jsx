@@ -19,14 +19,13 @@ function PrescriptionReportBox({
     const handleKeyDown = (event) => {
       const { key, ctrlKey, shiftKey, altKey } = event;
 
-      if (ctrlKey) {
-        if (event.key === 'P' || event.key === 'ح' || event.key === 'p') {
+
+        if (event.key === 'F4') {
           event.preventDefault()
             setTimeout(() => {
               handlePrint() 
             }, 200)
         }
-      }
     };
 
     // Add event listener for keyboard events

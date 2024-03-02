@@ -232,7 +232,7 @@ function PrescriptionShortcuts() {
       </div>
       <div className="shortcut-item">
         <div>چاپ</div>
-        <div>Ctrl + P</div>
+        <div>F4</div>
       </div>
     </div>
   );

@@ -33,7 +33,8 @@ function PrescriptionForm({ prescriptionThrough, update }) {
   const [searchNumber, setSearchNumber] = React.useState("");
   const { prescription, setPrescription } = usePrescription();
 
-  const { register, handleSubmit, reset, setValue, control } = useForm();
+
+  const { register, handleSubmit, reset, watch, setValue, control } = useForm();
 
   React.useEffect(() => {
     reset({
@@ -47,6 +48,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       doctor: prescription.doctor ? prescription.doctor : "",
     });
   }, [prescription]);
+  const { serverIP } = useServerIP()
 
   React.useEffect(() => {
     const date = moment();
@@ -66,9 +68,10 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           case "D":
           case "ی":
             e.preventDefault();
-            handleSubmit((data) =>
-              handleFormData(data, newPrescription, user)
-            )();
+            setTimeout(() => {
+              newPrescription()
+            }, 200)
+            console.log('it happent')
             break;
           case "s":
           case "S":
@@ -86,14 +89,15 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       document.removeEventListener("keydown", handleKeyDowns);
     };
   }, []);
-  const {serverIP} = useServerIP()
 
-  const newPrescription = (data) => {
-    serverIP && axios.get(`${serverIP}api/department/` + data.get('department') + "/").then((res) => {
+
+  const newPrescription = () => {
+    console.log(serverIP);
+    serverIP ? axios.get(`${serverIP}api/department/` + watch('department') + "/").then((res) => {
       const DepartmentForm = new FormData();
       DepartmentForm.append("name", "");
       DepartmentForm.append("doctor", "");
-      DepartmentForm.append("department", data.get('department'));
+      DepartmentForm.append("department", watch('department'));
       DepartmentForm.append("discount_money", res.data.discount_money);
       DepartmentForm.append("discount_percent", res.data.discount_percent);
       DepartmentForm.append("user", user().id);
@@ -101,7 +105,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
         setPrescription(res.data)
         toast.success('موفقانه بود')
       })
-    })
+    }) : console.log('bad server IP');
   }
 
 
