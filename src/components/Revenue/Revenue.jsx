@@ -32,10 +32,10 @@ export default function Revenue(props) {
           setRevenue(res.data && res.data[0]);
         });
 
-    toast.warning("در حال بارگذاری...", {
-      position: "bottom-right",
-      autoClose: 3000,
-    });
+    // toast.warning("در حال بارگذاری...", {
+    //   position: "bottom-right",
+    //   autoClose: 3000,
+    // });
 
     serverIP &&
       axios

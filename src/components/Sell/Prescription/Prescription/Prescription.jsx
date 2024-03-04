@@ -257,6 +257,7 @@ export default function Prescription(props) {
   const { data: pres, refetch: updatePrescrip } = useQuery({
     queryKey: [`prescription/${prescription?.id}/`],
     onSuccess: (res) => {
+      console.log(res);
       setPrescription(res);
     },
     enabled: prescription?.id != undefined,
@@ -299,7 +300,7 @@ export default function Prescription(props) {
                     prescription={prescription}
                     prescriptionThrough={prescriptionThrough}
                     updatePrescription={updatePrescription}
-                    update={updatePrescrip}
+                    update={updatePrescription}
                     setPrescription={(data) => setPrescription(data)}
                   />
                 <PrescriptionThroughForm
