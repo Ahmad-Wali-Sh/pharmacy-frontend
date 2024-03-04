@@ -11,6 +11,7 @@ import { useIsAuthenticated, useSignOut } from "react-auth-kit";
 import RevenueDashboard from "./components/Revenue/RevenueDashboard";
 import { useTheme } from "./components/States/States";
 import axios from "axios";
+import "./styles.scss";
 
 function App() {
   const RequireAuth = ({ children }) => {
@@ -22,10 +23,10 @@ function App() {
   };
 
   const signOut = useSignOut();
-  useEffect(() => {
-    signOut()
-    delete axios.defaults.headers.common["Authorization"];
-  }, [])
+  // useEffect(() => {
+  //   signOut()
+  //   delete axios.defaults.headers.common["Authorization"];
+  // }, [])
 
   const { theme, setTheme } = useTheme()
   return (

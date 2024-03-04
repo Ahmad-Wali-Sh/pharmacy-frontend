@@ -4,7 +4,7 @@ import { useSignIn } from "react-auth-kit";
 import { toast } from "react-toastify";
 import useServerIP from './components/services/ServerIP'
 import { useUserPermissions } from "./components/States/States";
-
+import './login.css'
 
 
 function Login() {

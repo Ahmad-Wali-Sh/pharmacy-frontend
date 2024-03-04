@@ -2909,12 +2909,28 @@ input[type="text"]:disabled {
 .revneue-content-open {
   background-color: var(--bg-300);
   border-radius: 1rem;
+
+}
+
+.barcode-lock-room {
+  height: 100%;
+}
+.yScroll {
   overflow-y: scroll;
+  height: 72dvh;
 }
 .revneue-content-close {
   background-color: var(--bg-300);
   border-radius: 1rem;
-  overflow-y: scroll;
+}
+
+.highlight-item {
+  background-color: var(--accent-100);
+}
+
+.lock-button {
+  margin-left: 1rem;
+  padding: 0.4rem;
 }
 
 .revenue-button {
@@ -2945,7 +2961,7 @@ input[type="text"]:disabled {
 
 .mini-content-headers {
   width: 100%;
-  height: 2.5rem;
+  height: 4rem;
   border-radius: 1rem 1rem 0rem 0rem;
   background-image: linear-gradient(
     55deg,
@@ -3557,6 +3573,7 @@ input[type="text"]:disabled {
   direction: ltr;
   font-size: 1rem;
   color: var(--text-100);
+  height: inherit;
 }
 .barcode-input:focus {
   box-shadow: 1px 1px 10px var(--primary-200);
