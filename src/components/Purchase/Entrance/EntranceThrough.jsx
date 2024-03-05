@@ -45,6 +45,10 @@ export default function EntranceThrough({ StoreCycle = false }) {
     setMedicine(data);
   };
 
+  const deSelectMedicine = () => {
+    setMedicine('')
+  }
+
   const handleCloseFocus = () => {
     setFocus("number_in_factor");
   };
@@ -99,6 +103,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
         }, 100)
         setFocus("number_in_factor");
         resetThrough();
+        deSelectMedicine()
         SelectMedicineRef.current.Opener();
       });
     },
@@ -124,6 +129,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             );
         });
         setFocus("number_in_factor");
+        deSelectMedicine()
         StoreCycle ? StoreCycleReset() : resetThrough();
         SelectMedicineRef.current.Opener();
       });
@@ -161,8 +167,8 @@ export default function EntranceThrough({ StoreCycle = false }) {
   const resetThrough = () => {
     reset({
       number_in_factor: "",
-      each_price_factor: medicine?.last_purchased,
-      each_sell_price_afg: sell_price_get(),
+      each_price_factor: medicine?.last_purchased || '',
+      each_sell_price_afg: sell_price_get() || '',
       each_quantity: medicine?.no_pocket || 1,
       no_box: medicine?.no_box || 1,
       interest_percent: entrance ? entrance.total_interest : "",
@@ -174,6 +180,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
       entrance: entrance?.id,
       medician: medicine?.id,
     });
+
   };
 
   const StoreCycleReset = () => {
@@ -256,6 +263,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             ]);
           setFocus("number_in_factor");
           StoreCycleReset()
+          deSelectMedicine()
           SelectMedicineRef.current.Opener();
         })
         .catch((e) => {
@@ -361,6 +369,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             />
           </div>
           <label>تعداد:</label>
+          <div className="flex">
           <input
             type="text"
             {...register("number_in_factor", { required: true })}
@@ -368,8 +377,16 @@ export default function EntranceThrough({ StoreCycle = false }) {
               errors.number_in_factor && "error-input"
             }`}
             disabled={entrance?.id ? false : true}
-          />
+            />
+            <label>موجودی:</label>
+          <input
+            type="text"
+            value={medicine?.existence || ''}
+            disabled
+            />
+            </div>
           <label>قیمت فی:</label>
+          <div className="flex">
           <input
             type="text"
             {...register("each_price_factor", { required: true })}
@@ -377,7 +394,14 @@ export default function EntranceThrough({ StoreCycle = false }) {
               errors.each_price_factor && "error-input"
             }`}
             disabled={entrance?.id ? false : true}
-          />
+            />
+            <label>خرید:</label>
+          <input
+            type="text"
+            value={medicine?.last_purchased || ''}
+            disabled
+            />
+            </div>
           <label>
             <h5> ت.د.پاکت:</h5>
           </label>
@@ -408,6 +432,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             disabled={entrance?.id ? false : true}
           />
           <label>فی_فروش:</label>
+          <div className="flex">
           <input
             type="text"
             {...register("each_sell_price_afg", { required: true })}
@@ -417,6 +442,14 @@ export default function EntranceThrough({ StoreCycle = false }) {
             onBlur={() => setValue("interest_percent", interest_get())}
             disabled={entrance?.id ? false : true}
           />
+          <label>قیمت:</label>
+          <input
+            value={medicine?.price || ''}
+            type="text"
+            disabled
+          />
+
+          </div>
           <label>
             <h5> بونوس:</h5>
           </label>
