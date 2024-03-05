@@ -437,7 +437,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
               disabled={entrance?.id ? false : true}
             />
           </div>
-          <label>انقضا.م:</label>
+          <label>انقضا:</label>
           <input
              type="text"
              placeholder="YYYY-M"
@@ -448,17 +448,19 @@ export default function EntranceThrough({ StoreCycle = false }) {
             onBlur={handleInputBlur}
             disabled={entrance?.id ? false : true}
           />
-          <label>انقضا.ش:</label>
+          {/* <label>انقضا.ش:</label>
           <DateInputSimple
             disabled={entrance?.id ? false : true}
             className={`${!entrance?.id && "disabled-input"}`}
-          />
+          /> */}
           <label>بچ نمبر:</label>
           <input
             type="text"
             {...register("batch_number")}
             disabled={entrance?.id ? false : true}
           />
+          <label></label>
+          <label></label>
           <label>تخفیف:</label>
           <input
             type="text"
