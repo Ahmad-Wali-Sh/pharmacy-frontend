@@ -877,7 +877,7 @@ input[type="text"]:disabled {
   background-color: var(--bg-300);
   border-radius: 1rem;
   display: grid;
-  grid-template-columns: 0fr 0.9fr 0.3fr 1fr 0.2fr 1fr;
+  grid-template-columns: 6% 26% 5% 26% 5% 26%;
   grid-template-rows: 15% 15% 15% 15% 15%;
   gap: 0.7rem;
   padding: 1rem;
