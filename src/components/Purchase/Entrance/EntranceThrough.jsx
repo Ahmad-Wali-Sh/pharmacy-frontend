@@ -16,6 +16,7 @@ import Entrance from "./Entrance";
 import AlertModal from "../../PageComponents/Modals/AlertModal";
 import axios from "axios";
 import useServerIP from "../../services/ServerIP";
+import moment from 'jalali-moment';
 
 export default function EntranceThrough({ StoreCycle = false }) {
   const SubmitedAlertRef = useRef(null);
@@ -49,18 +50,35 @@ export default function EntranceThrough({ StoreCycle = false }) {
   };
 
   const handleInputBlur = () => {
-    // Ensure the input value matches the desired format (YYYY-MM)
-    const regex = /^\d{2}-\d{1,2}$/;
-    if (regex.test(watch('expire_date'))) {
-      // If the input value matches the format, set it as the selected date
-      // You may want to parse and handle this value differently depending on your application logic
-      setValue('expire_date', '20' + watch('expire_date') + '-01')
-      console.log('Selected date:', watch('expire_date'));
-    } else {
-      // If the input value does not match the format, reset the input value
-      setValue('expire_date', '')
+    const inputValue = watch('expire_date');
+    const parts = inputValue.split('-');
+    if (parts.length === 2) {
+      let year = parseInt(parts[0]);
+      const month = parseInt(parts[1]);
+      if (!isNaN(year) && !isNaN(month)) {
+        if (year >= 1000 && year <= 1500) {
+          // If the year is between 1000 and 2000, consider it as Jalali and convert it
+          // Subtract 1000 from the year to get the correct Jalali year
+          const jalaliDate = moment(`${year}-${month}`, 'jYYYY-jMM');
+          const gregorianDate = jalaliDate.format('YYYY-MM-DD');
+          setValue('expire_date', gregorianDate);
+          console.log('Converted Jalali date:', gregorianDate);
+          return;
+        } else if (year >= 2000 && year <= 9999) {
+          // If the year is between 2000 and 9999, assume it's in the American format
+          // Set the year to the first 4 digits
+          const gregorianDate = `${year}-${month.toString().padStart(2, '0')}-01`;
+          setValue('expire_date', gregorianDate);
+          console.log('Converted American date:', gregorianDate);
+          return;
+        }
+      }
     }
+    // If the input value cannot be parsed correctly, clear it
+    setValue('expire_date', '');
+    console.log('Invalid date input:', inputValue);
   };
+
 
   useEffect(() => {
     setFocus("number_in_factor");
@@ -422,7 +440,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
           <label>انقضا.م:</label>
           <input
              type="text"
-             placeholder="YY-M"
+             placeholder="YYYY-M"
             {...register("expire_date", { required: true })}
             className={`entrance--inputs date--inputs ${
               errors.expire_date && "error-input"
