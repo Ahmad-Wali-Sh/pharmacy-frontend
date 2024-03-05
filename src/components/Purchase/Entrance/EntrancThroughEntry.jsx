@@ -249,8 +249,8 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
         >
           <input
             type="date"
-            defaultValue={through.timestamp?.slice(0, 10)}
-            {...register("timestamp")}
+            defaultValue={through.expire_date?.slice(0, 10)}
+            {...register("expire_date")}
             className="expire_date_transparent"
             onBlurCapture={handleSubmit((data) =>
               handleFormData(data, medicineUpdate, user)

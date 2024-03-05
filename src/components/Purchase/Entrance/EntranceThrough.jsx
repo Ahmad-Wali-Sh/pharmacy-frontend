@@ -48,18 +48,37 @@ export default function EntranceThrough({ StoreCycle = false }) {
     setFocus("number_in_factor");
   };
 
+  const handleInputBlur = () => {
+    // Ensure the input value matches the desired format (YYYY-MM)
+    const regex = /^\d{2}-\d{1,2}$/;
+    if (regex.test(watch('expire_date'))) {
+      // If the input value matches the format, set it as the selected date
+      // You may want to parse and handle this value differently depending on your application logic
+      setValue('expire_date', '20' + watch('expire_date') + '-01')
+      console.log('Selected date:', watch('expire_date'));
+    } else {
+      // If the input value does not match the format, reset the input value
+      setValue('expire_date', '')
+    }
+  };
+
   useEffect(() => {
     setFocus("number_in_factor");
   }, [medicine]);
 
   const { mutate: submitEntranceThrough } = useMutation({
-    mutationFn: (data) => postDataFn(data, "entrance-throug/"),
+    mutationFn: (data) => {
+      data.set('expire_date', watch('expire_date'))
+      postDataFn(data, "entrance-throug/")
+    },
     onSuccess: (res) => {
       successFn("", () => {
-        entrance?.id &&
+        setTimeout(() => {
+          entrance?.id &&
           queryClient.invalidateQueries([
             `entrance-throug/?entrance=${entrance?.id}`,
           ]);
+        }, 100)
         setFocus("number_in_factor");
         resetThrough();
         SelectMedicineRef.current.Opener();
@@ -150,7 +169,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
       batch_number: "",
       discount_money: "",
       discount_percent: "",
-      each_sell_price_afg: medicine?.price,
+      each_sell_price_afg: medicine?.price || '',
       entrance: entrance?.id,
       medician: medicine?.id,
     });
@@ -245,7 +264,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
           CheckerComponent={() => <Entrance button={1} />}
         />
         <form
-          className="entrance-through"
+          className="entrance-through-store"
           onSubmit={handleSubmit(StoreCycleSubmit)}
         >
           <label>قلم:</label>
@@ -285,7 +304,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             }`}
             disabled={entrance?.id ? false : true}
           />
-          <button type="submit">ذخیره</button>
+            <button type="submit" style={{display: 'none'}}>⤵ذخیره</button>
         </form>
       </>
     );
@@ -402,11 +421,13 @@ export default function EntranceThrough({ StoreCycle = false }) {
           </div>
           <label>انقضا.م:</label>
           <input
-            type="date"
+             type="text"
+             placeholder="YY-M"
             {...register("expire_date", { required: true })}
             className={`entrance--inputs date--inputs ${
               errors.expire_date && "error-input"
             }`}
+            onBlur={handleInputBlur}
             disabled={entrance?.id ? false : true}
           />
           <label>انقضا.ش:</label>

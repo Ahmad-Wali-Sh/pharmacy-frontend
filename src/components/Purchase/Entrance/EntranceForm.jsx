@@ -6,7 +6,7 @@ import EntrancBottom from "./EntranceBottom";
 export default function EntranceForm({StoreCycle=false}) {
   return (
     <div className="modal">
-      <div className="entrance-box">
+      <div className={StoreCycle ? 'entrance-box-store' : "entrance-box"}>
         <EntranceReport StoreCycle={StoreCycle}/>
         <EntranceHeader StoreCycle={StoreCycle}/>
         <EntranceThrough StoreCycle={StoreCycle}/>
