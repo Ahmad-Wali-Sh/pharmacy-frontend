@@ -48,7 +48,7 @@ function Login() {
                   .then((me_res) => {
                     signIn({
                       token: res.data.auth_token,
-                      expiresIn: 120000,
+                      expiresIn: 1200000,
                       tokenType: "Token",
                       authState: me_res.data,
                     });

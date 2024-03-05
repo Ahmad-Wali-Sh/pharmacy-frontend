@@ -22,7 +22,7 @@ import MultipleImage from "../../PageComponents/MultipleImage";
 import AlertModal from "../../PageComponents/Modals/AlertModal";
 import { toast } from "react-toastify";
 
-export default function EntranceHeader() {
+export default function EntranceHeader({StoreCycle=false}) {
   const {
     register,
     handleSubmit,

@@ -24,11 +24,12 @@ function Purchase() {
           icon="fa-solid fa-cart-arrow-down"
           trigger={entTrigger}
         />
-        {/* <Outrance
-          title="ثبت خروجی"
-          icon="fa-solid fa-arrow-right-from-bracket"
-          button={1}
-        /> */}
+        <Entrance
+          title="انبارگردانی"
+          StoreCycle={true}
+          icon="fa-solid fa-cart-arrow-down"
+          trigger={entTrigger}
+        />
         <PurchasingLists button='main' icon='fa-solid fa-cart-arrow-down' name='ثبت شرکت' activeKey='companies'/>
         <PurchasingLists button='main' icon='fa-solid fa-store' name='ثبت انبار' activeKey='stores'/>
         <PurchasingLists button='main' icon='fa-solid fa-money-bill-transfer' name='واحدات پولی' activeKey='currencies'/>
