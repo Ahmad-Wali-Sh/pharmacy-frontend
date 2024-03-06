@@ -103,10 +103,10 @@ function PrescriptionThroughEntry({
       <div className={`prescription-through-map ${alert} ${highlighted ? 'pres-item-highlight' : ''}`} onClick={onClick}>
         <label></label>
         <label>{num + 1}</label>
-        <h4 className="entrance-medician-map-name">
-          <h4>{through.medicine_full}</h4>
+        <h4 className="entrance-medician-map-name-dr">
+          {through.medicine_full}
         </h4>
-        <Popover
+        {/* <Popover
           isOpen={isUsagesOpen}
           position={["top"]}
           content={<div className="popover-box">{through.medicine_usage}</div>}
@@ -118,8 +118,8 @@ function PrescriptionThroughEntry({
           >
             {through.medicine_usage}
           </h5>
-        </Popover>
-        <Popover
+        </Popover> */}
+        {/* <Popover
           isOpen={isCautionsOpen}
           position={["top"]}
           content={
@@ -133,10 +133,7 @@ function PrescriptionThroughEntry({
           >
             {through.medicine_cautions}
           </h5>
-        </Popover>
-        <h4>{through.medicine_no_quantity}</h4>
-        <h4>{through.medicine_no_box}</h4>
-        <h4>{through.each_price}</h4>
+        </Popover> */}
         <input
           type="text"
           defaultValue={through.quantity}
@@ -146,6 +143,9 @@ function PrescriptionThroughEntry({
           }}
           onBlurCapture={handleSubmit(prescriptionThroughUpdate)}
         />
+        <h4>{through.medicine_no_quantity}</h4>
+        <h4>{through.medicine_no_box}</h4>
+        <h4>{through.each_price}</h4>
         <h4>{through.total_price}</h4>
         <div className="medician-map-buttons">
           <SelectMedician
