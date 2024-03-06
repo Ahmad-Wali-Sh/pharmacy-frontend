@@ -186,7 +186,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
   const StoreCycleReset = () => {
     reset({
       number_in_factor: "",
-      each_price_factor: medicine?.last_purchased || '',
+      each_price_factor: medicine?.last_purchased || 0,
       no_box: medicine?.no_box || 1,
       interest_percent: entrance ? entrance.total_interest : "",
       quantity_bonus: "",
@@ -194,7 +194,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
       batch_number: "",
       discount_money: "",
       discount_percent: "",
-      each_sell_price_afg: medicine?.price || '',
+      each_sell_price_afg: medicine?.price || 0,
       entrance: entrance?.id,
       medician: medicine?.id,
     });
