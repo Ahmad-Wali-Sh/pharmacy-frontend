@@ -30,10 +30,11 @@ function PrescriptionThroughMapForm({ prescription, updatePrescription, updatePr
 
   useEffect(() => {
     const selectedElement = document.getElementById(`item-${selectedIdx}`);
-    if (selectedElement) {
-      selectedElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const container = document.getElementsByClassName('prescription-medicine'); // Replace 'specific-box' with the ID of your container
+    if (selectedElement && container) {
+      selectedElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', container });
     }
-  }, [selectedIdx]);
+  }, [selectedIdx]); 
 
   useEffect(() => {
     setSelectedIdx('')

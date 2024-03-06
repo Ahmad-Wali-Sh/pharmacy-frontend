@@ -280,9 +280,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           <ButtonGroup>
             <FormButton
               Func={() => {
-                prescription?.sold == false
-                  ? deletePrescription()
-                  : toast.error("این نسخه به صندوق ثبت شده است");
+                deletePrescription()
               }}
               name="حذف"
               className="alert-button"

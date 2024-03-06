@@ -199,6 +199,7 @@ body {
   );
   padding: 1.6rem;
   position: relative;
+  overflow: clip
 }
 
 .modal-close-btn {
@@ -2130,12 +2131,13 @@ input[type="text"]:disabled {
 
 .prescription-medicine {
   overflow-y: scroll;
-  height: 90%;
+  height: 92%;
 }
 
 .prescription-medician-map {
   background-color: var(--bg-300);
   border-radius: 1rem;
+  height: 100%;
   grid-area: 3 / 1 / 4 / 3;
 }
 
