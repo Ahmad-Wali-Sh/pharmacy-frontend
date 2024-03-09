@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import ShortcutsSettings from "./ShortcutsSettings";
 import BigModal from '../PageComponents/Modals/BigModal'
+import EntranceSettings from "./EntranceSettings";
 
 const Settings = ({ title, activeKey, button, name, icon }) => {
     const ListDashboardRef = useRef(null);
@@ -29,18 +30,19 @@ const Settings = ({ title, activeKey, button, name, icon }) => {
                         >
                             رنگ بندی و تم
                         </div> */}
-                        {/* <div
+                        <div
                             onClick={() => setActive("entrance")}
                             className={`list-item ${active == "entrance" && "list-item-active"
                                 }`}
                         >
                             حواله ورود
-                        </div> */}
+                        </div>
                     </div>
                     <div className="list-box">
                         <div className="list-box-header">اطلاعات</div>
                         <div className="list-box-container">
                             {active == "shortcuts" && <ShortcutsSettings />}
+                            {active == "entrance" && <EntranceSettings />}
                             {/* {active == "theme" && <ShortcutsSettings />} */}
                             {/* {active == "entrance" && <ShortcutsSettings />} */}
                         </div>

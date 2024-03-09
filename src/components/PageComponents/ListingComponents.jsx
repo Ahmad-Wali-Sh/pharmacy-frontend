@@ -144,11 +144,11 @@ export function ListFooter({
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
         if (e.key != "A" && e.key != "a" && e.key != "c" && e.key != "v") {
-          e.preventDefault();
           switch (e.key) {
             case "s":
-            case "S":
-            case "س":
+              case "S":
+                case "س":
+              e.preventDefault();
               handleSubmit((data) => handleFormData(data, mutateAsync, user))();
               break;
           }

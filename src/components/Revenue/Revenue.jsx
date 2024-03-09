@@ -39,7 +39,7 @@ export default function Revenue(props) {
 
     serverIP &&
       axios
-        .get(`${serverIP}api/prescription/` + "?sold=false&ordering=-created")
+        .get(`${serverIP}api/prescription/` + "?sold=false&ordering=-id")
         .then((res) => {
           toast.info("بارگذاری موفقانه بود", { position: "bottom-right" });
           setSelectedIdx("");
@@ -51,7 +51,7 @@ export default function Revenue(props) {
     revenue?.id &&
       axios
         .get(
-          `${serverIP}api/prescription/?sold=true&ordering=-created&revenue=${revenue?.id}`
+          `${serverIP}api/prescription/?sold=true&ordering=-id&revenue=${revenue?.id}`
         )
         .then((res) => {
           setClosedPrescriptions(res.data);

@@ -8,7 +8,11 @@ import {
 } from "../../PageComponents/Buttons/Buttons";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { useEntrance, useMedicineShow, useSubmitedEntrance } from "../../States/States";
+import {
+  useEntrance,
+  useMedicineShow,
+  useSubmitedEntrance,
+} from "../../States/States";
 import {
   deleteDataFn,
   handleFormData,
@@ -22,7 +26,7 @@ import MultipleImage from "../../PageComponents/MultipleImage";
 import AlertModal from "../../PageComponents/Modals/AlertModal";
 import { toast } from "react-toastify";
 
-export default function EntranceHeader({StoreCycle=false}) {
+export default function EntranceHeader({ StoreCycle = false }) {
   const {
     register,
     handleSubmit,
@@ -33,26 +37,33 @@ export default function EntranceHeader({StoreCycle=false}) {
     formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
-      final_register: "",
-      company: "",
-      store: "",
+      final_register:
+        JSON.parse(localStorage.getItem("final_register"))?.id || "",
+      company: JSON.parse(localStorage.getItem("company"))?.id || "",
+      store: JSON.parse(localStorage.getItem("store"))?.id || "",
       factor_number: "",
       factor_date: new Date().toISOString().slice(0, 10),
       recived_by: "",
       deliver_by: "",
       entrance_search: "",
-      currency: "",
+      currency: JSON.parse(localStorage.getItem("currency"))?.id || "",
       description: "",
       entrance_id: "",
-      total_interest: "",
-      discount_percent_entrance: "",
-      wholesale: "",
-      payment_method: "",
-      currency_rate: ""
+      total_interest: localStorage.getItem("total_interest") || "",
+      discount_percent_entrance:
+        localStorage.getItem("discount_percent_entrance") || "",
+      wholesale: JSON.parse(localStorage.getItem("wholesale"))?.id || "",
+      payment_method:
+        JSON.parse(localStorage.getItem("payment_method"))?.id || "",
+      currency_rate: "",
     },
   });
   const user = useAuthUser();
   const [reKey, setReKey] = useState(0);
+
+  useEffect(() => {
+    console.log(localStorage.getItem("total_interest"));
+  }, [localStorage.getItem("total_interest")]);
 
   const { data: finalRegister } = useQuery("final-register/");
   const { data: company } = useQuery("pharm-companies/");
@@ -66,16 +77,16 @@ export default function EntranceHeader({StoreCycle=false}) {
     onSuccess: (res) => {
       successFn("", () => {
         setEntrance(res);
-        setMedicineShow(new Date())
+        setMedicineShow(new Date());
       });
     },
   });
   const { mutate: updateEntrance } = useMutation({
     mutationFn: (data) => putDataFn(data, `entrance/${entrance?.id}/`),
     onSuccess: (res) => {
-        console.clear()
-        toast.success('موفقانه بود')
-        setEntrance(res);
+      console.clear();
+      toast.success("موفقانه بود");
+      setEntrance(res);
     },
   });
   const { mutate: deleteEntrance } = useMutation({
@@ -86,8 +97,8 @@ export default function EntranceHeader({StoreCycle=false}) {
       });
     },
     onError: () => {
-      toast.error('اقلام وارد شده را حذف کرده دوباره سعی کنید')
-    }
+      toast.error("اقلام وارد شده را حذف کرده دوباره سعی کنید");
+    },
   });
 
   const newEntrance = () => {
@@ -95,7 +106,7 @@ export default function EntranceHeader({StoreCycle=false}) {
     setEntrance([]);
   };
 
-  const {  setSubmitedEntrance } = useSubmitedEntrance()
+  const { setSubmitedEntrance } = useSubmitedEntrance();
 
   const revertEntrance = () => {
     setReKey((prev) => prev + 1);
@@ -115,10 +126,9 @@ export default function EntranceHeader({StoreCycle=false}) {
       wholesale: entrance?.wholesale,
       entrance_id: entrance?.id,
       payment_method: entrance?.payment_method,
-      currency_rate: entrance?.currency_rate
+      currency_rate: entrance?.currency_rate,
     });
   };
-
 
   const { refetch: searchEntrance } = useQuery({
     queryKey: [`entrance/${watch("entrance_search")}/`],
@@ -133,9 +143,16 @@ export default function EntranceHeader({StoreCycle=false}) {
   useEffect(() => {
     setReKey((prev) => prev + 1);
     reset({
-      final_register: entrance?.final_register || "",
-      company: entrance?.company || "",
-      store: entrance?.store || "",
+      final_register:
+        entrance?.final_register ||
+        JSON.parse(localStorage.getItem("final_register"))?.id ||
+        "",
+      company:
+        entrance?.company ||
+        JSON.parse(localStorage.getItem("company"))?.id ||
+        "",
+      store:
+        entrance?.store || JSON.parse(localStorage.getItem("store"))?.id || "",
       factor_number: entrance?.factor_number || "",
       factor_date:
         entrance?.factor_date?.slice(0, 10) ||
@@ -143,267 +160,310 @@ export default function EntranceHeader({StoreCycle=false}) {
       recived_by: entrance?.recived_by || "",
       deliver_by: entrance?.deliver_by || "",
       entrance_search: "",
-      currency: entrance?.currency || "",
+      currency:
+        entrance?.currency ||
+        JSON.parse(localStorage.getItem("currency"))?.id ||
+        "",
       description: entrance?.description || "",
-      total_interest: entrance?.total_interest || "",
-      discount_percent_entrance: entrance?.discount_percent_entrance || "",
-      wholesale: entrance?.wholesale || "",
+      total_interest:
+        entrance?.total_interest ||
+        localStorage.getItem("total_interest") ||
+        "",
+      discount_percent_entrance:
+        entrance?.discount_percent_entrance ||
+        localStorage.getItem("discount_percent_entrance") ||
+        "",
+      wholesale:
+        entrance?.wholesale ||
+        JSON.parse(localStorage.getItem("wholesale"))?.id ||
+        "",
       entrance_id: entrance?.id || "",
-      payment_method: entrance?.payment_method || "",
-      currency_rate: entrance?.currency_rate || ""
+      payment_method:
+        entrance?.payment_method ||
+        JSON.parse(localStorage.getItem("payment_method"))?.id ||
+        "",
+      currency_rate: entrance?.currency_rate || "",
     });
     entrance?.id && revertEntrance();
   }, [entrance]);
 
   useEffect(() => {
     const currency_rater = () => {
-      return currency?.filter(cur => { return cur.id == parseInt(watch('currency')) }) || ''
-    }
-    currency_rater && setValue('currency_rate', currency_rater()[0]?.rate)
-  }, [watch('currency')])
+      return (
+        currency?.filter((cur) => {
+          return cur.id == parseInt(watch("currency"));
+        }) || ""
+      );
+    };
+    currency_rater && setValue("currency_rate", currency_rater()[0]?.rate);
+  }, [watch("currency")]);
 
-  const deleteAlertRef = useRef(null)
+  const deleteAlertRef = useRef(null);
 
-  const {medicineShow, setMedicineShow} = useMedicineShow()
+  const { medicineShow, setMedicineShow } = useMedicineShow();
 
   return (
     <>
-      <AlertModal errorText={'آیا موافق با حذف این حواله ورودی هستید؟'} errorTitle={"این عمل غیر قابل بازگشت است!"} OkFunc={() => deleteEntrance()} NoFunc={() => deleteAlertRef.current.Closer()} ref={deleteAlertRef}>
-      </AlertModal>
-    <form
-      className="entrance-entrance"
-      onSubmit={handleSubmit((data) =>
-        handleFormData(
-          data,
-          entrance?.id ? updateEntrance : submitEntrance,
-          user
-        )
-      )}
-    >
-      <label>وضعیت:</label>
-      <ControlledSelect
-        control={control}
-        autoFocus={entrance?.id ? false : true}
-        name="final_register"
-        error={errors.final_register ? true : false}
-        required={true}
-        options={finalRegister}
-        placeholder=""
-        getOptionLabel={(option) => option.name}
-        getOptionValue={(option) => option.id}
-        uniqueKey={`entrance-unique${reKey}`}
-        defaultValue={finalRegister?.find((c) =>
-          c.id === entrance?.final_register ? c.name : ""
+      <AlertModal
+        errorText={"آیا موافق با حذف این حواله ورودی هستید؟"}
+        errorTitle={"این عمل غیر قابل بازگشت است!"}
+        OkFunc={() => deleteEntrance()}
+        NoFunc={() => deleteAlertRef.current.Closer()}
+        ref={deleteAlertRef}
+      ></AlertModal>
+      <form
+        className="entrance-entrance"
+        onSubmit={handleSubmit((data) =>
+          handleFormData(
+            data,
+            entrance?.id ? updateEntrance : submitEntrance,
+            user
+          )
         )}
-        NewComponent={
-          <PurchasingLists button="plus" activeKey="final-registers" />
-        }
-      />
-      <label>شرکت:</label>
-      <div className="react-select-box">
+      >
+        <label>وضعیت:</label>
         <ControlledSelect
           control={control}
-          name="company"
-          error={errors.company ? true : false}
+          autoFocus={entrance?.id ? false : true}
+          name="final_register"
+          error={errors.final_register ? true : false}
           required={true}
-          options={company}
+          options={finalRegister}
+          reset={reset}
           placeholder=""
           getOptionLabel={(option) => option.name}
           getOptionValue={(option) => option.id}
           uniqueKey={`entrance-unique${reKey}`}
-          defaultValue={company?.find((c) =>
-            c.id === entrance?.company ? c.name : ""
+          defaultValue={finalRegister?.find((c) =>
+            c.id === entrance?.final_register ? c.name : ""
           )}
-          NewComponent={<PurchasingLists button="plus" activeKey="companies" />}
-        />
-      </div>
-      <label>انبار:</label>
-      <div>
-        <ControlledSelect
-          control={control}
-          name="store"
-          options={store}
-          error={errors.store ? true : false}
-          required={true}
-          placeholder=""
-          getOptionLabel={(option) => option.name}
-          getOptionValue={(option) => option.id}
-          uniqueKey={`entrance-unique${reKey}`}
-          defaultValue={store?.find((c) =>
-            c.id === entrance?.store ? c.name : ""
-          )}
-          NewComponent={<PurchasingLists button="plus" activeKey="stores" />}
-        />
-      </div>
-      <label>تاریخ:</label>
-      <DateInputSimple
-        onChange={(res) => setValue("factor_date", res.target.value)}
-        value={watch("factor_date")}
-      />
-      <label>شماره:</label>
-      <input
-        type="text"
-        {...register("factor_number")}
-        defaultValue={entrance?.factor_number}
-        className="entrance--inputs"
-      />
-
-      <label>ش.حواله:</label>
-      <div className="flex">
-        <input
-          value={entrance?.id}
-          type="text"
-          {...register("entrance_id")}
-          disabled
-          tabIndex={-1}
-        />
-        <form className="search-form" tabIndex={-1}>
-          <input type="text" {...register("entrance_search")} tabIndex={-1} />
-          <button
-            className="search-button-box"
-            type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              searchEntrance(e.target.value);
-            }}
-            tabIndex={-1}
-          >
-            <i class="fa-brands fa-searchengin"></i>
-          </button>
-        </form>
-      </div>
-
-      <label>
-        <h5>تحویل دهنده:</h5>
-      </label>
-      <input
-        type="text"
-        {...register("deliver_by")}
-        defaultValue={entrance?.deliver_by}
-        className="entrance--inputs"
-      />
-      <label>
-        <h5>تحویل گیرنده:</h5>
-      </label>
-      <input
-        type="text"
-        {...register("recived_by")}
-        defaultValue={entrance?.recived_by}
-        className="entrance--inputs"
-      />
-      <label>واحد_پول:</label>
-      <div style={{ display: 'grid', gridTemplateColumns: '50% 10% 40%' }}>
-        <ControlledSelect
-          control={control}
-          name="currency"
-          options={currency}
-          placeholder=""
-          isClearable={false}
-          error={errors.currency ? true : false}
-          required={true}
-          getOptionLabel={(option) => option.name + "(" + option.rate + ")"}
-          getOptionValue={(option) => option.id}
-          uniqueKey={`entrance-unique${reKey}`}
-          defaultValue={currency?.find((c) =>
-            c.id === entrance?.currency ? c.name : ""
-          )}
-          NewComponent={<PurchasingLists button="plus" activeKey="currencies" />}
-        />
-        <label></label>
-        <input
-          type="text"
-          disabled={watch('currency') == currency?.filter(item => {return item.name =='AFN' && item.id})?.[0]?.id ? true : false}
-          {...register("currency_rate")}
-          className="entrance--inputs"
-        />
-      </div>
-      <label>پرداخت:</label>
-      <ControlledSelect
-        control={control}
-        name="payment_method"
-        options={paymentMethod}
-        placeholder=""
-        error={errors.payment_method ? true : false}
-        required={true}
-        getOptionLabel={(option) => option.name}
-        getOptionValue={(option) => option.id}
-        uniqueKey={`entrance-unique${reKey}`}
-        defaultValue={paymentMethod?.find((c) =>
-          c.id === entrance?.payment_method ? c.name : ""
-        )}
-        NewComponent={<PurchasingLists button="plus" activeKey="payments" />}
-      />
-      <label>
-        <h5>فایده%:</h5>
-      </label>
-      <div className="numbers-box-pocket-1">
-        <input
-          type="text"
-          defaultValue={entrance?.total_interest}
-          {...register("total_interest", { required: true })}
-          className={`entrance--inputs ${errors.total_interest ? "error-input" : ""
-            }`}
-        />
-        <lable>تخفیف%:</lable>
-        <input
-          type="text"
-          defaultValue={entrance?.discount_percent}
-          {...register("discount_percent_entrance")}
-          className="entrance--inputs"
-        />
-      </div>
-      <label>
-        <h5>نوع ورودی:</h5>
-      </label>
-      <select defaultValue={entrance?.wholesale} {...register("wholesale")}>
-        <option value={"WHOLESALE"}>عمده</option>
-        <option value={"SINGULAR"}>پرچون</option>
-      </select>
-      <label>توضیحات:</label>
-      <input
-        {...register("description")}
-        defaultValue={entrance?.description}
-        onKeyDown={(e) => {
-          if (e.key === "Tab") {
-            handleSubmit((data) =>
-              handleFormData(
-                data,
-                entrance.id ? updateEntrance : submitEntrance,
-                user
-              )
-            )();
+          NewComponent={
+            <PurchasingLists button="plus" activeKey="final-registers" />
           }
-        }}
-        className="entrance--inputs"
-      ></input>
-      <label></label>
-      <MultipleImage />
-      <label></label>
-      <ButtonGroup>
-        <FormButton
-          name="حذف"
-          Func={() => {
-            deleteAlertRef.current.Opener()
+        />
+        <label>شرکت:</label>
+        <div className="react-select-box">
+          <ControlledSelect
+            control={control}
+            name="company"
+            error={errors.company ? true : false}
+            required={true}
+            options={company}
+            placeholder=""
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option.id}
+            uniqueKey={`entrance-unique${reKey}`}
+            defaultValue={company?.find((c) =>
+              c.id === entrance?.company ? c.name : ""
+            )}
+            NewComponent={
+              <PurchasingLists button="plus" activeKey="companies" />
+            }
+          />
+        </div>
+        <label>انبار:</label>
+        <div>
+          <ControlledSelect
+            control={control}
+            name="store"
+            options={store}
+            error={errors.store ? true : false}
+            required={true}
+            placeholder=""
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option.id}
+            uniqueKey={`entrance-unique${reKey}`}
+            defaultValue={store?.find((c) =>
+              c.id === entrance?.store ? c.name : ""
+            )}
+            NewComponent={<PurchasingLists button="plus" activeKey="stores" />}
+          />
+        </div>
+        <label>تاریخ:</label>
+        <DateInputSimple
+          onChange={(res) => setValue("factor_date", res.target.value)}
+          value={watch("factor_date")}
+        />
+        <label>شماره:</label>
+        <input
+          type="text"
+          {...register("factor_number")}
+          defaultValue={entrance?.factor_number}
+          className="entrance--inputs"
+        />
+
+        <label>ش.حواله:</label>
+        <div className="flex">
+          <input
+            value={entrance?.id}
+            type="text"
+            {...register("entrance_id")}
+            disabled
+            tabIndex={-1}
+          />
+          <form className="search-form" tabIndex={-1}>
+            <input type="text" {...register("entrance_search")} tabIndex={-1} />
+            <button
+              className="search-button-box"
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                searchEntrance(e.target.value);
+              }}
+              tabIndex={-1}
+            >
+              <i class="fa-brands fa-searchengin"></i>
+            </button>
+          </form>
+        </div>
+
+        <label>
+          <h5>تحویل دهنده:</h5>
+        </label>
+        <input
+          type="text"
+          {...register("deliver_by")}
+          defaultValue={entrance?.deliver_by}
+          className="entrance--inputs"
+        />
+        <label>
+          <h5>تحویل گیرنده:</h5>
+        </label>
+        <input
+          type="text"
+          {...register("recived_by")}
+          defaultValue={entrance?.recived_by}
+          className="entrance--inputs"
+        />
+        <label>واحد_پول:</label>
+        <div style={{ display: "grid", gridTemplateColumns: "50% 10% 40%" }}>
+          <ControlledSelect
+            control={control}
+            name="currency"
+            options={currency}
+            placeholder=""
+            isClearable={false}
+            error={errors.currency ? true : false}
+            required={true}
+            getOptionLabel={(option) => option.name + "(" + option.rate + ")"}
+            getOptionValue={(option) => option.id}
+            uniqueKey={`entrance-unique${reKey}`}
+            defaultValue={currency?.find((c) =>
+              c.id === entrance?.currency ? c.name : ""
+            )}
+            NewComponent={
+              <PurchasingLists button="plus" activeKey="currencies" />
+            }
+          />
+          <label></label>
+          <input
+            type="text"
+            disabled={
+              watch("currency") ==
+              currency?.filter((item) => {
+                return item.name == "AFN" && item.id;
+              })?.[0]?.id
+                ? true
+                : false
+            }
+            {...register("currency_rate")}
+            className="entrance--inputs"
+          />
+        </div>
+        <label>پرداخت:</label>
+        <ControlledSelect
+          control={control}
+          name="payment_method"
+          options={paymentMethod}
+          placeholder=""
+          error={errors.payment_method ? true : false}
+          required={true}
+          getOptionLabel={(option) => option.name}
+          getOptionValue={(option) => option.id}
+          uniqueKey={`entrance-unique${reKey}`}
+          defaultValue={paymentMethod?.find((c) =>
+            c.id === entrance?.payment_method ? c.name : ""
+          )}
+          NewComponent={<PurchasingLists button="plus" activeKey="payments" />}
+        />
+        <label>
+          <h5>فایده%:</h5>
+        </label>
+        <div className="numbers-box-pocket-1">
+          <input
+            type="text"
+            defaultValue={entrance?.total_interest}
+            {...register("total_interest", { required: true })}
+            className={`entrance--inputs ${
+              errors.total_interest ? "error-input" : ""
+            }`}
+          />
+          <lable>تخفیف%:</lable>
+          <input
+            type="text"
+            defaultValue={entrance?.discount_percent}
+            {...register("discount_percent_entrance")}
+            className="entrance--inputs"
+          />
+        </div>
+        <label>
+          <h5>نوع ورودی:</h5>
+        </label>
+        <select
+          defaultValue={entrance?.wholesale}
+          className={`entrance--inputs ${
+            errors.wholesale ? "error-input" : ""
+          }`}
+          {...register("wholesale", { required: true })}
+        >
+          <option value={"WHOLESALE"}>عمده</option>
+          <option value={"SINGULAR"}>پرچون</option>
+        </select>
+        <label>توضیحات:</label>
+        <input
+          {...register("description")}
+          defaultValue={entrance?.description}
+          onKeyDown={(e) => {
+            if (e.key === "Tab") {
+              handleSubmit((data) =>
+                handleFormData(
+                  data,
+                  entrance.id ? updateEntrance : submitEntrance,
+                  user
+                )
+              )();
+            }
           }}
-          disabled={entrance?.id ? false : true}
-        />
-        <FormButton
-          name="ریسیت"
-          className="revert-button"
-          Func={() => revertEntrance()}
-          disabled={entrance?.id && isDirty == true ? false : true}
-        />
-        <FormButton name="جدید" Func={() => newEntrance()} />
-        <SubmitButton
-          Func={() => {
-            entrance?.currency_rate != watch('currency_rate') &&
-              setSubmitedEntrance({ id: new Date()})
-          }}
-          name={entrance?.id ? "آپدیت" : "ثبت"}
-          disabled={errors.final_register ? true : false}
-        />
-      </ButtonGroup>
-    </form>
+          className="entrance--inputs"
+        ></input>
+        <label></label>
+        <MultipleImage />
+        <label></label>
+        <ButtonGroup>
+          <FormButton
+            name="حذف"
+            Func={() => {
+              deleteAlertRef.current.Opener();
+            }}
+            disabled={entrance?.id ? false : true}
+          />
+          <FormButton
+            name="ریسیت"
+            className="revert-button"
+            Func={() => revertEntrance()}
+            disabled={entrance?.id && isDirty == true ? false : true}
+          />
+          <FormButton name="جدید" Func={() => newEntrance()} />
+          <SubmitButton
+            Func={() => {
+              entrance?.currency_rate != watch("currency_rate") &&
+                setSubmitedEntrance({ id: new Date() });
+            }}
+            name={entrance?.id ? "آپدیت" : "ثبت"}
+            disabled={errors.final_register ? true : false}
+          />
+        </ButtonGroup>
+      </form>
     </>
   );
 }

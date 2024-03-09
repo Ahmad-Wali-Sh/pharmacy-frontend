@@ -4268,3 +4268,11 @@ input[type="text"]:disabled {
   margin: 1rem;
   border-radius: 1rem;
 }
+
+.ent-settings-container {
+  padding: 1rem;
+  justify-content: right;
+  display: grid;
+  grid-template-columns: 6% 22% 6% 22% 6% 22%;
+  gap: 1rem;
+}

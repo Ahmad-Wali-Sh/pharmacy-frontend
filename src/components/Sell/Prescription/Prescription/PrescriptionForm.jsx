@@ -27,8 +27,8 @@ import useServerIP from "../../../services/ServerIP";
 function PrescriptionForm({ prescriptionThrough, update }) {
   const { userPremissions} = useUserPermissions()
   const user = useAuthUser();
-  const { data: patient } = useQuery(["patient/"], { enabled: userPremissions?.includes('core.add_patient') ? true : false});
-  const { data: doctor } = useQuery(["doctor/"], { enabled: userPremissions?.includes('core.add_doctor') ? true : false});
+  const { data: patient } = useQuery(["patient/"]);
+  const { data: doctor } = useQuery(["doctor/"]);
   const { data: department } = useQuery(["department/"]);
   const [searchNumber, setSearchNumber] = React.useState("");
   const { prescription, setPrescription } = usePrescription();
