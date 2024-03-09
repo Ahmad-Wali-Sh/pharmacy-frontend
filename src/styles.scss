@@ -2902,13 +2902,12 @@ input[type="text"]:disabled {
 
 .revenue-box {
   width: 100%;
-  height: 90%;
   background-color: var(--bg-100);
+  height: 90dvh;
 }
 .revenue-info-header {
   background-color: var(--bg-300);
   width: 99%;
-  height: 10%;
   margin: 0.4rem;
   margin-top: 0rem;
   position: relative;
@@ -2918,7 +2917,6 @@ input[type="text"]:disabled {
 .revenue-header {
   background-color: var(--bg-300);
   width: 99%;
-  height: 10%;
   margin: 0.4rem;
   margin-top: 0rem;
   position: relative;
@@ -2929,13 +2927,17 @@ input[type="text"]:disabled {
   display: flex;
   justify-content: space-between;
 }
+
+.yScroll{
+  overflow-y: scroll;
+  height: 72dvh;
+}
 .revenue-content {
   direction: rtl;
   width: 97.8%;
-  height: 86%;
   display: grid;
-  grid-template-columns: 50% 50.5%;
-  gap: 0.4rem;
+  grid-template-columns: 51.3% 48%;
+  gap: 0.2rem;
   margin: 1.2rem;
   margin-top: 0.8rem;
 }
@@ -2946,16 +2948,17 @@ input[type="text"]:disabled {
 .revneue-content-open {
   background-color: var(--bg-300);
   border-radius: 1rem;
-
 }
-
+.revenue-with-refund {
+  display: flex;
+  flex-direction: column;
+  gap:0.2rem;
+  height: 20rem;
+}
 .barcode-lock-room {
   height: 100%;
 }
-.yScroll {
-  overflow-y: scroll;
-  height: 72dvh;
-}
+
 .revneue-content-close {
   background-color: var(--bg-300);
   border-radius: 1rem;
