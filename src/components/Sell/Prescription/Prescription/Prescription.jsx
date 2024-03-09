@@ -50,6 +50,12 @@ export default function Prescription(props) {
     Reporting();
   }, [prescriptionThrough, prescription]);
 
+  useEffect(() => {
+    prescription?.department && axios.get(`${serverIP}api/department/${prescription.department}/`).then((res) => {
+      setDepartmentSelected(res.data)
+    })
+  }, [prescription?.department, prescription?.id])
+
   const Reporting = () => {
     const totalCalculate = () => {
       let result = 0;
@@ -98,19 +104,21 @@ export default function Prescription(props) {
           result = Math.ceil(total) + 1 - total;
         }
       }
+      console.log(cellingStart);
       return result;
+
     };
     setReport({
       total: Math.round(totalCalculate()),
       number: prescriptionThrough?.length,
-      total_to_sale: Math.round(totalToSaleCalculate()) + CellingHandler(),
-      rounded_number: CellingHandler(),
+      total_to_sale: Math.round(totalToSaleCalculate()) + prescription?.rounded_number,
       disount_value: (
         prescription.discount_money +
         (report.total * prescription.discount_percent) / 100
       ).toFixed(2),
     });
   };
+
 
   const departmentSubmit = () => {
     PrescriptionModalRef.current.Opener();

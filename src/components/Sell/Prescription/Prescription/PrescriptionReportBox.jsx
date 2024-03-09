@@ -78,7 +78,7 @@ function PrescriptionReportBox({
         </div>
         <div className="entrance-report-map-box" style={{ marginBottom: '1rem'}}>
           <label>
-            {report.rounded_number ? report.rounded_number : ""}
+            {prescription?.rounded_number}
           </label>
           <label>:مقدار روند شده </label>
         </div>

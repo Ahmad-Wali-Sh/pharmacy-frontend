@@ -120,7 +120,7 @@ export const PrescriptionThroughForm = forwardRef(
           />
           <div className="prescription-button">
             <SubmitButton name="⤵ Add" />
-            {prescription && prescription.sold ? <h4 className="submit-badge">پرداخت شده</h4> : <h4 className="pending-badge">در حالت انتظار</h4>}
+            {prescription && prescription.sold ? <h4 className="submit-badge">{prescription.refund != 0 ? 'برگشتی' : 'پرداخت شده'}</h4> : <h4 className="pending-badge">در حالت انتظار</h4>}
           </div>
         </form>
       </>
