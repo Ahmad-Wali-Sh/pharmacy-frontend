@@ -84,12 +84,14 @@ export default function Revenue(props) {
             .patch(`${serverIP}api/prescription/${prescriptionId}/`, Form)
             .then(() => {
               setTrigger(new Date());
-              !res?.data?.[0]?.sold && toast.success("موفقانه بود", {
-                position: "bottom-right",
-                autoClose: 2000,
-              });
-            })
-        } if (res?.data?.[0]?.sold) {
+              !res?.data?.[0]?.sold &&
+                toast.success("موفقانه بود", {
+                  position: "bottom-right",
+                  autoClose: 2000,
+                });
+            });
+        }
+        if (res?.data?.[0]?.sold) {
           toast.info(
             <div>
               <div>نسخه مورد نظر پرداخت شده است </div>
@@ -286,7 +288,12 @@ export default function Revenue(props) {
                       <h4>قیمت کل</h4>
                     </div>
                   </div>
-                  <div style={{ overflowY: 'scroll', height: refundPrescription?.[0] ? '40dvh' : '72dvh'}}>
+                  <div
+                    style={{
+                      overflowY: "scroll",
+                      height: refundPrescription?.[0] ? "40dvh" : "72dvh",
+                    }}
+                  >
                     {revenue &&
                       openPrescriptions?.map((pres, key) => (
                         <div
@@ -330,7 +337,12 @@ export default function Revenue(props) {
                         <h4>قیمت کل</h4>
                       </div>
                     </div>
-                    <div style={{ overflowY:  'scroll', height: refundPrescription?.[0] ? '23dvh' : '72dvh'}}>
+                    <div
+                      style={{
+                        overflowY: "scroll",
+                        height: refundPrescription?.[0] ? "23dvh" : "72dvh",
+                      }}
+                    >
                       {revenue &&
                         refundPrescription?.map((pres, key) => (
                           <div
@@ -345,7 +357,11 @@ export default function Revenue(props) {
                             <h3>{pres.department_name}</h3>
                             <h3>{pres.patient_name}</h3>
                             <h3 className="persian-number">
-                              {pres.refund && "-" + pres.refund.toFixed(2)}
+                              {pres.refund &&
+                                (pres.refund > 0 ? "-" : "") +
+                                  (pres.refund > 0
+                                    ? pres.refund.toFixed(2)
+                                    : pres.refund.toFixed(2).slice(1))}
                               AF
                             </h3>
                             <div
