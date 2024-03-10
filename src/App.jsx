@@ -23,10 +23,10 @@ function App() {
   };
 
   const signOut = useSignOut();
-  // useEffect(() => {
-  //   signOut()
-  //   delete axios.defaults.headers.common["Authorization"];
-  // }, [])
+  useEffect(() => {
+    signOut()
+    delete axios.defaults.headers.common["Authorization"];
+  }, [])
 
   const { theme, setTheme } = useTheme()
   return (
