@@ -22,7 +22,7 @@ export default function RevenueInfo({ revenue }) {
   const { serverIP} = useServerIP()
 
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
-  const [revenueTrough, setRevenueThrough] = React.useState([]);
+  const [prescriptioner, setRevenueThrough] = React.useState([]);
 
   function registerModalOpener() {
     setRegisterModalOpen(true);
@@ -34,7 +34,7 @@ export default function RevenueInfo({ revenue }) {
 
   const RevenueSearch = () => {
     axios
-      .get(`${serverIP}api/revenue-through/` + "?revenue=" + revenue?.id)
+      .get(`${serverIP}api/prescription/` + "?revenue=" + revenue?.id)
       .then((res) => setRevenueThrough(res?.data));
   };
 
@@ -73,26 +73,28 @@ export default function RevenueInfo({ revenue }) {
               <h4>مجموع</h4>
               <h4>صندوقدار</h4>
               <h4>تخفیفات</h4>
+              <h4>%تخفیفات</h4>
               <h4>خیرات</h4>
               <h4>زکات</h4>
               <h4>مقدار روند</h4>
             </div>
             <div className="revenue-info-content">
-              {revenueTrough?.map((revenuethrough, key) => (
+              {prescriptioner?.map((pres, key) => (
                 <div className="revenue-info-map">
                   <h4></h4>
                   <h4>{key + 1}</h4>
-                  <h4>{revenuethrough.prescription_number}</h4>
-                  <h4>{revenuethrough.prescription_user}</h4>
-                  <h4>{revenuethrough.department}</h4>
-                  <h4>{revenuethrough.created.slice(0, 10)}</h4>
-                  <h4>{revenuethrough.created.slice(11, 16)}</h4>
-                  <h4>{revenuethrough.purchased}AF</h4>
+                  <h4>{pres.prescription_number}</h4>
+                  <h4>{pres.username}</h4>
+                  <h4>{pres.department_name}</h4>
+                  <h4>{pres.purchase_payment_date.slice(0, 10)}</h4>
+                  <h4>{pres.purchase_payment_date.slice(11, 16)}</h4>
+                  <h4>{pres.purchased_value}AF</h4>
                   <h4>{revenue.username}</h4>
-                  <h4>{revenuethrough.discount}</h4>
-                  <h4>{revenuethrough.khairat}</h4>
-                  <h4>{revenuethrough.zakat}</h4>
-                  <h4>{revenuethrough.rounded}</h4>
+                  <h4>{pres.discount_money}</h4>
+                  <h4>{pres.discount_percent}</h4>
+                  <h4>{pres.khairat}</h4>
+                  <h4>{pres.zakat}</h4>
+                  <h4>{pres.rounded_number}</h4>
                 </div>
               ))}
             </div>

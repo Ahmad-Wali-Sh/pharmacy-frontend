@@ -174,6 +174,7 @@ export default function RevenueManager(props) {
               <h4></h4>
               <h4>مجموع</h4>
               <h4>تخفیفات</h4>
+              <h4>%تخفیفات</h4>
               <h4>خیرات</h4>
               <h4>زکات</h4>
               <h4>مقدار روند</h4>
@@ -213,11 +214,12 @@ export default function RevenueManager(props) {
                   </h5>
                   <h5>{revenue.start_end && revenue.start_end_date}</h5>
                   <h5>{revenue.start_end && revenue.start_end.slice(0, 5)}</h5>
-                  <h4>{revenue.total}</h4>
-                  <h4>{revenue.discount}</h4>
-                  <h4>{revenue.khairat}</h4>
-                  <h4>{revenue.zakat}</h4>
-                  <h4>{revenue.rounded}</h4>
+                  <h4>{revenue.total_value}</h4>
+                  <h4>{revenue.discount_money_value}</h4>
+                  <h4>{revenue.discount_percent_value}</h4>
+                  <h4>{revenue.khairat_value}</h4>
+                  <h4>{revenue.zakat_value}</h4>
+                  <h4>{revenue.rounded_value}</h4>
                   <RevenueInfo revenue={revenue} />
                 </div>
               ))}
