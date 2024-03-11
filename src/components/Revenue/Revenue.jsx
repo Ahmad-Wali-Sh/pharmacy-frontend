@@ -136,6 +136,7 @@ export default function Revenue(props) {
     const Form = new FormData();
     Form.append("revenue", "");
     Form.append("sold", false);
+    Form.append('purchased_value', 0)
     axios
       .patch(`${serverIP}api/prescription/${prescription.id}/`, Form)
       .then(() => {
