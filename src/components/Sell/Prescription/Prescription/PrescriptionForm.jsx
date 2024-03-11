@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useForm } from "react-hook-form";
 import {
@@ -36,6 +36,8 @@ function PrescriptionForm({ prescriptionThrough, update }) {
 
   const { register, handleSubmit, reset, watch, setValue, control } = useForm();
 
+  const [rekey, setRekey] = useState('')
+
   React.useEffect(() => {
     reset({
       discount_money: prescription.discount_money || 0,
@@ -44,7 +46,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       khairat: prescription.khairat || 0,
       department: prescription.department || 0,
       prescription_number: prescription.prescription_number || "",
-      name: "",
+      name: prescription.name ? prescription.name : '',
       doctor: prescription.doctor ? prescription.doctor : "",
     });
   }, [prescription]);
@@ -126,6 +128,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       successFn("", () => {});
     },
   });
+
 
   const { mutateAsync: duplicatePrescription } = useMutation({
     mutationFn: (data) => postDataFn(data, "prescription/"),
@@ -231,8 +234,8 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             getOptionValue={(option) => option.code_name}
             uniqueKey={`patient-unique${prescription?.id}`}
             defaultValue={patient?.find((c) =>
-              c.id === prescription?.name ? c.code_name : ""
-            )}
+              c.id === prescription?.name ? c.code_name : ''
+            ) || new Date()}
             NewComponent={
              <SellingLists
                 title="لست ها"
@@ -253,7 +256,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             uniqueKey={`doctor-unique${prescription?.id}`}
             defaultValue={doctor?.find((c) =>
               c.id === prescription?.doctor ? c.code_name : ""
-            )}
+            ) || new Date()}
             NewComponent={
                <SellingLists
                 title="لست ها"

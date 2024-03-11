@@ -52,14 +52,27 @@ export default function ControlledSelect({
     const storedDefaultValue = localStorage.getItem(name);
     if (storedDefaultValue) {
       setDefaulter(JSON.parse(storedDefaultValue));
+    } 
+    else if (defaultValue == '') {
+      setDefaulter('')
     }
-  }, [name]);
+    else if (defaultValue) {
+      setDefaulter(defaultValue)
+    }
+  }, [name, defaultValue]);
 
   useEffect(() => {
     defaulter && reset && reset({
         name: defaulter.id
       })
   }, [defaulter]);
+
+  const [key, setKey] = useState(0); // State to hold the key for forcing re-render
+
+  useEffect(() => {
+    // When defaultValue changes, update the key to force re-render
+    defaultValue ? setKey(new Date()) : setKey(new Date())
+  }, [defaultValue === null ? null : defaultValue, defaultValue === '' ? '' : defaultValue]);
 
   return (
     <Controller
@@ -74,15 +87,14 @@ export default function ControlledSelect({
             isMulti={isMulti ? isMulti : false}
             menuPortalTarget={document.body} 
             placeholder={placeholder}
-
             isClearable={isClearable}
             tabIndex={tabindex ? tabindex : ''}
             autoFocus={autoFocus ? autoFocus : false}
             components={{ DropdownIndicator: IndicatorDropDown, IndicatorSeparator: () => null }}
             getOptionLabel={getOptionLabel}
             getOptionValue={getOptionValue}
-            key={uniqueKey || uniqueKeyer}
-            defaultValue={defaultValue ? defaultValue : defaulter} // Set defaultValue to defaulter
+            key={defaultValue ? key : uniqueKeyer}
+            value={defaulter} // Set defaultValue to defaulter
             onChange={onChange ? onChange : (val) => {
               setDefaulter(val); // Update defaulter state with the selected value
               field.onChange(val ? val.id : ''); // Use the selected value to update the form field

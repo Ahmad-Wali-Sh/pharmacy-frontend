@@ -102,14 +102,15 @@ export default function EntranceHeader({ StoreCycle = false }) {
   });
 
   const newEntrance = () => {
-    setReKey((prev) => prev + 1);
+    setReKey(new Date());
     setEntrance([]);
+    calculateRater()
   };
 
   const { setSubmitedEntrance } = useSubmitedEntrance();
 
   const revertEntrance = () => {
-    setReKey((prev) => prev + 1);
+    setReKey(new Date());
     reset({
       final_register: entrance?.final_register,
       company: entrance?.company,
@@ -141,7 +142,7 @@ export default function EntranceHeader({ StoreCycle = false }) {
   });
 
   useEffect(() => {
-    setReKey((prev) => prev + 1);
+    setReKey(new Date());
     reset({
       final_register:
         entrance?.final_register ||
@@ -187,7 +188,7 @@ export default function EntranceHeader({ StoreCycle = false }) {
     entrance?.id && revertEntrance();
   }, [entrance]);
 
-  useEffect(() => {
+  const calculateRater = () => {
     const currency_rater = () => {
       return (
         currency?.filter((cur) => {
@@ -195,7 +196,13 @@ export default function EntranceHeader({ StoreCycle = false }) {
         }) || ""
       );
     };
-    currency_rater && setValue("currency_rate", currency_rater()[0]?.rate);
+    currency_rater && setTimeout(()=> {
+      setValue("currency_rate", currency_rater()[0]?.rate);
+    }, 200)
+  }
+
+  useEffect(() => {
+    calculateRater()
   }, [watch("currency")]);
 
   const deleteAlertRef = useRef(null);
