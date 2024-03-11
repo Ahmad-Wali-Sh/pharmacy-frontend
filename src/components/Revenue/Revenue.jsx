@@ -62,7 +62,7 @@ export default function Revenue(props) {
     revenue?.id &&
       axios
         .get(
-          `${serverIP}api/prescription/?sold=true&ordering=-id&revenue=${revenue?.id}`
+          `${serverIP}api/prescription/?sold=true&ordering=-purchase_payment_date&revenue=${revenue?.id}`
         )
         .then((res) => {
           setClosedPrescriptions(res.data);

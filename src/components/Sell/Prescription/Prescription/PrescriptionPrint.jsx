@@ -9,7 +9,9 @@ const PrescriptionPrint = React.forwardRef((props, ref) => {
           <tbody>
             <tr>
               <td>زمان</td>
-              <td colspan="2">{props?.prescription?.timestamp?.slice(11,16)}</td>
+              <td colspan="2">
+                {props?.prescription?.timestamp?.slice(11, 16)}
+              </td>
             </tr>
             <tr>
               <td>نوع</td>
@@ -17,9 +19,7 @@ const PrescriptionPrint = React.forwardRef((props, ref) => {
             </tr>
             <tr>
               <td>شماره</td>
-              <td colspan="2">
-                {props?.prescription?.prescription_number}
-              </td>
+              <td colspan="2">{props?.prescription?.prescription_number}</td>
             </tr>
             <tr>
               <td colspan="3">
@@ -27,23 +27,29 @@ const PrescriptionPrint = React.forwardRef((props, ref) => {
                   className="barcode-image-print"
                   src={
                     props?.prescription?.barcode
-                      ? 
-                        props?.prescription?.barcode
+                      ? props?.prescription?.barcode
                       : "./images/nophoto.jpg"
                   }
                 />
               </td>
             </tr>
             <tr>
-              <td>پرداخت</td>
-              <td colspan="1" className="persian-number">{props?.prescription?.refund ? props?.prescription?.refund : props?.report?.total_to_sale} افغانی</td>
+              <td>{props?.prescription?.refund ? "برگشتی:" : "پرداخت:"}</td>
+              <td colspan="1" className="persian-number">
+                {props?.prescription?.refund
+                  ? props?.prescription?.refund * -1
+                  : props?.prescription?.grand_total ==
+                    props?.prescription?.purchased_value
+                  ? 0
+                  : props.prescription?.grand_total}{" "}
+                افغانی
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   );
-})
-
+});
 
 export default PrescriptionPrint;

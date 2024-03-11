@@ -13,6 +13,7 @@ import {
   postDataFn,
   handleFormData,
   successFn,
+  patchDataFn,
 } from "../../../services/API";
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
@@ -114,7 +115,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
 
   const { mutateAsync: updatePrescription } = useMutation({
     mutationFn: (data) => {
-      putDataFn(data, `prescription/${prescription.id}/`);
+      patchDataFn(data, `prescription/${prescription.id}/`);
     },
     onSuccess: (data) =>
       successFn("", () => {
