@@ -50,7 +50,7 @@ export default function ControlledSelect({
 
   useEffect(() => {
     const storedDefaultValue = localStorage.getItem(name);
-    if (storedDefaultValue) {
+    if (defaultValue == '' && storedDefaultValue) {
       setDefaulter(JSON.parse(storedDefaultValue));
     } 
     else if (defaultValue == '') {

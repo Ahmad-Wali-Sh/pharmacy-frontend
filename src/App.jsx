@@ -23,14 +23,13 @@ function App() {
   };
 
   const signOut = useSignOut();
-  useEffect(() => {
-    signOut()
-    delete axios.defaults.headers.common["Authorization"];
-  }, [])
+  // useEffect(() => {
+  //   signOut()
+  //   delete axios.defaults.headers.common["Authorization"];
+  // }, [])
 
-  const { theme, setTheme } = useTheme()
   return (
-    <div className="app" data-theme='light'>
+    <div className="app">
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
