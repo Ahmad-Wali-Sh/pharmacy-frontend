@@ -39,24 +39,28 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
           <label>:تعداد اقلام</label>
         </div>
         <div className="prescription-report-map-box">
+          <label>{report.total}</label>
+          <label>:مجموع فروش</label>
+        </div>
+        <div className="prescription-report-map-box-grey">
           <label>{report?.disount_value ? report.disount_value : 0} </label>
           <label>:تخفیف</label>
         </div>
-        <div className="prescription-report-map-box">
+        <div className="prescription-report-map-box-grey">
           <label>{prescription?.khairat ? prescription.khairat : 0}</label>
           <label>:خیرات</label>
         </div>
-        <div className="prescription-report-map-box">
+        <div className="prescription-report-map-box-grey">
           <label>{prescription?.zakat ? prescription.zakat : 0}</label>
           <label>:زکات</label>
         </div>
-        <div className="prescription-report-map-box">
+        <div className="prescription-report-map-box-grey">
           <label>{prescription?.rounded_number}</label>
           <label>:مقدار روند شده </label>
         </div>
         <div className="prescription-report-map-box">
           <label>{prescription?.grand_total || 0}</label>
-          <label>:مجموع فروش</label>
+          <label>:قیمت نهایی</label>
         </div>
         {prescription?.refund == 0 ? (
           <div className="prescription-report-map-box">

@@ -13,6 +13,9 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Vazir";
+  transition-property: color, background-color, border-color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in;
 }
 
 :root {
@@ -26,7 +29,8 @@
   --bg-100:#241b35;
   --bg-200:#342a45;
   --bg-300:#4d425f;
- 
+
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .color-pallete-container {
@@ -1479,7 +1483,7 @@ input[type="text"]:disabled {
 .prescription-report-map-box {
   width: 100%;
   height: 1.6rem;
-  background-color: var(--bg-200);
+  background-color: var(--bg-100);
   color: var(--text-100);
   margin-top: 0.4rem;
   border-bottom: 1px solid var(--bg-300);
@@ -1488,6 +1492,21 @@ input[type="text"]:disabled {
   padding-right: 1rem;
   padding-left: 1rem;
   direction: ltr;
+}
+
+.prescription-report-map-box-grey {
+  width: 100%;
+  height: 1.6rem;
+  background-color: var(--bg-200);
+  color: var(--text-200);
+  margin-top: 0.4rem;
+  border-bottom: 1px solid var(--bg-300);
+  display: flex;
+  justify-content: space-between;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  direction: ltr;
+  
 }
 
 .total-price-input {
