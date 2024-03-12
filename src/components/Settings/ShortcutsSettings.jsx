@@ -227,6 +227,10 @@ function PrescriptionShortcuts() {
         <div>Ctrl + D</div>
       </div>
       <div className="shortcut-item">
+        <div>خالی سازی نسخه</div>
+        <div>Ctrl + Q</div>
+      </div>
+      <div className="shortcut-item">
         <div>ذخیره یا آپدیت نسخه</div>
         <div>Ctrl + S</div>
       </div>

@@ -53,6 +53,10 @@ function PrescriptionForm({ prescriptionThrough, update }) {
   }, [prescription]);
   const { serverIP } = useServerIP()
 
+  const cleanupPrescription = () => {
+    setPrescription([])
+  }
+
   React.useEffect(() => {
     const date = moment();
     const jalaliDate = date.format("jYYYY-jMM");
@@ -74,7 +78,14 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             setTimeout(() => {
               newPrescription()
             }, 200)
-            console.log('it happent')
+            break;
+          case "q":
+          case "Q":
+          case "ض":
+            e.preventDefault();
+            document.getElementById("search-number").focus();
+            setSearchNumber(`${jalaliDate}-`);
+            cleanupPrescription()
             break;
           case "s":
           case "S":
@@ -95,8 +106,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
 
 
   const newPrescription = () => {
-    console.log(serverIP);
-    serverIP ? axios.get(`${serverIP}api/department/` + watch('department') + "/").then((res) => {
+    serverIP && axios.get(`${serverIP}api/department/` + watch('department') + "/").then((res) => {
       const DepartmentForm = new FormData();
       DepartmentForm.append("name", "");
       DepartmentForm.append("doctor", "");
@@ -108,7 +118,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
         setPrescription(res.data)
         toast.success('موفقانه بود')
       })
-    }) : console.log('bad server IP');
+    }) 
   }
 
 

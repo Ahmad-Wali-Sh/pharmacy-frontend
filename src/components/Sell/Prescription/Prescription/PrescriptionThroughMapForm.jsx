@@ -43,15 +43,16 @@ function PrescriptionThroughMapForm({ prescription, updatePrescription, updatePr
   return (
     <form className="prescription-medician-map">
       <div className="prescription-medician-header">
-        <label></label>
-        <label>No</label>
-        <label>قلم</label>
-        <label>تعداد</label>
-        <label>ت.پ</label>
-        <label>ت.ق</label>
-        <label>قیمت فی</label>
-        <label>قیمت کل</label>
-        <label>بیشتر</label>
+        <label style={{flexBasis: '1%'}}></label>
+        <label style={{flexBasis: '2%'}}>No</label>
+        <label style={{flexBasis: '60%', textAlign:'left'}}>قلم</label>
+        <label style={{flexBasis: '4%'}}>تعداد</label>
+        <label style={{flexBasis: '3%'}}>ت.پ</label>
+        <label style={{flexBasis: '3%'}}>ت.ق</label>
+        <label style={{flexBasis: '4%'}}>موجودیت</label>
+        <label style={{flexBasis: '5%'}}>قیمت فی</label>
+        <label style={{flexBasis: '5%'}}>قیمت کل</label>
+        <label style={{flexBasis: '4%'}}>بیشتر</label>
       </div>
       <div className="prescription-medicine">
         {prescriptionThrough?.map((presThrough, key) => (

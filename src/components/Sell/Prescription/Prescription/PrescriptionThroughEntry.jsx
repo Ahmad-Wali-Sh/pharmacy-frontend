@@ -102,39 +102,12 @@ function PrescriptionThroughEntry({
     <form onSubmit={(e) => e.preventDefault()} id={id}>
       <div className={`prescription-through-map ${alert} ${highlighted ? 'pres-item-highlight' : ''}`} onClick={onClick}>
         <label></label>
-        <label>{num + 1}</label>
+        <label style={{flexBasis: '1%'}}>{num + 1}</label>
         <h4 className="entrance-medician-map-name-dr">
           {through.medicine_full}
         </h4>
-        {/* <Popover
-          isOpen={isUsagesOpen}
-          position={["top"]}
-          content={<div className="popover-box">{through.medicine_usage}</div>}
-        >
-          <h5
-            className="popovers-h5"
-            onMouseLeave={() => setIsUsagesOpen(false)}
-            onMouseOver={() => setIsUsagesOpen(true)}
-          >
-            {through.medicine_usage}
-          </h5>
-        </Popover> */}
-        {/* <Popover
-          isOpen={isCautionsOpen}
-          position={["top"]}
-          content={
-            <div className="popover-box">{through.medicine_cautions}</div>
-          }
-        >
-          <h5
-            className="popovers-h5"
-            onMouseLeave={() => setIsCautionsOpen(false)}
-            onMouseOver={() => setIsCautionsOpen(true)}
-          >
-            {through.medicine_cautions}
-          </h5>
-        </Popover> */}
         <input
+        style={{flexBasis: '4%'}}
           type="text"
           defaultValue={through.quantity}
           {...register("quantity")}
@@ -143,11 +116,12 @@ function PrescriptionThroughEntry({
           }}
           onBlurCapture={handleSubmit(prescriptionThroughUpdate)}
         />
-        <h4>{through.medicine_no_quantity}</h4>
-        <h4>{through.medicine_no_box}</h4>
-        <h4>{through.each_price}</h4>
-        <h4>{through.total_price}</h4>
-        <div className="medician-map-buttons">
+        <h4 style={{flexBasis: '3%'}}>{through.medicine_no_quantity || 1}</h4>
+        <h4 style={{flexBasis: '3%'}}>{through.medicine_no_box || 1}</h4>
+        <h4 style={{flexBasis: '4%', direction:'ltr', textAlign:'right'}}>{through.medicine_existence}</h4>
+        <h4 style={{flexBasis: '5%'}}>{through.each_price}</h4>
+        <h4 style={{flexBasis: '4%'}}>{through.total_price}</h4>
+        <h4 className="medician-map-buttons">
           <SelectMedician
             edit={true}
             selectAutoCompleteData={selectAutoCompleteData}
@@ -155,7 +129,7 @@ function PrescriptionThroughEntry({
           <div onClick={prescriptionThroughDelete}>
             <i className="fa-solid fa-trash"></i>
           </div>
-        </div>
+        </h4>
       </div>
     </form>
   );
