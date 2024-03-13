@@ -1,10 +1,12 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import BigModal from "../../Modals/BigModal";
 import { MainButton, PlusButton } from "../../Buttons/Buttons";
 import PatientList from "./PatientList";
 import DoctorList from "./DoctorList";
 import DepartmentsList from "./DepartmentsList";
 import PurchaseListManual from "./PurcahseListManual";
+import axios from "axios";
+import useServerIP from "../../../services/ServerIP";
 
 const SellingLists = ({
   title,
@@ -16,6 +18,7 @@ const SellingLists = ({
 }) => {
   const ListDashboardRef = useRef(null);
 
+
   const [active, setActive] = React.useState(activeKey);
   return (
     <>
@@ -26,6 +29,14 @@ const SellingLists = ({
             setActive(activeKey);
           }}
         />
+      )}
+      {button == "plus_purchase" && (
+        <div onClick={() =>  {
+          ListDashboardRef.current.Opener();
+          setActive(activeKey);
+        }}>
+          <i className="fa-solid fa-plus"></i>
+        </div>
       )}
       {button == "main" && (
         <MainButton

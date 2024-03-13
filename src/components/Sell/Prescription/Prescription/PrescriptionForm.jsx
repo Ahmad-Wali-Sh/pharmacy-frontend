@@ -75,9 +75,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           case "D":
           case "ی":
             e.preventDefault();
-            setTimeout(() => {
               newPrescription()
-            }, 200)
             break;
           case "q":
           case "Q":
@@ -102,7 +100,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDowns);
     };
-  }, []);
+  }, [serverIP]);
 
 
   const newPrescription = () => {

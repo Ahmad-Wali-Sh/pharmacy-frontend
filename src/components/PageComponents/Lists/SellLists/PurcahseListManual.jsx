@@ -78,16 +78,17 @@ function isValidDate(dateString) {
 export default function PurchaseListManual({ selectedMedicine }) {
 
   const currendDate = new Date()
-  currendDate.setDate(currendDate.getDate() + 1)
+  const today = new Date()
+  currendDate.setDate(currendDate.getDate() + 2)
   const tomorrow = currendDate.toISOString().substring(0,10)
-  const ListFilterRef = useRef(null);
   const [active, setActive] = useState("list");
   const [editItem, setEditItem] = useState("");
+  const ListFilterRef = useRef(null);
   const [filter, setFilter] = useState({
     created: new Date().toISOString().substring(0, 10),
     approved: false,
-    createdAfter: new Date().toISOString().substring(0, 10),
-    createdAfterTime: new Date().setHours(0, 0, 0, 0),
+    createdAfter: today.toISOString().substring(0, 10),
+    createdAfterTime: today.setHours(0, 0, 0, 0),
     createdBeforeTime: new Date().setHours(0, 0, 0, 0),
     createdBefore: tomorrow
   });
@@ -155,7 +156,7 @@ export default function PurchaseListManual({ selectedMedicine }) {
     selectedMedicine && setActive("new");
     selectedMedicine &&
       reset({
-        medicine: selectedMedicine?.id,
+        medicine: selectedMedicine?.medician || selectedMedicine?.id,
       });
   }, [selectedMedicine]);
 
@@ -316,7 +317,7 @@ export default function PurchaseListManual({ selectedMedicine }) {
               purchaseMedicine={selectedMedicine}
             />
             <label>تعداد_مورد_نیاز:</label>
-            <input type="text" {...register("quantity")} />
+            <input type="text" {...register("quantity")} autoFocus/>
           </Form>
           <ListFooter
             setActive={setActive}

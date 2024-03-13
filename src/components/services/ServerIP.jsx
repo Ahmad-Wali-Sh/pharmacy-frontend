@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const useServerIP = () => {
-  const [serverIP, setServerIP] = useState("http://127.0.0.1:8000/");
+  const [serverIP, setServerIP] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const EndpointsURL = "http://127.0.0.1:4000/api/endpoints";

@@ -381,7 +381,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             <label>موجودی:</label>
           <input
             type="text"
-            value={medicine?.existence || ''}
+            value={medicine?.existence || 0}
             disabled
             />
             </div>

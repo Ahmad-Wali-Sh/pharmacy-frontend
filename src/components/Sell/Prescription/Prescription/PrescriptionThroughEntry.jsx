@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
 import { Popover } from "react-tiny-popover";
@@ -9,6 +9,7 @@ import { SelectMedician } from "../../../Medician/SelectMedicine/SelectMedician"
 import axios from "axios";
 import useServerIP from "../../../services/ServerIP";
 import { toast } from "react-toastify";
+import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 
 function PrescriptionThroughEntry({
   through,
@@ -98,6 +99,8 @@ function PrescriptionThroughEntry({
       });
   };
 
+  const SellRef = useRef(null)
+
   return (
     <form onSubmit={(e) => e.preventDefault()} id={id}>
       <div className={`prescription-through-map ${alert} ${highlighted ? 'pres-item-highlight' : ''}`} onClick={onClick}>
@@ -107,7 +110,7 @@ function PrescriptionThroughEntry({
           {through.medicine_full}
         </h4>
         <input
-        style={{flexBasis: '4%'}}
+        style={{flexBasis: '4.1%'}}
           type="text"
           defaultValue={through.quantity}
           {...register("quantity")}
@@ -116,12 +119,21 @@ function PrescriptionThroughEntry({
           }}
           onBlurCapture={handleSubmit(prescriptionThroughUpdate)}
         />
-        <h4 style={{flexBasis: '3%'}}>{through.medicine_no_quantity || 1}</h4>
-        <h4 style={{flexBasis: '3%'}}>{through.medicine_no_box || 1}</h4>
-        <h4 style={{flexBasis: '4%', direction:'ltr', textAlign:'right'}}>{through.medicine_existence}</h4>
-        <h4 style={{flexBasis: '5%'}}>{through.each_price}</h4>
-        <h4 style={{flexBasis: '4%'}}>{through.total_price}</h4>
+        <h4 style={{flexBasis: '2%'}}>{through.medicine_no_quantity || 1}</h4>
+        <h4 style={{flexBasis: '2%'}}>{through.medicine_no_box || 1}</h4>
+        <h4 style={{flexBasis: '4%', direction:'ltr', textAlign:'right'}}>{through.medicine_existence ? through.medicine_existence : 0}</h4>
+        <h4 style={{flexBasis: '3.5%'}}>{through.each_price}</h4>
+        <h4 style={{flexBasis: '2.4%'}}>{through.total_price}</h4>
         <h4 className="medician-map-buttons">
+        <div >
+                <SellingLists
+                  title="لست ها"
+                  activeKey="purhase-list"
+                  ref={SellRef}
+                  selectedMedicine={through}
+                  button='plus_purchase'
+                />
+              </div>
           <SelectMedician
             edit={true}
             selectAutoCompleteData={selectAutoCompleteData}
