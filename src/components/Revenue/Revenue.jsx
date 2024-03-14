@@ -329,7 +329,7 @@ export default function Revenue(props) {
                 {refundPrescription?.[0] && (
                   <div className="revneue-content-open">
                     <div className="mini-content-headers">
-                      <div>نسخه های برگشتی</div>
+                      <div>نسخه های برگشتی و اخذیات</div>
                       <div className="revenue-map-content">
                         <h4>NO</h4>
                         <h4>شماره نسخه</h4>

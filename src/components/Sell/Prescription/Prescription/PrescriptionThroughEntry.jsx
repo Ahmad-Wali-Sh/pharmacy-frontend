@@ -20,7 +20,7 @@ function PrescriptionThroughEntry({
   updatePrescription,
   highlighted,
   id,
-  updatePrescriptionThrough
+  updatePrescriptionThrough,
 }) {
   const user = useAuthUser();
   const { serverIP } = useServerIP();
@@ -83,34 +83,38 @@ function PrescriptionThroughEntry({
     prescriptionThroughPatch(MedicianUpdateForm);
   };
 
-  const [isCautionsOpen, setIsCautionsOpen] = React.useState(false);
-  const [isUsagesOpen, setIsUsagesOpen] = React.useState(false);
-
   const selectAutoCompleteData = (data) => {
     const Form = new FormData();
     Form.append("medician", data?.id);
     Form.append("each_price", data?.price);
+    Form.append('quantity', through?.quantity)
     Form.append("user", user().id);
     axios
       .patch(`${serverIP}api/prescription-through/${through.id}/`, Form)
       .then(() => {
-          updatePrescriptionThrough();
-          toast.success('دارو موفقانه تعویض شد')
+        updatePrescriptionThrough();
+        handleSubmit(prescriptionThroughUpdate)()
+        toast.success("دارو موفقانه تعویض شد");
       });
   };
 
-  const SellRef = useRef(null)
+  const SellRef = useRef(null);
 
   return (
     <form onSubmit={(e) => e.preventDefault()} id={id}>
-      <div className={`prescription-through-map ${alert} ${highlighted ? 'pres-item-highlight' : ''}`} onClick={onClick}>
+      <div
+        className={`prescription-through-map ${alert} ${
+          highlighted ? "pres-item-highlight" : ""
+        }`}
+        onClick={onClick}
+      >
         <label></label>
-        <label style={{flexBasis: '1%'}}>{num + 1}</label>
-        <h4 className="entrance-medician-map-name-dr">
+        <label style={{ width: "2%" }}>{num + 1}</label>
+        <h4 className="entrance-medician-map-name-dr" style={{ maxWidth: "67%", width:'67%' }}>
           {through.medicine_full}
         </h4>
         <input
-        style={{flexBasis: '4.1%'}}
+          style={{ width: "4%" }}
           type="text"
           defaultValue={through.quantity}
           {...register("quantity")}
@@ -119,21 +123,23 @@ function PrescriptionThroughEntry({
           }}
           onBlurCapture={handleSubmit(prescriptionThroughUpdate)}
         />
-        <h4 style={{flexBasis: '2%'}}>{through.medicine_no_quantity || 1}</h4>
-        <h4 style={{flexBasis: '2%'}}>{through.medicine_no_box || 1}</h4>
-        <h4 style={{flexBasis: '4%', direction:'ltr', textAlign:'right'}}>{through.medicine_existence ? through.medicine_existence : 0}</h4>
-        <h4 style={{flexBasis: '3.5%'}}>{through.each_price}</h4>
-        <h4 style={{flexBasis: '2.4%'}}>{through.total_price}</h4>
-        <h4 className="medician-map-buttons">
-        <div >
-                <SellingLists
-                  title="لست ها"
-                  activeKey="purhase-list"
-                  ref={SellRef}
-                  selectedMedicine={through}
-                  button='plus_purchase'
-                />
-              </div>
+        <h4 style={{ width: "3%" }}>{through.medicine_no_quantity || 1}</h4>
+        <h4 style={{ width: "3%" }}>{through.medicine_no_box || 1}</h4>
+        <h4 style={{ width: "5%", direction: "ltr", textAlign: "right" }}>
+          {through.medicine_existence ? through.medicine_existence : 0}
+        </h4>
+        <h4 style={{ width: "4%" }}>{through.each_price}</h4>
+        <h4 style={{ width: "4%" }}>{through.total_price}</h4>
+        <h4 className="medician-map-buttons" style={{width: '6%'}}>
+          <div>
+            <SellingLists
+              title="لست ها"
+              activeKey="purhase-list"
+              ref={SellRef}
+              selectedMedicine={through}
+              button="plus_purchase"
+            />
+          </div>
           <SelectMedician
             edit={true}
             selectAutoCompleteData={selectAutoCompleteData}

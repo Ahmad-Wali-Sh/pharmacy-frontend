@@ -24,9 +24,10 @@ import moment from "jalali-moment";
 import MultiplePrescriptionImage from "../../../PageComponents/MultiplePrescriptionImage";
 import axios from "axios";
 import useServerIP from "../../../services/ServerIP";
+import AlertModal from "../../../PageComponents/Modals/AlertModal";
 
 function PrescriptionForm({ prescriptionThrough, update }) {
-  const { userPremissions} = useUserPermissions()
+  const { userPremissions } = useUserPermissions();
   const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
   const { data: doctor } = useQuery(["doctor/"]);
@@ -34,10 +35,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
   const [searchNumber, setSearchNumber] = React.useState("");
   const { prescription, setPrescription } = usePrescription();
 
-
   const { register, handleSubmit, reset, watch, setValue, control } = useForm();
-
-  const [rekey, setRekey] = useState('')
 
   React.useEffect(() => {
     reset({
@@ -47,15 +45,15 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       khairat: prescription.khairat || 0,
       department: prescription.department || 0,
       prescription_number: prescription.prescription_number || "",
-      name: prescription.name ? prescription.name : '',
+      name: prescription.name ? prescription.name : "",
       doctor: prescription.doctor ? prescription.doctor : "",
     });
   }, [prescription]);
-  const { serverIP } = useServerIP()
+  const { serverIP } = useServerIP();
 
   const cleanupPrescription = () => {
-    setPrescription([])
-  }
+    setPrescription([]);
+  };
 
   React.useEffect(() => {
     const date = moment();
@@ -75,7 +73,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           case "D":
           case "ی":
             e.preventDefault();
-              newPrescription()
+            newPrescription();
             break;
           case "q":
           case "Q":
@@ -83,7 +81,10 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             e.preventDefault();
             document.getElementById("search-number").focus();
             setSearchNumber(`${jalaliDate}-`);
-            cleanupPrescription()
+            cleanupPrescription();
+          case "Delete":
+            e.preventDefault();
+            DeleterWithAlert()
             break;
           case "s":
           case "S":
@@ -102,24 +103,26 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     };
   }, [serverIP]);
 
-
   const newPrescription = () => {
-    serverIP && axios.get(`${serverIP}api/department/` + watch('department') + "/").then((res) => {
-      const DepartmentForm = new FormData();
-      DepartmentForm.append("name", "");
-      DepartmentForm.append("doctor", "");
-      DepartmentForm.append("department", watch('department'));
-      DepartmentForm.append("discount_money", res.data.discount_money);
-      DepartmentForm.append("discount_percent", res.data.discount_percent);
-      DepartmentForm.append("user", user().id);
-      axios.post(`${serverIP}api/prescription/`, DepartmentForm).then((res) => {
-        setPrescription(res.data)
-        toast.success('موفقانه بود')
-      })
-    }) 
-  }
-
-
+    serverIP &&
+      axios
+        .get(`${serverIP}api/department/` + watch("department") + "/")
+        .then((res) => {
+          const DepartmentForm = new FormData();
+          DepartmentForm.append("name", "");
+          DepartmentForm.append("doctor", "");
+          DepartmentForm.append("department", watch("department"));
+          DepartmentForm.append("discount_money", res.data.discount_money);
+          DepartmentForm.append("discount_percent", res.data.discount_percent);
+          DepartmentForm.append("user", user().id);
+          axios
+            .post(`${serverIP}api/prescription/`, DepartmentForm)
+            .then((res) => {
+              setPrescription(res.data);
+              toast.success("موفقانه بود");
+            });
+        });
+  };
 
   const { mutateAsync: updatePrescription } = useMutation({
     mutationFn: (data) => {
@@ -138,7 +141,6 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     },
   });
 
-
   const { mutateAsync: duplicatePrescription } = useMutation({
     mutationFn: (data) => postDataFn(data, "prescription/"),
     onSuccess: (res) => {
@@ -156,6 +158,10 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       });
     },
   });
+
+  const DeleterWithAlert = () => {
+    AlertModalRef.current.Opener()
+  }
 
   const { refetch: deletePrescription } = useQuery({
     queryKey: [`prescription-through/delete/?prescription=${prescription?.id}`],
@@ -180,9 +186,16 @@ function PrescriptionForm({ prescriptionThrough, update }) {
 
   const ListRef = useRef(null);
   const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
-
+  const AlertModalRef = useRef(null)
   return (
     <>
+      <AlertModal
+        errorText={"آیا موافق با حذف این نسخه هستید؟"}
+        errorTitle={"حذف نسخه"}
+        OkFunc={() => {deletePrescription()}}
+        NoFunc={() => {AlertModalRef.current.Closer()}}
+        ref={AlertModalRef}
+      ></AlertModal>
       <div
         className="more-less-button"
         onClick={() => setShowPrescriptionForm(!showPrescriptionForm)}
@@ -242,11 +255,13 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             getOptionLabel={(option) => option.code_name}
             getOptionValue={(option) => option.code_name}
             uniqueKey={`patient-unique${prescription?.id}`}
-            defaultValue={patient?.find((c) =>
-              c.id === prescription?.name ? c.code_name : ''
-            ) || new Date()}
+            defaultValue={
+              patient?.find((c) =>
+                c.id === prescription?.name ? c.code_name : ""
+              ) || new Date()
+            }
             NewComponent={
-             <SellingLists
+              <SellingLists
                 title="لست ها"
                 activeKey="patient"
                 ref={ListRef}
@@ -263,11 +278,13 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             getOptionLabel={(option) => option.code_name}
             getOptionValue={(option) => option.code_name}
             uniqueKey={`doctor-unique${prescription?.id}`}
-            defaultValue={doctor?.find((c) =>
-              c.id === prescription?.doctor ? c.code_name : ""
-            ) || new Date()}
+            defaultValue={
+              doctor?.find((c) =>
+                c.id === prescription?.doctor ? c.code_name : ""
+              ) || new Date()
+            }
             NewComponent={
-               <SellingLists
+              <SellingLists
                 title="لست ها"
                 activeKey="doctor"
                 ref={ListRef}
@@ -292,7 +309,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           <ButtonGroup>
             <FormButton
               Func={() => {
-                deletePrescription()
+                deletePrescription();
               }}
               name="حذف"
               className="alert-button"
