@@ -82,6 +82,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             document.getElementById("search-number").focus();
             setSearchNumber(`${jalaliDate}-`);
             cleanupPrescription();
+            break;
           case "Delete":
             e.preventDefault();
             DeleterWithAlert()
