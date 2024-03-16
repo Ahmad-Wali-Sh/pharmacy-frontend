@@ -60,7 +60,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     const jalaliDate = date.format("jYYYY-jMM");
 
     const handleKeyDowns = (e) => {
-      if (e.ctrlKey) {
+      if (e.shiftKey) {
         switch (e.key) {
           case "B":
           case "b":

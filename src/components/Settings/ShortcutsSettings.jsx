@@ -220,23 +220,23 @@ function PrescriptionShortcuts() {
       </div>
       <div className="shortcut-item">
         <div>جستجو نسخه</div>
-        <div>Ctrl + B</div>
+        <div>Shift + B</div>
       </div>
       <div className="shortcut-item">
         <div>نسخه جدید</div>
-        <div>Ctrl + D</div>
+        <div>Shift + D</div>
       </div>
       <div className="shortcut-item">
         <div>خالی سازی نسخه</div>
-        <div>Ctrl + Q</div>
+        <div>Shift + Q</div>
       </div>
       <div className="shortcut-item">
         <div>حذف  نسخه</div>
-        <div>Ctrl + Delete</div>
+        <div>Shift + Delete</div>
       </div>
       <div className="shortcut-item">
         <div>ذخیره یا آپدیت نسخه</div>
-        <div>Ctrl + S</div>
+        <div>Shift + S</div>
       </div>
       <div className="shortcut-item">
         <div>چاپ</div>
