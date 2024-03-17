@@ -40,7 +40,7 @@ export default function Revenue(props) {
 
     serverIP &&
       axios
-        .get(`${serverIP}api/prescription/` + "?sold=false&ordering=-id")
+        .get(`${serverIP}api/prescription/` + "?sold=false&grand_not_equal=0&ordering=-id")
         .then((res) => {
           setSelectedIdx("");
           setOpenPrescriptions(res.data);
