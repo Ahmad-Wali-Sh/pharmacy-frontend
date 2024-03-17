@@ -2071,6 +2071,21 @@ input[type="text"]:disabled {
   gap: 1rem;
 }
 
+.date-picker-app-wrapper  {
+  background-color: var(--bg-300) !important;
+  width: 20rem;
+  height: 2rem;
+  position: absolute;
+  top: -0.5rem;
+  margin:1rem;
+  border-radius: 2rem;
+  direction: ltr !important;
+}
+
+.default-placeholder {
+  background-color: var(--bg-200) !important;
+}
+
 .prescription-add-button {
   height: 1.5rem;
   border-radius: 1rem;

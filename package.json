@@ -38,6 +38,7 @@
     "react-modal": "^3.16.1",
     "react-multi-date-picker": "^4.0.0",
     "react-query": "^3.39.3",
+    "react-range-picker": "^1.0.1",
     "react-router-dom": "^6.9.0",
     "react-search-autocomplete": "^8.3.2",
     "react-select": "^5.7.4",
