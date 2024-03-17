@@ -33,8 +33,8 @@ function MultipleBarcode({ medicineID }) {
             console.log(res);
             toast.error(
               <>
-                <h5>ID: {`${res.data.results[0].medician.id}`}</h5>
-                <h5>Name: {`${res.data.results[0].medician.medicine_full}`}</h5>
+                <h5>ID: {`${res.data.results[0].medicine.id}`}</h5>
+                <h5>Name: {`${res.data.results[0].medicine.medicine_full}`}</h5>
                 <hr />
                 <h5>barcode: {barcoder}</h5>
                 <button

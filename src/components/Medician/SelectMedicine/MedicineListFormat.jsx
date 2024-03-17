@@ -52,7 +52,7 @@ export const MedicineListFormat = (resultsLength) => (item) => {
           <h4 className="generics-text-header">
             {item?.generic_name?.toString()}
           </h4>
-          {item?.generic_name[0] && (
+          {item?.generic_name?.[0] && (
             <div className="generics-text">
               {item?.generic_name?.toString()}
             </div>

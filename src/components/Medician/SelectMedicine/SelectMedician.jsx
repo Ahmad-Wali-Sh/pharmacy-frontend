@@ -85,7 +85,7 @@ export const SelectMedician = forwardRef(
       const options = stringArray.join("").replace(/\s/g, "") !== "" &&
                       !MedicineLoading &&
                       isBarcode(stringArray) 
-                        ? [MedicianSearched?.results[0].medician] 
+                        ? [MedicianSearched?.results[0].medicine] 
                         : MedicianSearched?.results;
     
       const optionsWithIndex = options.map((option, index) => ({
