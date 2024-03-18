@@ -33,6 +33,15 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.today-date{
+  background-color: var(--bg-300);
+  padding: 0.5rem;
+  color: var(--text-200);
+  border-radius: 1rem;
+  overflow: clip;
+  scale: 0.85;
+}
+
 .color-pallete-container {
   background-color: var(--bg-100);
   width: 94%;
