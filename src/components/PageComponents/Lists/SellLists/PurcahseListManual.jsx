@@ -201,15 +201,20 @@ export default function PurchaseListManual({ selectedMedicine }) {
     case "list":
       return (
         <>
+        <div style={{zIndex:'1000'}}>
+
           <RangePicker
             selectTime={true}
             rangeTillEndOfDay
+            // defaultValue={{startDate: new Date(), endDate: new Date()}}
             onDateSelected={(startDate, endDate) => {
               setStarter(new Date(startDate).toISOString());
               setEnder(new Date(endDate).toISOString());
             }}
             dateFormat={'yyyy-mm-dd h:mi A '}
-          />
+            style={{zIndex:'10000'}}
+            />
+            </div>
           <FilterModal
             current={ListFilterRef.current}
             ListFilterRef={ListFilterRef}

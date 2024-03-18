@@ -8,7 +8,6 @@ import ShortcutListener from "../Settings/ShortcutListener";
 import useServerIP from "../services/ServerIP";
 import moment from 'jalali-moment';
 
-
 function Header() {
 
   const [time, setTime] = useState(moment().format('jYYYY-jMM-jDD | hh:mm A'));

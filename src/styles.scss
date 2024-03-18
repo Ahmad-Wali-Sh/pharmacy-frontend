@@ -2065,6 +2065,10 @@ input[type="text"]:disabled {
   text-align: left;
 }
 
+.visible {
+  z-index: 10000 !important;
+}
+
 .prescription-through > input {
   height: 1.47rem;
   border-radius: 1rem;
@@ -2086,6 +2090,7 @@ input[type="text"]:disabled {
   height: 2rem;
   position: absolute;
   top: -0.5rem;
+  z-index: 1000;
   margin:1rem;
   border-radius: 2rem;
   direction: ltr !important;

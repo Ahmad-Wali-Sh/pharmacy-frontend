@@ -4,6 +4,7 @@ import BigModal from "../../PageComponents/Modals/BigModal";
 import AutoShopingList from "./AutoShopingList";
 import ManualShopingList from "./ManualShopingList";
 import TrazList from "./TrazList";
+import PurchaseListManual from "../../PageComponents/Lists/SellLists/PurcahseListManual";
 
 const ShopingLists = ({
   title,
@@ -80,7 +81,7 @@ const ShopingLists = ({
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
-              {active == "manual-shoping" && <ManualShopingList />}
+              {active == "manual-shoping" && <PurchaseListManual />}
               {active == "shoping-list" && <AutoShopingList />}
               {active == "traz" && <TrazList />}
             </div>
