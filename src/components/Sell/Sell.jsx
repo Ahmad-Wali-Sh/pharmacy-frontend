@@ -10,9 +10,7 @@ function Sell() {
     data: departments,
     isLoading,
     isError,
-  } = useQuery({ queryKey: ["department/?ordering=id"] });
-
-  const {userPermissions} = useUserPermissions()
+  } = useQuery({ queryKey: ["department/?ordering=id/"] });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -31,11 +29,11 @@ function Sell() {
         <SellingLists title='لست ها' activeKey='purhase-list' button='main' name='لست خرید' icon='fa-solid fa-list-alt'/>
       </div>
       <div className="sell-form">
-        {userPermissions?.includes('core.add_prescription') && <div className="sell-department-buttons">
+        <div className="sell-department-buttons">
           {departments?.map((depart) => (
             <Prescription button={2} department={depart} trigger={0} />
           ))}
-        </div>}
+        </div>
       </div>
     </div>
   );
