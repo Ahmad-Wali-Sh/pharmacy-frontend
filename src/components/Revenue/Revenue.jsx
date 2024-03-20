@@ -17,6 +17,9 @@ export default function Revenue(props) {
   const [closedPrescriptions, setClosedPrescriptions] = React.useState([]);
   const [refundPrescription, setRefundPrescription] = React.useState([]);
   const [lock, setLock] = useState(false);
+  const [closePage, setClosePage] = useState(1);
+  const [openPage, setOpenPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     serverIP &&
@@ -33,41 +36,51 @@ export default function Revenue(props) {
           setRevenue(res.data && res.data[0]);
         });
 
-    // toast.warning("در حال بارگذاری...", {
-    //   position: "bottom-right",
-    //   autoClose: 3000,
-    // });
-
     serverIP &&
       axios
-        .get(`${serverIP}api/prescription/` + "?sold=false&grand_not_equal=0&ordering=-id")
+        .get(
+          `${serverIP}api/prescription-pg/` +
+            `?sold=false&grand_not_equal=0&ordering=-id&${
+              search ? "prescription_number=" + search : ""
+            }&page=${openPage}`
+        )
         .then((res) => {
           setSelectedIdx("");
           setOpenPrescriptions(res.data);
+        })
+        .catch(() => {
+          setOpenPage(1);
+          setTrigger(new Date());
         });
 
     serverIP &&
       axios
         .get(
-          `${serverIP}api/prescription/` +
+          `${serverIP}api/prescription-pg/` +
             "?sold=true&ordering=-id&refund_not_equal=0"
         )
         .then((res) => {
           setSelectedIdx("");
-          setRefundPrescription(res.data);
+          setRefundPrescription(res.data.results);
         });
-  }, [trigger]);
+  }, [trigger, search]);
 
   useEffect(() => {
     revenue?.id &&
       axios
         .get(
-          `${serverIP}api/prescription/?sold=true&ordering=-purchase_payment_date&revenue=${revenue?.id}`
+          `${serverIP}api/prescription-pg/?sold=true&ordering=-purchase_payment_date&revenue=${
+            revenue?.id
+          }&${search ? "prescription_number=" + search : ""}&page=${closePage}`
         )
         .then((res) => {
           setClosedPrescriptions(res.data);
+        })
+        .catch(() => {
+          setClosePage(1);
+          setTrigger(new Date());
         });
-  }, [revenue?.id, trigger]);
+  }, [revenue?.id, trigger, search]);
 
   const handleBarcodePay = (barcode) => {
     axios
@@ -136,7 +149,7 @@ export default function Revenue(props) {
     const Form = new FormData();
     Form.append("revenue", "");
     Form.append("sold", false);
-    Form.append('purchased_value', 0)
+    Form.append("purchased_value", 0);
     axios
       .patch(`${serverIP}api/prescription/${prescription.id}/`, Form)
       .then(() => {
@@ -187,7 +200,7 @@ export default function Revenue(props) {
         event.preventDefault();
       } else if (
         event.key === "ArrowDown" &&
-        selectedIdx < openPrescriptions?.length - 1
+        selectedIdx < openPrescriptions?.results?.length - 1
       ) {
         setSelectedIdx((prevIdx) => prevIdx + 1);
         event.preventDefault();
@@ -198,7 +211,7 @@ export default function Revenue(props) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [openPrescriptions, selectedIdx]);
+  }, [openPrescriptions?.results, selectedIdx]);
 
   useEffect(() => {
     const selectedElement = document.getElementById(`item-${selectedIdx}`);
@@ -254,8 +267,22 @@ export default function Revenue(props) {
               >
                 <i className="fa-solid fa-arrows-rotate"></i>
               </div>
-              {revenue?.active && <h3>فعال</h3>}
+
               <div className="barcode-lock-room">
+                <input
+                  type="text"
+                  className="barcode-input"
+                  placeholder="جستجو"
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setTrigger(new Date());
+                  }}
+                  style={{
+                    marginLeft: "1rem",
+                    direction: "rtl",
+                    padding: "0.5rem",
+                  }}
+                />
                 <button className="lock-button" onClick={() => setLock(!lock)}>
                   {lock ? (
                     <i className="fa-solid fa-lock"></i>
@@ -266,6 +293,7 @@ export default function Revenue(props) {
                 <input
                   type="text"
                   id="barcode-input"
+                  style={{ padding: "0.5rem" }}
                   ref={barcodeRef}
                   className="barcode-input"
                   onKeyDown={(e) =>
@@ -280,7 +308,18 @@ export default function Revenue(props) {
               <div className="revenue-with-refund">
                 <div className="revneue-content-open">
                   <div className="mini-content-headers">
-                    <div>نسخه های قابل پرداخت</div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>نسخه های قابل پرداخت</div>
+                      <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem', paddingLeft: '0.4rem'}}>
+                        <div>تعداد: {openPrescriptions?.count}</div>
+                        <div>صفحات: {Math.ceil(openPrescriptions?.count / 100)}</div>
+                      </div>
+                    </div>
                     <div className="revenue-map-content">
                       <h4>NO</h4>
                       <h4>شماره نسخه</h4>
@@ -292,11 +331,11 @@ export default function Revenue(props) {
                   <div
                     style={{
                       overflowY: "scroll",
-                      height: refundPrescription?.[0] ? "40dvh" : "72dvh",
+                      height: refundPrescription?.[0] ? "28dvh" : "66dvh",
                     }}
                   >
                     {revenue &&
-                      openPrescriptions?.map((pres, key) => (
+                      openPrescriptions?.results?.map((pres, key) => (
                         <div
                           className={`revenue-map-content ${
                             selectedIdx === key ? "highlight-item" : ""
@@ -325,65 +364,114 @@ export default function Revenue(props) {
                         </div>
                       ))}
                   </div>
+                  <div className="revenue-pagination-conatiner">
+                    {openPrescriptions?.previous && (
+                      <div
+                        className="paginator-button"
+                        onClick={() => {
+                          if (openPrescriptions?.previous) {
+                            setOpenPage((prev) => prev - 1);
+                            setTrigger(new Date());
+                          }
+                        }}
+                      >
+                        {"قبلی"}
+                      </div>
+                    )}
+                    <div className="paginator-button-page">{openPage}</div>
+                    {openPrescriptions?.next && (
+                      <div
+                        className="paginator-button"
+                        onClick={() => {
+                          if (openPrescriptions?.next) {
+                            setOpenPage((prev) => prev + 1);
+                            setTrigger(new Date());
+                          }
+                        }}
+                      >
+                        {"بعدی"}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 {refundPrescription?.[0] && (
-                  <div className="revneue-content-open">
-                    <div className="mini-content-headers">
-                      <div>نسخه های برگشتی و اخذیات</div>
-                      <div className="revenue-map-content">
-                        <h4>NO</h4>
-                        <h4>شماره نسخه</h4>
-                        <h4>نوعیت نسخه</h4>
-                        <h4>نام مریض</h4>
-                        <h4>قیمت کل</h4>
+                  <>
+                    <div className="revneue-content-open">
+                      <div className="mini-content-headers">
+                        <div>نسخه های برگشتی و اخذیات</div>
+                        <div className="revenue-map-content">
+                          <h4>NO</h4>
+                          <h4>شماره نسخه</h4>
+                          <h4>نوعیت نسخه</h4>
+                          <h4>نام مریض</h4>
+                          <h4>قیمت کل</h4>
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          overflowY: "scroll",
+                          height: refundPrescription?.[0] ? "23.6dvh" : "72dvh",
+                        }}
+                      >
+                        {revenue &&
+                          refundPrescription?.map((pres, key) => (
+                            <div
+                              className={`revenue-map-content ${
+                                selectedIdx === key ? "" : ""
+                              }`}
+                              id={`item-${key}`}
+                              onClick={() => setSelectedIdx(key)}
+                            >
+                              <h3>{key + 1}</h3>
+                              <h3>{pres.prescription_number}</h3>
+                              <h3>{pres.department_name}</h3>
+                              <h3>{pres.patient_name}</h3>
+                              <h3 className="persian-number">
+                                {pres.refund &&
+                                  (pres.refund > 0 ? "-" : "") +
+                                    (pres.refund > 0
+                                      ? pres.refund.toFixed(2)
+                                      : pres.refund.toFixed(2).slice(1))}
+                                AF
+                              </h3>
+                              <div
+                                className="revenue-button"
+                                onClick={() => {
+                                  handleClosePrescription(pres);
+                                  handleRefundPrescription(pres);
+                                }}
+                              >
+                                <i class="fa-solid fa-angles-left"></i>
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                      <div className="revenue-pagination-conatiner">
+                        <div className="paginator-button">{"<<"}</div>
+                        <div className="paginator-button">{"1"}</div>
+                        <div className="paginator-button">{"2"}</div>
+                        <div className="paginator-button">{"3"}</div>
+                        <div className="paginator-button">{">>"}</div>
                       </div>
                     </div>
-                    <div
-                      style={{
-                        overflowY: "scroll",
-                        height: refundPrescription?.[0] ? "23dvh" : "72dvh",
-                      }}
-                    >
-                      {revenue &&
-                        refundPrescription?.map((pres, key) => (
-                          <div
-                            className={`revenue-map-content ${
-                              selectedIdx === key ? "" : ""
-                            }`}
-                            id={`item-${key}`}
-                            onClick={() => setSelectedIdx(key)}
-                          >
-                            <h3>{key + 1}</h3>
-                            <h3>{pres.prescription_number}</h3>
-                            <h3>{pres.department_name}</h3>
-                            <h3>{pres.patient_name}</h3>
-                            <h3 className="persian-number">
-                              {pres.refund &&
-                                (pres.refund > 0 ? "-" : "") +
-                                  (pres.refund > 0
-                                    ? pres.refund.toFixed(2)
-                                    : pres.refund.toFixed(2).slice(1))}
-                              AF
-                            </h3>
-                            <div
-                              className="revenue-button"
-                              onClick={() => {
-                                handleClosePrescription(pres);
-                                handleRefundPrescription(pres);
-                              }}
-                            >
-                              <i class="fa-solid fa-angles-left"></i>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
+                  </>
                 )}
               </div>
 
               <div className="revneue-content-close">
                 <div className="mini-content-headers">
-                  <div>نسخه های پرداخت شده</div>
+                <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>نسخه های  پرداخت شده</div>
+                      <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem', paddingLeft: '0.4rem'}}>
+                        <div>تعداد: {closedPrescriptions?.count}</div>
+                        <div>صفحات: {Math.ceil(closedPrescriptions?.count / 100)}</div>
+                      </div>
+                    </div>
                   <div className="revenue-map-content">
                     <h4>NO</h4>
                     <h4>شماره نسخه</h4>
@@ -394,7 +482,7 @@ export default function Revenue(props) {
                 </div>
                 <div className="yScroll">
                   {revenue &&
-                    closedPrescriptions?.map((through, key) => (
+                    closedPrescriptions?.results?.map((through, key) => (
                       <div className={`revenue-map-content`}>
                         <h3>{key + 1}</h3>
                         <h3>{through.prescription_number}</h3>
@@ -414,6 +502,35 @@ export default function Revenue(props) {
                         </div>
                       </div>
                     ))}
+                </div>
+                <div className="revenue-pagination-conatiner">
+                  {closedPrescriptions?.previous && (
+                    <div
+                      className="paginator-button"
+                      onClick={() => {
+                        if (closedPrescriptions?.previous) {
+                          setClosePage((prev) => prev - 1);
+                          setTrigger(new Date());
+                        }
+                      }}
+                    >
+                      {"قبلی"}
+                    </div>
+                  )}
+                  <div className="paginator-button-page">{closePage}</div>
+                  {closedPrescriptions?.next && (
+                    <div
+                      className="paginator-button"
+                      onClick={() => {
+                        if (closedPrescriptions?.next) {
+                          setClosePage((prev) => prev + 1);
+                          setTrigger(new Date());
+                        }
+                      }}
+                    >
+                      {"بعدی"}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

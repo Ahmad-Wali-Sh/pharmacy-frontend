@@ -2976,7 +2976,48 @@ input[type="text"]:disabled {
 
 .yScroll {
   overflow-y: scroll;
-  height: 72dvh;
+  height: 66dvh;
+}
+
+.paginator-button{
+  height: 1.6rem;
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.9rem;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-200);
+  border-radius: 0.5rem;
+  color: var(--text-100);
+
+  &:hover {
+    background-color: var(--accent-100);
+  }
+}
+
+.paginator-button-page{
+  height: 1.6rem;
+  padding: 1rem;
+  display: flex;
+  font-size: 0.9rem;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent-200);
+  border-radius: 0.5rem;
+  color: var(--text-100);
+}
+
+.revenue-pagination-conatiner {
+  height: 6dvh;
+  text-align: center;
+  display: flex;
+  gap: 0.3rem;
+  direction: rtl;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-200);
+  border-radius: 0rem 0rem 1rem 1rem;
 }
 .revenue-content {
   direction: rtl;
