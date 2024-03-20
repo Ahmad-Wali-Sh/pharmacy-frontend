@@ -2864,22 +2864,20 @@ input[type="text"]:disabled {
 }
 
 .sell-department-buttons {
-  height: 3rem;
   width: 100%;
-  border-radius: 1rem;
-  background-color: var(--bg-300);
-  align-items: center;
+  height: 100%;
+  padding: 1rem;
   display: flex;
   gap: 1rem;
-  justify-content: right;
-  padding-right: 1rem;
-  padding-left: 1rem;
+  flex-wrap: wrap;
   direction: rtl;
 }
 
 .department-card {
   width: 9rem;
-  height: 2rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
   align-items: center;
   background-color: var(--primary-100);
   text-align: center;
