@@ -3709,7 +3709,8 @@ input[type="text"]:disabled {
 .prescription-print-box {
   text-align: center;
   width: 160px;
-  overflow: hidden;
+  overflow: clip;
+  height: 200px;
   direction: rtl;
   border: 1.4px solid var(--bg-100);
   margin: 1rem;
@@ -3717,6 +3718,7 @@ input[type="text"]:disabled {
 
 .barcode-image-print {
   width: 150px;
+  height: 70px;
 }
 
 .submit-badge {
