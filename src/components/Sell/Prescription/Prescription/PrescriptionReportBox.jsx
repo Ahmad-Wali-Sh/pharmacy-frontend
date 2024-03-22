@@ -42,7 +42,7 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [serverIP]);
+  }, [serverIP, user]);
 
   return (
     <div className="entrance-report">
