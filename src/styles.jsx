@@ -13,6 +13,21 @@ export const ModalSmallStyles = {
     textAlign: "center",
   },
 };
+export const ModalBiggerSmallStyles = {
+  content: {
+    backgroundColor: "var(--bg-200)",
+    border: "none",
+    borderRadius: "1rem",
+    overflow: "hidden",
+    padding: "0px",
+    width: "50%",
+    left: "25%",
+  },
+  overlay: {
+    backgroundColor: "rgba(60,60,60,0.5)",
+    textAlign: "center",
+  },
+};
 
 export const ModalBigStyles = {
   content: {

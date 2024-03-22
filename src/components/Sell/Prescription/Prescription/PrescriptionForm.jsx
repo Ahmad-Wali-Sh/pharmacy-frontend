@@ -25,6 +25,8 @@ import MultiplePrescriptionImage from "../../../PageComponents/MultiplePrescript
 import axios from "axios";
 import useServerIP from "../../../services/ServerIP";
 import AlertModal from "../../../PageComponents/Modals/AlertModal";
+import SmallModal from "../../../PageComponents/Modals/SmallModal";
+import { ModalBiggerSmallStyles } from "../../../../styles";
 
 function PrescriptionForm({ prescriptionThrough, update }) {
   const { userPremissions } = useUserPermissions();
@@ -85,7 +87,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             break;
           case "Delete":
             e.preventDefault();
-            DeleterWithAlert()
+            DeleterWithAlert();
             break;
           case "s":
           case "S":
@@ -161,8 +163,8 @@ function PrescriptionForm({ prescriptionThrough, update }) {
   });
 
   const DeleterWithAlert = () => {
-    AlertModalRef.current.Opener()
-  }
+    AlertModalRef.current.Opener();
+  };
 
   const { refetch: deletePrescription } = useQuery({
     queryKey: [`prescription-through/delete/?prescription=${prescription?.id}`],
@@ -187,14 +189,191 @@ function PrescriptionForm({ prescriptionThrough, update }) {
 
   const ListRef = useRef(null);
   const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
-  const AlertModalRef = useRef(null)
+  const AlertModalRef = useRef(null);
+  const HisotryModalRef = useRef(null);
+
+  const historyStatus = (historyAction) => {
+    if (historyAction == 0) {
+      return "history-create";
+    }
+    if (historyAction == 1) {
+      return "history-update";
+    }
+    if (historyAction == 2) {
+      return "history-delete";
+    } else return "";
+  };
+  const historyStatusNaming = (historyAction) => {
+    if (historyAction == 0) {
+      return "جدید";
+    }
+    if (historyAction == 1) {
+      return "آپدیت";
+    }
+    if (historyAction == 2) {
+      return "حذف";
+    } else return "نامشخص";
+  };
+
+  function changesToArray(changes) {
+    const changesArray = [];
+
+    Object.entries(changes).forEach(([key, value]) => {
+      let oldValue = value;
+      let newValue = null;
+
+      if (Array.isArray(value)) {
+        [oldValue, newValue] = value;
+      }
+
+      changesArray.push({
+        field: key,
+        oldValue: oldValue === "None" ? null : oldValue,
+        newValue: newValue === "None" ? null : newValue,
+      });
+    });
+    console.log(changesArray);
+    return changesArray;
+  }
+
+  const ChangeToPersian = (fieldName) => {
+    if (fieldName == "prescription_through") {
+      return "دارو";
+    }
+    if (fieldName == "doctor") {
+      return "داکتر";
+    }
+    if (fieldName == "name") {
+      return "مریض";
+    }
+    if (fieldName == "discount_money") {
+      return "تخفیف";
+    }
+    if (fieldName == "discount_percent") {
+      return "%تخفیف";
+    }
+    if (fieldName == "zakat") {
+      return "زکات";
+    }
+    if (fieldName == "khairat") {
+      return "خیرات";
+    }
+    if (fieldName == "sold") {
+      return "پرداخت";
+    }
+    if (fieldName == "purchased_value") {
+      return "مبلغ_پرداخت";
+    }
+    if (fieldName == "revenue") {
+      return "صندوق";
+    }
+    if (fieldName == "order_user") {
+      return "هدایت";
+    } else return "نامشخص";
+  };
   return (
     <>
+      <SmallModal
+        title={"تاریخچه نسخه"}
+        ref={HisotryModalRef}
+        ModalStyle={ModalBiggerSmallStyles}
+      >
+        <div className="history-modal-container">
+          <div className="history-header">
+            <h5>No.</h5>
+            <h5>زمان</h5>
+            <h5>کاربر</h5>
+            <h5>عملیات</h5>
+            <h5>نوعیت</h5>
+            <h5>تغییرات</h5>
+          </div>
+          <div className="history-map-container">
+            {prescription?.history?.map((history, num) => (
+              <div
+                className={`history-change-item ${historyStatus(
+                  history.action
+                )}`}
+              >
+                <h5>{num + 1}</h5>
+                <div>
+                  <h6>{moment(history?.date).format("jYYYY-jMM-jDD")}</h6>
+                  <h6 style={{ direction: "ltr" }}>
+                    {moment(history?.date).format("hh:mm A")}
+                  </h6>
+                </div>
+                <h5>{history.user_name}</h5>
+                <h5>{historyStatusNaming(history.action)}</h5>
+                <h5>
+                  {changesToArray(history?.changes)?.map((change) => (
+                    <div>{ChangeToPersian(change?.field)}</div>
+                  ))}
+                </h5>
+
+                <h5
+                  style={{
+                    direction: "ltr",
+                    textAlign: "left",
+                    paddingLeft: "0.5rem",
+                  }}
+                >
+                  {changesToArray(history?.changes)?.map((change) =>
+                    change.field != "prescription_through" ? (
+                      <div style={{ direction: "ltr" }}>
+                        {(change.oldValue ? change.oldValue : "") +
+                          " > " +
+                          (change.newValue ? change.newValue : "Empty")}
+                      </div>
+                    ) : history.action == 2 ? (
+                      <div style={{ direction: "ltr" }}>
+                        {change.oldValue?.old?.medician_name}
+                      </div>
+                    ) : history.action == 0 ? (
+                      <div style={{ direction: "ltr" }}>
+                        <div>{change.oldValue?.new?.medician_name}</div>
+                        <div>{"> " + change.oldValue?.new?.quantity}</div>
+                      </div>
+                    ) : (
+                      <div style={{ direction: "ltr" }}>
+                        {change.oldValue?.old?.medician_name !=
+                          change.oldValue?.new?.medician_name && (
+                          <>
+                            <div>{change.oldValue?.old?.medician_name}</div>
+                            <div>
+                              {"> " + change.oldValue?.new?.medician_name}
+                            </div>
+                          </>
+                        )}
+                        {change.oldValue?.old?.quantity !=
+                          change.oldValue?.new?.quantity && (
+                          <>
+                            <div>{change.oldValue?.new?.medician_name}</div>
+                            <div className="flex">
+                              <div>تعداد</div>
+                              <div>
+                                {change.oldValue?.old?.quantity}{" "}
+                                {"> " + change.oldValue?.new?.quantity}
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )
+                  )}
+                </h5>
+              </div>
+            ))}
+          </div>
+        </div>
+      </SmallModal>
       <AlertModal
         errorText={"آیا موافق با حذف این نسخه هستید؟"}
         errorTitle={"حذف نسخه"}
-        OkFunc={() => {deletePrescription()}}
-        NoFunc={() => {AlertModalRef.current.Closer()}}
+        OkFunc={() => {
+          deletePrescription();
+        }}
+        NoFunc={() => {
+          AlertModalRef.current.Closer();
+        }}
         ref={AlertModalRef}
       ></AlertModal>
       <div
@@ -224,13 +403,24 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             ))}
           </select>
           <label>شماره:</label>
-          <input
-            required
-            type="text"
-            {...register("prescription_number")}
-            value={prescription?.prescription_number}
-            disabled
-          />
+          <div className="flex_pres">
+            <input
+              required
+              type="text"
+              {...register("prescription_number")}
+              value={prescription?.prescription_number}
+              disabled
+            />
+            <button
+              className="search-button-box shadow-drop-center"
+              onClick={(e) => {
+                e.preventDefault();
+                HisotryModalRef.current.Opener();
+              }}
+            >
+              <i class="fa-solid fa-history"></i>
+            </button>
+          </div>
           <label>جستجو:</label>
           <div className="flex">
             <form className="search-form">
@@ -361,13 +551,24 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             ))}
           </select>
           <label>شماره:</label>
-          <input
-            required
-            type="text"
-            {...register("prescription_number")}
-            value={prescription?.prescription_number}
-            disabled
-          />
+          <div className="flex_pres">
+            <input
+              required
+              type="text"
+              {...register("prescription_number")}
+              value={prescription?.prescription_number}
+              disabled
+            />
+            <button
+              className="search-button-box shadow-drop-center"
+              onClick={(e) => {
+                e.preventDefault();
+                HisotryModalRef.current.Opener();
+              }}
+            >
+              <i class="fa-solid fa-history"></i>
+            </button>
+          </div>
           <label>جستجو:</label>
           <div className="flex">
             <form className="search-form">

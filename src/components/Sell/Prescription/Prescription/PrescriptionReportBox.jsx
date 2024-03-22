@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import PrescriptionPrint from "./PrescriptionPrint";
+import axios from "axios";
+import useServerIP from "../../../services/ServerIP";
+import { useAuthUser } from "react-auth-kit";
+import { toast } from "react-toastify";
 
 function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
   let PrescriptiontoPrintRef = useRef(null);
@@ -8,7 +12,16 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
   const handlePrint = useReactToPrint({
     content: () => PrescriptiontoPrintRef.current,
   });
+  const {serverIP}= useServerIP()
+  const user = useAuthUser()
 
+  const OrderSubmit = () => {
+    const Form = new FormData()
+    Form.append('order_user', user().id)
+    axios.patch(`${serverIP}api/prescription/${prescription.id}/`, Form).then(() => {
+      toast.info('هدایت موفقانه ثبت شد')
+    })
+  }
   useEffect(() => {
     const handleKeyDown = (event) => {
       const { key, ctrlKey, shiftKey, altKey } = event;
@@ -17,6 +30,7 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
         event.preventDefault();
         setTimeout(() => {
           handlePrint();
+          OrderSubmit()
         }, 200);
       }
     };
@@ -28,7 +42,7 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [serverIP]);
 
   return (
     <div className="entrance-report">
@@ -96,6 +110,7 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
           <button
             onClick={() => {
               handlePrint();
+              OrderSubmit()
             }}
             className="entrance-report-button"
           >
