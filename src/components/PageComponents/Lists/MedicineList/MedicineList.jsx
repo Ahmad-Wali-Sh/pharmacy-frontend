@@ -29,13 +29,17 @@ import { SelectInputStyle } from "../../../../styles";
 import { useMedicine } from "../../../States/States";
 import MultipleBarcode from "../../MultipleBarcode";
 import useServerIP from "../../../services/ServerIP";
+import AlertModal from "../../Modals/AlertModal";
+import SimplePurchaseList from "./SimplePurchaseList";
 
 export default function MedicineList({
   edit,
   setSelectedMedician,
   selectAutoCompleteData,
+  medicineActive
 }) {
   const ListFilterRef = useRef(null);
+  const { medicine, setMedicine } = useMedicine();
   const [active, setActive] = useState("list");
   const [editItem, setEditItem] = useState("");
   const [imagePreview, setImage] = useState("");
@@ -51,6 +55,13 @@ export default function MedicineList({
     barcode:''
   });
 
+  useEffect(() => {
+    if (medicineActive) {
+      setActive(medicineActive)
+      ResetForm();
+    } 
+  }, [medicineActive])
+
   const user = useAuthUser();
 
   useEffect(() => {
@@ -58,6 +69,7 @@ export default function MedicineList({
       setActive("edit");
       setEditItem(edit);
       FormResetToItem(edit);
+      setMedicine(edit)
     }
   }, [edit]);
 
@@ -72,8 +84,10 @@ export default function MedicineList({
     formState: { errors },
   } = useForm();
 
+
+
   const { mutateAsync: newMedicine } = useMutation({
-    mutationFn: (data) => {
+    mutationFn: async (data) => {
       let newdata = data;
       newdata.delete("department");
       if (watch("department")) {
@@ -82,15 +96,19 @@ export default function MedicineList({
         );
       }
 
-      postDataFn(newdata, "medician/");
+      const response = await postDataFn(newdata, "medician/");
+      setMedicine(response)
     },
-    onSuccess: () =>
+    onSuccess: () => {
       successFn([medicineQuery], () => {
-        setActive("list");
-      }),
+        // setActive("list");
+        // setMedicine(res.data)
+      })
+    }
   });
 
-  const { medicine, setMedicine } = useMedicine();
+
+
 
   const { mutateAsync: handleEditMedicine } = useMutation({
     mutationFn: (data) => {
@@ -246,6 +264,7 @@ export default function MedicineList({
         });
 
     setEditItem(item);
+    setMedicine(item)
     setImage(item.image ? item.image : "");
   };
 
@@ -286,6 +305,7 @@ export default function MedicineList({
     setImage("");
   };
 
+  const simplePuchaseListRef = useRef(null)
   const listRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -319,6 +339,12 @@ export default function MedicineList({
           case "م":
             e.preventDefault();
             setActive("list");
+            break;
+          case "p":
+          case "P":
+          case "ح":
+            e.preventDefault();
+            simplePuchaseListRef.current.Opener()
             break;
         }
       }
@@ -448,6 +474,7 @@ export default function MedicineList({
       () => setEditItem("");
       return (
         <>
+            <SimplePurchaseList ref={simplePuchaseListRef} medicine={medicine}/>
           <MedicineForm
             imagePreview={imagePreview}
             setImage={setImage}
@@ -477,6 +504,7 @@ export default function MedicineList({
     case "edit":
       return (
         <>
+         <SimplePurchaseList ref={simplePuchaseListRef} medicine={medicine}/>
           <MedicineForm
             imagePreview={imagePreview}
             setImage={setImage}
@@ -516,8 +544,10 @@ function MedicineForm(props) {
   });
 
   return (
+    <>
     <form>
       <div className="listing-form">
+
         <label>نام برند:</label>
         <input
           type="text"
@@ -791,5 +821,6 @@ function MedicineForm(props) {
         )}
       </div>
     </form>
+    </>
   );
 }

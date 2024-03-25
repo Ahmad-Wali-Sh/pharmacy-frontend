@@ -12,6 +12,7 @@ import RevenueDashboard from "./components/Revenue/RevenueDashboard";
 import { useTheme } from "./components/States/States";
 import axios from "axios";
 import "./styles.scss";
+import ShortcutListener from "./components/Settings/ShortcutListener";
 
 function App() {
   const RequireAuth = ({ children }) => {

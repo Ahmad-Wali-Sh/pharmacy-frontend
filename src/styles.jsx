@@ -29,6 +29,24 @@ export const ModalBiggerSmallStyles = {
   },
 };
 
+export const SimplePurchaseListStyle = {
+  content: {
+    backgroundColor: "var(--bg-200)",
+    border: "none",
+    borderRadius: "1rem",
+    overflow: "hidden",
+    padding: "0px",
+    width: "40%",
+    left: "30%",
+    top: '10rem',
+    height: '15rem'
+  },
+  overlay: {
+    backgroundColor: "rgba(60,60,60,0.5)",
+    textAlign: "center",
+  },
+};
+
 export const ModalBigStyles = {
   content: {
     backgroundColor: "var(--bg-200)",
@@ -199,3 +217,5 @@ export const SelectInputStyle = {
     top: "-0.2rem",
   }),
 };
+
+

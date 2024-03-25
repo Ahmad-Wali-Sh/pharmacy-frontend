@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ShopingLists from "../Reports/ShopingLists/ShopingLists";
 import { useNewMedicineShow } from "../States/States";
+import MedicineList from "../PageComponents/Lists/MedicineList/MedicineList";
+import MedicinesLists from "../PageComponents/Lists/MedicineList/MedicinesLists";
 
 const ShortcutListener = () => {
   const [trigger, setTrigger] = useState("");
+  const [medicineTrigger, setMedicineTrigger] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -94,6 +97,8 @@ const ShortcutListener = () => {
       if (shiftKey) modifiers.push("Shift");
       if (altKey) modifiers.push("Alt");
 
+
+
       // Build the shortcut string with modifiers and the pressed key
       const shortcut = `${modifiers.join("+")}${
         modifiers.length > 0 ? "+" : ""
@@ -114,7 +119,10 @@ const ShortcutListener = () => {
         default:
           break;
       }
+
     };
+
+
 
     // Add event listener for keyboard events
     window.addEventListener("keydown", handleKeyDown);
@@ -126,12 +134,12 @@ const ShortcutListener = () => {
   }, []);
 
   return (
-    <ShopingLists
-      activeKey={"traz"}
-      button=""
-      title="لست خرید"
-      trigger={trigger}
-    />
+      <ShopingLists
+        activeKey={"traz"}
+        button=""
+        title="لست خرید"
+        trigger={trigger}
+      />
   );
 };
 

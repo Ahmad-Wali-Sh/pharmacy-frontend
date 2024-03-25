@@ -4,7 +4,6 @@ import { useSignOut, useIsAuthenticated } from "react-auth-kit";
 import { useQuery } from "react-query";
 import ColorTemplates from "../Settings/ColorTemplates";
 import Settings from "../Settings/Settings";
-import ShortcutListener from "../Settings/ShortcutListener";
 import useServerIP from "../services/ServerIP";
 import moment from 'jalali-moment';
 
@@ -49,7 +48,6 @@ function Header() {
       <div className="header-elements">
         <div className="icons">
           <ColorTemplates />
-          <ShortcutListener />
           <i className="fa-solid fa-bell"></i>
           <div className="log-in" onClick={() => {
             axios.post(`${serverIP}auth/` + 'token/logout/').finally(() => {

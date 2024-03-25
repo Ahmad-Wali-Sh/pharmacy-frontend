@@ -7,9 +7,12 @@ import PharmGroupLists from "./PharmgroupsLists";
 import CountryList from "./CountryList";
 import CompanyLists from "./CompanyLists";
 
-const MedicinesLists = ({ title, activeKey, button, name, icon, medicine, setSelectedMedician,selectAutoCompleteData }) => {
+const MedicinesLists = ({ title, activeKey, trigger, button, name, icon, medicine, setSelectedMedician,selectAutoCompleteData, medicineActive=false }) => {
   const ListDashboardRef = useRef(null);
 
+  useEffect(() => {
+    trigger && ListDashboardRef.current.Opener()
+  }, [trigger])
   
   useEffect(() => {
     const listener = (e) => {
@@ -92,7 +95,7 @@ const MedicinesLists = ({ title, activeKey, button, name, icon, medicine, setSel
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
-              {active == "medicines" && <MedicineList edit={medicine} setSelectedMedician={setSelectedMedician ? setSelectedMedician : ''} selectAutoCompleteData={selectAutoCompleteData && selectAutoCompleteData}/>}
+              {active == "medicines" && <MedicineList edit={medicine} setSelectedMedician={setSelectedMedician ? setSelectedMedician : ''} selectAutoCompleteData={selectAutoCompleteData && selectAutoCompleteData} medicineActive={medicineActive}/>}
               {active == 'kinds' && <KindList />}
               {active == 'pharm-groups' && <PharmGroupLists />}
               {active == 'countries' && <CountryList />}

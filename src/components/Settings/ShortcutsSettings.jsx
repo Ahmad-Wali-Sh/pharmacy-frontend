@@ -191,16 +191,20 @@ function EntranceShortcuts() {
             color: "white",
           }}
         >
-          خریداری و حواله ورود:
+          حواله ورود، داروخانه
         </div>
       </div>
       <div className="shortcut-item">
-        <div>ویرایش دارو</div>
+        <div> ویرایش دارو (حواله ورود)</div>
         <ShortcutInput
           name="edit_medicine"
           shortcut={entranceShortcuts.edit_medicine}
           setShortcut={(value) => handleShortcutChange("edit_medicine", value)}
         />
+      </div>
+      <div className="shortcut-item">
+        <div> ثبت سریع دارو برای خریداری</div>
+        <div>Ctrl + P</div>
       </div>
     </div>
   );
@@ -229,6 +233,10 @@ function PrescriptionShortcuts() {
       <div className="shortcut-item">
         <div>خالی سازی نسخه</div>
         <div>Shift + Q</div>
+      </div>
+      <div className="shortcut-item">
+        <div>ایجاد داروی جدید</div>
+        <div>Shift + M</div>
       </div>
       <div className="shortcut-item">
         <div>حذف  نسخه</div>

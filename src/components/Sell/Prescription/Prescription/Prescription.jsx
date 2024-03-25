@@ -17,6 +17,7 @@ import PrescriptionThroughMapForm from "./PrescriptionThroughMapForm";
 import { useQuery } from "react-query";
 import { usePrescription, useUserPermissions } from "../../../States/States";
 import useServerIP from "../../../services/ServerIP";
+import NewMedicineListener from "../../../Settings/NewMedicineListener";
 
 export default function Prescription(props) {
   const PrescriptionModalRef = useRef(null);
@@ -187,7 +188,9 @@ export default function Prescription(props) {
       )}
       <BigModal title="ثبت نسخه" ref={PrescriptionModalRef}>
         {loading ? (
+          
           <div className="modal">
+                <NewMedicineListener />
             <div className="prescription-box">
               <div className="prescription-report">
                 <PrescriptionReportBox
