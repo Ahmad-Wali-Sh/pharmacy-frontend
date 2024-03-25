@@ -37,17 +37,18 @@ export default function Prescription(props) {
     total_to_sale: 0,
     rounded_number: 0,
     disount_value: 0,
+    over_value: 0,
   });
 
   const { data: prescriptionThrough, refetch: updatePrescriptionThrough } =
     useQuery({
       queryKey: [`prescription-through/?prescription=${prescription?.id}`],
-      enabled: prescription?.id != null,
+      enabled: prescription?.id != undefined,
     });
 
   React.useEffect(() => {
-    Reporting();
-  }, [prescriptionThrough, prescription]);
+      Reporting();
+  }, [prescriptionThrough, prescription, prescriptionThrough?.length]);
 
   useEffect(() => {
     prescription?.department &&
@@ -77,38 +78,6 @@ export default function Prescription(props) {
         prescription.khairat;
       return result;
     };
-
-    const CellingHandler = () => {
-      const cellingStart = departmentSelected.celling_start;
-      const total = Math.round(totalToSaleCalculate());
-      const lastDigit = Number(String(total).slice(-1));
-      let result = 0;
-      if (total > cellingStart && lastDigit >= 3 && cellingStart != 0) {
-        if (lastDigit == 3) {
-          result = Math.ceil(total) + 7 - total;
-        }
-        if (lastDigit == 4) {
-          result = Math.ceil(total) + 6 - total;
-        }
-        if (lastDigit == 5) {
-          result = Math.ceil(total) + 5 - total;
-        }
-        if (lastDigit == 6) {
-          result = Math.ceil(total) + 4 - total;
-        }
-        if (lastDigit == 7) {
-          result = Math.ceil(total) + 3 - total;
-        }
-        if (lastDigit == 8) {
-          result = Math.ceil(total) + 2 - total;
-        }
-        if (lastDigit == 9) {
-          result = Math.ceil(total) + 1 - total;
-        }
-      }
-      console.log(cellingStart);
-      return result;
-    };
     setReport({
       total: Math.round(totalCalculate()),
       number: prescriptionThrough?.length,
@@ -118,6 +87,10 @@ export default function Prescription(props) {
         prescription.discount_money +
         (report.total * prescription.discount_percent) / 100
       ).toFixed(2),
+      over_value: (
+        prescription.over_money +
+        (report.total * prescription.over_percent) / 100
+      ).toFixed(2)
     });
   };
 
@@ -133,6 +106,8 @@ export default function Prescription(props) {
         DepartmentForm.append("department", props.department.id);
         DepartmentForm.append("discount_money", res.data.discount_money);
         DepartmentForm.append("discount_percent", res.data.discount_percent);
+        DepartmentForm.append("over_money", res.data.over_price_money);
+        DepartmentForm.append("over_percent", res.data.over_price_percent);
         DepartmentForm.append("zakat", "");
         DepartmentForm.append("khairat", "");
         DepartmentForm.append("user", user().id);
@@ -156,28 +131,32 @@ export default function Prescription(props) {
       });
   };
 
-  const handleNextPrescription = () => {
-    axios.get(`${serverIP}api/prescription/${prescription?.id}/next/`).then((res) => {
-      setPrescription([])
-      res.data && setPrescription(res.data)
-      
-    }).catch(() => {
-      toast.warning('موجود نیست')
-    });
-  };
-  const handlePreviousPrescription = () => {
-    axios.get(`${serverIP}api/prescription/${prescription?.id}/previous/`).then((res) => {
-      setPrescription([])
-      res.data && setPrescription(res.data)
-    }).catch(() => {
-      toast.warning('موجود نیست')
-    });
+  const handleSurfPrescription = (functionality) => {
+    if (prescription?.id) {
+      axios.get(`${serverIP}api/prescription/${prescription?.id}/${functionality}/`).then((res) => {
+        setPrescription([])
+        res.data && setPrescription(res.data)
+      }).catch(() => {
+        toast.warning('موجود نیست')
+      });
+    }
+    else {
+      axios.get(`${serverIP}api/last-prescription/`).then((res) => {
+        setPrescription([])
+        res.data && setPrescription(res.data?.[0])
+      })
+    }
   };
 
   const updatePrescription = () => {
     axios
       .get(`${serverIP}api/prescription/` + prescription.id + "/")
-      .then((res) => setPrescription(res.data));
+      .then((res) => {
+        setPrescription(res.data)
+        setTimeout(() => {
+          Reporting()
+        }, 500)
+      });
   };
 
   const { data: pres, refetch: updatePrescrip } = useQuery({
@@ -215,8 +194,8 @@ export default function Prescription(props) {
                 <PrescriptionReportBox
                   report={report}
                   prescription={prescription}
-                  BackFunc={() => handlePreviousPrescription()}
-                  FrontFunc={() => handleNextPrescription()}
+                  BackFunc={() => handleSurfPrescription('previous')}
+                  FrontFunc={() => handleSurfPrescription('next')}
                 />
               </div>
               <div className="prescription-details">

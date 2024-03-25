@@ -156,8 +156,8 @@ export default function DepartmentsList() {
           <ListHeader>
             <h4>No</h4>
             <h4>نام</h4>
-            <h4>حداکثر قیمت</h4>
-            <h4>حداکثر "فیصدی"</h4>
+            <h4>اضافه قیمت</h4>
+            <h4>اضافه قیمت "فیصدی"</h4>
             <h4>تخفیف</h4>
             <h4>تخفیف "فیصدی"</h4>
             <h4>شروع روند</h4>
@@ -201,13 +201,13 @@ export default function DepartmentsList() {
           <Form>
             <label>نام:</label>
             <input type="text" defaultValue="" autoFocus {...register("name")} />
-            <label>حداکثرقیمت:</label>
+            <label>اضافه_قیمت:</label>
             <input
               type="text"
               defaultValue=""
               {...register("over_price_money")}
             />
-            <label>حداکثرقیمت%:</label>
+            <label>اضافه_قیمت%:</label>
             <input
               type="text"
               defaultValue=""
@@ -243,13 +243,13 @@ export default function DepartmentsList() {
           <Form>
             <label>نام:</label>
             <input type="text" defaultValue="" {...register("name")} />
-            <label>حداکثرقیمت:</label>
+            <label>اضافه_قیمت:</label>
             <input
               type="text"
               defaultValue=""
               {...register("over_price_money")}
             />
-            <label>حداکثرقیمت%:</label>
+            <label>اضافه_قیمت%:</label>
             <input
               type="text"
               defaultValue=""

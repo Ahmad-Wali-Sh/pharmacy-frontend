@@ -43,6 +43,8 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     reset({
       discount_money: prescription.discount_money || 0,
       discount_percent: prescription.discount_percent || 0,
+      over_money: prescription.over_money || 0,
+      over_percent: prescription.over_percent || 0,
       zakat: prescription.zakat || 0,
       khairat: prescription.khairat || 0,
       department: prescription.department || 0,
@@ -117,6 +119,8 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           DepartmentForm.append("department", watch("department"));
           DepartmentForm.append("discount_money", res.data.discount_money);
           DepartmentForm.append("discount_percent", res.data.discount_percent);
+          DepartmentForm.append("over_money", res.data.over_price_money);
+          DepartmentForm.append("over_percent", res.data.over_price_percent);
           DepartmentForm.append("user", user().id);
           axios
             .post(`${serverIP}api/prescription/`, DepartmentForm)
@@ -251,6 +255,12 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     }
     if (fieldName == "discount_percent") {
       return "%تخفیف";
+    }
+    if (fieldName == "over_money") {
+      return "اضافه_قیمت";
+    }
+    if (fieldName == "over_percent") {
+      return "اضافه_قیمت%";
     }
     if (fieldName == "zakat") {
       return "زکات";
@@ -486,9 +496,17 @@ function PrescriptionForm({ prescriptionThrough, update }) {
           <label>عکس:</label>
           <MultiplePrescriptionImage />
           <label>تخفیف:</label>
+          <div className="flex">
           <input type="text" {...register("discount_money")} />
-          <label>تخفیف %:</label>
+          <label>%:</label>
           <input type="text" {...register("discount_percent")} />
+          </div>
+          <label>اضافه_قیمت</label>
+          <div className="flex">
+          <input type="text" {...register("over_money")} />
+          <label>%:</label>
+          <input type="text" {...register("over_percent")} />
+          </div>
           <div></div>
           <div></div>
           <label>زکات:</label>

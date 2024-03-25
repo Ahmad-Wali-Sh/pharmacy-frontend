@@ -41,13 +41,13 @@ function Department({ title, button }) {
             <div className="store-form">
               <label>نام:</label>
               <input type="text" defaultValue="" {...register("name")} />
-              <label>حداکثرقیمت:</label>
+              <label>اضافه_قیمت:</label>
               <input
                 type="text"
                 defaultValue=""
                 {...register("over_price_money")}
               />
-              <label>حداکثرقیمت%:</label>
+              <label>اضافه_قیمت%:</label>
               <input
                 type="text"
                 defaultValue=""

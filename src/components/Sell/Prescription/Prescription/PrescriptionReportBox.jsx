@@ -57,8 +57,18 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
           <label>:مجموع فروش</label>
         </div>
         <div className="prescription-report-map-box-grey">
-          <label>{report?.disount_value ? report.disount_value : 0} </label>
+          <label>{(
+        prescription.discount_money +
+        (report.total * prescription.discount_percent) / 100
+      ).toFixed(2)} </label>
           <label>:تخفیف</label>
+        </div>
+        <div className="prescription-report-map-box-grey">
+          <label>{(
+        prescription.over_money +
+        (report.total * prescription.over_percent) / 100
+      ).toFixed(2)} </label>
+          <label>:اضافه قیمت</label>
         </div>
         <div className="prescription-report-map-box-grey">
           <label>{prescription?.khairat ? prescription.khairat : 0}</label>
