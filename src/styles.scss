@@ -3728,18 +3728,17 @@ input[type="text"]:disabled {
 }
 
 .prescription-print-box {
-  text-align: center;
-  width: 160px;
+  text-align: center !important;
+  width: 250px;
   overflow: clip;
-  height: 200px;
   direction: rtl;
   border: 1.4px solid var(--bg-100);
-  margin: 1rem;
+  margin: 0.3rem;
+  padding: 0.2rem
 }
 
 .barcode-image-print {
-  width: 150px;
-  height: 70px;
+  width: 120%;
 }
 
 .submit-badge {
