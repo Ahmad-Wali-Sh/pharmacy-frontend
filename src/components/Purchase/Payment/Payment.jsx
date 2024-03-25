@@ -52,7 +52,6 @@ function Payment({Update}) {
       axios
           .post(PAYMENT_URL, FinalForm)
           .then((res) => {
-            console.log(res)
             registerModalCloser()
             toast.success('Item Added Succesfully')
             Update()

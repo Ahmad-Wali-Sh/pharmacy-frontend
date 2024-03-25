@@ -55,7 +55,6 @@ function City({title, icon, button, Update}) {
             Update();
           }
           toast.success("Data Updated Successfuly.");
-          console.log(e.data);
         })
   
         .catch((err) => {

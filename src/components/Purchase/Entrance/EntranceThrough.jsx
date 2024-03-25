@@ -66,21 +66,18 @@ export default function EntranceThrough({ StoreCycle = false }) {
           const jalaliDate = moment(`${year}-${month}`, 'jYYYY-jMM');
           const gregorianDate = jalaliDate.format('YYYY-MM-DD');
           setValue('expire_date', gregorianDate);
-          console.log('Converted Jalali date:', gregorianDate);
           return;
         } else if (year >= 2000 && year <= 9999) {
           // If the year is between 2000 and 9999, assume it's in the American format
           // Set the year to the first 4 digits
           const gregorianDate = `${year}-${month.toString().padStart(2, '0')}-01`;
           setValue('expire_date', gregorianDate);
-          console.log('Converted American date:', gregorianDate);
           return;
         }
       }
     }
     // If the input value cannot be parsed correctly, clear it
     setValue('expire_date', '');
-    console.log('Invalid date input:', inputValue);
   };
 
 
@@ -147,7 +144,6 @@ export default function EntranceThrough({ StoreCycle = false }) {
   }, [medicineShow]);
 
   const SubmitedAlert = (data) => {
-    console.log(data);
     return entranceThrough?.filter((through) => {
       if (through.medician == data.medician) {
         return through;
@@ -237,7 +233,6 @@ export default function EntranceThrough({ StoreCycle = false }) {
     let year = currentDate.getFullYear();
     let month = String(currentDate.getMonth() + 1).padStart(2, "0");
     let day = String(currentDate.getDate()).padStart(2, "0");
-    console.log(SubmitedAlert(data));
     if (SubmitedAlert(data) != false) {
       SubmitedAlertRef.current.Opener();
     } else {

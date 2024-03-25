@@ -56,7 +56,6 @@ function Currency({ Update }) {
         registerModalCloser();
         Update();
         toast.success("Data Updated Successfuly.");
-        console.log(e.data);
       })
       .catch((err) => {
         console.log(err);

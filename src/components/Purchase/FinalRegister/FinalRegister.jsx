@@ -51,7 +51,6 @@ function FinalRegister({Update}) {
       axios
           .post(FINAL_REGISTER_URL, FinalForm)
           .then((res) => {
-            console.log(res)
             registerModalCloser()
             toast.success('Item Added Succesfully')
             Update()

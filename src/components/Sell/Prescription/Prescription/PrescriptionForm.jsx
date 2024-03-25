@@ -185,7 +185,6 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     queryKey: ["prescription/?prescription_number=" + searchNumber],
     enabled: false,
     onSuccess: (data) => {
-      console.log(data[0]);
       setPrescription(data[0] ? data[0] : []);
       prescriptionThroughSearch();
     },
@@ -236,7 +235,6 @@ function PrescriptionForm({ prescriptionThrough, update }) {
         newValue: newValue === "None" ? null : newValue,
       });
     });
-    console.log(changesArray);
     return changesArray;
   }
 

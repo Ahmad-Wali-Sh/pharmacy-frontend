@@ -80,7 +80,6 @@ export default function PaymentsLists() {
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
-      console.log(e.key);
       if (e.ctrlKey) {
         switch (e.key) {
           case "e":

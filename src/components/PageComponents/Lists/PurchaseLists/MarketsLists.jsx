@@ -89,7 +89,6 @@ export default function MarketsLists() {
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
-      console.log(e.key);
       if (e.ctrlKey) {
         switch (e.key) {
           case "e":

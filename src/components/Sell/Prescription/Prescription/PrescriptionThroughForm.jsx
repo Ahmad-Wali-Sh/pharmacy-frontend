@@ -51,7 +51,6 @@ export const PrescriptionThroughForm = forwardRef(
       PrescriptionThroughForm.append("medician", medicine.id);
       PrescriptionThroughForm.append("prescription", prescription?.id);
       PrescriptionThroughForm.append("user", user().id);
-      console.log(medicineIncludesCheck());
 
       if (medicineIncludesCheck() === false) {
         prescriptionThroughPost(PrescriptionThroughForm);

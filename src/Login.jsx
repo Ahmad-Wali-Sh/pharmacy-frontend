@@ -37,7 +37,6 @@ function Login() {
           axios
             .post(`${serverIP}auth/token/login/`, formData)
             .then((res) => {
-              console.log(res);
               if (res.status === 200) {
                 axios
                   .get(`${serverIP}auth/users/me/`, {

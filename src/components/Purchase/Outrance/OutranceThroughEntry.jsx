@@ -29,7 +29,6 @@ function OutranceThroughEntry({
       .get(MEDICIAN_URL + through.medician)
       .then((res) => {
         setExactMedician(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);

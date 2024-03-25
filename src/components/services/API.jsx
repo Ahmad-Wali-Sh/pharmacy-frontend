@@ -42,7 +42,6 @@ export const queryClient = new QueryClient({
 
 // it is a default posting function to be used for api
 export const postDataFn = async (data, api) => {
-  console.log(serverIP);
   try {
     const response = await axios.post(serverIP + "api/" + api, data);
     return response.data;

@@ -78,7 +78,6 @@ export default function CountryList() {
           reset({
             image: file ? file : "",
           });
-          console.log(file);
         });
 
     setEditItem(item);

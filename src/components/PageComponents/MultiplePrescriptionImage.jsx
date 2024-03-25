@@ -50,7 +50,6 @@ function MultiplePrescriptionImage() {
   });
 
   useEffect(() => {
-    console.log(image);
     image && newImage();
   }, [image]);
 

@@ -50,7 +50,6 @@ function MultipleImage() {
   });
 
   useEffect(() => {
-    console.log(image);
     image && newImage();
   }, [image]);
 

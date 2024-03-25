@@ -30,7 +30,6 @@ function MultipleBarcode({ medicineID }) {
         axios
           .get(`${serverIP}api/` + `medicine-barcode/?barcode=${barcoder}`)
           .then((res) => {
-            console.log(res);
             toast.error(
               <>
                 <h5>ID: {`${res.data.results[0].medicine.id}`}</h5>

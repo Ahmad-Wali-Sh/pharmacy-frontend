@@ -82,7 +82,6 @@ export default function Currencies() {
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
-      console.log(e.key);
       if (e.ctrlKey) {
         switch (e.key) {
           case "e":

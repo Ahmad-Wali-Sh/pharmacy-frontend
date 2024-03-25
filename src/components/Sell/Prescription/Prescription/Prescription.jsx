@@ -162,7 +162,6 @@ export default function Prescription(props) {
   const { data: pres, refetch: updatePrescrip } = useQuery({
     queryKey: [`prescription/${prescription?.id}/`],
     onSuccess: (res) => {
-      console.log(res);
       setPrescription(res);
     },
     enabled: prescription?.id != undefined,

@@ -61,9 +61,6 @@ export default function EntranceHeader({ StoreCycle = false }) {
   const user = useAuthUser();
   const [reKey, setReKey] = useState(0);
 
-  useEffect(() => {
-    console.log(localStorage.getItem("total_interest"));
-  }, [localStorage.getItem("total_interest")]);
 
   const { data: finalRegister } = useQuery("final-register/");
   const { data: company } = useQuery("pharm-companies/");

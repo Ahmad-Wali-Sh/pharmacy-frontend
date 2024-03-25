@@ -69,7 +69,6 @@ function CurrencyList({ Update }) {
         registerModalCloser();
         Update();
         toast.success("Data Updated Successfuly.");
-        console.log(e.data);
       })
 
       .catch((err) => {
@@ -128,7 +127,6 @@ function CurrencyList({ Update }) {
                     axios
                       .patch(`${serverIP}api/currency/` + currency.id + "/", CurrencyForm)
                       .then((res) => {
-                        console.log(res);
                         Update();
                       });
                   }}

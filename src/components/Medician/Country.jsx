@@ -58,11 +58,9 @@ function Country({title, icon, button, Update}) {
             Update();
           }
           toast.success("Data Updated Successfuly.");
-          console.log(e.data);
         })
   
         .catch((err) => {
-          console.log(err);
           toast.error("Check Your Input And Try Again!");
         });
     };

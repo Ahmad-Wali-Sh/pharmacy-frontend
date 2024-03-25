@@ -128,7 +128,6 @@ export default function MedicineList({
         setActive("list");
       }),
     onError: (e) => {
-      console.log(e.response);
       toast.error(`نسخه های قبلی را حذف نموده دوباره سعی کنید`);
     },
   });

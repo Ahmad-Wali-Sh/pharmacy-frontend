@@ -102,7 +102,6 @@ function Company({ button, title, icon, Update }) {
           Update();
         }
         toast.success("Data Updated Successfuly.");
-        console.log(e.data);
       })
 
       .catch((err) => {

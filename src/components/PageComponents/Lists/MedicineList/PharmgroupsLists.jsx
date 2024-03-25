@@ -81,7 +81,6 @@ export default function PharmGroupLists() {
           reset({
             image: file ? file : "",
           });
-          console.log(file);
         });
 
     setEditItem(item);

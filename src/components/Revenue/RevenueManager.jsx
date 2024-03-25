@@ -97,7 +97,6 @@ export default function RevenueManager(props) {
             axios
               .patch(`${serverIP}api/revenue/` + editRevenue.id + "/", RevenueForm)
               .then(() => {
-                console.log("done");
                 revenueGet();
               });
           }}

@@ -57,13 +57,9 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
   const sell_price_get = () => {
     let each_price_factor = parseFloat(watch("each_price_factor"));
     let interest_percent = parseFloat(watch("interest_percent"));
-    console.clear();
-    console.log(through.each_purchase_price);
     let result =
       ((through.each_purchase_price + (interest_percent * through.each_purchase_price) / 100) / 1) *
       entrance?.currency_rate;
-
-    console.log(result);
     return parseFloat(result).toFixed(3);
   };
 
@@ -85,8 +81,6 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
     },
     onSuccess: (res) => {
       setTimeout(() => {
-        console.clear();
-        console.log('it happend');
         entrance?.id &&  queryClient.invalidateQueries([
           `entrance-throug/?entrance=${entrance?.id}`,
         ]);
