@@ -135,7 +135,7 @@ export const SelectMedician = forwardRef(
       stringArray[3] ? encodeURIComponent(stringArray[3]) : ""
     }&kind__name_english=${
       stringArray[4] ? encodeURIComponent(stringArray[4]) : ""
-    }&country__name=${
+    }&active=true&country__name=${
       stringArray[5] ? encodeURIComponent(stringArray[5]) : ""
     }&big_company__name=${stringArray[6] ? encodeURIComponent(stringArray[6]) : ""}&all=${
       stringArray[7] ? encodeURIComponent(stringArray[7]) : ""
