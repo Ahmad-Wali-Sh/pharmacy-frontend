@@ -53,7 +53,6 @@ export default function EntranceThrough({ StoreCycle = false }) {
     setFocus("number_in_factor");
   };
 
-
   const handleInputBlur = () => {
     const inputValue = watch("expire_date");
     const parts = inputValue.split("-");
@@ -77,14 +76,13 @@ export default function EntranceThrough({ StoreCycle = false }) {
     }
   };
 
-
   const handleDisable = () => {
     if (entrance?.id && medicine?.id) {
       return false;
     } else {
       return true;
     }
-  }
+  };
 
   useEffect(() => {
     setFocus("number_in_factor");
@@ -310,7 +308,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             className={`entrance--inputs ${
               errors.number_in_factor && "error-input"
             }`}
-            disabled={(entrance?.id && medicine?.id) ? false : true}
+            disabled={entrance?.id && medicine?.id ? false : true}
           />
           <label>قیمت فی:</label>
           <input
@@ -319,7 +317,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             className={`entrance--inputs ${
               errors.each_price_factor && "error-input"
             }`}
-            disabled={(entrance?.id && medicine?.id) ? false : true}
+            disabled={entrance?.id && medicine?.id ? false : true}
           />
           <label>فی_فروش:</label>
           <input
@@ -328,7 +326,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             className={`entrance--inputs ${
               errors.each_sell_price_afg && "error-input"
             }`}
-            disabled={(entrance?.id && medicine?.id) ? false : true}
+            disabled={entrance?.id && medicine?.id ? false : true}
           />
           <button type="submit" style={{ display: "none" }}>
             ⤵ذخیره
@@ -384,7 +382,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
               className={`entrance--inputs ${
                 errors.number_in_factor && "error-input"
               }`}
-              disabled={(entrance?.id && medicine?.id) ? false : true}
+              disabled={entrance?.id && medicine?.id ? false : true}
             />
             <label>موجودی:</label>
             <input type="text" value={medicine?.existence || 0} disabled />
@@ -403,7 +401,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
               className={`entrance--inputs ${
                 errors.each_price_factor && "error-input"
               }`}
-              disabled={(entrance?.id && medicine?.id) ? false : true}
+              disabled={entrance?.id && medicine?.id ? false : true}
             />
             <label>خرید:</label>
             <input
@@ -445,7 +443,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             className={`entrance--inputs ${
               errors.interest_percent && "error-input"
             }`}
-            disabled={(entrance?.id && medicine?.id) ? false : true}
+            disabled={entrance?.id && medicine?.id ? false : true}
           />
           <label>فی_فروش:</label>
           <div className="flex">
@@ -462,7 +460,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
                 errors.each_sell_price_afg && "error-input"
               }`}
               onBlur={() => setValue("interest_percent", interest_get())}
-              disabled={(entrance?.id && medicine?.id) ? false : true}
+              disabled={entrance?.id && medicine?.id ? false : true}
             />
             <label>قیمت:</label>
             <input value={medicine?.price || ""} type="text" disabled />
@@ -480,7 +478,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
                 },
               })}
               className="entrance--inputs"
-              disabled={(entrance?.id && medicine?.id) ? false : true}
+              disabled={entrance?.id && medicine?.id ? false : true}
             />
             <lable>امانتی:</lable>
             <input
@@ -489,7 +487,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
               style={{
                 width: "1rem",
               }}
-              disabled={(entrance?.id && medicine?.id) ? false : true}
+              disabled={entrance?.id && medicine?.id ? false : true}
             />
           </div>
           <label>انقضا:</label>
@@ -516,7 +514,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
               errors.expire_date && "error-input"
             }`}
             onBlur={handleInputBlur}
-            disabled={(entrance?.id && medicine?.id) ? false : true}
+            disabled={entrance?.id && medicine?.id ? false : true}
           />
           {/* <label>انقضا.ش:</label>
           <DateInputSimple
@@ -527,7 +525,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
           <input
             type="text"
             {...register("batch_number")}
-            disabled={(entrance?.id && medicine?.id) ? false : true}
+            disabled={entrance?.id && medicine?.id ? false : true}
           />
           <label></label>
           <label></label>
@@ -541,7 +539,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
               },
             })}
             className="entrance--inputs"
-            disabled={(entrance?.id && medicine?.id) ? false : true}
+            disabled={entrance?.id && medicine?.id ? false : true}
           />
           <label>تخفیف ٪:</label>
           <input
@@ -559,7 +557,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
                 setFocus("number_in_factor");
               }
             }}
-            disabled={(entrance?.id && medicine?.id) ? false : true}
+            disabled={entrance?.id && medicine?.id ? false : true}
           />
           <div className="adding-box">
             <label></label>
