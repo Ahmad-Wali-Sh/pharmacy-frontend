@@ -34,8 +34,8 @@ export default function RevenueInfo({ revenue }) {
 
   const RevenueSearch = () => {
     axios
-      .get(`${serverIP}api/prescription/` + "?revenue=" + revenue?.id)
-      .then((res) => setRevenueThrough(res?.data));
+      .get(`${serverIP}api/revenue-record/` + "?revenue=" + revenue?.id)
+      .then((res) => setRevenueThrough(res?.data?.results));
   };
 
   return (
@@ -86,9 +86,9 @@ export default function RevenueInfo({ revenue }) {
                   <h4>{pres.prescription_number}</h4>
                   <h4>{pres.username}</h4>
                   <h4>{pres.department_name}</h4>
-                  <h4>{pres.purchase_payment_date.slice(0, 10)}</h4>
-                  <h4>{pres.purchase_payment_date.slice(11, 16)}</h4>
-                  <h4>{pres.purchased_value}AF</h4>
+                  <h4>{pres.timestamp?.slice(0, 10)}</h4>
+                  <h4>{pres.timestamp?.slice(11, 16)}</h4>
+                  <h4 style={{direction:'ltr', textAlign:'right'}}>{pres.amount?.toFixed()}</h4>
                   <h4>{revenue.username}</h4>
                   <h4>{pres.discount_money}</h4>
                   <h4>{pres.discount_percent}</h4>
