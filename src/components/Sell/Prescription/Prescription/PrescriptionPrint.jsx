@@ -26,19 +26,12 @@ const PrescriptionPrint = React.forwardRef((props, ref) => {
             </tr>
             <tr style={{ position: "relative", bottom: "1rem" }}>
               <td>
-                {props?.prescription?.refund
-                  ? parseFloat(props.prescription.refund) * -1 >= 0
-                    ? "اخذ:"
-                    : "برگشتی:"
-                  : "پرداخت:"}
+                {parseFloat(props.prescription.refund) >= 0
+                    ? "پرداخت:"
+                    : "برگشتی:"}
               </td>
               <td className="persian-number">
-                {props?.prescription?.refund
-                  ? props?.prescription?.refund * -1
-                  : props?.prescription?.grand_total ==
-                    props?.prescription?.purchased_value
-                  ? 0
-                  : props.prescription?.grand_total}{" "}
+                {props?.prescription?.refund}{" "}
                 افغانی
               </td>
             </tr>

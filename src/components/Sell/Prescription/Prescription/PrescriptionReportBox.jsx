@@ -97,8 +97,8 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
           </div>
         ) : (
           <div className="prescription-report-map-box">
-            <label>{prescription?.refund * -1}</label>
-            <label>{parseFloat((prescription?.refund * -1)) >= 0 ? ':اخذ' : ':برگشتی'}</label>
+            <label>{prescription?.refund}</label>
+            <label>{parseFloat((prescription?.refund)) >= 0 ? ':قابل پرداخت' : ':برگشتی'}</label>
           </div>
         )}
         {prescription?.purchased_value != 0 && (

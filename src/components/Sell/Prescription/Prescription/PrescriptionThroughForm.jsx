@@ -11,7 +11,12 @@ export const PrescriptionThroughForm = forwardRef(
   ({ prescription, prescriptionThrough, updatePrescription }, ref) => {
     const SameMedicineAlertModalRef = React.useRef(null);
     const user = useAuthUser();
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const {
+      register,
+      handleSubmit,
+      reset,
+      formState: { errors },
+    } = useForm();
     const [medicine, setMedicine] = React.useState(null);
 
     const { mutateAsync: prescriptionThroughPost } = useMutation({
@@ -34,7 +39,7 @@ export const PrescriptionThroughForm = forwardRef(
         successFn(
           `prescription-through/?prescription=${prescription?.id}`,
           () => {
-            updatePrescription()
+            updatePrescription();
           }
         );
       },
@@ -85,8 +90,8 @@ export const PrescriptionThroughForm = forwardRef(
     const handleQuantityFocus = () => {
       document.getElementById("number-in-factor-input").focus();
       reset({
-        quantity: ""
-      })
+        quantity: "",
+      });
     };
 
     return (
@@ -114,16 +119,23 @@ export const PrescriptionThroughForm = forwardRef(
           <input
             type="text"
             {...register("quantity", { required: true })}
-            className={errors.quantity && 'error-input'}
+            className={errors.quantity && "error-input"}
             id="number-in-factor-input"
           />
           <div className="prescription-button">
             <SubmitButton name="⤵ Add" />
-            {prescription && prescription.sold ? <h4 className="submit-badge">{prescription.refund != 0 ? 'برگشتی' : 'پرداخت شده'}</h4> : <h4 className="pending-badge">در حالت انتظار</h4>}
+            {prescription && (
+              <h4
+                className={
+                  prescription.refund ? "pending-badge" : "submit-badge"
+                }
+              >
+                {prescription.refund != 0 ? "در حال انتظار" : "پرداخت شده"}
+              </h4>
+            )}
           </div>
         </form>
       </>
     );
   }
 );
-

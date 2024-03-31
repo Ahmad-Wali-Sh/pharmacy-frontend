@@ -3088,15 +3088,22 @@ input[type="text"]:disabled {
   border-radius: 20rem;
   text-align: center;
   padding: 0.1rem;
+  background-color: #241b3500;
+
+  &:disabled {
+    background-color: rgb(158, 55, 55);
+  }
+
+  &:hover {
+    border: 1px solid var(--primary-200);
+    background-image: linear-gradient(
+      55deg,
+      var(--primary-200) 0%,
+      var(--primary-100) 80%
+    );
+  }
 }
-.revenue-button:hover {
-  border: 1px solid var(--primary-200);
-  background-image: linear-gradient(
-    55deg,
-    var(--primary-200) 0%,
-    var(--primary-100) 80%
-  );
-}
+
 
 .revenue-select {
   width: 15rem;

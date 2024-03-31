@@ -4,6 +4,7 @@ import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import useServerIP from "../services/ServerIP";
 import BigModal from "../PageComponents/Modals/BigModal";
+import _ from "lodash";
 
 export default function Revenue(props) {
   const barcodeRef = useRef("");
@@ -14,7 +15,7 @@ export default function Revenue(props) {
   const [revenue, setRevenue] = React.useState([]);
   const [openPrescriptions, setOpenPrescriptions] = React.useState([]);
   const [trigger, setTrigger] = useState("");
-  const [closedPrescriptions, setClosedPrescriptions] = React.useState([]);
+  const [revenueRecords, setrevenueRecords] = React.useState([]);
   const [refundPrescription, setRefundPrescription] = React.useState([]);
   const [lock, setLock] = useState(false);
   const [closePage, setClosePage] = useState(1);
@@ -40,7 +41,7 @@ export default function Revenue(props) {
       axios
         .get(
           `${serverIP}api/prescription-pg/` +
-            `?sold=false&grand_not_equal=0&ordering=-id&${
+            `?grand_not_equal=0&ordering=-id&refund_not_equal=0&${
               search ? "prescription_number=" + search : ""
             }&page=${openPage}`
         )
@@ -52,29 +53,18 @@ export default function Revenue(props) {
           setOpenPage(1);
           setTrigger(new Date());
         });
-
-    serverIP &&
-      axios
-        .get(
-          `${serverIP}api/prescription-pg/` +
-            "?sold=true&ordering=-id&refund_not_equal=0"
-        )
-        .then((res) => {
-          setSelectedIdx("");
-          setRefundPrescription(res.data.results);
-        });
   }, [trigger, search]);
 
   useEffect(() => {
     revenue?.id &&
       axios
         .get(
-          `${serverIP}api/prescription-pg/?sold=true&ordering=-purchase_payment_date&revenue=${
-            revenue?.id
-          }&${search ? "prescription_number=" + search : ""}&page=${closePage}`
+          `${serverIP}api/revenue-record/?revenue=${revenue?.id}${
+            search ? "&prescription__prescription_number=" + search : ""
+          }&page=${closePage}`
         )
         .then((res) => {
-          setClosedPrescriptions(res.data);
+          setrevenueRecords(res.data);
         })
         .catch(() => {
           setClosePage(1);
@@ -86,25 +76,10 @@ export default function Revenue(props) {
     axios
       .get(`${serverIP}api/prescription/` + "?barcode_str=" + barcode)
       .then((res) => {
-        if (res?.data?.[0]?.id) {
-          let prescriptionId = res?.data?.[0].id;
-          const Form = new FormData();
-          Form.append("revenue", revenue.id);
-          Form.append("sold", true);
-          Form.append("refund", 0);
-          Form.append("purchased_value", res?.data?.[0].grand_total);
-          axios
-            .patch(`${serverIP}api/prescription/${prescriptionId}/`, Form)
-            .then(() => {
-              setTrigger(new Date());
-              !res?.data?.[0]?.sold &&
-                toast.success("موفقانه بود", {
-                  position: "bottom-right",
-                  autoClose: 2000,
-                });
-            });
+        if (res?.data?.[0]?.id && res?.data?.[0]?.refund != 0) {
+          handleClosePrescription(res?.data?.[0])
         }
-        if (res?.data?.[0]?.sold) {
+        if (res?.data?.[0]?.refund == 0) {
           toast.info(
             <div>
               <div>نسخه مورد نظر پرداخت شده است </div>
@@ -122,36 +97,29 @@ export default function Revenue(props) {
       });
   };
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const handleClosePrescription = (prescription) => {
-    const Form = new FormData();
-    Form.append("revenue", revenue.id);
-    Form.append("sold", true);
-    axios
-      .patch(`${serverIP}api/prescription/${prescription.id}/`, Form)
-      .then(() => {
-        setTrigger(new Date());
-      });
-  };
-  const handleRefundPrescription = (prescription) => {
-    const Form = new FormData();
-    Form.append("revenue", revenue.id);
-    Form.append("sold", true);
-    Form.append("refund", 0);
-    Form.append("purchased_value", prescription.grand_total);
-    axios
-      .patch(`${serverIP}api/prescription/${prescription.id}/`, Form)
-      .then(() => {
-        setTrigger(new Date());
-      });
+    setIsButtonDisabled(true);
+    const RevenueRecordForm = new FormData()
+    RevenueRecordForm.append('revenue', revenue?.id)
+    RevenueRecordForm.append('prescription', prescription?.id)
+    RevenueRecordForm.append('record_type', 'new')
+    RevenueRecordForm.append('amount',  prescription?.refund)
+    RevenueRecordForm.append('user',  user().id)
+
+    prescription?.refund != 0 && axios.post(`${serverIP}api/revenue-record/`, RevenueRecordForm).then(() => {
+      setTrigger(new Date())
+    })
+
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 1500);
   };
 
-  const handleOpenPrescription = (prescription) => {
-    const Form = new FormData();
-    Form.append("revenue", "");
-    Form.append("sold", false);
-    Form.append("purchased_value", 0);
+  const handleOpenPrescription = (revenueRecord) => {
     axios
-      .patch(`${serverIP}api/prescription/${prescription.id}/`, Form)
+      .delete(`${serverIP}api/revenue-record/${revenueRecord.id}/`)
       .then(() => {
         setTrigger(new Date());
       });
@@ -315,9 +283,18 @@ export default function Revenue(props) {
                       }}
                     >
                       <div>نسخه های قابل پرداخت</div>
-                      <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem', paddingLeft: '0.4rem'}}>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "2rem",
+                          fontSize: "0.9rem",
+                          paddingLeft: "0.4rem",
+                        }}
+                      >
                         <div>تعداد: {openPrescriptions?.count}</div>
-                        <div>صفحات: {Math.ceil(openPrescriptions?.count / 100)}</div>
+                        <div>
+                          صفحات: {Math.ceil(openPrescriptions?.count / 100)}
+                        </div>
                       </div>
                     </div>
                     <div className="revenue-map-content">
@@ -348,19 +325,18 @@ export default function Revenue(props) {
                           <h3>{pres.department_name}</h3>
                           <h3>{pres.patient_name}</h3>
                           <h3 className="persian-number">
-                            {pres.refund
-                              ? pres.refund.toFixed(2)
-                              : pres.grand_total.toFixed(2)}
+                            {pres.refund.toFixed(2)}
                             AF
                           </h3>
-                          <div
+                          <button
                             className="revenue-button"
+                            disabled={isButtonDisabled}
                             onClick={() => {
-                              handleClosePrescription(pres);
+                              handleClosePrescription(pres)
                             }}
                           >
                             <i class="fa-solid fa-angles-left"></i>
-                          </div>
+                          </button>
                         </div>
                       ))}
                   </div>
@@ -394,84 +370,29 @@ export default function Revenue(props) {
                     )}
                   </div>
                 </div>
-                {refundPrescription?.[0] && (
-                  <>
-                    <div className="revneue-content-open">
-                      <div className="mini-content-headers">
-                        <div>نسخه های برگشتی و اخذیات</div>
-                        <div className="revenue-map-content">
-                          <h4>NO</h4>
-                          <h4>شماره نسخه</h4>
-                          <h4>نوعیت نسخه</h4>
-                          <h4>نام مریض</h4>
-                          <h4>قیمت کل</h4>
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          overflowY: "scroll",
-                          height: refundPrescription?.[0] ? "23.6dvh" : "72dvh",
-                        }}
-                      >
-                        {revenue &&
-                          refundPrescription?.map((pres, key) => (
-                            <div
-                              className={`revenue-map-content ${
-                                selectedIdx === key ? "" : ""
-                              }`}
-                              id={`item-${key}`}
-                              onClick={() => setSelectedIdx(key)}
-                            >
-                              <h3>{key + 1}</h3>
-                              <h3>{pres.prescription_number}</h3>
-                              <h3>{pres.department_name}</h3>
-                              <h3>{pres.patient_name}</h3>
-                              <h3 className="persian-number">
-                                {pres.refund &&
-                                  (pres.refund > 0 ? "-" : "") +
-                                    (pres.refund > 0
-                                      ? pres.refund.toFixed(2)
-                                      : pres.refund.toFixed(2).slice(1))}
-                                AF
-                              </h3>
-                              <div
-                                className="revenue-button"
-                                onClick={() => {
-                                  handleClosePrescription(pres);
-                                  handleRefundPrescription(pres);
-                                }}
-                              >
-                                <i class="fa-solid fa-angles-left"></i>
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                      <div className="revenue-pagination-conatiner">
-                        <div className="paginator-button">{"<<"}</div>
-                        <div className="paginator-button">{"1"}</div>
-                        <div className="paginator-button">{"2"}</div>
-                        <div className="paginator-button">{"3"}</div>
-                        <div className="paginator-button">{">>"}</div>
-                      </div>
-                    </div>
-                  </>
-                )}
               </div>
 
               <div className="revneue-content-close">
                 <div className="mini-content-headers">
-                <div
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>نسخه های پرداخت شده</div>
+                    <div
                       style={{
                         display: "flex",
-                        justifyContent: "space-between",
+                        gap: "2rem",
+                        fontSize: "0.9rem",
+                        paddingLeft: "0.4rem",
                       }}
                     >
-                      <div>نسخه های  پرداخت شده</div>
-                      <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem', paddingLeft: '0.4rem'}}>
-                        <div>تعداد: {closedPrescriptions?.count}</div>
-                        <div>صفحات: {Math.ceil(closedPrescriptions?.count / 100)}</div>
-                      </div>
+                      <div>تعداد: {revenueRecords?.count}</div>
+                      <div>صفحات: {Math.ceil(revenueRecords?.count / 100)}</div>
                     </div>
+                  </div>
                   <div className="revenue-map-content">
                     <h4>NO</h4>
                     <h4>شماره نسخه</h4>
@@ -482,14 +403,14 @@ export default function Revenue(props) {
                 </div>
                 <div className="yScroll">
                   {revenue &&
-                    closedPrescriptions?.results?.map((through, key) => (
+                    revenueRecords?.results?.map((through, key) => (
                       <div className={`revenue-map-content`}>
                         <h3>{key + 1}</h3>
                         <h3>{through.prescription_number}</h3>
                         <h3>{through.department_name}</h3>
                         <h3>{through.patient_name}</h3>
                         <h3 className="persian-number">
-                          {through.purchased_value.toFixed(2)}
+                          {through?.amount?.toFixed(2)}
                           AF
                         </h3>
                         <div
@@ -504,11 +425,11 @@ export default function Revenue(props) {
                     ))}
                 </div>
                 <div className="revenue-pagination-conatiner">
-                  {closedPrescriptions?.previous && (
+                  {revenueRecords?.previous && (
                     <div
                       className="paginator-button"
                       onClick={() => {
-                        if (closedPrescriptions?.previous) {
+                        if (revenueRecords?.previous) {
                           setClosePage((prev) => prev - 1);
                           setTrigger(new Date());
                         }
@@ -518,11 +439,11 @@ export default function Revenue(props) {
                     </div>
                   )}
                   <div className="paginator-button-page">{closePage}</div>
-                  {closedPrescriptions?.next && (
+                  {revenueRecords?.next && (
                     <div
                       className="paginator-button"
                       onClick={() => {
-                        if (closedPrescriptions?.next) {
+                        if (revenueRecords?.next) {
                           setClosePage((prev) => prev + 1);
                           setTrigger(new Date());
                         }
