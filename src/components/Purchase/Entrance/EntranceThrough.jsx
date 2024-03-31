@@ -16,7 +16,7 @@ import Entrance from "./Entrance";
 import AlertModal from "../../PageComponents/Modals/AlertModal";
 import axios from "axios";
 import useServerIP from "../../services/ServerIP";
-import moment from 'jalali-moment';
+import moment from "jalali-moment";
 
 export default function EntranceThrough({ StoreCycle = false }) {
   const SubmitedAlertRef = useRef(null);
@@ -46,40 +46,45 @@ export default function EntranceThrough({ StoreCycle = false }) {
   };
 
   const deSelectMedicine = () => {
-    setMedicine('')
-  }
+    setMedicine("");
+  };
 
   const handleCloseFocus = () => {
     setFocus("number_in_factor");
   };
 
+
   const handleInputBlur = () => {
-    const inputValue = watch('expire_date');
-    const parts = inputValue.split('-');
+    const inputValue = watch("expire_date");
+    const parts = inputValue.split("-");
     if (parts.length === 2) {
       let year = parseInt(parts[0]);
       const month = parseInt(parts[1]);
       if (!isNaN(year) && !isNaN(month)) {
         if (year >= 1000 && year <= 1500) {
-          // If the year is between 1000 and 2000, consider it as Jalali and convert it
-          // Subtract 1000 from the year to get the correct Jalali year
-          const jalaliDate = moment(`${year}-${month}`, 'jYYYY-jMM');
-          const gregorianDate = jalaliDate.format('YYYY-MM-DD');
-          setValue('expire_date', gregorianDate);
+          const jalaliDate = moment(`${year}-${month}`, "jYYYY-jMM");
+          const gregorianDate = jalaliDate.format("YYYY-MM-DD");
+          setValue("expire_date", gregorianDate);
           return;
         } else if (year >= 2000 && year <= 9999) {
-          // If the year is between 2000 and 9999, assume it's in the American format
-          // Set the year to the first 4 digits
-          const gregorianDate = `${year}-${month.toString().padStart(2, '0')}-01`;
-          setValue('expire_date', gregorianDate);
+          const gregorianDate = `${year}-${month
+            .toString()
+            .padStart(2, "0")}-01`;
+          setValue("expire_date", gregorianDate);
           return;
         }
       }
     }
-    // If the input value cannot be parsed correctly, clear it
-    setValue('expire_date', '');
   };
 
+
+  const handleDisable = () => {
+    if (entrance?.id && medicine?.id) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   useEffect(() => {
     setFocus("number_in_factor");
@@ -87,20 +92,20 @@ export default function EntranceThrough({ StoreCycle = false }) {
 
   const { mutate: submitEntranceThrough } = useMutation({
     mutationFn: (data) => {
-      data.set('expire_date', watch('expire_date'))
-      postDataFn(data, "entrance-throug/")
+      data.set("expire_date", watch("expire_date"));
+      postDataFn(data, "entrance-throug/");
     },
     onSuccess: (res) => {
       successFn("", () => {
         setTimeout(() => {
           entrance?.id &&
-          queryClient.invalidateQueries([
-            `entrance-throug/?entrance=${entrance?.id}`,
-          ]);
-        }, 100)
+            queryClient.invalidateQueries([
+              `entrance-throug/?entrance=${entrance?.id}`,
+            ]);
+        }, 100);
         setFocus("number_in_factor");
         resetThrough();
-        deSelectMedicine()
+        deSelectMedicine();
         SelectMedicineRef.current.Opener();
       });
     },
@@ -126,7 +131,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             );
         });
         setFocus("number_in_factor");
-        deSelectMedicine()
+        deSelectMedicine();
         StoreCycle ? StoreCycleReset() : resetThrough();
         SelectMedicineRef.current.Opener();
       });
@@ -163,8 +168,8 @@ export default function EntranceThrough({ StoreCycle = false }) {
   const resetThrough = () => {
     reset({
       number_in_factor: "",
-      each_price_factor: medicine?.last_purchased || '',
-      each_sell_price_afg: sell_price_get() || '',
+      each_price_factor: medicine?.last_purchased || "",
+      each_sell_price_afg: sell_price_get() || "",
       each_quantity: medicine?.no_pocket || 1,
       no_box: medicine?.no_box || 1,
       interest_percent: entrance ? entrance.total_interest : "",
@@ -176,7 +181,6 @@ export default function EntranceThrough({ StoreCycle = false }) {
       entrance: entrance?.id,
       medician: medicine?.id,
     });
-
   };
 
   const StoreCycleReset = () => {
@@ -194,7 +198,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
       entrance: entrance?.id,
       medician: medicine?.id,
     });
-  }
+  };
 
   useEffect(() => {
     StoreCycle ? null : setValue("each_sell_price_afg", sell_price_get());
@@ -236,9 +240,10 @@ export default function EntranceThrough({ StoreCycle = false }) {
     if (SubmitedAlert(data) != false) {
       SubmitedAlertRef.current.Opener();
     } else {
-
-
-      let percentageIncrease = ((data.each_sell_price_afg - data.each_price_factor) / data.each_price_factor) * 100;
+      let percentageIncrease =
+        ((data.each_sell_price_afg - data.each_price_factor) /
+          data.each_price_factor) *
+        100;
       let formattedDate = `${year}-${month}-${day}`;
       const StoreCycleForm = new FormData();
       StoreCycleForm.append("entrance", entrance?.id);
@@ -257,8 +262,8 @@ export default function EntranceThrough({ StoreCycle = false }) {
               `entrance-throug/?entrance=${entrance?.id}`,
             ]);
           setFocus("number_in_factor");
-          StoreCycleReset()
-          deSelectMedicine()
+          StoreCycleReset();
+          deSelectMedicine();
           SelectMedicineRef.current.Opener();
         })
         .catch((e) => {
@@ -305,7 +310,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             className={`entrance--inputs ${
               errors.number_in_factor && "error-input"
             }`}
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
           />
           <label>قیمت فی:</label>
           <input
@@ -314,7 +319,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             className={`entrance--inputs ${
               errors.each_price_factor && "error-input"
             }`}
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
           />
           <label>فی_فروش:</label>
           <input
@@ -323,9 +328,11 @@ export default function EntranceThrough({ StoreCycle = false }) {
             className={`entrance--inputs ${
               errors.each_sell_price_afg && "error-input"
             }`}
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
           />
-            <button type="submit" style={{display: 'none'}}>⤵ذخیره</button>
+          <button type="submit" style={{ display: "none" }}>
+            ⤵ذخیره
+          </button>
         </form>
       </>
     );
@@ -365,38 +372,46 @@ export default function EntranceThrough({ StoreCycle = false }) {
           </div>
           <label>تعداد:</label>
           <div className="flex">
-          <input
-            type="text"
-            {...register("number_in_factor", { required: true })}
-            className={`entrance--inputs ${
-              errors.number_in_factor && "error-input"
-            }`}
-            disabled={entrance?.id ? false : true}
+            <input
+              type="text"
+              {...register("number_in_factor", {
+                required: true,
+                pattern: {
+                  value: /^[0-9]+([.][0-9]+)?$/,
+                  message: "Please enter a valid number",
+                },
+              })}
+              className={`entrance--inputs ${
+                errors.number_in_factor && "error-input"
+              }`}
+              disabled={(entrance?.id && medicine?.id) ? false : true}
             />
             <label>موجودی:</label>
-          <input
-            type="text"
-            value={medicine?.existence || 0}
-            disabled
-            />
-            </div>
+            <input type="text" value={medicine?.existence || 0} disabled />
+          </div>
           <label>قیمت فی:</label>
           <div className="flex">
-          <input
-            type="text"
-            {...register("each_price_factor", { required: true })}
-            className={`entrance--inputs ${
-              errors.each_price_factor && "error-input"
-            }`}
-            disabled={entrance?.id ? false : true}
+            <input
+              type="text"
+              {...register("each_price_factor", {
+                required: true,
+                pattern: {
+                  value: /^[0-9]+([.][0-9]+)?$/,
+                  message: "Please enter a valid number",
+                },
+              })}
+              className={`entrance--inputs ${
+                errors.each_price_factor && "error-input"
+              }`}
+              disabled={(entrance?.id && medicine?.id) ? false : true}
             />
             <label>خرید:</label>
-          <input
-            type="text"
-            value={medicine?.last_purchased || ''}
-            disabled
+            <input
+              type="text"
+              value={medicine?.last_purchased || ""}
+              disabled
             />
-            </div>
+          </div>
           <label>
             <h5> ت.د.پاکت:</h5>
           </label>
@@ -420,30 +435,37 @@ export default function EntranceThrough({ StoreCycle = false }) {
           <label>فایده٪:</label>
           <input
             type="text"
-            {...register("interest_percent", { required: true })}
+            {...register("interest_percent", {
+              required: true,
+              pattern: {
+                value: /^[0-9]+([.][0-9]+)?$/,
+                message: "Please enter a valid number",
+              },
+            })}
             className={`entrance--inputs ${
               errors.interest_percent && "error-input"
             }`}
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
           />
           <label>فی_فروش:</label>
           <div className="flex">
-          <input
-            type="text"
-            {...register("each_sell_price_afg", { required: true })}
-            className={`entrance--inputs ${
-              errors.each_sell_price_afg && "error-input"
-            }`}
-            onBlur={() => setValue("interest_percent", interest_get())}
-            disabled={entrance?.id ? false : true}
-          />
-          <label>قیمت:</label>
-          <input
-            value={medicine?.price || ''}
-            type="text"
-            disabled
-          />
-
+            <input
+              type="text"
+              {...register("each_sell_price_afg", {
+                required: true,
+                pattern: {
+                  value: /^[0-9]+([.][0-9]+)?$/,
+                  message: "Please enter a valid number",
+                },
+              })}
+              className={`entrance--inputs ${
+                errors.each_sell_price_afg && "error-input"
+              }`}
+              onBlur={() => setValue("interest_percent", interest_get())}
+              disabled={(entrance?.id && medicine?.id) ? false : true}
+            />
+            <label>قیمت:</label>
+            <input value={medicine?.price || ""} type="text" disabled />
           </div>
           <label>
             <h5> بونوس:</h5>
@@ -451,9 +473,14 @@ export default function EntranceThrough({ StoreCycle = false }) {
           <div className="numbers-box-pocket">
             <input
               type="text"
-              {...register("quantity_bonus")}
+              {...register("quantity_bonus", {
+                pattern: {
+                  value: /^[0-9]+([.][0-9]+)?$/,
+                  message: "Please enter a valid number",
+                },
+              })}
               className="entrance--inputs"
-              disabled={entrance?.id ? false : true}
+              disabled={(entrance?.id && medicine?.id) ? false : true}
             />
             <lable>امانتی:</lable>
             <input
@@ -462,44 +489,69 @@ export default function EntranceThrough({ StoreCycle = false }) {
               style={{
                 width: "1rem",
               }}
-              disabled={entrance?.id ? false : true}
+              disabled={(entrance?.id && medicine?.id) ? false : true}
             />
           </div>
           <label>انقضا:</label>
           <input
-             type="text"
-             placeholder="YYYY-M"
-            {...register("expire_date", { required: true })}
+            type="text"
+            placeholder="YYYY-M"
+            {...register("expire_date", {
+              required: true,
+              validate: (value) => {
+                const regex =
+                  /^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/;
+                if (!regex.test(value)) {
+                  return "Please enter a valid date in the format YYYY-MM-DD";
+                }
+                const [year, month, day] = value.split("-").map(Number);
+                const date = new Date(year, month - 1, day);
+                if (!date.getTime()) {
+                  return "Please enter a valid date";
+                }
+                return true;
+              },
+            })}
             className={`entrance--inputs date--inputs ${
               errors.expire_date && "error-input"
             }`}
             onBlur={handleInputBlur}
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
           />
           {/* <label>انقضا.ش:</label>
           <DateInputSimple
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
             className={`${!entrance?.id && "disabled-input"}`}
           /> */}
           <label>بچ نمبر:</label>
           <input
             type="text"
             {...register("batch_number")}
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
           />
           <label></label>
           <label></label>
           <label>تخفیف:</label>
           <input
             type="text"
-            {...register("discount_money")}
+            {...register("discount_money", {
+              pattern: {
+                value: /^[0-9]+([.][0-9]+)?$/,
+                message: "Please enter a valid number",
+              },
+            })}
             className="entrance--inputs"
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
           />
           <label>تخفیف ٪:</label>
           <input
             type="text"
-            {...register("discount_percent")}
+            {...register("discount_percent", {
+              pattern: {
+                value: /^[0-9]+([.][0-9]+)?$/,
+                message: "Please enter a valid number",
+              },
+            })}
             className="entrance--inputs"
             onKeyDown={(e) => {
               if (e.key === "Tab") {
@@ -507,7 +559,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
                 setFocus("number_in_factor");
               }
             }}
-            disabled={entrance?.id ? false : true}
+            disabled={(entrance?.id && medicine?.id) ? false : true}
           />
           <div className="adding-box">
             <label></label>
