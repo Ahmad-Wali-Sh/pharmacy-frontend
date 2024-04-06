@@ -4063,6 +4063,7 @@ input[type="text"]:disabled {
   direction: rtl;
   display: grid;
   gap: 1rem;
+  align-items: center;
   padding-top: 1rem;
   grid-template-columns: 18% 70%;
   text-align: right;

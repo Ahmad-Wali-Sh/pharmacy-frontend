@@ -151,11 +151,13 @@ export default function PurchaseListManual({ selectedMedicine }) {
     setEditItem("");
   };
 
-  const [starter, setStarter] = useState(new Date().toISOString());
-  const [ender, setEnder] = useState(new Date().toISOString());
+  const [starter, setStarter] = useState("");
+  const [ender, setEnder] = useState("");
 
   let PurchaseQuery = `purchase-list-manual/?approved=${filter.approved}&created_after=${starter}&created_before=${ender}`;
-  const { data: Purchases } = useQuery([PurchaseQuery]);
+  const { data: Purchases } = useQuery([PurchaseQuery], {
+    enabled: !!starter && !!ender,
+  });
 
   useEffect(() => {
     const handleKeyDowns = (e) => {
@@ -201,20 +203,6 @@ export default function PurchaseListManual({ selectedMedicine }) {
     case "list":
       return (
         <>
-        <div style={{zIndex:'1000'}}>
-
-          <RangePicker
-            selectTime={true}
-            rangeTillEndOfDay
-            // defaultValue={{startDate: new Date(), endDate: new Date()}}
-            onDateSelected={(startDate, endDate) => {
-              setStarter(new Date(startDate).toISOString());
-              setEnder(new Date(endDate).toISOString());
-            }}
-            dateFormat={'yyyy-mm-dd h:mi A '}
-            style={{zIndex:'10000'}}
-            />
-            </div>
           <FilterModal
             current={ListFilterRef.current}
             ListFilterRef={ListFilterRef}
@@ -234,6 +222,30 @@ export default function PurchaseListManual({ selectedMedicine }) {
               <option value={true}>بله</option>
             </FilterSelect>
           </FilterModal>
+          <RangePicker
+            placeholderText={"تاریخ شروع"}
+            selectTime={true}
+            disableRange
+            rangeTillEndOfDay
+            onDateSelected={(date) => {
+              setStarter(new Date(date).toISOString());
+              console.log(date);
+            }}
+            dateFormat={"YYYY/mm/dd ⦿ h:mi A "}
+            style={{ zIndex: "10000" }}
+          />
+          <RangePicker
+            selectTime={true}
+            placeholderText={"تاریخ پایان"}
+            disableRange
+            rangeTillEndOfDay
+            onDateSelected={(date) => {
+              setEnder(new Date(date).toISOString());
+              console.log(date);
+            }}
+            dateFormat={"YYYY/mm/dd ⦿ h:mi A "}
+            style={{ zIndex: "10000" }}
+          />
           <div className="patient-list-header-purchase">
             <h4>No</h4>
             <h4>دوا</h4>
@@ -243,6 +255,13 @@ export default function PurchaseListManual({ selectedMedicine }) {
             <h4>بیشتر</h4>
           </div>
           <ListMap>
+            {Purchases?.length >= 1 ? (
+              ""
+            ) : (
+              <div style={{ padding: "1rem" }}>
+                لطفا بازه ی زمانی متفاوت بین تاریخ شروع و پایان انتخاب کنید
+              </div>
+            )}
             {Purchases?.map((purchase, keyer) => (
               <PurchaseListItem
                 setActive={setActive}
