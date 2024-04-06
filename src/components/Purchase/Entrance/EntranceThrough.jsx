@@ -166,7 +166,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
   const resetThrough = () => {
     reset({
       number_in_factor: "",
-      each_price_factor: medicine?.last_purchased || "",
+      each_price_factor: medicine?.last_purchased_v1 || "",
       each_sell_price_afg: sell_price_get() || "",
       each_quantity: medicine?.no_pocket || 1,
       no_box: medicine?.no_box || 1,
@@ -184,7 +184,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
   const StoreCycleReset = () => {
     reset({
       number_in_factor: "",
-      each_price_factor: medicine?.last_purchased || 1,
+      each_price_factor: medicine?.last_purchased_v1 || 1,
       no_box: medicine?.no_box || 1,
       interest_percent: entrance ? entrance.total_interest : "",
       quantity_bonus: "",
@@ -406,7 +406,7 @@ export default function EntranceThrough({ StoreCycle = false }) {
             <label>خرید:</label>
             <input
               type="text"
-              value={medicine?.last_purchased || ""}
+              value={medicine?.last_purchased_v1 || ""}
               disabled
             />
           </div>
