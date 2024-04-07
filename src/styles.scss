@@ -1248,6 +1248,10 @@ input[type="text"]:disabled {
   color: var(--text-100);
   padding-left: 0.5rem;
   padding-right: 0.7rem;
+
+  &:focus {
+    box-shadow: -4px -4px 4px var(--primary-200);
+  }
 }
 
 .loading {
@@ -1279,6 +1283,11 @@ input[type="text"]:disabled {
   grid-template-rows: 2rem 4rem 3rem;
   padding-left: 1rem;
   font-size: 1rem;
+  width: 100%;
+}
+.medician-text-field-add {
+  padding: 0.2rem;
+  font-size: 0.9rem;
   width: 100%;
 }
 
@@ -4447,4 +4456,47 @@ input[type="text"]:disabled {
 }
 .history-create{
   background-color: rgba(10, 82, 22, 0.534) !important;
+}
+
+
+.additional-medicine-container {
+  background-color: var(--bg-100);
+  border-radius: 1rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  height: 88%;
+  overflow-y: scroll;
+}
+
+.additional-medicine-footer{
+  background-color: var(--primary-200);
+  height: 20%;
+}
+
+.additional-meidicne-header{
+  background-color: var(--primary-200);
+  height: 1.7rem;
+  border-radius: 1rem;
+  padding: 0.2rem;
+  padding-left: 0.5rem;
+  display: grid;
+  gap:1%;
+  grid-template-columns: 15% 15% 15% 40% 6% 4%;
+  font-size: 0.9rem;
+  direction: rtl;
+}
+
+.additional-meidicne-item{
+  background-color: var(--bg-200);
+  color: var(--text-200);
+  align-items: center;
+  gap:1%;
+  margin-top: 0.2rem;
+  border-radius: 1rem;
+  padding: 0.4rem;
+  padding-left: 0.5rem;
+  display: grid;
+  grid-template-columns: 15% 15% 15% 40% 6% 4%;
+  font-size: 0.9rem;
+  direction: rtl;
 }

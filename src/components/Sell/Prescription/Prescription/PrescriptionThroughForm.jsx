@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import { SelectMedician } from "../../../Medician/SelectMedicine/SelectMedician";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
@@ -6,6 +6,8 @@ import { useMutation } from "react-query";
 import { postDataFn, successFn, patchDataFn } from "../../../services/API";
 import AlertModal from "../../../PageComponents/Modals/AlertModal";
 import { SubmitButton } from "../../../PageComponents/Buttons/Buttons";
+import { toast } from "react-toastify";
+import AdditionalMedicineModal from "./AdditionalMedicineModal";
 
 export const PrescriptionThroughForm = forwardRef(
   ({ prescription, prescriptionThrough, updatePrescription }, ref) => {
@@ -19,6 +21,7 @@ export const PrescriptionThroughForm = forwardRef(
     } = useForm();
     const [medicine, setMedicine] = React.useState(null);
 
+    const additionalRef = useRef(null)
     const { mutateAsync: prescriptionThroughPost } = useMutation({
       mutationFn: (data) => postDataFn(data, "prescription-through/"),
       onSuccess: () => {
@@ -59,9 +62,13 @@ export const PrescriptionThroughForm = forwardRef(
 
       if (medicineIncludesCheck() === false) {
         prescriptionThroughPost(PrescriptionThroughForm);
-        ref.current.Opener();
+        if (medicine?.add_medicine?.[0]?.additional?.length > 0) {
+          toast.success('happend sir.')
+          additionalRef.current.Opener()
+        } else {
+          ref.current.Opener();
+        }
       }
-
       if (medicineIncludesCheck()) {
         SameMedicineAlertModalRef.current.Opener();
       }
@@ -96,6 +103,8 @@ export const PrescriptionThroughForm = forwardRef(
 
     return (
       <>
+      <AdditionalMedicineModal ref={additionalRef} medicine={medicine} prescriptionThrough={prescriptionThrough} prescription={prescription} medicineIncludesCheck={medicineIncludesCheck} medicineSelectRef={ref}>
+      </AdditionalMedicineModal>
         <AlertModal
           ref={SameMedicineAlertModalRef}
           errorTitle="این دوا ثبت شده است!"

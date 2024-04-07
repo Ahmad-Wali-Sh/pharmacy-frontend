@@ -66,6 +66,25 @@ export const ModalBigStyles = {
   },
 };
 
+export const AdditioanlModalStyle = {
+  content: {
+    backgroundColor: "var(--bg-200)",
+    border: "none",
+    width: '60%',
+    left: '20%',
+    height: '70%',
+    top: '10%', 
+    borderRadius: "1rem",
+    overflow: "hidden",
+    padding: "0px",
+    margin: "0px",
+    zIndex: 10,
+  },
+  overlay: {
+    backgroundColor: "rgba(60,60,60,0.5)",
+  },
+};
+
 export const MedicineShowModalStyles = {
   content: {
     backgroundColor: "var(--bg-200)",
