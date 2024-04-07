@@ -27,6 +27,7 @@
     "npm": "^9.6.7",
     "react": "^18.2.0",
     "react-auth-kit": "^2.12.2",
+    "react-barcode": "^1.5.1",
     "react-csv": "^2.2.2",
     "react-date-picker": "^10.5.0",
     "react-datetime": "^3.2.0",

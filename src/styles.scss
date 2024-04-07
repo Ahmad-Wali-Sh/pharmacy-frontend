@@ -33,7 +33,7 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.today-date{
+.today-date {
   background-color: var(--bg-300);
   padding: 0.5rem;
   color: var(--text-200);
@@ -45,7 +45,7 @@
 .fa-history {
   color: white !important;
   position: relative;
-  bottom: 0.1rem
+  bottom: 0.1rem;
 }
 
 .color-pallete-container {
@@ -1794,7 +1794,7 @@ input[type="text"]:disabled {
   height: 3rem;
   align-content: center;
   font-size: 1.5rem;
-  color:var(--text-200);
+  color: var(--text-200);
   margin: 1rem;
   box-shadow: 1px 1px 10px var(--primary-100);
 }
@@ -2128,14 +2128,14 @@ input[type="text"]:disabled {
   gap: 1rem;
 }
 
-.date-picker-app-wrapper  {
+.date-picker-app-wrapper {
   background-color: var(--bg-300) !important;
   width: 20rem;
   height: 2rem;
   position: absolute;
   top: -0.5rem;
   z-index: 1000;
-  margin:1rem;
+  margin: 1rem;
   border-radius: 2rem;
   direction: ltr !important;
 }
@@ -3023,7 +3023,7 @@ input[type="text"]:disabled {
   height: 66dvh;
 }
 
-.paginator-button{
+.paginator-button {
   height: 1.6rem;
   padding: 1rem;
   cursor: pointer;
@@ -3040,7 +3040,7 @@ input[type="text"]:disabled {
   }
 }
 
-.paginator-button-page{
+.paginator-button-page {
   height: 1.6rem;
   padding: 1rem;
   display: flex;
@@ -3126,7 +3126,6 @@ input[type="text"]:disabled {
     );
   }
 }
-
 
 .revenue-select {
   width: 15rem;
@@ -3764,7 +3763,7 @@ input[type="text"]:disabled {
   direction: rtl;
   border: 1.4px solid var(--bg-100);
   margin: 0.3rem;
-  padding: 0.2rem
+  padding: 0.2rem;
 }
 
 .barcode-image-print {
@@ -4418,7 +4417,6 @@ input[type="text"]:disabled {
   gap: 1rem;
 }
 
-
 .history-modal-container {
   width: 100%;
   height: 93%;
@@ -4426,7 +4424,7 @@ input[type="text"]:disabled {
   background-color: #241b35;
 }
 
-.history-header{
+.history-header {
   display: grid;
   justify-content: right;
   text-align: right;
@@ -4459,19 +4457,18 @@ input[type="text"]:disabled {
   display: flex;
   overflow-y: scroll;
   flex-direction: column;
-  gap: 0.5rem
+  gap: 0.5rem;
 }
 
-.history-delete{
+.history-delete {
   background-color: rgba(82, 10, 10, 0.63) !important;
 }
-.history-update{
+.history-update {
   background-color: rgba(10, 74, 82, 0.568) !important;
 }
-.history-create{
+.history-create {
   background-color: rgba(10, 82, 22, 0.534) !important;
 }
-
 
 .additional-medicine-container {
   background-color: var(--bg-100);
@@ -4482,41 +4479,41 @@ input[type="text"]:disabled {
   overflow-y: scroll;
 }
 
-.additional-medicine-footer{
+.additional-medicine-footer {
   background-color: var(--primary-200);
   height: 20%;
 }
 
-.additional-meidicne-header{
+.additional-meidicne-header {
   background-color: var(--primary-200);
   height: 1.7rem;
   border-radius: 1rem;
   padding: 0.2rem;
   padding-left: 0.5rem;
   display: grid;
-  gap:1%;
+  gap: 1%;
   grid-template-columns: 15% 15% 15% 40% 6% 4%;
   font-size: 0.9rem;
   direction: rtl;
 }
-.additional-meidicne-header-settings{
+.additional-meidicne-header-settings {
   background-color: var(--primary-200);
   height: 1.7rem;
   border-radius: 1rem;
   padding: 0.2rem;
   padding-left: 0.5rem;
   display: grid;
-  gap:1%;
+  gap: 1%;
   grid-template-columns: 15% 15% 15% 45% 5%;
   font-size: 0.9rem;
   direction: rtl;
 }
 
-.additional-meidicne-item-settings{
+.additional-meidicne-item-settings {
   background-color: var(--bg-200);
   color: var(--text-200);
   align-items: center;
-  gap:1%;
+  gap: 1%;
   margin-top: 0.2rem;
   border-radius: 1rem;
   padding: 0.4rem;
@@ -4527,11 +4524,11 @@ input[type="text"]:disabled {
   direction: rtl;
 }
 
-.additional-meidicne-item{
+.additional-meidicne-item {
   background-color: var(--bg-200);
   color: var(--text-200);
   align-items: center;
-  gap:1%;
+  gap: 1%;
   margin-top: 0.2rem;
   border-radius: 1rem;
   padding: 0.4rem;
@@ -4540,4 +4537,46 @@ input[type="text"]:disabled {
   grid-template-columns: 15% 15% 15% 40% 6% 4%;
   font-size: 0.9rem;
   direction: rtl;
+}
+
+.parent {
+  display: grid;
+  width: 60mm;
+  margin: 0.6rem;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 10% 10% 35% 40% 10%;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  text-align: center;
+  border: 2px solid black;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 2 / 5;
+  font-weight: bolder;
+  padding: 0.3rem;
+  font-size: 1.2rem;
+}
+.div2 {
+  grid-area: 2 / 3 / 3 / 5;
+  font-size: 1.2rem;
+}
+.div3 {
+  grid-area: 2 / 1 / 3 / 3;
+  font-size: 1.2rem;
+}
+.div4 {
+  grid-area: 3 / 2 / 4 / 4;
+  font-size: 1.2rem;
+}
+.div5 {
+  grid-area: 4 / 1 / 5 / 5;
+  height: 65mm;
+}
+.div6 { grid-area: 5 / 1 / 6 / 5; padding: 0.5rem; font-size: 1.2rem;}
+
+.barcode-generated {
+  transform: rotate(90deg);
+  margin-top:5.2rem;
+  display: flex;
 }
