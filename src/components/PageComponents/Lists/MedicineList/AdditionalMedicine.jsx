@@ -88,11 +88,11 @@ const AdditionalMedicine = forwardRef(({ medicine }, ref) => {
     const additon = additionals ? [...additionals, selectedMedicine] : ''
     const PatchForm = new FormData()
     additionals && additon?.forEach((item, i) => {
-        PatchForm.append(`additional`, item.id);
+      medicine?.id != item.id ? PatchForm.append(`additional`, item.id) : toast.warning('اصل دوا شامل دوا های همراه نمیشود')
       });
       if (medicineWith) {
           axios.patch(`${serverIP}api/medicine-with/${medicineWith?.id}/`, PatchForm).then((e) => {
-              toast.success("موفقانه حذف شد");
+              toast.success("موفقانه اضافه شد");
               MedicineWithFecth(medicine?.id);
           }).catch((e) => console.log(e))
       } 
@@ -100,10 +100,10 @@ const AdditionalMedicine = forwardRef(({ medicine }, ref) => {
         const PostForm = new FormData()
         PostForm.append(`additional`, selectedMedicine.id);
         PostForm.append(`medician`, medicine.id);
-        axios.post(`${serverIP}api/medicine-with/`, PostForm).then(() => {
+        selectedMedicine.id != medicine.id ? axios.post(`${serverIP}api/medicine-with/`, PostForm).then(() => {
             toast.success("موفقانه اضافه شد");
             MedicineWithFecth(medicine?.id);
-        })
+        }) : toast.warning('اصل دوا شامل دوا های همراه نمیشود')
       }
 
   }
