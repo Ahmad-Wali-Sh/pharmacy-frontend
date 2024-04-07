@@ -31,12 +31,13 @@ import MultipleBarcode from "../../MultipleBarcode";
 import useServerIP from "../../../services/ServerIP";
 import AlertModal from "../../Modals/AlertModal";
 import SimplePurchaseList from "./SimplePurchaseList";
+import AdditionalMedicine from "./AdditionalMedicine";
 
 export default function MedicineList({
   edit,
   setSelectedMedician,
   selectAutoCompleteData,
-  medicineActive
+  medicineActive,
 }) {
   const ListFilterRef = useRef(null);
   const { medicine, setMedicine } = useMedicine();
@@ -52,15 +53,15 @@ export default function MedicineList({
     country: "",
     company: "",
     page: 1,
-    barcode:''
+    barcode: "",
   });
 
   useEffect(() => {
     if (medicineActive) {
-      setActive(medicineActive)
+      setActive(medicineActive);
       ResetForm();
-    } 
-  }, [medicineActive])
+    }
+  }, [medicineActive]);
 
   const user = useAuthUser();
 
@@ -69,7 +70,7 @@ export default function MedicineList({
       setActive("edit");
       setEditItem(edit);
       FormResetToItem(edit);
-      setMedicine(edit)
+      setMedicine(edit);
     }
   }, [edit]);
 
@@ -84,8 +85,6 @@ export default function MedicineList({
     formState: { errors },
   } = useForm();
 
-
-
   const { mutateAsync: newMedicine } = useMutation({
     mutationFn: async (data) => {
       let newdata = data;
@@ -97,18 +96,15 @@ export default function MedicineList({
       }
 
       const response = await postDataFn(newdata, "medician/");
-      setMedicine(response)
+      setMedicine(response);
     },
     onSuccess: () => {
       successFn([medicineQuery], () => {
         // setActive("list");
         // setMedicine(res.data)
-      })
-    }
+      });
+    },
   });
-
-
-
 
   const { mutateAsync: handleEditMedicine } = useMutation({
     mutationFn: (data) => {
@@ -169,7 +165,9 @@ export default function MedicineList({
 
   let medicineQuery = `medician/?brand_name=${encodeURIComponent(
     filter.brand_name
-  )}&barcode__contains=${filter.barcode}&search=${encodeURIComponent(filter.generic_name)}&ml=${encodeURIComponent(
+  )}&barcode__contains=${filter.barcode}&search=${encodeURIComponent(
+    filter.generic_name
+  )}&ml=${encodeURIComponent(
     filter.ml
   )}&kind__name_persian=${encodeURIComponent(
     filter.kind_persian
@@ -191,12 +189,13 @@ export default function MedicineList({
   //   },
   // });
 
-  const { serverIP } = useServerIP()
+  const { serverIP } = useServerIP();
   const geteditedMedicine = () => {
-    edit?.id && axios.get(`${serverIP}api/medician/${edit?.id}`).then((res) => {
-      setMedicine(res)
-    })
-  }
+    edit?.id &&
+      axios.get(`${serverIP}api/medician/${edit?.id}`).then((res) => {
+        setMedicine(res);
+      });
+  };
 
   const imageReturn = (image) => {
     try {
@@ -251,7 +250,7 @@ export default function MedicineList({
     });
     item.image &&
       axios(item.image)
-        .then((response) => response.blob())
+        .then((response) => response?.blob())
         .then((blob) => {
           const file = new File(
             [blob],
@@ -264,7 +263,7 @@ export default function MedicineList({
         });
 
     setEditItem(item);
-    setMedicine(item)
+    setMedicine(item);
     setImage(item.image ? item.image : "");
   };
 
@@ -305,7 +304,7 @@ export default function MedicineList({
     setImage("");
   };
 
-  const simplePuchaseListRef = useRef(null)
+  const simplePuchaseListRef = useRef(null);
   const listRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -344,7 +343,7 @@ export default function MedicineList({
           case "P":
           case "ح":
             e.preventDefault();
-            simplePuchaseListRef.current.Opener()
+            simplePuchaseListRef.current.Opener();
             break;
         }
       }
@@ -474,7 +473,7 @@ export default function MedicineList({
       () => setEditItem("");
       return (
         <>
-            <SimplePurchaseList ref={simplePuchaseListRef} medicine={medicine}/>
+          <SimplePurchaseList ref={simplePuchaseListRef} medicine={medicine} />
           <MedicineForm
             imagePreview={imagePreview}
             setImage={setImage}
@@ -504,7 +503,7 @@ export default function MedicineList({
     case "edit":
       return (
         <>
-         <SimplePurchaseList ref={simplePuchaseListRef} medicine={medicine}/>
+          <SimplePurchaseList ref={simplePuchaseListRef} medicine={medicine} />
           <MedicineForm
             imagePreview={imagePreview}
             setImage={setImage}
@@ -545,282 +544,274 @@ function MedicineForm(props) {
 
   return (
     <>
-    <form>
-      <div className="listing-form">
-
-        <label>نام برند:</label>
-        <input
-          type="text"
-          className={props.errors?.brand_name ? "error-input" : ""}
-          {...props.register("brand_name", { required: true })}
-          style={{ direction: "ltr", textAlign: "right" }}
-        />
-        <label>ترکیب:</label>
-        <input
-          type="text"
-          {...props.register("generic_name")}
-          style={{ direction: "ltr", textAlign: "right" }}
-        />
-        <label>موثریت:</label>
-        <input
-          type="text"
-          {...props.register("ml")}
-          style={{ direction: "ltr", textAlign: "right" }}
-        />
-        <label>وزن:</label>
-        <input
-          type="text"
-          {...props.register("weight")}
-          style={{ direction: "ltr", textAlign: "right" }}
-        />
-        <label>گروپ:</label>
-        <ControlledSelect
-          control={props.control}
-          name="pharm_group"
-          options={props.pharmGroup}
-          placeholder=""
-          getOptionLabel={(option) =>
-            `${option.name_english} - ${option.name_persian}`
-          }
-          getOptionValue={(option) => option.id}
-          uniqueKey={`medicine-unigue${props.pharmGroup}`}
-          defaultValue={props.pharmGroup?.find((c) =>
-            c.id === props.medicine.pharm_group ? c.name_english : null
-          )}
-          NewComponent={
-            <MedicinesLists
-              title="لست ها"
-              activeKey="pharm-groups"
-              button="plus"
-              name="ثبت دوا"
-            />
-          }
-        />
-        <label>نوع:</label>
-        <div
-          style={{
-            marginLeft: "0.5rem",
-          }}
-        >
+      <form>
+        <div className="listing-form">
+          <label>نام برند:</label>
+          <input
+            type="text"
+            className={props.errors?.brand_name ? "error-input" : ""}
+            {...props.register("brand_name", { required: true })}
+            style={{ direction: "ltr", textAlign: "right" }}
+          />
+          <label>ترکیب:</label>
+          <input
+            type="text"
+            {...props.register("generic_name")}
+            style={{ direction: "ltr", textAlign: "right" }}
+          />
+          <label>موثریت:</label>
+          <input
+            type="text"
+            {...props.register("ml")}
+            style={{ direction: "ltr", textAlign: "right" }}
+          />
+          <label>وزن:</label>
+          <input
+            type="text"
+            {...props.register("weight")}
+            style={{ direction: "ltr", textAlign: "right" }}
+          />
+          <label>گروپ:</label>
           <ControlledSelect
             control={props.control}
-            name="kind"
-            options={props.kind}
+            name="pharm_group"
+            options={props.pharmGroup}
             placeholder=""
             getOptionLabel={(option) =>
               `${option.name_english} - ${option.name_persian}`
             }
             getOptionValue={(option) => option.id}
-            uniqueKey={`medicine-unigue${props.kind}`}
-            defaultValue={props.kind?.find((c) =>
-              c.id === props.medicine?.kind ? c.name_english : null
+            uniqueKey={`medicine-unigue${props.pharmGroup}`}
+            defaultValue={props.pharmGroup?.find((c) =>
+              c.id === props.medicine.pharm_group ? c.name_english : null
             )}
             NewComponent={
               <MedicinesLists
                 title="لست ها"
-                activeKey="kinds"
+                activeKey="pharm-groups"
                 button="plus"
                 name="ثبت دوا"
               />
             }
           />
-        </div>
-        <label>کشور:</label>
-        <div
-          style={{
-            marginLeft: "0.5rem",
-          }}
-        >
-          <ControlledSelect
-            control={props.control}
-            name="country"
-            options={props.country}
-            placeholder=""
-            getOptionLabel={(option) => option.name}
-            getOptionValue={(option) => option.id}
-            uniqueKey={`medicine-unigue${props.country}`}
-            defaultValue={props.country?.find((c) =>
-              c.id === props.medicine?.country ? c.name : null
-            )}
-            NewComponent={
-              <MedicinesLists
-                title="لست ها"
-                activeKey="countries"
-                button="plus"
-                name="ثبت دوا"
-              />
-            }
-          />
-        </div>
-        <label>کمپنی:</label>
-        <div
-          style={{
-            marginLeft: "0.5rem",
-          }}
-        >
-          <ControlledSelect
-            control={props.control}
-            name="big_company"
-            options={props.bigCompany}
-            placeholder=""
-            getOptionLabel={(option) => option.name}
-            getOptionValue={(option) => option.id}
-            uniqueKey={`medicine-unigue${props.bigCompany}`}
-            defaultValue={props.bigCompany?.find((c) =>
-              c.id === props.medicine?.big_company ? c.name : null
-            )}
-            NewComponent={
-              <MedicinesLists
-                title="لست ها"
-                activeKey="big-companies"
-                button="plus"
-                name="ثبت دوا"
-              />
-            }
-          />
-        </div>
-        <label>قیمت:</label>
-        <input
-          type="text"
-          className={props.errors?.price ? "error-input" : ""}
-          {...props.register("price", { required: true })}
-        />
-        <label>مکان:</label>
-        <input
-          type="text"
-          {...props.register("location")}
-          style={{ direction: "ltr", textAlign: "right" }}
-        />
-        <label>حداقل:</label>
-        <input type="text" {...props.register("minmum_existence")} />
-        <label>حداکثر:</label>
-        <input type="text" {...props.register("maximum_existence")} />
-        <label>ت.پاکت:</label>
-        <input type="text" {...props.register("no_pocket")} />
-        <label>ت.قطی:</label>
-        <input type="text" {...props.register("no_box")} />
-
-        <div className="approving-box">
-          <label>فعال:</label>
-          <input
-            type="checkbox"
-            className="must-advised-input"
-            {...props.register("active")}
-          />
-          <label>توصیه_حتمی:</label>
-          <input
-            type="checkbox"
-            className="must-advised-input"
-            {...props.register("must_advised")}
-          />
-          <label>توصیه_مریض:</label>
-          <input
-            type="checkbox"
-            className="must-advised-input"
-            {...props.register("patient_approved")}
-          />
-          <label>توصیه_داکتر:</label>
-          <input
-            type="checkbox"
-            className="must-advised-input"
-            {...props.register("doctor_approved")}
-          />
-        </div>
-        <label>اخطاریه:</label>
-        <input {...props.register("cautions")} />
-        <label>استفاده:</label>
-        <input {...props.register("usages")} />
-        <label>سنجاق:</label>
-        <Select
-          styles={SelectInputStyle}
-          getOptionLabel={(option) => option.name}
-          getOptionValue={(option) => option.id}
-          options={props.department}
-          isMulti
-          defaultValue={results ? results : ""}
-          onChange={(e) =>
-            props.setValue(
-              "department",
-              e.map((e) => {
-                return [e.id ? e.id : ""];
-              })
-            )
-          }
-        />
-        <label>انقضا:</label>
-        <input type="text" {...props.register("min_expire_date")} />
-        <label>توضیحات:</label>
-        <input {...props.register("description")} />
-        <label></label>
-        <label></label>
-        {/* <label>سهمیه:</label>
-        <input {...props.register("dividing_rules")} /> */}
-        <label>بارکد:</label>
-        {/* <input
-          type="text"
-          {...props.register("barcode")}
-          style={{ direction: "ltr", textAlign: "right" }}
-        /> */}
-        {props.medicine.id ? (
-          <MultipleBarcode medicineID={props.medicine.id} />
-        ) : (
-          <input
-            type="text"
-            style={{ direction: "ltr", textAlign: "right" }}
-            disabled
-          />
-        )}
-        <label>عکس:</label>
-        <div className="flex">
-          <input
-            type="file"
-            className="medician-image-field"
-            onChange={(e) => {
-              props.setValue("image", e.target.files[0]);
-              props.setImage(URL.createObjectURL(e.target.files[0]));
+          <label>نوع:</label>
+          <div
+            style={{
+              marginLeft: "0.5rem",
             }}
-          />
-          <form tabIndex={-1}>
-            <WebCamModal
-              medician={props.watch("brand_name")}
-              setFile={(data) => {
-                props.setValue("image", data),
-                  props.setImage(URL.createObjectURL(data));
-              }}
-              tabIndex={-1}
-            />
-          </form>
-        </div>
-        <label>نمایش:</label>
-        {props.imagePreview && (
-          <div className="flex">
-            <div className="image-preview-text">
-              <h5>filename</h5>
-              <h5>
-                {props.watch("image")?.name
-                  ? props.watch("image")?.name
-                  : props.watch("brand_name")}
-              </h5>
-            </div>
-            <div
-              className="modal-close-btn"
-              onClick={() => {
-                props.reset({
-                  image: "",
-                });
-                props.setImage("");
-              }}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </div>
-            <img
-              src={props.imagePreview ? props.imagePreview : ""}
-              className="image-preview"
+          >
+            <ControlledSelect
+              control={props.control}
+              name="kind"
+              options={props.kind}
+              placeholder=""
+              getOptionLabel={(option) =>
+                `${option.name_english} - ${option.name_persian}`
+              }
+              getOptionValue={(option) => option.id}
+              uniqueKey={`medicine-unigue${props.kind}`}
+              defaultValue={props.kind?.find((c) =>
+                c.id === props.medicine?.kind ? c.name_english : null
+              )}
+              NewComponent={
+                <MedicinesLists
+                  title="لست ها"
+                  activeKey="kinds"
+                  button="plus"
+                  name="ثبت دوا"
+                />
+              }
             />
           </div>
-        )}
-      </div>
-    </form>
+          <label>کشور:</label>
+          <div
+            style={{
+              marginLeft: "0.5rem",
+            }}
+          >
+            <ControlledSelect
+              control={props.control}
+              name="country"
+              options={props.country}
+              placeholder=""
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option.id}
+              uniqueKey={`medicine-unigue${props.country}`}
+              defaultValue={props.country?.find((c) =>
+                c.id === props.medicine?.country ? c.name : null
+              )}
+              NewComponent={
+                <MedicinesLists
+                  title="لست ها"
+                  activeKey="countries"
+                  button="plus"
+                  name="ثبت دوا"
+                />
+              }
+            />
+          </div>
+          <label>کمپنی:</label>
+          <div
+            style={{
+              marginLeft: "0.5rem",
+            }}
+          >
+            <ControlledSelect
+              control={props.control}
+              name="big_company"
+              options={props.bigCompany}
+              placeholder=""
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option.id}
+              uniqueKey={`medicine-unigue${props.bigCompany}`}
+              defaultValue={props.bigCompany?.find((c) =>
+                c.id === props.medicine?.big_company ? c.name : null
+              )}
+              NewComponent={
+                <MedicinesLists
+                  title="لست ها"
+                  activeKey="big-companies"
+                  button="plus"
+                  name="ثبت دوا"
+                />
+              }
+            />
+          </div>
+          <label>قیمت:</label>
+          <input
+            type="text"
+            className={props.errors?.price ? "error-input" : ""}
+            {...props.register("price", { required: true })}
+          />
+          <label>مکان:</label>
+          <input
+            type="text"
+            {...props.register("location")}
+            style={{ direction: "ltr", textAlign: "right" }}
+          />
+          <label>حداقل:</label>
+          <input type="text" {...props.register("minmum_existence")} />
+          <label>حداکثر:</label>
+          <input type="text" {...props.register("maximum_existence")} />
+          <label>ت.پاکت:</label>
+          <input type="text" {...props.register("no_pocket")} />
+          <label>ت.قطی:</label>
+          <input type="text" {...props.register("no_box")} />
+
+          <div className="approving-box">
+            <label>فعال:</label>
+            <input
+              type="checkbox"
+              className="must-advised-input"
+              {...props.register("active")}
+            />
+            <label>توصیه_حتمی:</label>
+            <input
+              type="checkbox"
+              className="must-advised-input"
+              {...props.register("must_advised")}
+            />
+            <label>توصیه_مریض:</label>
+            <input
+              type="checkbox"
+              className="must-advised-input"
+              {...props.register("patient_approved")}
+            />
+            <label>توصیه_داکتر:</label>
+            <input
+              type="checkbox"
+              className="must-advised-input"
+              {...props.register("doctor_approved")}
+            />
+          </div>
+          <label>اخطاریه:</label>
+          <input {...props.register("cautions")} />
+          <label>استفاده:</label>
+          <input {...props.register("usages")} />
+          <label>سنجاق:</label>
+          <Select
+            styles={SelectInputStyle}
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option.id}
+            options={props.department}
+            isMulti
+            defaultValue={results ? results : ""}
+            onChange={(e) =>
+              props.setValue(
+                "department",
+                e.map((e) => {
+                  return [e.id ? e.id : ""];
+                })
+              )
+            }
+          />
+          <label>انقضا:</label>
+          <input type="text" {...props.register("min_expire_date")} />
+          <label>توضیحات:</label>
+          <input {...props.register("description")} />
+          <label>دارو.همراه:</label>
+            <AdditionalMedicine medicine={props.medicine}/>
+          <label>بارکد:</label>
+          {props.medicine.id ? (
+            <MultipleBarcode medicineID={props.medicine.id} />
+          ) : (
+            <input
+              type="text"
+              style={{ direction: "ltr", textAlign: "right" }}
+              disabled
+            />
+          )}
+          <label>عکس:</label>
+          <div className="flex">
+            <input
+              type="file"
+              className="medician-image-field"
+              onChange={(e) => {
+                props.setValue("image", e.target.files[0]);
+                props.setImage(URL.createObjectURL(e.target.files[0]));
+              }}
+            />
+            <form tabIndex={-1}>
+              <WebCamModal
+                medician={props.watch("brand_name")}
+                setFile={(data) => {
+                  props.setValue("image", data),
+                    props.setImage(URL.createObjectURL(data));
+                }}
+                tabIndex={-1}
+              />
+            </form>
+          </div>
+          <label>نمایش:</label>
+          {props.imagePreview && (
+            <div className="flex">
+              <div className="image-preview-text">
+                <h5>filename</h5>
+                <h5>
+                  {props.watch("image")?.name
+                    ? props.watch("image")?.name
+                    : props.watch("brand_name")}
+                </h5>
+              </div>
+              <div
+                className="modal-close-btn"
+                onClick={() => {
+                  props.reset({
+                    image: "",
+                  });
+                  props.setImage("");
+                }}
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </div>
+              <img
+                src={props.imagePreview ? props.imagePreview : ""}
+                className="image-preview"
+              />
+            </div>
+          )}
+        </div>
+      </form>
     </>
   );
 }

@@ -102,17 +102,16 @@ const AdditionalMedicineModal = forwardRef(({ medicine, prescription, prescripti
       </div>
       <div className="modal-box">
         <div className="additional-medicine-container">
-          <div className="additional-meidicne-header">
+          <div className="additional-meidicne-header-settings">
             <h4>تصویر</h4>
             <h4>نوعیت</h4>
             <h4>کشور</h4>
             <h4>اطلاعات</h4>
             <h4>تعداد</h4>
-            <h4>حذف</h4>
           </div>
           {medicine?.add_medicine?.[0]?.additional?.map((addin, index) => (
             <form
-              className="additional-meidicne-item"
+              className="additional-meidicne-item-settings"
               onSubmit={onAdditionalSubmit}
             >
               <img
@@ -158,9 +157,7 @@ const AdditionalMedicineModal = forwardRef(({ medicine, prescription, prescripti
   value={inputValues[addin.id]?.value || ""}
   onChange={event => handleInputChange(event, addin.id)}
 />
-              <h4 style={{ marginRight: "0.6rem" }}>
-                <i className="fa-solid fa-trash"></i>
-              </h4>
+
             </form>
           ))}
         </div>
