@@ -4549,6 +4549,8 @@ input[type="text"]:disabled {
   grid-row-gap: 0px;
   text-align: center;
   border: 2px solid black;
+  transform: rotate(90deg);
+  transform-origin: 87%;
 }
 
 .div1 {
