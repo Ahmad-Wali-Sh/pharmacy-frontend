@@ -2,12 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ShopingLists from "../Reports/ShopingLists/ShopingLists";
 import { useNewMedicineShow } from "../States/States";
-import MedicineList from "../PageComponents/Lists/MedicineList/MedicineList";
-import MedicinesLists from "../PageComponents/Lists/MedicineList/MedicinesLists";
 
 const ShortcutListener = () => {
   const [trigger, setTrigger] = useState("");
-  const [medicineTrigger, setMedicineTrigger] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     const handleKeyDown = (event) => {

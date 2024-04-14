@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { forwardRef, useImperativeHandle } from "react";
 import Modal from "react-modal";
 import { AdditioanlModalStyle } from "../../../../styles";
@@ -24,10 +24,6 @@ const AdditionalMedicine = forwardRef(({ medicine }, ref) => {
       setRegisterModalOpen(false);
     },
   }));
-
-  useEffect(() => {
-    console.log(additionals);
-  }, [additionals])
 
   const MedicineWithFecth = (medicineId) => {
     axios
@@ -98,9 +94,9 @@ const AdditionalMedicine = forwardRef(({ medicine }, ref) => {
       } 
       else {
         const PostForm = new FormData()
-        PostForm.append(`additional`, selectedMedicine.id);
-        PostForm.append(`medician`, medicine.id);
-        selectedMedicine.id != medicine.id ? axios.post(`${serverIP}api/medicine-with/`, PostForm).then(() => {
+        PostForm.append(`additional`, selectedMedicine?.id);
+        PostForm.append(`medician`, medicine?.id);
+        selectedMedicine.id != medicine?.id ? axios.post(`${serverIP}api/medicine-with/`, PostForm).then(() => {
             toast.success("موفقانه اضافه شد");
             MedicineWithFecth(medicine?.id);
         }) : toast.warning('اصل دوا شامل دوا های همراه نمیشود')
@@ -110,7 +106,6 @@ const AdditionalMedicine = forwardRef(({ medicine }, ref) => {
 
   return (
       <>
-
       <div
         className="multiple-image-button"
         onClick={() => {
@@ -123,11 +118,11 @@ const AdditionalMedicine = forwardRef(({ medicine }, ref) => {
       <Modal
         style={AdditioanlModalStyle}
         isOpen={registerModalOpen}
-        onRequestClose={() => onClose()}
+        onRequestClose={onClose}
       >
         <div className="modal-header">
           <h3>دوا های همراه</h3>
-          <div className="modal-close-btn" onClick={() => onClose()}>
+          <div className="modal-close-btn" onClick={onClose}>
             <i className="fa-solid fa-xmark"></i>
           </div>
         </div>

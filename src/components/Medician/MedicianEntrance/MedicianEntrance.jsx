@@ -144,8 +144,10 @@ function MedicianEntrance({
 
   React.useEffect(() => {
     const listener = (e) => {
-      if (e.code === "F9") {
-        registerModalOpener();
+      if (e.ctrlKey) {
+        if (e.code === "F9") {
+          registerModalOpener();
+        }
       }
     };
 

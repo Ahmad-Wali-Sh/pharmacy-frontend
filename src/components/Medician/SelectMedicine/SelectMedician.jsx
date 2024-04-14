@@ -74,7 +74,7 @@ export const SelectMedician = forwardRef(
     }, []);
 
     React.useEffect(() => {
-      setMedicine(purchaseMedicine);
+      purchaseMedicine && setMedicine(purchaseMedicine);
     }, [purchaseMedicine]);
 
     const { data: BookmarkedMedicine } = useQuery({

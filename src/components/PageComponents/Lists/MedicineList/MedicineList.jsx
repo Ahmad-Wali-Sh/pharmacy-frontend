@@ -750,7 +750,7 @@ function MedicineForm(props) {
           <label>توضیحات:</label>
           <input {...props.register("description")} />
           <label>دارو.همراه:</label>
-            <AdditionalMedicine medicine={props.medicine}/>
+          <AdditionalMedicine medicine={props?.medicine}/>
           <label>بارکد:</label>
           {props.medicine.id ? (
             <MultipleBarcode medicineID={props.medicine.id} />

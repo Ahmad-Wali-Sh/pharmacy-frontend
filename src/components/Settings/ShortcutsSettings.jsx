@@ -42,7 +42,7 @@ const ShortcutInput = ({ name, shortcut, setShortcut }) => {
           style={{
             direction: "ltr",
             backgroundColor: "rgba(0,0,0,0)",
-            color: 'var(--text-100)',
+            color: "var(--text-100)",
             border: "none",
           }}
           onChange={handleInputChange}
@@ -179,7 +179,6 @@ function EntranceShortcuts() {
   }, [entranceShortcuts]);
 
   useEffect(() => {
-    localStorage.getItem("edit_medicine") == "" &&
       localStorage.setItem("edit_medicine", "F9");
   }, []);
 
@@ -196,11 +195,7 @@ function EntranceShortcuts() {
       </div>
       <div className="shortcut-item">
         <div> ویرایش دارو (حواله ورود)</div>
-        <ShortcutInput
-          name="edit_medicine"
-          shortcut={entranceShortcuts.edit_medicine}
-          setShortcut={(value) => handleShortcutChange("edit_medicine", value)}
-        />
+        <div>F9</div>
       </div>
       <div className="shortcut-item">
         <div> ثبت سریع دارو برای خریداری</div>
@@ -239,7 +234,7 @@ function PrescriptionShortcuts() {
         <div>Shift + M</div>
       </div>
       <div className="shortcut-item">
-        <div>حذف  نسخه</div>
+        <div>حذف نسخه</div>
         <div>Shift + Delete</div>
       </div>
       <div className="shortcut-item">

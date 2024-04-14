@@ -16,7 +16,7 @@ const MedicinesLists = ({ title, activeKey, trigger, button, name, icon, medicin
   
   useEffect(() => {
     const listener = (e) => {
-      if (e.code === localStorage.getItem('edit_medicine') && medicine) {
+      if (e.code === 'F9' && medicine) {
         ListDashboardRef.current.Opener()
       }
     };

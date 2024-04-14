@@ -22,9 +22,6 @@ const SimplePurchaseList = React.forwardRef(({medicine}, ref) => {
     setRegisterModalOpen(false);
   };
 
-  useEffect(() => {
-      console.log(medicine);
-  }, [medicine])
   const [input, setInput] = useState('')
   const { serverIP} = useServerIP()
   const user = useAuthUser()
