@@ -146,7 +146,6 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
             {barcode && <PrescriptionPrint
               ref={PrescriptiontoPrintRef}
               prescription={prescription}
-              report={report}
               barcode={barcode}
             />}
           </div>

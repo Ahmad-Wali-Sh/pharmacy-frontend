@@ -13,6 +13,9 @@ import { useTheme } from "./components/States/States";
 import axios from "axios";
 import "./styles.scss";
 import ShortcutListener from "./components/Settings/ShortcutListener";
+import "./fontawesome/css/fontawesome.min.css";
+import "./fontawesome/css/brands.css";
+import "./fontawesome/css/solid.css";
 
 function App() {
   const RequireAuth = ({ children }) => {
