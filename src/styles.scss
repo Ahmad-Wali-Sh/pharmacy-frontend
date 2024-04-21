@@ -18,6 +18,19 @@
   transition-timing-function: ease-in;
 }
 
+@media print {
+  /* Hide elements that are not needed for print */
+  .no-print {
+    display: none;
+  }
+
+  /* Remove background colors and images for print */
+  body {
+    background-color: white;
+    background-image: none;
+  }
+}
+
 :root {
   --primary-100: #6c35de;
   --primary-200: #a364ff;
@@ -4541,7 +4554,7 @@ input[type="text"]:disabled {
 
 .parent {
   display: grid;
-  width: 75mm;
+  width: 60mm;
   margin: 0.6rem;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 10% 10% 35% 40% 10%;

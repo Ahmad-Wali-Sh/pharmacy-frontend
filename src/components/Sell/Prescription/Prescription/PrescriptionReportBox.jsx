@@ -1,14 +1,30 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import PrescriptionPrint from "./PrescriptionPrint";
 import axios from "axios";
 import useServerIP from "../../../services/ServerIP";
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
+import Barcode from "react-barcode";
 
 function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
   let PrescriptiontoPrintRef = useRef(null);
 
+  const [barcode,setBarcode] = useState(null)
+
+
+  useEffect(() => {
+    if (prescription?.barcode_str) {
+      setBarcode(            <Barcode
+        value={prescription?.barcode_str}
+        format="CODE128"
+        margin={0}
+        displayValue={false}
+        height={80}
+        width={2}
+      />)
+    }
+  }, [prescription?.barcode_str])
   const handlePrint = useReactToPrint({
     content: () => PrescriptiontoPrintRef.current,
   });
@@ -127,11 +143,12 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
             <i class="fa-solid fa-comments-dollar"></i>
           </button>
           <div style={{ display: "none" }}>
-            <PrescriptionPrint
+            {barcode && <PrescriptionPrint
               ref={PrescriptiontoPrintRef}
               prescription={prescription}
               report={report}
-            />
+              barcode={barcode}
+            />}
           </div>
           <button className="entrance-report-button" onClick={() => BackFunc()}>
             <i class="fa-solid fa-left-long"></i>
