@@ -41,7 +41,7 @@ export default function Revenue(props) {
       axios
         .get(
           `${serverIP}api/prescription-pg/` +
-            `?grand_not_equal=0&ordering=-id&refund_not_equal=0&${
+            `?ordering=-id&refund_not_equal=0&${
               search ? "prescription_number=" + search : ""
             }&page=${openPage}`
         )
