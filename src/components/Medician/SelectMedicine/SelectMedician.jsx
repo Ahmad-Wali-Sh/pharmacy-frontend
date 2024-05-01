@@ -265,7 +265,7 @@ export const SelectMedician = forwardRef(
                   <span className={textHighlight?.barcode}>بارکد/نام برند</span>
                 </div>
                 <AsyncPaginate
-                  loadOptions={!MedicineLoading && loadMedicine}
+                  loadOptions={loadMedicine}
                   getOptionLabel={(option) => option?.medicine_full}
                   getOptionValue={(option) => option?.medicine_full}
                   autoFocus
@@ -280,7 +280,7 @@ export const SelectMedician = forwardRef(
                   styles={MedicineSelectStyle}
                   onChange={handleMedicineSelect}
                   isLoading={MedicineLoading}
-                  loadOptionsOnMenuOpen={false}
+                  loadOptionsOnMenuOpen={true}
                   onKeyDown={handleKeyDown}
                 />
                 <div className="bookmarks-box">
@@ -322,7 +322,7 @@ export const SelectMedician = forwardRef(
                   <span className={textHighlight?.barcode}>بارکد/نام برند</span>
                 </div>
                 <AsyncPaginate
-                  loadOptions={!MedicineLoading && loadMedicine}
+                  loadOptions={loadMedicine}
                   getOptionLabel={(option) => option?.medicine_full}
                   getOptionValue={(option) => option?.medicine_full}
                   autoFocus
@@ -337,7 +337,7 @@ export const SelectMedician = forwardRef(
                   styles={MedicineSelectStyle}
                   onChange={handleMedicineSelect}
                   isLoading={MedicineLoading}
-                  loadOptionsOnMenuOpen={false}
+                  loadOptionsOnMenuOpen={true}
                   onKeyDown={handleKeyDown}
                 />
                 <div className="bookmarks-box">
