@@ -17,7 +17,6 @@ import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLis
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 import MedicineShowModal from "../../PageComponents/Modals/MedicineShow";
 import { useMedicine } from "../../States/States";
-import _ from 'lodash';
 
 export const SelectMedician = forwardRef(
   (
@@ -103,11 +102,6 @@ export const SelectMedician = forwardRef(
     };
 
     const [stringArray, setStringArray] = React.useState([""]);
-
-    const debouncedOnInputChange = _.debounce((string) => {
-      setStringArray(string.split("  "));
-    }, 300);
-    
     React.useEffect(() => {
       stringArray.length == 1
         ? setTextHighlight({ barcode: "on" })
@@ -271,13 +265,13 @@ export const SelectMedician = forwardRef(
                   <span className={textHighlight?.barcode}>بارکد/نام برند</span>
                 </div>
                 <AsyncPaginate
-                  loadOptions={loadMedicine}
+                  loadOptions={!MedicineLoading && loadMedicine}
                   getOptionLabel={(option) => option?.medicine_full}
                   getOptionValue={(option) => option?.medicine_full}
                   autoFocus
                   defaultValue={MedicianSearched?.results?.[0]}
                   filterOption={() => true}
-                  onInputChange={debouncedOnInputChange}
+                  onInputChange={(string) => setStringArray(string.split("  "))}
                   formatOptionLabel={(option) =>
                     MedicineListFormat(MedicianSearched?.results?.length)(
                       option
@@ -328,13 +322,13 @@ export const SelectMedician = forwardRef(
                   <span className={textHighlight?.barcode}>بارکد/نام برند</span>
                 </div>
                 <AsyncPaginate
-                  loadOptions={loadMedicine}
+                  loadOptions={!MedicineLoading && loadMedicine}
                   getOptionLabel={(option) => option?.medicine_full}
                   getOptionValue={(option) => option?.medicine_full}
                   autoFocus
                   defaultValue={MedicianSearched?.results?.[0]}
                   filterOption={() => true}
-                  onInputChange={debouncedOnInputChange}
+                  onInputChange={(string) => setStringArray(string.split("  "))}
                   formatOptionLabel={(option) =>
                     MedicineListFormat(MedicianSearched?.results?.length)(
                       option
