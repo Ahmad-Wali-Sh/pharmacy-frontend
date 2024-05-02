@@ -17,6 +17,7 @@ import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLis
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 import MedicineShowModal from "../../PageComponents/Modals/MedicineShow";
 import { useMedicine } from "../../States/States";
+import _ from 'lodash';
 
 export const SelectMedician = forwardRef(
   (
@@ -102,6 +103,11 @@ export const SelectMedician = forwardRef(
     };
 
     const [stringArray, setStringArray] = React.useState([""]);
+
+    const debouncedOnInputChange = _.debounce((string) => {
+      setStringArray(string.split("  "));
+    }, 300);
+    
     React.useEffect(() => {
       stringArray.length == 1
         ? setTextHighlight({ barcode: "on" })
@@ -271,7 +277,7 @@ export const SelectMedician = forwardRef(
                   autoFocus
                   defaultValue={MedicianSearched?.results?.[0]}
                   filterOption={() => true}
-                  onInputChange={(string) => setStringArray(string.split("  "))}
+                  onInputChange={debouncedOnInputChange}
                   formatOptionLabel={(option) =>
                     MedicineListFormat(MedicianSearched?.results?.length)(
                       option
@@ -280,7 +286,7 @@ export const SelectMedician = forwardRef(
                   styles={MedicineSelectStyle}
                   onChange={handleMedicineSelect}
                   isLoading={MedicineLoading}
-                  loadOptionsOnMenuOpen={true}
+                  loadOptionsOnMenuOpen={false}
                   onKeyDown={handleKeyDown}
                 />
                 <div className="bookmarks-box">
@@ -328,7 +334,7 @@ export const SelectMedician = forwardRef(
                   autoFocus
                   defaultValue={MedicianSearched?.results?.[0]}
                   filterOption={() => true}
-                  onInputChange={(string) => setStringArray(string.split("  "))}
+                  onInputChange={debouncedOnInputChange}
                   formatOptionLabel={(option) =>
                     MedicineListFormat(MedicianSearched?.results?.length)(
                       option
@@ -337,7 +343,7 @@ export const SelectMedician = forwardRef(
                   styles={MedicineSelectStyle}
                   onChange={handleMedicineSelect}
                   isLoading={MedicineLoading}
-                  loadOptionsOnMenuOpen={true}
+                  loadOptionsOnMenuOpen={false}
                   onKeyDown={handleKeyDown}
                 />
                 <div className="bookmarks-box">
