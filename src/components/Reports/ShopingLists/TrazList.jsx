@@ -14,16 +14,16 @@ export default function TrazList() {
     to: "",
   });
 
-  let TrazQuery = `traz/?medician=${filter.medician}`;
+  let TrazQuery = `traz/?medician=${filter.medician?.id}`;
   const { data: TrazQueryList } = useQuery([TrazQuery], {
-    enabled: filter.medician ? true : false,
+    enabled: filter.medician?.id ? true : false,
   });
 
   const [sortedTraz, setSortedTraz] = useState([]);
   useEffect(() => {
     TrazQueryList &&
       setSortedTraz(
-        TrazQueryList?.sort((a, b) => {
+        TrazQueryList?.results?.sort((a, b) => {
           return new Date(a.timestamp) - new Date(b.timestamp);
         })
       );
@@ -64,11 +64,11 @@ export default function TrazList() {
         <label>دوا</label>
         <SelectMedician
           selectAutoCompleteData={(medicine) => {
-            setFilter({ ...filter, medician: medicine.id });
+            setFilter({ ...filter, medician: medicine });
           }}
           ref={MedicineSelectRef}
         />
-        <FilterDate
+        {/* <FilterDate
           label="از"
           value={filter.from}
           name="from"
@@ -79,7 +79,7 @@ export default function TrazList() {
           value={filter.to}
           name="to"
           handleChange={(e) => setFilter({ ...filter, to: e.target.value })}
-        />
+        /> */}
       </FilterModal>
       <div className="traz-list-box">
         <div className="traz-list-header">
@@ -101,10 +101,18 @@ export default function TrazList() {
           <h5>وضعیت</h5>
           <h5>توضیحات</h5>
         </div>
-        {filter.medician &&
+        {filter.medician?.id &&
           sortedTraz?.map((trazItem, num) => (
-            <TrazListItem trazItem={trazItem} num={num}></TrazListItem>
+            <TrazListItem trazItem={trazItem} num={num} medician={filter.medician}></TrazListItem>
           ))}
+      </div>
+      <div className="traz-total-box">
+        <h4>مجموع خرید:</h4>
+        <h4>{TrazQueryList?.entrance_through_total}</h4>
+        <h4>مجموع فروش:</h4>
+        <h4>{TrazQueryList?.prescription_through_total}</h4>
+        <h4>موجودی:</h4>
+        <h4>{filter.medician?.existence ? filter.medician?.existence : ''}</h4>
       </div>
     </>
   );
@@ -136,8 +144,9 @@ function TrazListItem(props) {
           : ""}
       </h4>
       <h4>
-        {props.trazItem.type == "EntranceThrough" ? props.trazItem.company : ""}
+        {props.trazItem.type == "EntranceThrough" ? props.trazItem.company_name : ""}
       </h4>
+
       <h4>{props.trazItem.username}</h4>
       <h4>{props.trazItem?.timestamp?.substring(0, 10)}</h4>
       <h4>{props.trazItem?.timestamp?.substring(11, 16)}</h4>
