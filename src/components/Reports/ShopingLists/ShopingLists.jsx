@@ -5,6 +5,7 @@ import AutoShopingList from "./AutoShopingList";
 import ManualShopingList from "./ManualShopingList";
 import TrazList from "./TrazList";
 import PurchaseListManual from "../../PageComponents/Lists/SellLists/PurcahseListManual";
+import OrderList from "./OrderList";
 
 const ShopingLists = ({
   title,
@@ -70,13 +71,21 @@ const ShopingLists = ({
               تراز
             </div>
             <div
+              onClick={() => setActive("order")}
+              className={`list-item ${
+                active == "order" && "list-item-active"
+              }`}
+            >
+              آردر لست
+            </div>
+            {/* <div
               onClick={() => setActive("shoping-cycle")}
               className={`list-item ${
                 active == "shoping-cycle" && "list-item-active"
               }`}
             >
               گردش اقلام
-            </div>
+            </div> */}
           </div>
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
@@ -84,6 +93,7 @@ const ShopingLists = ({
               {active == "manual-shoping" && <PurchaseListManual />}
               {active == "shoping-list" && <AutoShopingList />}
               {active == "traz" && <TrazList />}
+              {active == "order" && <OrderList />}
             </div>
           </div>
         </div>

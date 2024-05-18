@@ -307,11 +307,13 @@ export function FilterModal(props) {
   const { serverIP } = useServerIP()
 
   const ExcelExport = () => {
+    toast.warning('فایل در حال ذخیره سازی است')
     axios({
-      url: `${serverIP}/api/` + props.url + "&format=xml",
+      url: `${serverIP}api/` + props.url + "&format=xml",
       method: "GET",
       responseType: "blob",
     }).then((response) => {
+      toast.success('تکمیل شد')
       fileDownload(response.data, `${props.fileName}.xml`);
     });
   };
