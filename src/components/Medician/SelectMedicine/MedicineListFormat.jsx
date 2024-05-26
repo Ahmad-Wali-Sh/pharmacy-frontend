@@ -4,10 +4,11 @@ let api = null;
 function fetchServerIP() {
   return axios.get('http://127.0.0.1:4000/api/endpoints')
     .then(response => {
-      api = response.data.server_ip;
+      api = 'http://192.168.88.113:8000/';
       return api;
     })
     .catch(error => {
+      api = 'http://192.168.88.113:8000/';
       console.log(error);
       // Handle the error if necessary
       return null; // Return null or handle the error accordingly

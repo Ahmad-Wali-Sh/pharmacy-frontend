@@ -8,11 +8,12 @@ let serverIP = null;
 function fetchServerIP() {
   return axios.get(EndpointsURL)
     .then(response => {
-      serverIP = response.data.server_ip;
+      serverIP = "http://192.168.88.113:8000/";
       return serverIP;
     })
     .catch(error => {
       console.log(error);
+      serverIP = "http://192.168.88.113:8000/";
       // Handle the error if necessary
       return null; // Return null or handle the error accordingly
     });
