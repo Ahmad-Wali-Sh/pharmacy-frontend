@@ -2,16 +2,14 @@ import axios from "axios";
 
 let api = null;
 function fetchServerIP() {
-  return axios.get('http://127.0.0.1:4000/api/endpoints')
+  return axios.get('/endpoint.json')
     .then(response => {
-      api = 'http://192.168.88.113:8000/';
+      api = response.data.endpoint;
       return api;
     })
     .catch(error => {
-      api = 'http://192.168.88.113:8000/';
       console.log(error);
-      // Handle the error if necessary
-      return null; // Return null or handle the error accordingly
+      return null;
     });
 }
 

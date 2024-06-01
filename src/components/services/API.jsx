@@ -2,20 +2,17 @@ import axios from "axios";
 import { QueryClient } from "react-query";
 import { toast } from "react-toastify";
 
-const EndpointsURL = "http://127.0.0.1:4000/api/endpoints";
 
 let serverIP = null;
 function fetchServerIP() {
-  return axios.get(EndpointsURL)
+  return axios.get('endpoint.json')
     .then(response => {
-      serverIP = "http://192.168.88.113:8000/";
+      serverIP = response.data.endpoint;
       return serverIP;
     })
     .catch(error => {
       console.log(error);
-      serverIP = "http://192.168.88.113:8000/";
-      // Handle the error if necessary
-      return null; // Return null or handle the error accordingly
+      return null;
     });
 }
 
