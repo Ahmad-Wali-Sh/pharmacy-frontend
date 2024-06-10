@@ -3218,13 +3218,13 @@ input[type="text"]:disabled {
   padding-right: 1rem;
   margin-top: 0.7rem;
   text-align: right;
-  grid-template-columns: 0.1fr 0.4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.1fr 0.4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   font-size: 0.9rem;
 }
 
 .revenue-info-map {
   display: grid;
-  grid-template-columns: 0.1fr 0.4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.1fr 0.4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   direction: rtl;
   padding-right: 0.1rem;
   height: 2.5rem;
@@ -3248,6 +3248,32 @@ input[type="text"]:disabled {
   border-radius: 1rem;
   margin: 0.4rem;
   overflow-y: scroll;
+}
+
+.revenue-manager-pagination {
+  height: 2rem;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+
+  div {
+    border: 1px solid var(--accent-200);
+    border-radius: 0.2rem;
+    padding:0.2rem;
+    margin:0.2rem;
+    height: 1.6rem;
+    text-align: center;
+    color: var(--text-200);
+    background-color: var(--bg-300);
+
+    &:hover {
+      background-color: var(--accent-100);
+    }
+  }
+}
+
+.text{
+  color: var(--text-200)
 }
 
 .revenue-manager-inputs {
