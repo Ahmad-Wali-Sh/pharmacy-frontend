@@ -21,6 +21,7 @@ export default function Revenue(props) {
   const [closePage, setClosePage] = useState(1);
   const [openPage, setOpenPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [searchValue, setValueSearch] = useState("");
 
   useEffect(() => {
     serverIP &&
@@ -43,7 +44,7 @@ export default function Revenue(props) {
           `${serverIP}api/prescription-pg/` +
             `?ordering=-id&refund_not_equal=0&${
               search ? "prescription_number=" + search : ""
-            }&page=${openPage}`
+            }&refund=${searchValue}&page=${openPage}`
         )
         .then((res) => {
           setSelectedIdx("");
@@ -53,7 +54,7 @@ export default function Revenue(props) {
           setOpenPage(1);
           setTrigger(new Date());
         });
-  }, [trigger, search]);
+  }, [trigger, search, searchValue]);
 
   useEffect(() => {
     revenue?.id &&
@@ -61,7 +62,7 @@ export default function Revenue(props) {
         .get(
           `${serverIP}api/revenue-record/?revenue=${revenue?.id}${
             search ? "&prescription__prescription_number=" + search : ""
-          }&page=${closePage}`
+          }&amount=${searchValue}&page=${closePage}`
         )
         .then((res) => {
           setrevenueRecords(res.data);
@@ -240,7 +241,21 @@ export default function Revenue(props) {
                 <input
                   type="text"
                   className="barcode-input"
-                  placeholder="جستجو"
+                  placeholder="جستجو بر اساس قیمت"
+                  onChange={(e) => {
+                    setValueSearch(e.target.value);
+                    setTrigger(new Date());
+                  }}
+                  style={{
+                    marginLeft: "1rem",
+                    direction: "rtl",
+                    padding: "0.5rem",
+                  }}
+                />
+                <input
+                  type="text"
+                  className="barcode-input"
+                  placeholder="جستجو بر اساس شماره نسخه"
                   onChange={(e) => {
                     setSearch(e.target.value);
                     setTrigger(new Date());
@@ -261,6 +276,7 @@ export default function Revenue(props) {
                 <input
                   type="text"
                   id="barcode-input"
+                  placeholder="Barcode"
                   style={{ padding: "0.5rem" }}
                   ref={barcodeRef}
                   className="barcode-input"

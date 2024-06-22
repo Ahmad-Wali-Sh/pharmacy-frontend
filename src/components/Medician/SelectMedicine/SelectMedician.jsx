@@ -16,7 +16,7 @@ import { AsyncPaginate } from "react-select-async-paginate";
 import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLists";
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 import MedicineShowModal from "../../PageComponents/Modals/MedicineShow";
-import { useMedicine } from "../../States/States";
+import { useMedicine, useMedicineOpener } from "../../States/States";
 
 export const SelectMedician = forwardRef(
   (
@@ -43,6 +43,15 @@ export const SelectMedician = forwardRef(
     const SelectMedicineModalRef = useRef(null);
 
     const { medicine, setMedicine } = useMedicine();
+    const { medicineOpener, setMedicineOpener} = useMedicineOpener()
+    
+    useEffect(() => {
+      if (medicineOpener && SelectMedicineModalRef.current) {
+        SelectMedicineModalRef.current.Opener();
+        setMedicineOpener(null);
+      }
+    }, [medicineOpener]);
+
     const [textHighlight, setTextHighlight] = React.useState({
       barcode: "on",
       generic: "",

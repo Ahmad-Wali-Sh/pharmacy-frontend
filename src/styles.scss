@@ -1625,6 +1625,7 @@ input[type="text"]:disabled {
   flex-direction: column;
   overflow-y: scroll !important;
   min-height: 90%;
+  width: 100%;
   background-color: var(--bg-300);
 }
 
@@ -3359,8 +3360,69 @@ input[type="text"]:disabled {
   color: var(--text-200);
 }
 
-.bookmarks-box {
+.quantity_select_quantity {
+  background-color: var(--bg-300);
+  padding: 0.1rem;
+  text-align: center;
+  border-radius: 1rem;
+  font-weight: bolder;
+  width: 3rem;
+  &:hover {
+    background-color: var(--primary-200);
+    cursor: pointer
+  }
+}
+
+.tooltip_quantiy_change {
+  position: absolute;
+  width: 10rem;
+  height: 4.6rem;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 4px 1px var(--bg-100);
   background-color: var(--bg-100);
+  padding: 0.4rem;
+
+  input {
+    background-color: var(--bg-200);
+    width: 100%;
+    padding:0.3rem;
+    color: var(--text-100);
+    border: none;
+    border-radius: 0.2rem;
+    &:focus {
+      box-shadow: 1px 1px 1px 3px var(--primary-200);
+    }
+  }
+  nav {
+    display: flex
+  }
+
+  div {
+    width: 35%;
+    height: 1.6rem;
+    margin: 3%;
+    border-radius: 0.3rem;
+    text-align: center;
+  }
+
+  .red {
+    background-color: rgb(126, 49, 49);
+
+    &:hover {
+      background-color: rgb(75, 15, 15);
+    }
+  }
+  
+  .green {
+    background-color: rgb(49, 126, 53);
+
+    &:hover {
+      background-color: rgb(10, 71, 13);
+    }
+  }
+}
+
+.bookmarks-box {
   border-radius: 1rem;
   height: 68vh;
   width: 100%;
@@ -3369,7 +3431,7 @@ input[type="text"]:disabled {
   padding: 0.4rem;
   gap: 2%;
   display: grid;
-  grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .bookmark-card {

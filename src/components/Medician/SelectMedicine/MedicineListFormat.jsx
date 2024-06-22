@@ -2,21 +2,21 @@ import axios from "axios";
 
 let api = null;
 function fetchServerIP() {
-  return axios.get('/endpoint.json')
-    .then(response => {
+  return axios
+    .get("/endpoint.json")
+    .then((response) => {
       api = response.data.endpoint;
       return api;
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
       return null;
     });
 }
 
-fetchServerIP()
+fetchServerIP();
 
 export const MedicineListFormat = (resultsLength) => (item) => {
-
   return (
     <div className="medician-format">
       <div className="medician-image">
@@ -28,11 +28,7 @@ export const MedicineListFormat = (resultsLength) => (item) => {
       <div className="medician-image">
         <img
           className="medician-image"
-          src={
-            item.kind_image
-              ?  api + item.kind_image
-              : "./images/nophoto.jpg"
-          }
+          src={item.kind_image ? api + item.kind_image : "./images/nophoto.jpg"}
         />
       </div>
       <div className="medician-image">
@@ -58,8 +54,20 @@ export const MedicineListFormat = (resultsLength) => (item) => {
           )}
         </h4>
         <div className="medicine-info-fields">
-          <h4>تعداد در پاکت: {item.no_pocket}</h4>
-          <h4>تعداد در قطی: {item.no_box}</h4>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <h4>تعداد در پاکت: {item.no_pocket}</h4>
+            <h4 style={{ direction: "rtl" }}>
+              قیمت پاکت:{" "}
+              {`${parseFloat(item.no_pocket) * parseFloat(item.price)}AF`}
+            </h4>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <h4>تعداد در قطی: {item.no_box}</h4>
+            <h4 style={{ direction: "rtl" }}>
+              قیمت قطی:{" "}
+              {`${parseFloat(item.no_box) * parseFloat(item.price)}AF`}
+            </h4>
+          </div>
           <h4>مکان: {item.location}</h4>
           <h4>قیمت: {`${item.price}AF`}</h4>
           <h4>موجودیت: {item.existence}</h4>

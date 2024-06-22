@@ -18,7 +18,7 @@ import {
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import ControlledSelect from "../../../PageComponents/ControlledSelect";
-import { usePrescription, useUserPermissions } from "../../../States/States";
+import { useMedicineOpener, usePrescription, useUserPermissions } from "../../../States/States";
 import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 import moment from "jalali-moment";
 import MultiplePrescriptionImage from "../../../PageComponents/MultiplePrescriptionImage";
@@ -108,6 +108,8 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     };
   }, [serverIP]);
 
+  const { medicineOpener, setMedicineOpener} = useMedicineOpener()
+
   const newPrescription = () => {
     serverIP &&
       axios
@@ -127,6 +129,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
             .then((res) => {
               setPrescription(res.data);
               toast.success("موفقانه بود");
+              setMedicineOpener(new Date())
             });
         });
   };

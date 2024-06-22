@@ -47,3 +47,7 @@ export const useUserPermissions = create((set) => ({
   userPermissions: [],
   setUserPermissions: (state) => set(() => ({ userPermissions: state })),
 }));
+export const useMedicineOpener = create((set) => ({
+  medicineOpener: [],
+  setMedicineOpener: (state) => set(() => ({ medicineOpener: state })),
+}));
