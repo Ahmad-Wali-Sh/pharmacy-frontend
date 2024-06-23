@@ -51,3 +51,7 @@ export const useMedicineOpener = create((set) => ({
   medicineOpener: [],
   setMedicineOpener: (state) => set(() => ({ medicineOpener: state })),
 }));
+export const useMedicineClosed = create((set) => ({
+  medicineClosed: [],
+  setMedicineClosed: (state) => set(() => ({ medicineClosed: state })),
+}));

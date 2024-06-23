@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { forwardRef, useImperativeHandle } from "react";
 import Modal from "react-modal";
 import { ModalBigStyles } from "../../../styles";
+import { useMedicineClosed } from '../../States/States';
 
 const BigModal = forwardRef((props, ref) => {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
+
+  const { medicineClosed, setMedicineClosed} = useMedicineClosed()
 
   useImperativeHandle(ref, () => ({
     Opener() {
@@ -12,12 +15,18 @@ const BigModal = forwardRef((props, ref) => {
     },
     Closer() {
       setRegisterModalOpen(false);
+      props?.medicineModal && setMedicineClosed(new Date())
     },
   }));
 
   const onClose = () => {
     setRegisterModalOpen(false);
+    props?.medicineModal && setMedicineClosed(new Date())
   };
+
+  useEffect(() => {
+    registerModalOpen === false && props?.medicineModal && setMedicineClosed(new Date())
+  }, [registerModalOpen])
 
   return (
     <Modal

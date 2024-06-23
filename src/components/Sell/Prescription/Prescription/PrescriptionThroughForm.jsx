@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import { SelectMedician } from "../../../Medician/SelectMedicine/SelectMedician";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "react-auth-kit";
@@ -8,6 +8,7 @@ import AlertModal from "../../../PageComponents/Modals/AlertModal";
 import { SubmitButton } from "../../../PageComponents/Buttons/Buttons";
 import { toast } from "react-toastify";
 import AdditionalMedicineModal from "./AdditionalMedicineModal";
+import { useMedicineClosed } from "../../../States/States";
 
 export const PrescriptionThroughForm = forwardRef(
   ({ prescription, prescriptionThrough, updatePrescription }, ref) => {
@@ -17,9 +18,15 @@ export const PrescriptionThroughForm = forwardRef(
       register,
       handleSubmit,
       reset,
+      setFocus,
       formState: { errors },
     } = useForm();
     const [medicine, setMedicine] = React.useState(null);
+    const { medicineClosed, setMedicineClosed} = useMedicineClosed()
+
+    useEffect(() => {
+      medicineClosed && handleQuantityFocus()
+    }, [medicineClosed])
 
     const additionalRef = useRef(null)
     const { mutateAsync: prescriptionThroughPost } = useMutation({
@@ -96,6 +103,7 @@ export const PrescriptionThroughForm = forwardRef(
 
     const handleQuantityFocus = () => {
       document.getElementById("number-in-factor-input").focus();
+      setFocus('quantity')
       reset({
         quantity: "",
       });

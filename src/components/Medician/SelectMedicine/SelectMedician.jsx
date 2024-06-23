@@ -16,7 +16,7 @@ import { AsyncPaginate } from "react-select-async-paginate";
 import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLists";
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 import MedicineShowModal from "../../PageComponents/Modals/MedicineShow";
-import { useMedicine, useMedicineOpener } from "../../States/States";
+import { useMedicine, useMedicineClosed, useMedicineOpener } from "../../States/States";
 
 export const SelectMedician = forwardRef(
   (
@@ -171,12 +171,15 @@ export const SelectMedician = forwardRef(
       setCurrentIndex(newIndex);
     };
 
+    const { medicineClosed, setMedicineClosed } = useMedicineClosed()
+
     const ApproveMedicine = (item) => {
       selectAutoCompleteData(item);
       SelectMedicineModalRef.current.Closer();
       setMedicine(item);
       UpdateChangedMedicine && UpdateChangedMedicine(item);
       handleCloseFocus && handleCloseFocus();
+      setMedicineClosed(new Date())
       // Medicine With Including Functionality
       // Medicine Expires Including Functionality
     };
@@ -252,7 +255,7 @@ export const SelectMedician = forwardRef(
                 />
               </div>
             )}
-            <BigModal title="انتخاب دارو" ref={SelectMedicineModalRef}>
+            <BigModal title="انتخاب دارو" ref={SelectMedicineModalRef} medicineModal={true}>
               <MedicineShowModal
                 ref={MedicineShowRef}
                 ApproveMedicine={ApproveMedicine}
