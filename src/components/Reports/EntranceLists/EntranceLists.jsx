@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MainButton, PlusButton } from "../../PageComponents/Buttons/Buttons";
 import BigModal from "../../PageComponents/Modals/BigModal";
+import Entrances from "./Entrances";
 
 const EntranceLists = ({
   title,
@@ -42,7 +43,7 @@ const EntranceLists = ({
           <div className="list-nav">
             <div className="list-nav-header">فهرست</div>
             <div
-              onClick={() => setActive("revenue-total")}
+              onClick={() => setActive("entrances")}
               className={`list-item ${
                 active == "entrances" && "list-item-active"
               }`}
@@ -54,7 +55,7 @@ const EntranceLists = ({
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
-            {active == "entrances" && <PurchaseListManual />}
+            {active == "entrances" && <Entrances />}
             </div>
           </div>
         </div>
