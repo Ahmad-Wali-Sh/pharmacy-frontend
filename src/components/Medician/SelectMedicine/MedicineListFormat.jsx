@@ -17,6 +17,8 @@ function fetchServerIP() {
 fetchServerIP();
 
 export const MedicineListFormat = (resultsLength) => (item) => {
+
+  
   return (
     <div className="medician-format">
       <div className="medician-image">
@@ -58,14 +60,14 @@ export const MedicineListFormat = (resultsLength) => (item) => {
             <h4>تعداد در پاکت: {item.no_pocket}</h4>
             <h4 style={{ direction: "rtl" }}>
               قیمت پاکت:{" "}
-              {`${parseFloat(item.no_pocket) * parseFloat(item.price)}AF`}
+              {`${(parseFloat(item.no_pocket || 0) * parseFloat(item.price || 0)).toFixed(1)}AF`}
             </h4>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <h4>تعداد در قطی: {item.no_box}</h4>
             <h4 style={{ direction: "rtl" }}>
               قیمت قطی:{" "}
-              {`${parseFloat(item.no_box) * parseFloat(item.price)}AF`}
+              {`${(parseFloat(item.no_box || 0) * parseFloat(item.price || 0)).toFixed(1)}AF`}
             </h4>
           </div>
           <h4>مکان: {item.location}</h4>
