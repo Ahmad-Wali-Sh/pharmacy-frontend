@@ -45,6 +45,11 @@ export default function EntranceThrough({ StoreCycle = false }) {
     setMedicine(data);
   };
 
+
+  useEffect(() => {
+    entrance?.id && setMedicine("")
+  }, [entrance?.id])
+
   const deSelectMedicine = () => {
     setMedicine("");
   };

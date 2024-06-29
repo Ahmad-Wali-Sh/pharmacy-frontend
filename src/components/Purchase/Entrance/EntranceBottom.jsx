@@ -39,22 +39,20 @@ export default function EntrancBottom(props) {
   return (
     <form className="entrance-medician">
       <div className="entrance-medician-header">
-        <label>No</label>
+        <label>ردیف</label>
         <label>قلم</label>
-        <label>تعداد</label>
-        <label>قیمت</label>
-        <label>تخفیف</label>
+        <label>تعداد(قطی)</label>
+        <label>فی_خرید(قطی)</label>
+        <label>مفاد</label>
+        <label>فی_فروش(قطی)</label>
         <label>تخفیف %</label>
-        <label>ت.قطی</label>
-        <label>جمع.خرید</label>
-        <label>بعد.تخفیف</label>
+        <label>مبلغ_تخفیف</label>
         <label>بونوس</label>
-        <label>تاریخ</label>
         <label>کمبود</label>
         <label>امانتی</label>
-        <label>فی.خرید</label>
-        <label>فایده٪</label>
-        <label>به.افغانی</label>
+        <label>تاریخ_انقضا</label>
+        <label>جمع_خرید</label>
+        <label>جمع_فروش</label>
         <label>حذف</label>
       </div>
       <div className="entrance-map">

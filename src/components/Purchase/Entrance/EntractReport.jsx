@@ -155,7 +155,7 @@ export default function EntranceReport() {
       const result = entranceThrough?.reduce((total, currentValue) => {
         return total + currentValue.discount_value;
       }, 0);
-      return result ? result : 0;
+      return  parseFloat(result) + parseFloat(entrance?.discount_percent);
     };
     const totalBonusValue = () => {
       const result = entranceThrough?.reduce((total, currentValue) => {
@@ -196,7 +196,7 @@ export default function EntranceReport() {
   useEffect(() => {
     Reporting();
     setPriceApplied(false)
-  }, [entranceThrough && entranceThrough]);
+  }, [entranceThrough && entranceThrough, entrance?.discount_percent]);
 
 
   useEffect(() => {
@@ -234,7 +234,7 @@ export default function EntranceReport() {
         </div>
         <div className="entrance-report-map-box">
           <label>مجموعه</label>
-          <label>{report.grandTotal} </label>
+          <label>{report.grandTotal?.toFixed(2)} </label>
         </div>
         {entrance?.currency_rate != 1 && <div className="entrance-report-map-box">
           <label>مجموعه (AFN)</label>

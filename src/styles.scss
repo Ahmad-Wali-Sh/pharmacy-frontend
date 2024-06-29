@@ -1015,7 +1015,7 @@ input[type="text"]:disabled {
   padding: 0.1rem;
   padding-right: 1.8rem;
   display: grid;
-  grid-template-columns: 2.4% 20% 4% 4.6% 4.6% 5% 5% 6% 6% 4% 7% 5% 5% 6% 5% 7% 7% 7% 4.6%;
+  grid-template-columns: 2.4% 26% 6% 7% 4% 7% 5% 6% 4% 4% 4% 7% 7% 7% 5%;
   font-size: 0.8rem;
   direction: rtl;
 }
@@ -1028,12 +1028,17 @@ input[type="text"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 2.4% 20% 3% 5.3% 4.6% 5% 5% 6% 6% 3.5% 7.5% 5% 5% 6% 5% 7% 7% 7% 4.6%;
+  grid-template-columns: 2.4% 26% 6% 7% 4% 7% 5% 6% 4% 4% 5% 6% 7% 7% 5%;
   direction: rtl;
   justify-content: space-between;
 }
 .entrance-medician-map > input {
   color: var(--text-100) !important;
+}
+
+.no_box_type_text {
+  font-size: 0.8rem;
+  color: grey;
 }
 .entrance-medician-map-alert {
   background-color: var(--primary-100);
@@ -1043,7 +1048,7 @@ input[type="text"]:disabled {
   padding: 0.1rem;
   padding-right: 1rem;
   display: grid;
-  grid-template-columns: 2.4% 20% 3% 5.3% 4.6% 5% 5% 6% 6% 3.5% 7.5% 5% 5% 6% 5% 7% 7% 7% 4.6%;
+  grid-template-columns: 2.4% 26% 6% 7% 4% 7% 5% 6% 4% 4% 5% 6% 7% 7% 5%;
   direction: rtl;
   text-align: right;
   justify-content: space-between;
@@ -1093,7 +1098,7 @@ input[type="text"]:disabled {
 .numbers-box-pocket-1 {
   width: 10rem;
   display: grid;
-  grid-template-columns: 45% 28% 45%;
+  grid-template-columns: 45% 45% 45%;
   gap: 1rem;
   font-size: 0.8rem;
 }

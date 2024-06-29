@@ -13,7 +13,15 @@ import {
 import { useEntrance, useSubmitedEntrance } from "../../States/States";
 import { toast } from "react-toastify";
 
-function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBluring }) {
+function EntrancThroughEntry({
+  through,
+  keyValue,
+  num,
+  onClick,
+  styled,
+  id,
+  onBluring,
+}) {
   const user = useAuthUser();
   const { entrance, setEntrance } = useEntrance();
   const AlertHighlighter = () => {
@@ -23,34 +31,35 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
     return true;
   };
 
-  const { submitedEntrance } = useSubmitedEntrance()
+  const { submitedEntrance } = useSubmitedEntrance();
   const [isInitialRender, setIsInitialRender] = useState(true);
 
   useEffect(() => {
-
     if (!isInitialRender) {
-      submitedEntrance.id && entrance.id && setTimeout(() => {
-        handleSubmit((data) =>
-          handleFormData(data, medicineUpdate, user)
-        )()
-      }, 1000)
-      submitedEntrance.id && entrance.id && toast.warning('...قیمت ارز در حال آپدیت')
+      submitedEntrance.id &&
+        entrance.id &&
+        setTimeout(() => {
+          handleSubmit((data) => handleFormData(data, medicineUpdate, user))();
+        }, 1000);
+      submitedEntrance.id &&
+        entrance.id &&
+        toast.warning("...قیمت ارز در حال آپدیت");
     } else {
-      setIsInitialRender(false)
+      setIsInitialRender(false);
     }
-  }, [submitedEntrance?.id])
+  }, [submitedEntrance?.id]);
   const { mutate: medicineUpdate } = useMutation({
-
     mutationFn: (data) => patchDataFn(data, `entrance-throug/${through.id}/`),
     onSuccess: (res) => {
       setTimeout(() => {
         handleSubmit((data) =>
           handleFormData(data, interestPercentUpdate, user)
-        )()
-      }, 500)
-      entrance?.id &&  queryClient.invalidateQueries([
-        `entrance-throug/?entrance=${entrance?.id}`,
-      ]);
+        )();
+      }, 500);
+      entrance?.id &&
+        queryClient.invalidateQueries([
+          `entrance-throug/?entrance=${entrance?.id}`,
+        ]);
     },
   });
 
@@ -58,7 +67,9 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
     let each_price_factor = parseFloat(watch("each_price_factor"));
     let interest_percent = parseFloat(watch("interest_percent"));
     let result =
-      ((through.each_purchase_price + (interest_percent * through.each_purchase_price) / 100) / 1) *
+      ((through.each_purchase_price +
+        (interest_percent * through.each_purchase_price) / 100) /
+        1) *
       entrance?.currency_rate;
     return parseFloat(result).toFixed(3);
   };
@@ -69,8 +80,8 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
     let result =
       (100 *
         ((each_sell_price_afg / entrance?.currency_rate) * 1 -
-        through.each_purchase_price)) /
-          through.each_purchase_price;
+          through.each_purchase_price)) /
+      through.each_purchase_price;
     return parseFloat(result).toFixed(3);
   };
 
@@ -81,9 +92,10 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
     },
     onSuccess: (res) => {
       setTimeout(() => {
-        entrance?.id &&  queryClient.invalidateQueries([
-          `entrance-throug/?entrance=${entrance?.id}`,
-        ]);
+        entrance?.id &&
+          queryClient.invalidateQueries([
+            `entrance-throug/?entrance=${entrance?.id}`,
+          ]);
       }, 200);
     },
   });
@@ -95,9 +107,10 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
     onSuccess: (res) => {
       successFn("", () => {
         setTimeout(() => {
-          entrance?.id &&  queryClient.invalidateQueries([
-            `entrance-throug/?entrance=${entrance?.id}`,
-          ]);
+          entrance?.id &&
+            queryClient.invalidateQueries([
+              `entrance-throug/?entrance=${entrance?.id}`,
+            ]);
         }, 200);
       });
     },
@@ -110,9 +123,10 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
     onSuccess: () => {
       successFn("", () => {
         setTimeout(() => {
-          entrance?.id && queryClient.invalidateQueries([
-            `entrance-throug/?entrance=${entrance?.id}`,
-          ]);
+          entrance?.id &&
+            queryClient.invalidateQueries([
+              `entrance-throug/?entrance=${entrance?.id}`,
+            ]);
         }, 200);
       });
     },
@@ -140,10 +154,9 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
   }, [through]);
 
   return (
-    <form key={keyValue} onClick={() => onClick()}
-    onBlurCapture={onBluring}>
+    <form key={keyValue} onClick={() => onClick()} onBlurCapture={onBluring}>
       <div
-      id={id}
+        id={id}
         className={
           AlertHighlighter()
             ? `entrance-medician-map ${styled}`
@@ -153,13 +166,16 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
         <label>{num + 1}</label>
         <div className="entrance-medician-map-box">
           <h4 className="entrance-medician-map-name">
-            <h4>{through?.medicine_full}</h4>
+            <h4>
+              {through?.medicine_full + " "}
+              <span className="no_box_type_text">{`[1 * ${through.no_box}]`}</span>
+            </h4>
           </h4>
         </div>
         <input
           type="text"
           {...register("number_in_factor")}
-          style={{backgroundColor: 'inherit'}}
+          style={{ backgroundColor: "inherit" }}
           onBlurCapture={handleSubmit((data) =>
             handleFormData(data, medicineUpdate, user)
           )}
@@ -176,16 +192,35 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
           />
         </div>
         <div className="input-with-currency">
-          <span className="currency-span">{through.rate_name}</span>
+          <span className={"currency-span-percent"}>%</span>
           <input
             type="text"
-            {...register("discount_money")}
-            className="transparent-inputs"
+            {...register("interest_percent")}
+            className={
+              through.interest_percent > 0 && through.interest_percent <= 100
+                ? "transparent-inputs-percent"
+                : "transparent-inputs-percent-alert"
+            }
             onBlurCapture={handleSubmit((data) =>
-              handleFormData(data, medicineUpdate, user)
+              handleFormData(data, interestPercentUpdate, user)
             )}
           />
         </div>
+        <div className="input-with-currency">
+          <span className="currency-span" style={{ cursor: "default" }}>
+            AF
+          </span>
+          <input
+            type="text"
+            className="transparent-inputs"
+            {...register("each_sell_price_afg")}
+            style={{ cursor: "default" }}
+            onBlurCapture={handleSubmit((data) =>
+              handleFormData(data, afghanPriceUpdate, user)
+            )}
+          />
+        </div>
+
         <div className="input-with-currency">
           <span className="currency-span-percent">%</span>
           <input
@@ -197,38 +232,40 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
             )}
           />
         </div>
-        <input
-          type="text"
-          value={through.no_box}
-          style={{ cursor: "default", backgroundColor: 'inherit'}}
-          {...register("no_box")}
-        />
         <div className="input-with-currency">
-          <span className="currency-span" style={{ cursor: "default" }}>
-            {through.rate_name}
-          </span>
+          <span className="currency-span">{through.rate_name}</span>
           <input
             type="text"
-            value={through.total_purchase_currency_before}
+            {...register("discount_money")}
             className="transparent-inputs"
-            style={{ cursor: "default" }}
-          />
-        </div>
-        <div className="input-with-currency">
-          <span className="currency-span" style={{ cursor: "default" }}>
-            {through.rate_name}
-          </span>
-          <input
-            type="text"
-            value={through.total_purchaseـcurrency}
-            className="transparent-inputs"
-            style={{ cursor: "default" }}
+            onBlurCapture={handleSubmit((data) =>
+              handleFormData(data, medicineUpdate, user)
+            )}
           />
         </div>
         <input
           type="text"
           {...register("quantity_bonus")}
-          style={{ zIndex: "10",  backgroundColor: 'inherit'}}
+          style={{ zIndex: "10", backgroundColor: "inherit" }}
+          onBlurCapture={handleSubmit((data) =>
+            handleFormData(data, medicineUpdate, user)
+          )}
+        />
+
+        <input
+          type="text"
+          defaultValue={through.shortage}
+          {...register("shortage")}
+          style={{ zIndex: "10", backgroundColor: "inherit" }}
+          onBlurCapture={handleSubmit((data) =>
+            handleFormData(data, medicineUpdate, user)
+          )}
+        />
+        <input
+          type="checkbox"
+          defaultChecked={through.lease}
+          {...register("lease")}
+          style={{ width: "1rem", marginRight: "0rem" }}
           onBlurCapture={handleSubmit((data) =>
             handleFormData(data, medicineUpdate, user)
           )}
@@ -251,65 +288,31 @@ function EntrancThroughEntry({ through, keyValue, num, onClick, styled, id, onBl
             )}
           />
         </div>
-        <input
-          type="text"
-          defaultValue={through.shortage}
-          {...register("shortage")}
-          style={{ zIndex: "10", backgroundColor: 'inherit'}}
-          onBlurCapture={handleSubmit((data) =>
-            handleFormData(data, medicineUpdate, user)
-          )}
-        />
-        <input
-          type="checkbox"
-          defaultChecked={through.lease}
-          {...register("lease")}
-          style={{ width: "1rem", marginRight: "0rem" }}
-          onBlurCapture={handleSubmit((data) =>
-            handleFormData(data, medicineUpdate, user)
-          )}
-        />
         <div className="input-with-currency">
           <span className="currency-span" style={{ cursor: "default" }}>
             {through.rate_name}
           </span>
           <input
             type="text"
-            value={through.each_purchase_price}
+            value={through.total_purchaseـcurrency}
             className="transparent-inputs"
             style={{ cursor: "default" }}
           />
         </div>
         <div className="input-with-currency">
-          <span className={"currency-span-percent"}>%</span>
-          <input
-            type="text"
-            {...register("interest_percent")}
-            className={
-              through.interest_percent > 0 && through.interest_percent <= 100
-                ? "transparent-inputs-percent"
-                : "transparent-inputs-percent-alert"
-            }
-            onBlurCapture={handleSubmit((data) =>
-              handleFormData(data, interestPercentUpdate, user)
-            )}
-          />
-        </div>
-
-        <div className="input-with-currency">
           <span className="currency-span" style={{ cursor: "default" }}>
-            AFN
+            {through.rate_name}
           </span>
           <input
             type="text"
+            value={(
+              through.each_sell_price * through.register_quantity
+            ).toFixed(0)}
             className="transparent-inputs"
-            {...register("each_sell_price_afg")}
             style={{ cursor: "default" }}
-            onBlurCapture={handleSubmit((data) =>
-              handleFormData(data, afghanPriceUpdate, user)
-            )}
           />
         </div>
+
         <div className="medician-map-buttons">
           <div onClick={handleSubmit(MedicineDelete)}>
             <i className="fa-solid fa-trash"></i>

@@ -50,8 +50,8 @@ export default function EntranceHeader({ StoreCycle = false }) {
       description: "",
       entrance_id: "",
       total_interest: localStorage.getItem("total_interest") || "",
-      discount_percent_entrance:
-        localStorage.getItem("discount_percent_entrance") || "",
+      discount_percent:
+        localStorage.getItem("discount_percent") || "",
       wholesale: JSON.parse(localStorage.getItem("wholesale"))?.id || "",
       payment_method:
         JSON.parse(localStorage.getItem("payment_method"))?.id || "",
@@ -81,7 +81,6 @@ export default function EntranceHeader({ StoreCycle = false }) {
   const { mutate: updateEntrance } = useMutation({
     mutationFn: (data) => putDataFn(data, `entrance/${entrance?.id}/`),
     onSuccess: (res) => {
-      console.clear();
       toast.success("موفقانه بود");
       setEntrance(res);
     },
@@ -120,7 +119,7 @@ export default function EntranceHeader({ StoreCycle = false }) {
       currency: entrance?.currency,
       description: entrance?.description,
       total_interest: entrance?.total_interest,
-      discount_percent_entrance: entrance?.discount_percent_entrance,
+      discount_percent: entrance?.discount_percent,
       wholesale: entrance?.wholesale,
       entrance_id: entrance?.id,
       payment_method: entrance?.payment_method,
@@ -167,9 +166,9 @@ export default function EntranceHeader({ StoreCycle = false }) {
         entrance?.total_interest ||
         localStorage.getItem("total_interest") ||
         "",
-      discount_percent_entrance:
-        entrance?.discount_percent_entrance ||
-        localStorage.getItem("discount_percent_entrance") ||
+      discount_percent:
+        entrance?.discount_percent ||
+        localStorage.getItem("discount_percent") ||
         "",
       wholesale:
         entrance?.wholesale ||
@@ -402,11 +401,11 @@ export default function EntranceHeader({ StoreCycle = false }) {
               errors.total_interest ? "error-input" : ""
             }`}
           />
-          <lable>تخفیف%:</lable>
+          <lable>مبلغ_تخفیف:</lable>
           <input
             type="text"
             defaultValue={entrance?.discount_percent}
-            {...register("discount_percent_entrance")}
+            {...register("discount_percent")}
             className="entrance--inputs"
           />
         </div>
