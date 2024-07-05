@@ -70,7 +70,8 @@ const AdditionalMedicineModal = forwardRef(
         PrescriptionThroughForm.append("medician", item.addinId);
         PrescriptionThroughForm.append("prescription", prescription?.id);
         PrescriptionThroughForm.append("user", user().id);
-        if (MedicineIncludeCheck(item.addinId) === false && item.value > 0) {
+        const quantity = Number(item.value);
+        if (MedicineIncludeCheck(item.addinId) === false && Number.isFinite(quantity) && quantity > 0) {
           prescriptionThroughPost(PrescriptionThroughForm);
         }
       });

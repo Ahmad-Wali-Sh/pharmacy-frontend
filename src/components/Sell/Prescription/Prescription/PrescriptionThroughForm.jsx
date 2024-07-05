@@ -135,7 +135,12 @@ export const PrescriptionThroughForm = forwardRef(
           <label>تعداد:</label>
           <input
             type="text"
-            {...register("quantity", { required: true })}
+            {...register("quantity", { 
+              required: "This field is required", 
+              valueAsNumber: true, 
+              min: { value: 1, message: "Value must be a positive number" },
+              validate: value => !isNaN(value) || "Value must be a number"
+            })}
             className={errors.quantity && "error-input"}
             id="number-in-factor-input"
           />
