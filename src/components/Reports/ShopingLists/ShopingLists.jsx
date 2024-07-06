@@ -60,7 +60,7 @@ const ShopingLists = ({
                 active == "shoping-list" && "list-item-active"
               }`}
             >
-              لست خرید
+              کمبودی اقلام
             </div>
             <div
               onClick={() => setActive("traz")}

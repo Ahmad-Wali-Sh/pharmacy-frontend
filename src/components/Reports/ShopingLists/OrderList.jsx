@@ -45,21 +45,23 @@ export default function OrderList({
   const [editItem, setEditItem] = useState("");
   const [imagePreview, setImage] = useState("");
 
-    let dateer = new Date();
-    let year = dateer.getFullYear();
-    let first_day_of_year = new Date(year, 0, 2);
+  let dateer = new Date();
+  let year = dateer.getFullYear();
+  let first_day_of_year = new Date(year, 0, 2);
   const [filter, setFilter] = useState({
     brand_name: "",
     generic_name: "",
     ml: "",
     kind_english: "",
+    pharm_group_english: "",
+    pharm_group_persian: "",
     kind_persian: "",
     country: "",
     company: "",
     page: 1,
     barcode: "",
     num_days: 30,
-    start_date: first_day_of_year.toISOString().substring(0,10),
+    start_date: first_day_of_year.toISOString().substring(0, 10),
   });
 
   useEffect(() => {
@@ -179,6 +181,10 @@ export default function OrderList({
     filter.kind_persian
   )}&kind__name_english=${encodeURIComponent(
     filter.kind_english
+  )}&pharm_group__name_english=${encodeURIComponent(
+    filter.pharm_group_english
+  )}&country__name=${encodeURIComponent()}&pharm_group__name_persian=${encodeURIComponent(
+    filter.pharm_group_persian
   )}&country__name=${encodeURIComponent(
     filter.country
   )}&big_company__name=${encodeURIComponent(filter.company)}&page=${
@@ -248,7 +254,12 @@ export default function OrderList({
       doctor_approved: item.doctor_approved ? item.doctor_approved : "",
       active: item.active ? item.active : "",
       min_expire_date: item.min_expire_date ? item.min_expire_date : "",
-      pharm_group: item.pharm_group ? item.pharm_group : "",
+      pharm_group_english: item.pharm_group_english
+        ? item.pharm_group_english
+        : "",
+      pharm_group_persian: item.pharm_group_persian
+        ? item.pharm_group_persian
+        : "",
       kind: item.kind ? item.kind : "",
       country: item.country ? item.country : "",
       department: item.department ? item.department : [],
@@ -300,7 +311,8 @@ export default function OrderList({
       doctor_approved: "",
       active: "",
       min_expire_date: "",
-      pharm_group: "",
+      pharm_group_english: "",
+      pharm_group_persian: "",
       kind: "",
       country: "",
       department: [],
@@ -362,7 +374,7 @@ export default function OrderList({
   }, []);
 
   let date = new Date();
-    let formatted_date = date.toISOString().substring(0, 10);
+  let formatted_date = date.toISOString().substring(0, 10);
 
   switch (active) {
     case "list":
@@ -373,18 +385,22 @@ export default function OrderList({
             ListFilterRef={ListFilterRef}
             fileName={`order_list_${formatted_date}`}
             url={`medicine_order/?brand_name=${encodeURIComponent(
-                filter.brand_name
-              )}&barcode__contains=${filter.barcode}&search=${encodeURIComponent(
-                filter.generic_name
-              )}&ml=${encodeURIComponent(
-                filter.ml
-              )}&kind__name_persian=${encodeURIComponent(
-                filter.kind_persian
-              )}&kind__name_english=${encodeURIComponent(
-                filter.kind_english
-              )}&country__name=${encodeURIComponent(
-                filter.country
-              )}&big_company__name=${encodeURIComponent(filter.company)}&num_days=${filter.num_days}&start_date=${filter.start_date}`}
+              filter.brand_name
+            )}&barcode__contains=${filter.barcode}&search=${encodeURIComponent(
+              filter.generic_name
+            )}&ml=${encodeURIComponent(filter.ml)}&pharm_group__name_english=${
+              filter.pharm_group_english
+            }&pharm_group__name_persian=${
+              filter.pharm_group_persian
+            }&kind__name_persian=${encodeURIComponent(
+              filter.kind_persian
+            )}&kind__name_english=${encodeURIComponent(
+              filter.kind_english
+            )}&country__name=${encodeURIComponent(
+              filter.country
+            )}&big_company__name=${encodeURIComponent(
+              filter.company
+            )}&num_days=${filter.num_days}&start_date=${filter.start_date}`}
           >
             <FilterInput
               label="نام برند"
@@ -413,6 +429,20 @@ export default function OrderList({
               value={filter.kind_english}
               handleChange={(e) =>
                 setFilter({ ...filter, kind_english: e.target.value })
+              }
+            />
+            <FilterInput
+              label="گروپ_انگلیسی"
+              value={filter.pharm_group_english}
+              handleChange={(e) =>
+                setFilter({ ...filter, pharm_group_english: e.target.value })
+              }
+            />
+            <FilterInput
+              label="گروپ_فارسی"
+              value={filter.pharm_group_persian}
+              handleChange={(e) =>
+                setFilter({ ...filter, pharm_group_persian: e.target.value })
               }
             />
             <FilterInput
@@ -779,7 +809,7 @@ function MedicineForm(props) {
           <label>توضیحات:</label>
           <input {...props.register("description")} />
           <label>دارو.همراه:</label>
-          <AdditionalMedicine medicine={props?.medicine}/>
+          <AdditionalMedicine medicine={props?.medicine} />
           <label>بارکد:</label>
           {props.medicine.id ? (
             <MultipleBarcode medicineID={props.medicine.id} />

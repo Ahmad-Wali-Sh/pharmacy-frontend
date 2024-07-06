@@ -164,6 +164,7 @@ function EntrancThroughEntry({
         }
       >
         <label>{num + 1}</label>
+        <label>{through?.medicine_existence || 0}</label>
         <div className="entrance-medician-map-box">
           <h4 className="entrance-medician-map-name">
             <h4>
