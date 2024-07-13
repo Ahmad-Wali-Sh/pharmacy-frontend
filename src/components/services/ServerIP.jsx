@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { fetchServerIP } from './serverUtil';
 
 const useServerIP = () => {
   const [serverIP, setServerIP] = useState("");
@@ -9,9 +9,8 @@ const useServerIP = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/endpoint.json');
-        console.log(response);
-        setServerIP(response.data.endpoint);
+        const ip = await fetchServerIP();
+        setServerIP(ip);
       } catch (error) {
         setError(error);
       } finally {

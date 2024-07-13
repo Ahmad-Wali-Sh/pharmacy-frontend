@@ -1,9 +1,9 @@
-import React from "react";
+import React, { memo } from "react";
 import { forwardRef, useImperativeHandle } from "react";
 import Modal from "react-modal";
 import { MedicineShowModalStyles } from "../../../styles";
 
-const MedicineShowModal = forwardRef((props, ref) => {
+const MedicineShowModal = memo(forwardRef((props, ref) => {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [item, setItem] = React.useState("");
 
@@ -92,5 +92,5 @@ const MedicineShowModal = forwardRef((props, ref) => {
       </div>
     </Modal>
   );
-});
+}));
 export default MedicineShowModal;

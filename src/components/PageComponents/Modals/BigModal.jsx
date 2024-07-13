@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { memo, useEffect } from 'react'
 import { forwardRef, useImperativeHandle } from "react";
 import Modal from "react-modal";
 import { ModalBigStyles } from "../../../styles";
 import { useMedicineClosed } from '../../States/States';
 
-const BigModal = forwardRef((props, ref) => {
+const BigModal = memo(forwardRef((props, ref) => {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
 
   const { medicineClosed, setMedicineClosed} = useMedicineClosed()
@@ -45,5 +45,5 @@ const BigModal = forwardRef((props, ref) => {
       </div>
     </Modal>
   );
-});
+}));
 export default BigModal;

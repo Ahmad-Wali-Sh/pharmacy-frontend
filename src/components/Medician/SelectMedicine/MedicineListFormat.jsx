@@ -1,20 +1,14 @@
 import axios from "axios";
+import { fetchServerIP } from '../../services/serverUtil';
 
 let api = null;
-function fetchServerIP() {
-  return axios
-    .get("/endpoint.json")
-    .then((response) => {
-      api = response.data.endpoint;
-      return api;
-    })
-    .catch((error) => {
-      console.log(error);
-      return null;
-    });
-}
 
-fetchServerIP();
+fetchServerIP().then(serverIP => {
+  api = serverIP;
+}).catch(error => {
+  console.error("Error fetching server IP:", error);
+});
+
 
 export const MedicineListFormat = (resultsLength) => (item) => {
 

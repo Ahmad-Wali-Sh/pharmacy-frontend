@@ -28,7 +28,7 @@ function Header() {
     data: departments,
     isLoading,
     isError,
-  } = useQuery({ queryKey: ["department/?ordering=id"], retry: false });
+  } = useQuery({ queryKey: ["department/?ordering=id"], retry: 3 });
 
 
   const { serverIP } = useServerIP()

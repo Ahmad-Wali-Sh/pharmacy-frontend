@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-function BookmarkCards({ medicine, Func }) {
+const BookmarkCards = memo(({ medicine, Func }) => {
   return (
     <div
       className="bookmark-card"
@@ -19,6 +19,6 @@ function BookmarkCards({ medicine, Func }) {
       <h4>{medicine.ml}</h4>
     </div>
   );
-}
+})
 
 export default BookmarkCards;
