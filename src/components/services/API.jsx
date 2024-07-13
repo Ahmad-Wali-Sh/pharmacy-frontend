@@ -42,7 +42,7 @@ export const patchDataFn = createDataFn('patch');
 
 export const deleteDataFn = async (api) => {
   try {
-    await fetchServerIP();
+    const serverIP = await fetchServerIP();
     const response = await axios.delete(serverIP + "api/" + api);
     return response.data;
   } catch (error) {

@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run copy:endpoint",
-    "preview": "vite preview",
+    "preview": "vite preview --host 0.0.0.0 --port 3000",
     "postbuild": "purgecss --css build/static/css/*.css --content build/index.html build/static/jsx/*.jsx --output build/static/css",
-    "copy:endpoint": "cp endpoint.json dist/endpoint.json"
+    "copy:endpoint": "copy endpoint.json dist/endpoint.json"
   },
   "dependencies": {
     "@kasraghoreyshi/calendar": "^0.0.5",
