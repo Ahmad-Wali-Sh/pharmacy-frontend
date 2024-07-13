@@ -37,7 +37,20 @@ const createDataFn = (method) => async (data, api) => {
 export const postDataFn = createDataFn('post');
 export const putDataFn = createDataFn('put');
 export const patchDataFn = createDataFn('patch');
-export const deleteDataFn = createDataFn('delete');
+// export const deleteDataFn = createDataFn('delete');
+
+
+export const deleteDataFn = async (api) => {
+  try {
+    await fetchServerIP();
+    const response = await axios.delete(serverIP + "api/" + api);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting data:", error);
+    toast.warning('شما قابل به انجام این عملیات نیستید');
+    throw error; // Rethrow the error to be caught by React Query
+  }
+};
 
 export const successFn = (invalidKey, func) => {
   toast.success('در خواست موفقانه بود');
