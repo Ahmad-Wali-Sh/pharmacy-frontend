@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run copy:endpoint",
     "preview": "vite preview",
-    "postbuild": "purgecss --css build/static/css/*.css --content build/index.html build/static/jsx/*.jsx --output build/static/css"
+    "postbuild": "purgecss --css build/static/css/*.css --content build/index.html build/static/jsx/*.jsx --output build/static/css",
+    "copy:endpoint": "cp endpoint.json dist/endpoint.json"
   },
   "dependencies": {
     "@kasraghoreyshi/calendar": "^0.0.5",
