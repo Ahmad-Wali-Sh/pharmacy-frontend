@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run copy:endpoint",
+    "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port 3000",
-    "postbuild": "purgecss --css build/static/css/*.css --content build/index.html build/static/jsx/*.jsx --output build/static/css",
-    "copy:endpoint": "copy endpoint.json dist/endpoint.json"
+    "production": "serve -s dist -l 3000",
+    "postbuild": "purgecss --css build/static/css/*.css --content build/index.html build/static/jsx/*.jsx --output build/static/css"
   },
   "dependencies": {
     "@kasraghoreyshi/calendar": "^0.0.5",
@@ -24,6 +24,7 @@
     "jb-date-input": "^3.8.0",
     "js-file-download": "^0.4.12",
     "less": "^4.2.0",
+    "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "npm": "^9.6.7",
     "react": "^18.2.0",
@@ -53,6 +54,7 @@
     "react-window": "^1.8.9",
     "react-windowed-select": "^5.1.0",
     "scss": "^0.2.4",
+    "vite-plugin-compression": "^0.5.1",
     "zaman": "^2.0.7",
     "zustand": "^4.4.1"
   },
@@ -61,7 +63,11 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
-    "sass": "^1.70.0",
-    "vite": "^4.1.0"
+    "rollup-plugin-visualizer": "^5.12.0",
+    "sass": "^1.77.8",
+    "vite": "^4.1.0",
+    "vite-plugin-compress": "^2.1.1",
+    "vite-plugin-purgecss": "^0.2.12",
+    "vite-plugin-static-copy": "^1.0.6"
   }
 }

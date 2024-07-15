@@ -1,32 +1,56 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { viteStaticCopy } from "vite-plugin-static-copy";
+import purgecss from "vite-plugin-purgecss";
+import compression from "vite-plugin-compression";
+import { visualizer } from "rollup-plugin-visualizer";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    port: 3000
+    port: 3000,
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: "endpoint.json",
+          dest: "",
+        },
+      ],
+    }),
+    purgecss({
+      content: ["./src/**/*.html", "./src/**/*.jsx", "./src/**/*.js"],
+      defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+      safelist: {
+        deep: [/^Toastify/],
+      },
+    }),
+    compression(),
+    {
+      ...visualizer(),
+      enforce: "pre",
+      apply: "build",
+    },
+  ],
   css: {
     preprocessorOptions: {
-      less: {
-        math: "always",
-        relativeUrls: true,
-        javascriptEnabled: true
-      },
+      scss: {},
     },
   },
   build: {
-    outDir: 'dist', // Output directory for the build
-    assetsInlineLimit: 0, // Ensure assets are not inlined
+    outDir: "dist",
+    assetsInlineLimit: 0,
     rollupOptions: {
       input: {
-        main: './index.html', // Entry point of your application
+        main: "./index.html",
+      },
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"], 
+        },
       },
     },
-    // Copy env.json to the build output directory
-    assets: {
-      include: ['env.json'],
-    },
+    chunkSizeWarningLimit: 100000,
   },
-})
+});

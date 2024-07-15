@@ -22,9 +22,7 @@ import {
   FilterSelect,
 } from "../../ListingComponents";
 import { SelectMedician } from "../../../Medician/SelectMedicine/SelectMedician";
-import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import moment from "moment";
 
 import RangePicker from "react-range-picker";
 

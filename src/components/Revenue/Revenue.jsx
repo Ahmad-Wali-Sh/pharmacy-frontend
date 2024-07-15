@@ -4,7 +4,6 @@ import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import useServerIP from "../services/ServerIP";
 import BigModal from "../PageComponents/Modals/BigModal";
-import _ from "lodash";
 
 export default function Revenue(props) {
   const barcodeRef = useRef("");
