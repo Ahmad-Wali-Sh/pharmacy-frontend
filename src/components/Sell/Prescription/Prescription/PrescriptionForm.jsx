@@ -28,7 +28,7 @@ import AlertModal from "../../../PageComponents/Modals/AlertModal";
 import SmallModal from "../../../PageComponents/Modals/SmallModal";
 import { ModalBiggerSmallStyles } from "../../../../styles";
 
-function PrescriptionForm({ prescriptionThrough, update }) {
+function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected }) {
   const { userPremissions } = useUserPermissions();
   const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
@@ -184,6 +184,12 @@ function PrescriptionForm({ prescriptionThrough, update }) {
     enabled: false,
   });
 
+  useEffect(() => {
+    if (prescriptionSelected.prescription_number) {
+      setPrescription(prescriptionSelected)
+    }
+  }, [prescriptionSelected]);
+  
   const { refetch: prescriptionSearch } = useQuery({
     queryKey: ["prescription/?prescription_number=" + searchNumber],
     enabled: false,
@@ -192,6 +198,7 @@ function PrescriptionForm({ prescriptionThrough, update }) {
       prescriptionThroughSearch();
     },
   });
+
 
   const ListRef = useRef(null);
   const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);

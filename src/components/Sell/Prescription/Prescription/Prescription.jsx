@@ -31,9 +31,6 @@ export default function Prescription(props) {
 
   const { prescription, setPrescription } = usePrescription();
 
-  useEffect(() => {
-    props.SelectPrescription && setPrescription(SelectPrescription)
-  }, [props.SelectPrescription])
 
   const [departmentSelected, setDepartmentSelected] = React.useState("");
 
@@ -209,6 +206,7 @@ export default function Prescription(props) {
                 <PrescriptionForm
                   prescription={prescription}
                   prescriptionThrough={prescriptionThrough}
+                  prescriptionSelected={props.SelectPrescription ? props.SelectPrescription : ''}
                   updatePrescription={updatePrescription}
                   update={updatePrescription}
                   setPrescription={(data) => setPrescription(data)}

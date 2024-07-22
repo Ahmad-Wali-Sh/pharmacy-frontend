@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import ControlledSelect from "../../PageComponents/ControlledSelect";
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 import axios from "axios";
+import Prescription from "../../Sell/Prescription/Prescription/Prescription";
 
 function Prescriptions() {
   const FilterModalRef = useRef(null);
@@ -288,7 +289,7 @@ function Prescriptions() {
             <h4>{pres.zakat}</h4>
             <h4>{pres.khairat}</h4>
             <h4>{pres.grand_total}</h4>
-            <h4>{<InfoButton />}</h4>
+            <h4>{<Prescription button={1} SelectPrescription={pres} />}</h4>
           </div>
         ))}
       </div>
