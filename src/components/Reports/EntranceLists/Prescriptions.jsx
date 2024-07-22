@@ -19,8 +19,8 @@ function Prescriptions() {
   const [orderUsers, setUsers] = useState([]);
 
   useEffect(() => {
-    axios.get(serverIP + "auth/users/").then((res) => {
-      setUsers(res.data);
+    serverIP && axios.get(serverIP + "auth/users/").then((res) => {
+      setUsers(res?.data);
     });
   }, [serverIP]);
   const { data: doctors } = useQuery(["doctor/"]);
