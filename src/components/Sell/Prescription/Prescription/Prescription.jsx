@@ -30,6 +30,11 @@ export default function Prescription(props) {
   const user = useAuthUser();
 
   const { prescription, setPrescription } = usePrescription();
+
+  useEffect(() => {
+    props.SelectPrescription && setPrescription(SelectPrescription)
+  }, [props.SelectPrescription])
+
   const [departmentSelected, setDepartmentSelected] = React.useState("");
 
   const [report, setReport] = React.useState({

@@ -30,6 +30,24 @@ export const ModalFilterStyles = {
     textAlign: "center",
   },
 };
+
+export const InfoModalStyles = {
+  content: {
+    backgroundColor: "var(--bg-200)",
+    border: "none",
+    borderRadius: "1rem",
+    overflow: "hidden",
+    padding: "0px",
+    width: "35%",
+    left: "35%",
+    height: '35rem',
+    top:'10%'
+  },
+  overlay: {
+    backgroundColor: "rgba(60,60,60,0.5)",
+    textAlign: "center",
+  },
+};
 export const ModalBiggerSmallStyles = {
   content: {
     backgroundColor: "var(--bg-200)",

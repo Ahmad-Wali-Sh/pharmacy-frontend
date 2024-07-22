@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { MainButton, PlusButton } from "../../PageComponents/Buttons/Buttons";
 import BigModal from "../../PageComponents/Modals/BigModal";
 import Entrances from "./Entrances";
+import Prescriptions from "./Prescriptions";
 
 const EntranceLists = ({
   title,
@@ -50,12 +51,21 @@ const EntranceLists = ({
             >
                 حواله های ورود
             </div>
+            <div
+              onClick={() => setActive("prescriptions")}
+              className={`list-item ${
+                active == "prescriptions" && "list-item-active"
+              }`}
+            >
+                حواله های خروجی
+            </div>
 
           </div>
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
             {active == "entrances" && <Entrances />}
+            {active == "prescriptions" && <Prescriptions />}
             </div>
           </div>
         </div>
