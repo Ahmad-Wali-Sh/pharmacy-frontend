@@ -3,12 +3,14 @@ import FilterModal from "../../PageComponents/Modals/FilterModal";
 import InfoModal from "../../PageComponents/Modals/InfoModal";
 import useServerIP from "../../services/ServerIP";
 import { useQuery } from "react-query";
-import { InfoButton } from "../../PageComponents/Buttons/Buttons";
+import { FormButton, InfoButton } from "../../PageComponents/Buttons/Buttons";
 import { useForm } from "react-hook-form";
 import ControlledSelect from "../../PageComponents/ControlledSelect";
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 import axios from "axios";
 import Prescription from "../../Sell/Prescription/Prescription/Prescription";
+import fileDownload from "js-file-download";
+import { toast } from "react-toastify";
 
 function Prescriptions() {
   const FilterModalRef = useRef(null);
@@ -100,15 +102,17 @@ function Prescriptions() {
     watch("created_before"),
     watch("created_after"),
   ]);
+  let query = `department=${filter.department}&created_before=${filter.created_before}&created_after=${filter.created_after}&prescription_number=${filter.prescription_number}&name=${filter.patinet}&doctor=${filter.doctor}&order_user=${filter.order_user}&zakat=${filter.zakat}&khairat=${filter.khairat}`
 
   const { data: prescriptions } = useQuery({
     queryKey: [
-      `prescription-pg/?page=${filter?.page}&department=${filter.department}&created_before=${filter.created_before}&created_after=${filter.created_after}&prescription_number=${filter.prescription_number}&name=${filter.patinet}&doctor=${filter.doctor}&order_user=${filter.order_user}&zakat=${filter.zakat}&khairat=${filter.khairat}`,
+      `prescription-pg/?page=${filter?.page}&` + query
     ],
   });
   const { data: departments } = useQuery({
     queryKey: [`department/`],
   });
+
 
   const ModalFilterStyles = {
     content: {
@@ -119,13 +123,25 @@ function Prescriptions() {
       padding: "0px",
       width: "65%",
       left: "20%",
-      height: "34rem",
+      height: "36rem",
       top: "15%",
     },
     overlay: {
       backgroundColor: "rgba(60,60,60,0.5)",
       textAlign: "center",
     },
+  };
+
+  const ExcelExport = () => {
+    toast.warning('فایل در حال ذخیره سازی است')
+    axios({
+      url: `${serverIP}api/prescription-excel/?` + query + "&format=xml",
+      method: "GET",
+      responseType: "blob",
+    }).then((response) => {
+      toast.success('تکمیل شد')
+      fileDownload(response.data, `prescriptions.xml`);
+    });
   };
   return (
     <>
@@ -231,7 +247,15 @@ function Prescriptions() {
             </div>
             <div>
               <label>مجموع قیمت:</label>
+              <input type="text" disabled value={Number(prescriptions?.total_grand_total) + Number(prescriptions?.total_to_sell)} />
+            </div>
+            <div>
+              <label>مجموع پرداختی:</label>
               <input type="text" disabled value={prescriptions?.total_grand_total} />
+            </div>
+            <div>
+              <label>قابل پرداخت:</label>
+              <input type="text" disabled value={prescriptions?.total_to_sell} />
             </div>
             <div>
               <label>مجموع زکات:</label>
@@ -254,6 +278,11 @@ function Prescriptions() {
               <input type="text" disabled value={prescriptions?.total_over_money} />
             </div>
           </div>
+          <hr></hr>
+          <br></br>
+          <FormButton name='Excel' Func={() => {
+              ExcelExport()
+          }}/>
         </>
       </FilterModal>
       <div
