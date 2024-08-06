@@ -27,7 +27,7 @@ function Prescriptions() {
     });
   }, [serverIP]);
   const { data: doctors } = useQuery(["doctor/"]);
-  const { register, watch, control } = useForm({
+  const { register, watch, control, setValue } = useForm({
     defaultValues: {
       prescription_number: "",
       department: "",
@@ -38,6 +38,8 @@ function Prescriptions() {
       khairat: "",
       created_before: "",
       created_after: "",
+      has_prescriptionthrough: true,
+      to_pay: true
     },
   });
 
@@ -52,6 +54,8 @@ function Prescriptions() {
     khairat: "",
     created_before: "",
     created_after: "",
+    to_pay: true,
+    has_prescriptionthrough: true,
   });
 
   useEffect(() => {
@@ -74,6 +78,14 @@ function Prescriptions() {
     setFilter((prev) => ({
       ...prev,
       order_user: watch("order_user"),
+    }));
+    setFilter((prev) => ({
+      ...prev,
+      to_pay: watch("to_pay"),
+    }));
+    setFilter((prev) => ({
+      ...prev,
+      has_prescriptionthrough: watch("has_prescriptionthrough"),
     }));
     setFilter((prev) => ({
       ...prev,
@@ -101,8 +113,10 @@ function Prescriptions() {
     watch("khairat"),
     watch("created_before"),
     watch("created_after"),
+    watch("has_prescriptionthrough"),
+    watch("to_pay"),
   ]);
-  let query = `department=${filter.department}&created_before=${filter.created_before}&created_after=${filter.created_after}&prescription_number=${filter.prescription_number}&name=${filter.patinet}&doctor=${filter.doctor}&order_user=${filter.order_user}&zakat=${filter.zakat}&khairat=${filter.khairat}`
+  let query = `department=${filter.department}&purchased=${!filter.to_pay}&created_before=${filter.created_before}${!filter.has_prescriptionthrough ? '&has_prescriptionthrough=true' : ''}&created_after=${filter.created_after}&prescription_number=${filter.prescription_number}&name=${filter.patinet}&doctor=${filter.doctor}&order_user=${filter.order_user}&zakat=${filter.zakat}&khairat=${filter.khairat}`
 
   const { data: prescriptions } = useQuery({
     queryKey: [
@@ -150,7 +164,7 @@ function Prescriptions() {
         ModalStyle={ModalFilterStyles}
         title={"فلترنگ حواله های خروجی"}
       >
-        <>
+        <div className="overflow">
           <div className="entrances-filter-modal-container ">
             <div>
               <label>نوعیت:</label>
@@ -219,12 +233,15 @@ function Prescriptions() {
               />
             </div>
             <div>
-              <label>زکات:</label>
-              <input type="text" {...register("zakat")} />
-            </div>
-            <div>
-              <label>تخفیف:</label>
-              <input type="text" {...register("khairat")} />
+              <label>پرداختی:</label>
+              <select>
+                <option value={filter.to_pay} onClick={() => {
+                      setValue('to_pay', true)
+                }}>شامل نسخه های قابل پرداخت</option>
+                <option  onClick={() => {
+                      setValue('to_pay', false)
+                }}>فقط نسخه های پرداخت شده</option>
+              </select>
             </div>
             <div>
               <label>از_تاریخ:</label>
@@ -233,6 +250,17 @@ function Prescriptions() {
             <div>
               <label>تا_تاریخ:</label>
               <input type="date" {...register("created_before")} />
+            </div>
+            <div>
+              <label>نسخه های خالی:</label>
+              <select >
+                <option onClick={() => {
+                      setValue('has_prescriptionthrough', true)
+                }}>شامل نسخه های خالی</option>
+                <option  onClick={() => {
+                      setValue('has_prescriptionthrough', false)
+                }}>حذف نسخه های خالی</option>
+              </select>
             </div>
           </div>
           <div className="divider-info">
@@ -267,7 +295,7 @@ function Prescriptions() {
             </div>
             <div>
               <label>مجموع تخفیف:</label>
-              <input type="text" disabled value={prescriptions?.total_discount_money} />
+              <input type="text" disabled value={prescriptions?.total_discount_value?.toFixed(2)} />
             </div>
             <div>
               <label>مجموع راند:</label>
@@ -283,7 +311,7 @@ function Prescriptions() {
           <FormButton name='Excel' Func={() => {
               ExcelExport()
           }}/>
-        </>
+        </div>
       </FilterModal>
       <div
         className="filter-button"
