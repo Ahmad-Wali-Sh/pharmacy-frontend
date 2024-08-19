@@ -152,7 +152,12 @@ function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected })
   });
 
   const { mutateAsync: duplicatePrescription } = useMutation({
-    mutationFn: (data) => postDataFn(data, "prescription/"),
+    mutationFn: (data) => {
+      data.delete("purchase_payment_date"); 
+      data.delete("revenue"); 
+      data.delete("order_user"); 
+      return postDataFn(data, "prescription/");
+    },
     onSuccess: (res) => {
       successFn("", () => {
         setPrescription(res);
