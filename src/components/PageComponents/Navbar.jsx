@@ -43,6 +43,9 @@ function Navbar() {
           {userPermissions?.includes('core.view_prescription') && <NavLink to="/sell"  className={({isActive}) => isActive ? 'active-navbar' : 'button'}> 
             <div className="button">فروشات</div>
           </NavLink>}
+          {userPermissions?.includes('core.view_prescription') && <NavLink to="/return"  className={({isActive}) => isActive ? 'active-navbar' : 'button'}> 
+            <div className="button">برگشتی</div>
+          </NavLink>}
           {userPermissions?.includes('core.view_entrance') && <NavLink to="/purchase" className={({isActive}) => isActive ? 'active-navbar' : 'button'}activeClassName="active-navbar">
             <div className="button">خریداری</div>
           </NavLink>}

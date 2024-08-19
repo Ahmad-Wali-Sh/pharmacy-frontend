@@ -16,6 +16,7 @@ import ShortcutListener from "./components/Settings/ShortcutListener";
 import "./fontawesome/css/fontawesome.min.css";
 import "./fontawesome/css/brands.css";
 import "./fontawesome/css/solid.css";
+import Return from "./components/Purchase/Return/Return";
 
 function App() {
   const RequireAuth = ({ children }) => {
@@ -73,6 +74,16 @@ function App() {
               <RequireAuth>
                 <PageComponent>
                   <Sell />
+                </PageComponent>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/return"
+            element={
+              <RequireAuth>
+                <PageComponent>
+                  <Return />
                 </PageComponent>
               </RequireAuth>
             }

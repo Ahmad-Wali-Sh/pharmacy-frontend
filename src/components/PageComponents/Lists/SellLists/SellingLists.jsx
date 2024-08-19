@@ -7,6 +7,7 @@ import DepartmentsList from "./DepartmentsList";
 import PurchaseListManual from "./PurcahseListManual";
 import axios from "axios";
 import useServerIP from "../../../services/ServerIP";
+import DepartmentReturnList from "./DepartmentReturnList";
 
 const SellingLists = ({
   title,
@@ -15,9 +16,9 @@ const SellingLists = ({
   name,
   icon,
   selectedMedicine,
+  Return = false,
 }) => {
   const ListDashboardRef = useRef(null);
-
 
   const [active, setActive] = React.useState(activeKey);
   return (
@@ -31,10 +32,12 @@ const SellingLists = ({
         />
       )}
       {button == "plus_purchase" && (
-        <div onClick={() =>  {
-          ListDashboardRef.current.Opener();
-          setActive(activeKey);
-        }}>
+        <div
+          onClick={() => {
+            ListDashboardRef.current.Opener();
+            setActive(activeKey);
+          }}
+        >
           <i className="fa-solid fa-plus"></i>
         </div>
       )}
@@ -74,23 +77,30 @@ const SellingLists = ({
                 active == "departments" && "list-item-active"
               }`}
             >
-              انواع نسخه
+              {Return === false ? 'انواع نسخه' : 'انواع برگشتی'}
             </div>
-            <div
-              onClick={() => setActive("purhase-list")}
-              className={`list-item ${
-                active == "purhase-list" && "list-item-active"
-              }`}
-            >
-              لست خرید
-            </div>
+            {Return === false && (
+              <div
+                onClick={() => setActive("purhase-list")}
+                className={`list-item ${
+                  active == "purhase-list" && "list-item-active"
+                }`}
+              >
+                لست خرید
+              </div>
+            )}
           </div>
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
               {active == "patient" && <PatientList />}
               {active == "doctor" && <DoctorList />}
-              {active == "departments" && <DepartmentsList />}
+              {active == "departments" &&
+                (Return == false ? (
+                  <DepartmentsList />
+                ) : (
+                  <DepartmentReturnList />
+                ))}
               {active == "purhase-list" && (
                 <PurchaseListManual selectedMedicine={selectedMedicine} />
               )}

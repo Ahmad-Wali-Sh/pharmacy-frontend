@@ -4,6 +4,11 @@ export const usePrescription = create((set) => ({
   prescription: [],
   setPrescription: (state) => set(() => ({ prescription: state })),
 }));
+
+export const usePrescriptionReturn = create((set) => ({
+  prescription: [],
+  setPrescription: (state) => set(() => ({ prescription: state })),
+}));
 export const useEntrance = create((set) => ({
   entrance: [],
   setEntrance: (state) => set(() => ({ entrance: state })),

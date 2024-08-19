@@ -13,6 +13,7 @@ export default function Revenue(props) {
   const [selectedIdx, setSelectedIdx] = useState("");
   const [revenue, setRevenue] = React.useState([]);
   const [openPrescriptions, setOpenPrescriptions] = React.useState([]);
+  const [openPrescriptionsReturns, setOpenPrescriptionsReturns] = React.useState([]);
   const [trigger, setTrigger] = useState("");
   const [revenueRecords, setrevenueRecords] = React.useState([]);
   const [refundPrescription, setRefundPrescription] = React.useState([]);
@@ -53,6 +54,23 @@ export default function Revenue(props) {
           setOpenPage(1);
           setTrigger(new Date());
         });
+
+    serverIP &&
+      axios
+        .get(
+          `${serverIP}api/prescription-return-pg/` +
+            `?ordering=-id&refund_not_equal=0&${
+              search ? "prescription_number=" + search : ""
+            }&refund=${searchValue}&page=${openPage}`
+        )
+        .then((res) => {
+          setSelectedIdx("");
+          setOpenPrescriptionsReturns(res.data);
+        })
+        .catch(() => {
+          setOpenPage(1);
+          setTrigger(new Date());
+        });
   }, [trigger, search, searchValue]);
 
   useEffect(() => {
@@ -77,7 +95,30 @@ export default function Revenue(props) {
       .get(`${serverIP}api/prescription/` + "?barcode_str=" + barcode)
       .then((res) => {
         if (res?.data?.[0]?.id && res?.data?.[0]?.refund != 0) {
-          handleClosePrescription(res?.data?.[0])
+          handleClosePrescription(res?.data?.[0]);
+        }
+        if (res?.data?.[0]?.refund == 0) {
+          toast.info(
+            <div>
+              <div>نسخه مورد نظر پرداخت شده است </div>
+              <div>{res?.data?.[0]?.prescription_number}</div>
+            </div>,
+            { position: "bottom-right", autoClose: 2000 }
+          );
+        } else if (!res?.data?.[0]?.id) {
+          toast.error("نسخه مورد نظر یافت نشد ", {
+            position: "bottom-right",
+            autoClose: 2000,
+          });
+        }
+        barcodeRef.current.value = "";
+      });
+
+      axios
+      .get(`${serverIP}api/prescription-return/` + "?barcode_str=" + barcode)
+      .then((res) => {
+        if (res?.data?.[0]?.id && res?.data?.[0]?.refund != 0) {
+          handleClosePrescriptionReturn(res?.data?.[0]);
         }
         if (res?.data?.[0]?.refund == 0) {
           toast.info(
@@ -101,16 +142,40 @@ export default function Revenue(props) {
 
   const handleClosePrescription = (prescription) => {
     setIsButtonDisabled(true);
-    const RevenueRecordForm = new FormData()
-    RevenueRecordForm.append('revenue', revenue?.id)
-    RevenueRecordForm.append('prescription', prescription?.id)
-    RevenueRecordForm.append('record_type', 'new')
-    RevenueRecordForm.append('amount',  prescription?.refund)
-    RevenueRecordForm.append('user',  user().id)
+    const RevenueRecordForm = new FormData();
+    RevenueRecordForm.append("revenue", revenue?.id);
+    RevenueRecordForm.append("prescription", prescription?.id);
+    RevenueRecordForm.append("record_type", "new");
+    RevenueRecordForm.append("amount", prescription?.refund);
+    RevenueRecordForm.append("user", user().id);
 
-    prescription?.refund != 0 && axios.post(`${serverIP}api/revenue-record/`, RevenueRecordForm).then(() => {
-      setTrigger(new Date())
-    })
+    prescription?.refund != 0 &&
+      axios
+        .post(`${serverIP}api/revenue-record/`, RevenueRecordForm)
+        .then(() => {
+          setTrigger(new Date());
+        });
+
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 1500);
+  };
+
+  const handleClosePrescriptionReturn = (prescription) => {
+    setIsButtonDisabled(true);
+    const RevenueRecordForm = new FormData();
+    RevenueRecordForm.append("revenue", revenue?.id);
+    RevenueRecordForm.append("prescription_return", prescription?.id);
+    RevenueRecordForm.append("record_type", "new");
+    RevenueRecordForm.append("amount", prescription?.refund);
+    RevenueRecordForm.append("user", user().id);
+
+    prescription?.refund != 0 &&
+      axios
+        .post(`${serverIP}api/revenue-record/`, RevenueRecordForm)
+        .then(() => {
+          setTrigger(new Date());
+        });
 
     setTimeout(() => {
       setIsButtonDisabled(false);
@@ -323,7 +388,6 @@ export default function Revenue(props) {
                   <div
                     style={{
                       overflowY: "scroll",
-                      height: refundPrescription?.[0] ? "28dvh" : "66dvh",
                     }}
                   >
                     {revenue &&
@@ -347,7 +411,7 @@ export default function Revenue(props) {
                             className="revenue-button"
                             disabled={isButtonDisabled}
                             onClick={() => {
-                              handleClosePrescription(pres)
+                              handleClosePrescription(pres);
                             }}
                           >
                             <i class="fa-solid fa-angles-left"></i>
@@ -385,8 +449,102 @@ export default function Revenue(props) {
                     )}
                   </div>
                 </div>
+                <div className="revneue-content-open">
+                  <div className="mini-content-headers">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>برگشتی ها</div>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "2rem",
+                          fontSize: "0.9rem",
+                          paddingLeft: "0.4rem",
+                        }}
+                      >
+                        <div>تعداد: {openPrescriptionsReturns?.count}</div>
+                        <div>
+                          صفحات: {Math.ceil(openPrescriptionsReturns?.count / 100)}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="revenue-map-content">
+                      <h4>NO</h4>
+                      <h4>شماره نسخه</h4>
+                      <h4>نوعیت نسخه</h4>
+                      <h4>نام مریض</h4>
+                      <h4>قیمت کل</h4>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      overflowY: "scroll",
+                    }}
+                  >
+                    {revenue &&
+                      openPrescriptionsReturns?.results?.map((pres, key) => (
+                        <div
+                          className={`revenue-map-content ${
+                            selectedIdx === key ? "highlight-item" : ""
+                          }`}
+                          id={`item-${key}`}
+                          onClick={() => setSelectedIdx(key)}
+                        >
+                          <h3>{key + 1}</h3>
+                          <h3>{pres.prescription_number}</h3>
+                          <h3>{pres.department_name}</h3>
+                          <h3>{pres.patient_name}</h3>
+                          <h3 className="persian-number">
+                            {pres.refund.toFixed(2)}
+                            AF
+                          </h3>
+                          <button
+                            className="revenue-button"
+                            disabled={isButtonDisabled}
+                            onClick={() => {
+                              handleClosePrescriptionReturn(pres);
+                            }}
+                          >
+                            <i class="fa-solid fa-angles-left"></i>
+                          </button>
+                        </div>
+                      ))}
+                  </div>
+                  <div className="revenue-pagination-conatiner">
+                    {openPrescriptions?.previous && (
+                      <div
+                        className="paginator-button"
+                        onClick={() => {
+                          if (openPrescriptionsReturns?.previous) {
+                            setOpenPage((prev) => prev - 1);
+                            setTrigger(new Date());
+                          }
+                        }}
+                      >
+                        {"قبلی"}
+                      </div>
+                    )}
+                    <div className="paginator-button-page">{openPage}</div>
+                    {openPrescriptionsReturns?.next && (
+                      <div
+                        className="paginator-button"
+                        onClick={() => {
+                          if (openPrescriptionsReturns?.next) {
+                            setOpenPage((prev) => prev + 1);
+                            setTrigger(new Date());
+                          }
+                        }}
+                      >
+                        {"بعدی"}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-
               <div className="revneue-content-close">
                 <div className="mini-content-headers">
                   <div
