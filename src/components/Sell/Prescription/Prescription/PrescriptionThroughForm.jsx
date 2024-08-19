@@ -128,7 +128,6 @@ export const PrescriptionThroughForm = forwardRef(
             <SelectMedician
               ref={ref}
               selectAutoCompleteData={handleMedicineSelect}
-              department={prescription?.department}
               handleCloseFocus={handleQuantityFocus}
             />
           </div>
