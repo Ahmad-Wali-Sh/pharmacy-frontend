@@ -28,7 +28,7 @@ import AlertModal from "../../../PageComponents/Modals/AlertModal";
 import SmallModal from "../../../PageComponents/Modals/SmallModal";
 import { ModalBiggerSmallStyles } from "../../../../styles";
 
-function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected }) {
+function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected, departmenter }) {
   const { userPremissions } = useUserPermissions();
   const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
@@ -118,7 +118,7 @@ function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected })
           const DepartmentForm = new FormData();
           DepartmentForm.append("name", "");
           DepartmentForm.append("doctor", "");
-          DepartmentForm.append("department", watch("department"));
+          DepartmentForm.append("department", departmenter);
           DepartmentForm.append("discount_money", res.data.discount_money);
           DepartmentForm.append("discount_percent", res.data.discount_percent);
           DepartmentForm.append("over_money", res.data.over_price_money);

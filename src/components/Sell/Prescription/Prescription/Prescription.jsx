@@ -209,6 +209,7 @@ export default function Prescription(props) {
                   prescriptionSelected={props.SelectPrescription ? props.SelectPrescription : ''}
                   updatePrescription={updatePrescription}
                   update={updatePrescription}
+                  departmenter={props?.department?.id}
                   setPrescription={(data) => setPrescription(data)}
                 />
                 <PrescriptionThroughForm
