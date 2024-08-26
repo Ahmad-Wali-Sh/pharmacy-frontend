@@ -4548,10 +4548,20 @@ input[type="text"]:disabled {
 
 .traz-list-box {
   width: 100%;
-  overflow-x: auto;
   direction: rtl;
   padding: 0.4rem;
   height: 92%;
+}
+
+.traz-entrance {
+  background-color: rgb(163, 124, 124);
+}
+
+.traz-return{
+  background-color: rgb(124, 136, 163);
+}
+.traz-prescription{
+  background-color: rgb(124, 163, 126);
 }
 
 .traz-total-box {
@@ -4560,10 +4570,13 @@ input[type="text"]:disabled {
   color: var(--text-100);
   padding: 1rem;
   display: grid;
-  grid-template-columns: 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr;
-
+  grid-template-columns: 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr;
 }
 
+.traz-list-container{
+  height: 95%;
+  overflow: auto;
+}
 .traz-list-header {
   direction: rtl;
   display: grid;
@@ -4586,7 +4599,7 @@ input[type="text"]:disabled {
   padding: 0.3rem;
   border-bottom: 1px solid var(--bg-100);
   border-radius: 0.5rem;
-  width: 170%;
+  width: 100%;
   gap: 0.5rem;
   align-items: center;
 }

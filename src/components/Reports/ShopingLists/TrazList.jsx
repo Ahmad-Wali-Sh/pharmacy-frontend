@@ -29,8 +29,6 @@ export default function TrazList() {
       );
   }, [TrazQueryList]);
 
-
-
   useEffect(() => {
     const handleKeyDowns = (e) => {
       if (e.ctrlKey) {
@@ -40,7 +38,7 @@ export default function TrazList() {
           case "ب":
             e.preventDefault();
             ListFilterRef.current.Opener();
-            MedicineSelectRef?.current?.Opener()
+            MedicineSelectRef?.current?.Opener();
             break;
         }
       }
@@ -52,7 +50,7 @@ export default function TrazList() {
     };
   }, []);
 
-  const MedicineSelectRef = useRef(null)
+  const MedicineSelectRef = useRef(null);
 
   return (
     <>
@@ -68,23 +66,12 @@ export default function TrazList() {
           }}
           ref={MedicineSelectRef}
         />
-        {/* <FilterDate
-          label="از"
-          value={filter.from}
-          name="from"
-          handleChange={(e) => setFilter({ ...filter, from: e.target.value })}
-        />
-        <FilterDate
-          label="تا"
-          value={filter.to}
-          name="to"
-          handleChange={(e) => setFilter({ ...filter, to: e.target.value })}
-        /> */}
       </FilterModal>
       <div className="traz-list-box">
         <div className="traz-list-header">
           <h5>No</h5>
           <h5>نوع</h5>
+          <h5>وضعیت</h5>
           <h5>ش.حواله</h5>
           <h5>تعداد</h5>
           <h5>قیمت</h5>
@@ -93,36 +80,98 @@ export default function TrazList() {
           <h5>کاربر</h5>
           <h5>تاریخ</h5>
           <h5>ساعت</h5>
-          <h5>نوع</h5>
-          <h5>ش.حواله</h5>
-          <h5>تعداد</h5>
-          <h5>قیمت</h5>
-          <h5>منفی</h5>
-          <h5>وضعیت</h5>
           <h5>توضیحات</h5>
         </div>
+        <div className="traz-list-container">
         {filter.medician?.id &&
           sortedTraz?.map((trazItem, num) => (
-            <TrazListItem trazItem={trazItem} num={num} medician={filter.medician}></TrazListItem>
+            <TrazListItem
+            trazItem={trazItem}
+            num={num}
+            medician={filter.medician}
+            ></TrazListItem>
           ))}
+        </div>
       </div>
       <div className="traz-total-box">
         <h4>مجموع خرید:</h4>
         <h4>{TrazQueryList?.entrance_through_total}</h4>
         <h4>مجموع فروش:</h4>
         <h4>{TrazQueryList?.prescription_through_total}</h4>
+        <h4>مجموع برگشتی:</h4>
+        <h4>{TrazQueryList?.prescription_return_through_total}</h4>
         <h4>موجودی:</h4>
-        <h4>{filter.medician?.existence ? filter.medician?.existence : ''}</h4>
+        <h4>{filter.medician?.existence ? filter.medician?.existence : ""}</h4>
       </div>
     </>
   );
 }
 
 function TrazListItem(props) {
+  if (props.trazItem.type == "EntranceThrough") {
+    return (
+      <div className="traz-list-items-box traz-entrance" key={props.trazItem.id}>
+        <h4>{props.num + 1}</h4>
+        <h4>ورودی</h4>
+        <h4>{props.trazItem.entrance_department}</h4>
+        <h4>{props.trazItem.entrance}</h4>
+        <h4>{props.trazItem.register_quantity}</h4>
+        <h4>{props.trazItem.each_purchase_price}</h4>
+        <h4>{props.trazItem.expire_date}</h4>
+        <h4>{props.trazItem.company_name}</h4>
+        <h4>{props.trazItem.username}</h4>
+        <h4>{props.trazItem?.timestamp?.substring(0, 10)}</h4>
+        <h4>{props.trazItem?.timestamp?.substring(11, 16)}</h4>
+        <h4>{props.trazItem.description}</h4>
+      </div>
+    );
+  }
+
+  if (props.trazItem.type == "PrescriptionReturnThrough") {
+    return (
+      <div className="traz-list-items-box traz-return" key={props.trazItem.id}>
+        <h4>{props.num + 1}</h4>
+        <h4>برگشتی</h4>
+        <h4>{props.trazItem.department_name}</h4>
+        <h4>{props.trazItem.prescription_number}</h4>
+        <h4>{props.trazItem.quantity}</h4>
+        <h4>{props.trazItem.each_price}</h4>
+        <h4></h4>
+        <h4>{props.trazItem.patient_name}</h4>
+        <h4>{props.trazItem.username}</h4>
+        <h4>{props.trazItem?.timestamp?.substring(0, 10)}</h4>
+        <h4>{props.trazItem?.timestamp?.substring(11, 16)}</h4>
+        <h4>{props.trazItem.description}</h4>
+      </div>
+    );
+  }
+  if (props.trazItem.type == "PrescriptionThrough") {
+    return (
+      <div className="traz-list-items-box traz-prescription" key={props.trazItem.id}>
+      <h4>{props.num + 1}</h4>
+      <h4>خروجی</h4>
+      <h4>{props.trazItem.department_name}</h4>
+      <h4>{props.trazItem.prescription_number}</h4>
+      <h4>{props.trazItem.quantity}</h4>
+      <h4>{props.trazItem.each_price}</h4>
+      <h4></h4>
+      <h4>{props.trazItem.patient_name}</h4>
+      <h4>{props.trazItem.username}</h4>
+      <h4>{props.trazItem?.timestamp?.substring(0, 10)}</h4>
+      <h4>{props.trazItem?.timestamp?.substring(11, 16)}</h4>
+      <h4>{props.trazItem.description}</h4>
+    </div>
+    );
+  }
   return (
     <div className="traz-list-items-box" key={props.trazItem.id}>
       <h4>{props.num + 1}</h4>
-      <h4>{props.trazItem.type == "EntranceThrough" ? "ورودی" : ""}</h4>
+      <h4>
+        {props.trazItem.type == "EntranceThrough" ||
+        props.trazItem.type == "PrescriptionReturnThrough"
+          ? "ورودی"
+          : "خروجی"}
+      </h4>
       <h4>
         {props.trazItem.type == "EntranceThrough"
           ? props.trazItem.entrance
@@ -144,21 +193,23 @@ function TrazListItem(props) {
           : ""}
       </h4>
       <h4>
-        {props.trazItem.type == "EntranceThrough" ? props.trazItem.company_name : ""}
+        {props.trazItem.type == "EntranceThrough"
+          ? props.trazItem.company_name
+          : ""}
       </h4>
 
       <h4>{props.trazItem.username}</h4>
       <h4>{props.trazItem?.timestamp?.substring(0, 10)}</h4>
       <h4>{props.trazItem?.timestamp?.substring(11, 16)}</h4>
       <h4>
-        {props.trazItem.type == "OutranceThrough"
-          ? "خروجی"
+        {props.trazItem.type == "PrescriptionReturnThrough"
+          ? "ورودی"
           : props.trazItem.type == "PrescriptionThrough"
           ? "خروجی"
           : ""}
       </h4>
       <h4>
-        {props.trazItem.type == "OutranceThrough"
+        {props.trazItem.type == "PrescriptionReturnThrough"
           ? props.trazItem.outrance
           : props.trazItem.type == "PrescriptionThrough"
           ? props.trazItem.prescription_number
