@@ -106,32 +106,27 @@ export default function Revenue(props) {
             { position: "bottom-right", autoClose: 2000 }
           );
         } else if (!res?.data?.[0]?.id) {
-          toast.error("نسخه مورد نظر یافت نشد ", {
-            position: "bottom-right",
-            autoClose: 2000,
-          });
-        }
-        barcodeRef.current.value = "";
-      });
-
-      axios
-      .get(`${serverIP}api/prescription-return/` + "?barcode_str=" + barcode)
-      .then((res) => {
-        if (res?.data?.[0]?.id && res?.data?.[0]?.refund != 0) {
-          handleClosePrescriptionReturn(res?.data?.[0]);
-        }
-        if (res?.data?.[0]?.refund == 0) {
-          toast.info(
-            <div>
-              <div>نسخه مورد نظر پرداخت شده است </div>
-              <div>{res?.data?.[0]?.prescription_number}</div>
-            </div>,
-            { position: "bottom-right", autoClose: 2000 }
-          );
-        } else if (!res?.data?.[0]?.id) {
-          toast.error("نسخه مورد نظر یافت نشد ", {
-            position: "bottom-right",
-            autoClose: 2000,
+          axios
+          .get(`${serverIP}api/prescription-return/` + "?barcode_str=" + barcode)
+          .then((res) => {
+            if (res?.data?.[0]?.id && res?.data?.[0]?.refund != 0) {
+              handleClosePrescriptionReturn(res?.data?.[0]);
+            }
+            if (res?.data?.[0]?.refund == 0) {
+              toast.info(
+                <div>
+                  <div>نسخه مورد نظر پرداخت شده است </div>
+                  <div>{res?.data?.[0]?.prescription_number}</div>
+                </div>,
+                { position: "bottom-right", autoClose: 2000 }
+              );
+            } else if (!res?.data?.[0]?.id) {
+              toast.error("نسخه مورد نظر یافت نشد ", {
+                position: "bottom-right",
+                autoClose: 2000,
+              });
+            }
+            barcodeRef.current.value = "";
           });
         }
         barcodeRef.current.value = "";

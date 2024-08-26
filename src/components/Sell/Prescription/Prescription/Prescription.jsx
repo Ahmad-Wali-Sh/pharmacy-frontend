@@ -188,7 +188,7 @@ export default function Prescription(props) {
           name={props.department.name}
         />
       )}
-      <BigModal title="ثبت نسخه" ref={PrescriptionModalRef}>
+      <BigModal title={`ثبت نسخه (${props?.department?.name ? props?.department?.name : ''})`} ref={PrescriptionModalRef}>
         {loading ? (
           
           <div className="modal">
@@ -209,7 +209,7 @@ export default function Prescription(props) {
                   prescriptionSelected={props.SelectPrescription ? props.SelectPrescription : ''}
                   updatePrescription={updatePrescription}
                   update={updatePrescription}
-                  departmenter={props?.department?.id}
+                  departmenter={props?.department}
                   setPrescription={(data) => setPrescription(data)}
                 />
                 <PrescriptionThroughForm

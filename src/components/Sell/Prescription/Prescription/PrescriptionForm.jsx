@@ -111,32 +111,38 @@ function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected, d
   const { medicineOpener, setMedicineOpener} = useMedicineOpener()
 
   const newPrescription = () => {
-    serverIP &&
-      axios
-        .get(`${serverIP}api/department/` + watch("department") + "/")
-        .then((res) => {
           const DepartmentForm = new FormData();
           DepartmentForm.append("name", "");
           DepartmentForm.append("doctor", "");
-          DepartmentForm.append("department", departmenter);
-          DepartmentForm.append("discount_money", res.data.discount_money);
-          DepartmentForm.append("discount_percent", res.data.discount_percent);
-          DepartmentForm.append("over_money", res.data.over_price_money);
-          DepartmentForm.append("over_percent", res.data.over_price_percent);
+          DepartmentForm.append("department", departmenter.id);
+          DepartmentForm.append("discount_money", departmenter.discount_money);
+          DepartmentForm.append("discount_percent", departmenter.discount_percent);
+          DepartmentForm.append("over_money", departmenter.over_price_money);
+          DepartmentForm.append("over_percent", departmenter.over_price_percent);
           DepartmentForm.append("user", user().id);
-          axios
+          serverIP && axios
             .post(`${serverIP}api/prescription/`, DepartmentForm)
             .then((res) => {
               setPrescription(res.data);
               toast.success("موفقانه بود");
               setMedicineOpener(new Date())
             });
-        });
   };
 
-  const { mutateAsync: updatePrescription } = useMutation({
-    mutationFn: (data) => {
-      patchDataFn(data, `prescription/${prescription.id}/`);
+const { mutateAsync: updatePrescription } = useMutation({
+    mutationFn: async (data) => {
+      if (data.get('department') != prescription.department) {
+        try {
+          const res = await axios.get(`${serverIP}api/department/${data.get('department')}/`);
+          data.set('discount_money', res.data.discount_money);
+          data.set('discount_percent', res.data.discount_percent);
+          data.set('over_money', res.data.over_price_money);
+          data.set('over_percent', res.data.over_price_percent);
+        } catch (error) {
+          console.error("Error fetching department data:", error);
+        }
+      }
+      await patchDataFn(data, `prescription/${prescription.id}/`);
     },
     onSuccess: (data) =>
       successFn("", () => {
