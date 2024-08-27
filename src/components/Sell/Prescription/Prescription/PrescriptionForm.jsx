@@ -18,7 +18,11 @@ import {
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import ControlledSelect from "../../../PageComponents/ControlledSelect";
-import { useMedicineOpener, usePrescription, useUserPermissions } from "../../../States/States";
+import {
+  useMedicineOpener,
+  usePrescription,
+  useUserPermissions,
+} from "../../../States/States";
 import SellingLists from "../../../PageComponents/Lists/SellLists/SellingLists";
 import moment from "jalali-moment";
 import MultiplePrescriptionImage from "../../../PageComponents/MultiplePrescriptionImage";
@@ -27,8 +31,14 @@ import useServerIP from "../../../services/ServerIP";
 import AlertModal from "../../../PageComponents/Modals/AlertModal";
 import SmallModal from "../../../PageComponents/Modals/SmallModal";
 import { ModalBiggerSmallStyles } from "../../../../styles";
+import InputMask from "react-input-mask";
 
-function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected, departmenter }) {
+function PrescriptionForm({
+  prescriptionThrough,
+  update,
+  prescriptionSelected,
+  departmenter,
+}) {
   const { userPremissions } = useUserPermissions();
   const user = useAuthUser();
   const { data: patient } = useQuery(["patient/"]);
@@ -70,8 +80,12 @@ function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected, d
           case "b":
           case "ذ":
             e.preventDefault();
-            document.getElementById("search-number").focus();
+            const searchInput = document.getElementById("search-number");
             setSearchNumber(`${jalaliDate}-`);
+            setTimeout(() => {
+              searchInput.focus();
+              searchInput.setSelectionRange(searchInput.value.length - 6, searchInput.value.length - 6);
+            }, 0);
             break;
           case "d":
           case "D":
@@ -108,36 +122,37 @@ function PrescriptionForm({ prescriptionThrough, update, prescriptionSelected, d
     };
   }, [serverIP]);
 
-  const { medicineOpener, setMedicineOpener} = useMedicineOpener()
+  const { medicineOpener, setMedicineOpener } = useMedicineOpener();
 
   const newPrescription = () => {
-          const DepartmentForm = new FormData();
-          DepartmentForm.append("name", "");
-          DepartmentForm.append("doctor", "");
-          DepartmentForm.append("department", departmenter.id);
-          DepartmentForm.append("discount_money", departmenter.discount_money);
-          DepartmentForm.append("discount_percent", departmenter.discount_percent);
-          DepartmentForm.append("over_money", departmenter.over_price_money);
-          DepartmentForm.append("over_percent", departmenter.over_price_percent);
-          DepartmentForm.append("user", user().id);
-          serverIP && axios
-            .post(`${serverIP}api/prescription/`, DepartmentForm)
-            .then((res) => {
-              setPrescription(res.data);
-              toast.success("موفقانه بود");
-              setMedicineOpener(new Date())
-            });
+    const DepartmentForm = new FormData();
+    DepartmentForm.append("name", "");
+    DepartmentForm.append("doctor", "");
+    DepartmentForm.append("department", departmenter.id);
+    DepartmentForm.append("discount_money", departmenter.discount_money);
+    DepartmentForm.append("discount_percent", departmenter.discount_percent);
+    DepartmentForm.append("over_money", departmenter.over_price_money);
+    DepartmentForm.append("over_percent", departmenter.over_price_percent);
+    DepartmentForm.append("user", user().id);
+    serverIP &&
+      axios.post(`${serverIP}api/prescription/`, DepartmentForm).then((res) => {
+        setPrescription(res.data);
+        toast.success("موفقانه بود");
+        setMedicineOpener(new Date());
+      });
   };
 
-const { mutateAsync: updatePrescription } = useMutation({
+  const { mutateAsync: updatePrescription } = useMutation({
     mutationFn: async (data) => {
-      if (data.get('department') != prescription.department) {
+      if (data.get("department") != prescription.department) {
         try {
-          const res = await axios.get(`${serverIP}api/department/${data.get('department')}/`);
-          data.set('discount_money', res.data.discount_money);
-          data.set('discount_percent', res.data.discount_percent);
-          data.set('over_money', res.data.over_price_money);
-          data.set('over_percent', res.data.over_price_percent);
+          const res = await axios.get(
+            `${serverIP}api/department/${data.get("department")}/`
+          );
+          data.set("discount_money", res.data.discount_money);
+          data.set("discount_percent", res.data.discount_percent);
+          data.set("over_money", res.data.over_price_money);
+          data.set("over_percent", res.data.over_price_percent);
         } catch (error) {
           console.error("Error fetching department data:", error);
         }
@@ -159,9 +174,9 @@ const { mutateAsync: updatePrescription } = useMutation({
 
   const { mutateAsync: duplicatePrescription } = useMutation({
     mutationFn: (data) => {
-      data.delete("purchase_payment_date"); 
-      data.delete("revenue"); 
-      data.delete("order_user"); 
+      data.delete("purchase_payment_date");
+      data.delete("revenue");
+      data.delete("order_user");
       return postDataFn(data, "prescription/");
     },
     onSuccess: (res) => {
@@ -197,10 +212,10 @@ const { mutateAsync: updatePrescription } = useMutation({
 
   useEffect(() => {
     if (prescriptionSelected.prescription_number) {
-      setPrescription(prescriptionSelected)
+      setPrescription(prescriptionSelected);
     }
   }, [prescriptionSelected]);
-  
+
   const { refetch: prescriptionSearch } = useQuery({
     queryKey: ["prescription/?prescription_number=" + searchNumber],
     enabled: false,
@@ -209,7 +224,6 @@ const { mutateAsync: updatePrescription } = useMutation({
       prescriptionThroughSearch();
     },
   });
-
 
   const ListRef = useRef(null);
   const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
@@ -300,6 +314,12 @@ const { mutateAsync: updatePrescription } = useMutation({
       return "هدایت";
     } else return "نامشخص";
   };
+
+  const handleSearchChange = (e) => {
+    const rawValue = e.target.value.replace(/_/g, ''); // Remove underscores
+    setSearchNumber(rawValue);
+    
+  }
   return (
     <>
       <SmallModal
@@ -453,16 +473,21 @@ const { mutateAsync: updatePrescription } = useMutation({
           <label>جستجو:</label>
           <div className="flex">
             <form className="search-form">
-              <input
-                type="text"
-                {...register("number")}
-                onChange={(e) => {
-                  setSearchNumber(e.target.value);
-                }}
+            <InputMask
+                mask="9999-99-999999"
+                placeholder="0000-00-0000"
                 value={searchNumber}
-                id="search-number"
-                className="search-input"
-              />
+                onChange={(e) => handleSearchChange(e)}
+              >
+                {(inputProps) => (
+                  <input
+                    {...inputProps}
+                    type="text"
+                    id="search-number"
+                    className="search-input"
+                  />
+                )}
+              </InputMask>
               <SearchButton Func={() => prescriptionSearch()} />
             </form>
           </div>
@@ -516,15 +541,15 @@ const { mutateAsync: updatePrescription } = useMutation({
           <MultiplePrescriptionImage />
           <label>تخفیف:</label>
           <div className="flex">
-          <input type="text" {...register("discount_money")} />
-          <label>%:</label>
-          <input type="text" {...register("discount_percent")} />
+            <input type="text" {...register("discount_money")} />
+            <label>%:</label>
+            <input type="text" {...register("discount_percent")} />
           </div>
           <label>اضافه_قیمت</label>
           <div className="flex">
-          <input type="text" {...register("over_money")} />
-          <label>%:</label>
-          <input type="text" {...register("over_percent")} />
+            <input type="text" {...register("over_money")} />
+            <label>%:</label>
+            <input type="text" {...register("over_percent")} />
           </div>
           <div></div>
           <div></div>
@@ -608,17 +633,22 @@ const { mutateAsync: updatePrescription } = useMutation({
           </div>
           <label>جستجو:</label>
           <div className="flex">
-            <form className="search-form">
-              <input
-                type="text"
-                {...register("number")}
-                onChange={(e) => {
-                  setSearchNumber(e.target.value);
-                }}
+          <form className="search-form">
+              <InputMask
+                mask="9999-99-999999"
+                placeholder="0000-00-0000"
                 value={searchNumber}
-                id="search-number"
-                className="search-input"
-              />
+                onChange={(e) => handleSearchChange(e)}
+              >
+                {(inputProps) => (
+                  <input
+                    {...inputProps}
+                    type="text"
+                    id="search-number"
+                    className="search-input"
+                  />
+                )}
+              </InputMask>
               <SearchButton Func={() => prescriptionSearch()} />
             </form>
           </div>
