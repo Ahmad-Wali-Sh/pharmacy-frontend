@@ -2,10 +2,21 @@ import React, { memo } from "react";
 import { forwardRef, useImperativeHandle } from "react";
 import Modal from "react-modal";
 import { MedicineShowModalStyles } from "../../../styles";
+import { toast } from "react-toastify";
 
 const MedicineShowModal = memo(forwardRef((props, ref) => {
   const [registerModalOpen, setRegisterModalOpen] = React.useState(false);
   const [item, setItem] = React.useState("");
+
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        toast.info('موفقانه کپی شد')
+      })
+      .catch((err) => {
+        console.error('Failed to copy text:', err);
+      });
+  };
 
 
   useImperativeHandle(ref, () => ({
@@ -46,10 +57,14 @@ const MedicineShowModal = memo(forwardRef((props, ref) => {
               />
             </div>
             <div className="medicine-show-info">
-              <h4>
+              <h4 style={{cursor:'pointer'}} onClick={() => {
+                handleCopy(item.medicine_full) 
+              }}>
                 <span>نام:</span> {item.medicine_full}
               </h4>
-              <h4>
+              <h4 style={{cursor:'pointer'}}  onClick={() => {
+                handleCopy(item?.generic_name?.toString())
+              }}>
                 <span>ترکیب:</span>
                 <small>{item?.generic_name?.toString()}</small>
               </h4>

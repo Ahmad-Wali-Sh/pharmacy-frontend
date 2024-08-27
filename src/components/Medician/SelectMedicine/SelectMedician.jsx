@@ -17,6 +17,7 @@ import MedicinesLists from "../../PageComponents/Lists/MedicineList/MedicinesLis
 import SellingLists from "../../PageComponents/Lists/SellLists/SellingLists";
 import MedicineShowModal from "../../PageComponents/Modals/MedicineShow";
 import { useMedicine, useMedicineClosed, useMedicineOpener } from "../../States/States";
+import { toast } from "react-toastify";
 
 export const SelectMedician = forwardRef(
   (
@@ -51,6 +52,16 @@ export const SelectMedician = forwardRef(
         setMedicineOpener(null);
       }
     }, [medicineOpener]);
+
+    const handleCopy = (text) => {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          toast.info('موفقانه کپی شد')
+        })
+        .catch((err) => {
+          console.error('Failed to copy text:', err);
+        });
+    };
 
     const [textHighlight, setTextHighlight] = React.useState({
       barcode: "on",
@@ -230,7 +241,9 @@ export const SelectMedician = forwardRef(
             >
               {ready ? "انتخاب دارو" : "انتخاب دارو"}
             </div>
-            <div className="selected-medician-show">
+            <div className="selected-medician-show" style={{cursor:'pointer'}}onClick={() => {
+              handleCopy(medicine?.medicine_full)
+            }}>
               <h4>{medicine && medicine.medicine_full}</h4>
             </div>
             {medicine && (
