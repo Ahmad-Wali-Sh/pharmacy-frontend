@@ -55,6 +55,9 @@ function Navbar() {
           {userPermissions?.includes('core.view_revenue') && <NavLink to="/revenue" className={({isActive}) => isActive ? 'active-navbar' : 'button'}>
             <div className="button">صندوق</div>
           </NavLink>}
+          {<NavLink to="/journal" className={({isActive}) => isActive ? 'active-navbar' : 'button'}>
+            <div className="button">روزنامچه</div>
+          </NavLink>}
           {userPermissions?.includes('core.view_prescription') && userPermissions?.includes('core.view_entrance') && <NavLink to="/reports" className={({isActive}) => isActive ? 'active-navbar' : 'button'}>
             <div className="button">گزارشات</div>
           </NavLink>}

@@ -17,6 +17,7 @@ import "./fontawesome/css/fontawesome.min.css";
 import "./fontawesome/css/brands.css";
 import "./fontawesome/css/solid.css";
 import Return from "./components/Purchase/Return/Return";
+import Journal from "./components/Journal/Journal";
 
 function App() {
   const RequireAuth = ({ children }) => {
@@ -114,6 +115,16 @@ function App() {
               <RequireAuth>
                 <PageComponent>
                   <RevenueDashboard />
+                </PageComponent>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/journal"
+            element={
+              <RequireAuth>
+                <PageComponent>
+                  <Journal />
                 </PageComponent>
               </RequireAuth>
             }
