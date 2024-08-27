@@ -7,6 +7,7 @@ import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
 import { useMutation } from "react-query";
 import { postDataFn, successFn } from "../../../services/API";
+import { toast } from "react-toastify";
 
 const AdditionalMedicineModal = forwardRef(
   ({ medicine, prescription, prescriptionThrough, medicineSelectRef }, ref) => {
@@ -63,7 +64,11 @@ const AdditionalMedicineModal = forwardRef(
           };
         }
       );
+      console.log(prescriptionThrough);
+
+      
       inputData.map((item) => {
+        const prescriptionPatch = prescriptionThrough.find(entry => entry.medician == item.addinId)
         const PrescriptionThroughForm = new FormData();
         PrescriptionThroughForm.append("quantity", item.value);
         PrescriptionThroughForm.append("each_price", item.price);
@@ -73,6 +78,17 @@ const AdditionalMedicineModal = forwardRef(
         const quantity = Number(item.value);
         if (MedicineIncludeCheck(item.addinId) === false && Number.isFinite(quantity) && quantity > 0) {
           prescriptionThroughPost(PrescriptionThroughForm);
+        }
+        else {
+          const PrescriptionPatchForm = new FormData()
+          PrescriptionPatchForm.append('quantity', parseFloat(prescriptionPatch.quantity) + parseFloat(item.value))
+          axios.patch(`${serverIP}api/prescription-through/${prescriptionPatch?.id}/`, PrescriptionPatchForm).then((res) => {
+            toast.success('موفقانه به تعداد اضافه شد')
+            successFn(
+              `prescription-through/?prescription=${prescription?.id}`,
+              () => {}
+            );
+          })
         }
       });
       onClose();
