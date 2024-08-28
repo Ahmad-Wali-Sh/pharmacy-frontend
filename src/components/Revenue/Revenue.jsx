@@ -105,33 +105,40 @@ export default function Revenue(props) {
             </div>,
             { position: "bottom-right", autoClose: 2000 }
           );
+          hanedlePrescriptionReturnPay(barcode)
         } else if (!res?.data?.[0]?.id) {
-          axios
-          .get(`${serverIP}api/prescription-return/` + "?barcode_str=" + barcode)
-          .then((res) => {
-            if (res?.data?.[0]?.id && res?.data?.[0]?.refund != 0) {
-              handleClosePrescriptionReturn(res?.data?.[0]);
-            }
-            if (res?.data?.[0]?.refund == 0) {
-              toast.info(
-                <div>
-                  <div>نسخه مورد نظر پرداخت شده است </div>
-                  <div>{res?.data?.[0]?.prescription_number}</div>
-                </div>,
-                { position: "bottom-right", autoClose: 2000 }
-              );
-            } else if (!res?.data?.[0]?.id) {
-              toast.error("نسخه مورد نظر یافت نشد ", {
-                position: "bottom-right",
-                autoClose: 2000,
-              });
-            }
-            barcodeRef.current.value = "";
-          });
+          hanedlePrescriptionReturnPay(barcode)
         }
         barcodeRef.current.value = "";
       });
   };
+
+  const hanedlePrescriptionReturnPay = (barcode) => {
+    axios
+    .get(`${serverIP}api/prescription-return/` + "?barcode_str=" + barcode)
+    .then((re_res) => {
+      if (re_res?.data?.[0]?.id && re_res?.data?.[0]?.refund != 0) {
+        handleClosePrescriptionReturn(re_res?.data?.[0]);
+      }
+      if (re_res?.data?.[0]?.refund == 0) {
+        toast.info(
+          <div>
+            <div>برگشتی مورد نظر پرداخت شده است </div>
+            <div>{re_res?.data?.[0]?.prescription_number}</div>
+          </div>,
+          { position: "bottom-right", autoClose: 2000 }
+        );
+      } else if (!re_res?.data?.[0]?.id) {
+        toast.error("برگشتی مورد نظر یافت نشد ", {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+      barcodeRef.current.value = "";
+    });
+  }
+
+  
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
