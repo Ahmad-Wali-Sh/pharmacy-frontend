@@ -9,13 +9,30 @@ const MedicineShowModal = memo(forwardRef((props, ref) => {
   const [item, setItem] = React.useState("");
 
   const handleCopy = (text) => {
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        toast.info('موفقانه کپی شد')
-      })
-      .catch((err) => {
-        console.error('Failed to copy text:', err);
-      });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          toast.info('موفقانه کپی شد');
+        })
+        .catch((err) => {
+          console.error('Failed to copy text:', err);
+          toast.error('کپی کردن متن با خطا مواجه شد');
+        });
+    } else {
+      // Fallback approach if Clipboard API is not supported
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        toast.info('موفقانه کپی شد');
+      } catch (err) {
+        console.error('Fallback: Failed to copy text:', err);
+        toast.error('کپی کردن متن با خطا مواجه شد');
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
 
