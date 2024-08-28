@@ -3,6 +3,7 @@ import BigModal from "../PageComponents/Modals/BigModal";
 import { MainButton, PlusButton } from "../PageComponents/Buttons/Buttons";
 import JournalCategory from "./JournalCategory";
 import JournalEntry from "./JournalEntry";
+import SalaryEntry from "./SalaryEntry";
 
 const JournalList = ({ title, activeKey, trigger, button, icon }) => {
   const ListDashboardRef = useRef(null);
@@ -48,12 +49,21 @@ const JournalList = ({ title, activeKey, trigger, button, icon }) => {
             >
                 بخش ها
             </div>
+            <div
+              onClick={() => setActive("salary")}
+              className={`list-item ${
+                active == "salary" && "list-item-active"
+              }`}
+            >
+                معاشات کارمندان
+            </div>
           </div>
           <div className="list-box">
             <div className="list-box-header">اطلاعات</div>
             <div className="list-box-container">
               {active == 'journal' && <JournalEntry />}
               {active == 'categories' && <JournalCategory />}
+              {active == 'salary' && <SalaryEntry />}
             </div>
           </div>
         </div>

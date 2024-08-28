@@ -11,6 +11,7 @@ function Journal() {
       <div className="purchase-box">
         <JournalList button='main' title='روزنامچه' icon='fa-solid fa-journal-whills' activeKey={'journal'}/>
         <JournalList button='main' title='ثبت بخش' icon='fa-solid fa-journal-whills' activeKey={'categories'}/>
+        <JournalList button='main' title='معاشات کارمندان' icon='fa-solid fa-journal-whills' activeKey={'salary'}/>
       </div>
       <div className="purchase-form"></div>
     </div>

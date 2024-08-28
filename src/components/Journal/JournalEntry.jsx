@@ -42,9 +42,9 @@ export default function JournalEntry() {
     timestamp: formatDate(new Date()),
   });
 
+  const { data: categories } = useQuery(["journal-category/"]);
   const { serverIP } = useServerIP();
 
-  const { data: categories } = useQuery(["journal-category/"]);
   const [Users, setUsers] = useState([]);
 
   useEffect(() => {
