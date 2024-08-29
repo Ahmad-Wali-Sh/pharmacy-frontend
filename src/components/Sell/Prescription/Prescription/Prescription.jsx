@@ -31,6 +31,8 @@ export default function Prescription(props) {
 
   const { prescription, setPrescription } = usePrescription();
 
+  const [startTrigger, setStartTrigger] = useState([])
+
 
   const [departmentSelected, setDepartmentSelected] = React.useState("");
 
@@ -174,8 +176,12 @@ export default function Prescription(props) {
     <>
       {props.button == "main" && (
         <MainButton
-          Func={() => PrescriptionModalRef.current.Opener()}
-          title="ثبت نسخه"
+          Func={() => {
+            PrescriptionModalRef.current.Opener()
+            setPrescription([])
+            setStartTrigger(new Date())
+          }}
+          title="جستجو نسخه"
           icon="fa-solid fa-circle-info"
         />
       )}
@@ -188,7 +194,7 @@ export default function Prescription(props) {
           name={props.department.name}
         />
       )}
-      <BigModal title={`ثبت نسخه (${props?.department?.name ? props?.department?.name : ''})`} ref={PrescriptionModalRef}>
+      <BigModal title={props?.department?.name ? `ثبت (${props?.department?.name})` : 'جستجو نسخه'} ref={PrescriptionModalRef}>
         {loading ? (
           
           <div className="modal">
@@ -210,6 +216,7 @@ export default function Prescription(props) {
                   updatePrescription={updatePrescription}
                   update={updatePrescription}
                   departmenter={props?.department}
+                  startTrigger={startTrigger}
                   setPrescription={(data) => setPrescription(data)}
                 />
                 <PrescriptionThroughForm

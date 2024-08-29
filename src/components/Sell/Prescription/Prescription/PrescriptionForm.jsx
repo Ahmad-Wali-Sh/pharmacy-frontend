@@ -38,6 +38,7 @@ function PrescriptionForm({
   update,
   prescriptionSelected,
   departmenter,
+  startTrigger
 }) {
   const { userPremissions } = useUserPermissions();
   const user = useAuthUser();
@@ -67,11 +68,13 @@ function PrescriptionForm({
 
   const cleanupPrescription = () => {
     setPrescription([]);
+    SetSearchBar()
   };
 
   React.useEffect(() => {
     const date = moment();
     const jalaliDate = date.format("jYYYY-jMM");
+    const searchInput = document.getElementById("search-number");
 
     const handleKeyDowns = (e) => {
       if (e.shiftKey) {
@@ -80,12 +83,7 @@ function PrescriptionForm({
           case "b":
           case "ذ":
             e.preventDefault();
-            const searchInput = document.getElementById("search-number");
-            setSearchNumber(`${jalaliDate}-`);
-            setTimeout(() => {
-              searchInput.focus();
-              searchInput.setSelectionRange(searchInput.value.length - 6, searchInput.value.length - 6);
-            }, 0);
+            SetSearchBar()
             break;
           case "d":
           case "D":
@@ -97,8 +95,6 @@ function PrescriptionForm({
           case "Q":
           case "ض":
             e.preventDefault();
-            document.getElementById("search-number").focus();
-            setSearchNumber(`${jalaliDate}-`);
             cleanupPrescription();
             break;
           case "Delete":
@@ -121,6 +117,24 @@ function PrescriptionForm({
       document.removeEventListener("keydown", handleKeyDowns);
     };
   }, [serverIP]);
+
+  const SetSearchBar = () => {
+    const date = moment();
+    const jalaliDate = date.format("jYYYY-jMM");
+    const searchInput = document.getElementById("search-number");
+    setSearchNumber(`${jalaliDate}-`);
+    setTimeout(() => {
+      searchInput.focus();
+      searchInput.setSelectionRange(
+        searchInput.value.length - 6,
+        searchInput.value.length - 6
+      );
+    }, 0);
+  }
+
+  useEffect(() => {
+    startTrigger && cleanupPrescription()
+  }, [startTrigger])
 
   const { medicineOpener, setMedicineOpener } = useMedicineOpener();
 
@@ -221,7 +235,7 @@ function PrescriptionForm({
     enabled: false,
     onSuccess: (data) => {
       setPrescription(data[0] ? data[0] : []);
-      prescriptionThroughSearch();
+      prescription.id && prescriptionThroughSearch();
     },
   });
 
@@ -316,10 +330,9 @@ function PrescriptionForm({
   };
 
   const handleSearchChange = (e) => {
-    const rawValue = e.target.value.replace(/_/g, ''); // Remove underscores
+    const rawValue = e.target.value.replace(/_/g, ""); // Remove underscores
     setSearchNumber(rawValue);
-    
-  }
+  };
   return (
     <>
       <SmallModal
@@ -473,7 +486,7 @@ function PrescriptionForm({
           <label>جستجو:</label>
           <div className="flex">
             <form className="search-form">
-            <InputMask
+              <InputMask
                 mask="9999-99-999999"
                 placeholder="0000-00-0000"
                 value={searchNumber}
@@ -583,13 +596,15 @@ function PrescriptionForm({
               }}
               name="کپی"
             />
-            <FormButton
-              Func={handleSubmit((data) =>
-                handleFormData(data, newPrescription, user)
-              )}
-              name="جدید"
-            />
-            <SubmitButton name={prescription?.id ? "آپدیت" : "ذخیره"} />
+            {departmenter?.id && (
+              <FormButton
+                Func={handleSubmit((data) =>
+                  handleFormData(data, newPrescription, user)
+                )}
+                name="جدید"
+              />
+            )}
+           {prescription?.id && <SubmitButton name={prescription?.id ? "آپدیت" : "ذخیره"} />}
           </ButtonGroup>
         </form>
       ) : (
@@ -633,7 +648,7 @@ function PrescriptionForm({
           </div>
           <label>جستجو:</label>
           <div className="flex">
-          <form className="search-form">
+            <form className="search-form">
               <InputMask
                 mask="9999-99-999999"
                 placeholder="0000-00-0000"
