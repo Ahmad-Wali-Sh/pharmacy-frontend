@@ -572,15 +572,15 @@ function PrescriptionForm({
           <label>خیرات:</label>
           <input type="text" {...register("khairat")} />
           <div></div>
-          <ButtonGroup>
-            <FormButton
+          {(prescription?.id || departmenter?.id) && <ButtonGroup>
+{        prescription?.id &&    <FormButton
               Func={() => {
                 deletePrescription();
               }}
               name="حذف"
               className="alert-button"
-            />
-            <FormButton
+            />}
+{         prescription?.id &&   <FormButton
               Func={() => {
                 handleFormData(
                   {
@@ -595,7 +595,7 @@ function PrescriptionForm({
                 );
               }}
               name="کپی"
-            />
+            />}
             {departmenter?.id && (
               <FormButton
                 Func={handleSubmit((data) =>
@@ -605,7 +605,7 @@ function PrescriptionForm({
               />
             )}
            {prescription?.id && <SubmitButton name={prescription?.id ? "آپدیت" : "ذخیره"} />}
-          </ButtonGroup>
+          </ButtonGroup>}
         </form>
       ) : (
         <form
