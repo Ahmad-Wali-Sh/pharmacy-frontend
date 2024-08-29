@@ -38,7 +38,7 @@ function PrescriptionForm({
   update,
   prescriptionSelected,
   departmenter,
-  startTrigger
+  startTrigger,
 }) {
   const { userPremissions } = useUserPermissions();
   const user = useAuthUser();
@@ -68,7 +68,7 @@ function PrescriptionForm({
 
   const cleanupPrescription = () => {
     setPrescription([]);
-    SetSearchBar()
+    SetSearchBar();
   };
 
   React.useEffect(() => {
@@ -83,7 +83,7 @@ function PrescriptionForm({
           case "b":
           case "ذ":
             e.preventDefault();
-            SetSearchBar()
+            SetSearchBar();
             break;
           case "d":
           case "D":
@@ -130,11 +130,11 @@ function PrescriptionForm({
         searchInput.value.length - 6
       );
     }, 0);
-  }
+  };
 
   useEffect(() => {
-    startTrigger && cleanupPrescription()
-  }, [startTrigger])
+    startTrigger && cleanupPrescription();
+  }, [startTrigger]);
 
   const { medicineOpener, setMedicineOpener } = useMedicineOpener();
 
@@ -572,40 +572,48 @@ function PrescriptionForm({
           <label>خیرات:</label>
           <input type="text" {...register("khairat")} />
           <div></div>
-          {(prescription?.id || departmenter?.id) && <ButtonGroup>
-{        prescription?.id &&    <FormButton
-              Func={() => {
-                deletePrescription();
-              }}
-              name="حذف"
-              className="alert-button"
-            />}
-{         prescription?.id &&   <FormButton
-              Func={() => {
-                handleFormData(
-                  {
-                    ...prescription,
-                    image: "",
-                    doctor: "",
-                    name: "",
-                    sold: false,
-                  },
-                  duplicatePrescription,
-                  user
-                );
-              }}
-              name="کپی"
-            />}
-            {departmenter?.id && (
-              <FormButton
-                Func={handleSubmit((data) =>
-                  handleFormData(data, newPrescription, user)
-                )}
-                name="جدید"
-              />
-            )}
-           {prescription?.id && <SubmitButton name={prescription?.id ? "آپدیت" : "ذخیره"} />}
-          </ButtonGroup>}
+          {(prescription?.id || departmenter?.id) && (
+            <ButtonGroup>
+              {prescription?.id && (
+                <FormButton
+                  Func={() => {
+                    deletePrescription();
+                  }}
+                  name="حذف"
+                  className="alert-button"
+                />
+              )}
+              {prescription?.id && (
+                <FormButton
+                  Func={() => {
+                    handleFormData(
+                      {
+                        ...prescription,
+                        image: "",
+                        doctor: "",
+                        name: "",
+                        sold: false,
+                      },
+                      duplicatePrescription,
+                      user
+                    );
+                  }}
+                  name="کپی"
+                />
+              )}
+              {departmenter?.id && (
+                <FormButton
+                  Func={handleSubmit((data) =>
+                    handleFormData(data, newPrescription, user)
+                  )}
+                  name="جدید"
+                />
+              )}
+              {prescription?.id && (
+                <SubmitButton name={prescription?.id ? "آپدیت" : "ذخیره"} />
+              )}
+            </ButtonGroup>
+          )}
         </form>
       ) : (
         <form
