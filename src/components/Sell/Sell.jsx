@@ -35,7 +35,6 @@ function Sell() {
           <hr />
           </div>
           <div className="sell-department-buttons">
-
           {departments?.map((depart) => (
             <Prescription button={2} department={depart} trigger={0} />
           ))}
