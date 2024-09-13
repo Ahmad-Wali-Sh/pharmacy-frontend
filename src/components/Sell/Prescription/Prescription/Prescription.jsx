@@ -139,16 +139,14 @@ export default function Prescription(props) {
   const handleSurfPrescription = (functionality) => {
     if (prescription?.id) {
       axios.get(`${serverIP}api/prescription/${prescription?.id}/${functionality}/`).then((res) => {
-        setPrescription([])
-        res.data && setPrescription(res.data)
+        res?.data && setPrescription(res?.data)
       }).catch(() => {
         toast.warning('موجود نیست')
       });
     }
     else {
       axios.get(`${serverIP}api/last-prescription/`).then((res) => {
-        setPrescription([])
-        res.data && setPrescription(res.data?.[0])
+        res?.data?.[0] && setPrescription(res?.data?.[0])
       })
     }
   };

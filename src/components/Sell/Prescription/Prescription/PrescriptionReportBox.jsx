@@ -34,7 +34,7 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
   const OrderSubmit = () => {
     const Form = new FormData()
     Form.append('order_user', user().id)
-    axios.patch(`${serverIP}api/prescription/${prescription.id}/`, Form).then(() => {
+    axios.patch(`${serverIP}api/prescription/${prescription?.id}/`, Form).then(() => {
       toast.info('هدایت موفقانه ثبت شد')
     })
   }
@@ -74,24 +74,24 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
         </div>
         <div className="prescription-report-map-box-grey">
           <label>{(
-        prescription.discount_money +
-        (report.total * prescription.discount_percent) / 100
+        prescription?.discount_money +
+        (report?.total * prescription?.discount_percent) / 100
       ).toFixed(2)} </label>
           <label>:تخفیف</label>
         </div>
         <div className="prescription-report-map-box-grey">
           <label>{(
-        prescription.over_money +
-        (report.total * prescription.over_percent) / 100
+        prescription?.over_money +
+        (report.total * prescription?.over_percent) / 100
       ).toFixed(2)} </label>
           <label>:اضافه قیمت</label>
         </div>
         <div className="prescription-report-map-box-grey">
-          <label>{prescription?.khairat ? prescription.khairat : 0}</label>
+          <label>{prescription?.khairat ? prescription?.khairat : 0}</label>
           <label>:خیرات</label>
         </div>
         <div className="prescription-report-map-box-grey">
-          <label>{prescription?.zakat ? prescription.zakat : 0}</label>
+          <label>{prescription?.zakat ? prescription?.zakat : 0}</label>
           <label>:زکات</label>
         </div>
         <div className="prescription-report-map-box-grey">
