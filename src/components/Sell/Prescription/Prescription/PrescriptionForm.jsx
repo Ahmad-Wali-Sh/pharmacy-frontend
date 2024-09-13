@@ -186,28 +186,13 @@ function PrescriptionForm({
     },
   });
 
-  const { mutateAsync: duplicatePrescription } = useMutation({
-    mutationFn: (data) => {
-      data.delete("purchase_payment_date");
-      data.delete("revenue");
-      data.delete("order_user");
-      return postDataFn(data, "prescription/");
-    },
-    onSuccess: (res) => {
-      successFn("", () => {
-        setPrescription(res);
-        prescriptionThrough?.map((item) => {
-          const PrescriptionThroughForm = new FormData();
-          PrescriptionThroughForm.append("quantity", item.quantity);
-          PrescriptionThroughForm.append("each_price", item.each_price);
-          PrescriptionThroughForm.append("medician", item.medician);
-          PrescriptionThroughForm.append("prescription", res.id);
-          PrescriptionThroughForm.append("user", user().id);
-          prescriptionThroughPost(PrescriptionThroughForm);
-        });
-      });
-    },
-  });
+
+  const duplicatePrescription = () => {
+    prescription?.id && axios.post(`${serverIP}api/prescription/${prescription?.id}/duplicate/`).then((res)=> {
+      toast.success('موفقانه بود')
+      setPrescription(res.data);
+    })
+  }
 
   const DeleterWithAlert = () => {
     AlertModalRef.current.Opener();
