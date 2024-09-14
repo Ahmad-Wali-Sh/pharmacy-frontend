@@ -150,6 +150,7 @@ function EntrancThroughEntry({
       shortage: through.shortage,
       interest_percent: through.interest_percent,
       each_sell_price_afg: through.each_sell_price_afg,
+      expire_date: through.expire_date,
     });
   }, [through]);
 

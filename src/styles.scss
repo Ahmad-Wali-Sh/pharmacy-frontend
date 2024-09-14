@@ -4951,3 +4951,25 @@ input[type="text"]:disabled {
     background-color: var(--bg-300);
   }
 }
+
+.expiry-modal-container {
+  width: 100%;
+  overflow: auto;
+  height: 90%;
+}
+
+.expiry-batch-entry {
+  display: flex;
+  direction: rtl;
+  width: 100%;
+  color: var(--text-100);
+  justify-content: space-around;
+  padding: 1rem;
+  background-color: var(--bg-200);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid black;
+
+  h4{
+    direction: ltr;
+  }
+}
