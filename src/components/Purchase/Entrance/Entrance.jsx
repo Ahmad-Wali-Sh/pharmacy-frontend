@@ -7,7 +7,7 @@ import { useFactorTotal, useEntrance } from "../../States/States";
 import axios from "axios";
 import useServerIP from "../../services/ServerIP";
 
-export default function Entrance({ button, icon, title, StoreCycle = false }) {
+export default function Entrance({ button, icon, title, StoreCycle = false, SearchedNumber=false, trigger}) {
   const EntranceModalRef = useRef(null);
   const SubmitedAlertRef = useRef(null);
   const PreviousPriceAlertRef = useRef(null);
@@ -32,6 +32,10 @@ export default function Entrance({ button, icon, title, StoreCycle = false }) {
         EntranceModalRef.current.Closer();
       });
   };
+
+  useEffect(()=> {
+    trigger && EntranceModalRef.current.Opener()
+  }, [trigger])
 
   if (StoreCycle) {
     return (
@@ -145,7 +149,7 @@ export default function Entrance({ button, icon, title, StoreCycle = false }) {
             NoFunc={() => PriceAppliedAlertRef.current.Closer()}
             ref={PriceAppliedAlertRef}
           />
-          <EntranceForm />
+          <EntranceForm SearchedNumber={SearchedNumber} trigger={trigger}/>
         </BigModal>
       </>
     );

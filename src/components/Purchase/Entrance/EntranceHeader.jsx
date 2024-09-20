@@ -25,8 +25,10 @@ import { useState, useEffect, useRef } from "react";
 import MultipleImage from "../../PageComponents/MultipleImage";
 import AlertModal from "../../PageComponents/Modals/AlertModal";
 import { toast } from "react-toastify";
+import axios from "axios";
+import useServerIP from "../../services/ServerIP";
 
-export default function EntranceHeader({ StoreCycle = false }) {
+export default function EntranceHeader({ StoreCycle = false, SearchedNumber= false, trigger }) {
   const {
     register,
     handleSubmit,
@@ -102,6 +104,21 @@ export default function EntranceHeader({ StoreCycle = false }) {
     setEntrance([]);
     calculateRater()
   };
+  const { serverIP } = useServerIP();
+
+
+
+  useEffect(() => {
+    SearchedNumber && setEntrance([])
+    SearchedNumber && toast.info('لطفا منتظر بمانید...')
+    setTimeout(() => {
+      SearchedNumber && axios.get(serverIP + "api/" + `entrance/${SearchedNumber}/`).then((res)=> {
+        setEntrance(res.data)
+        toast.success('موفقانه جستجو شد')
+      })
+    }, 500)
+
+  }, [SearchedNumber, serverIP, trigger])
 
   const { setSubmitedEntrance } = useSubmitedEntrance();
 

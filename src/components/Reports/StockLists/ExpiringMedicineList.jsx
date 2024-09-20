@@ -8,11 +8,10 @@ import {
   FilterModal,
   FilterInput,
 } from "../../PageComponents/ListingComponents";
-
+import Entrance from '../../Purchase/Entrance/Entrance'
 import "react-image-upload/dist/index.css";
 import axios from "axios";
 import { useMedicine } from "../../States/States";
-import { months } from "jalali-moment";
 import InfoModal from "../../PageComponents/Modals/InfoModal";
 import { InfoButton } from "../../PageComponents/Buttons/Buttons";
 
@@ -41,7 +40,7 @@ export default function ExpiringMedicineList() {
   } = useForm();
 
   let medicineQuery = `medicine-expiry/?expire_in=${filter.month}`;
-  const { data: medicines, refetch: getTwiceMedicine } = useQuery({
+  const { data: medicines } = useQuery({
     queryKey: [medicineQuery],
   });
 
@@ -99,35 +98,47 @@ export default function ExpiringMedicineList() {
 
     return totalMonths;
 }
-
+  const [trigger, setTrigger] = useState('')
+  const [searchEntrance, setSearchEntrance] = useState(false)
   return (
     <>
+
       <InfoModal ref={InfoRef} title="حواله های ورودی">
         <div className="expiry-modal-container">
           {batchDetail?.map((batch) => (
-            <div className="expiry-batch-entry">
+            <div className="expiry-batch-entry" onClick={() => {
+              batch?.entrance && setTrigger(new Date())
+              setSearchEntrance(batch?.entrance)
+
+              setTimeout(() => {
+                setSearchEntrance('')
+              }, 500)
+            }}>
               <div className="expiry-batch-info">
-                <h4>حواله</h4>
-                <h4>تاریخ</h4>
-                <h4>کمپنی</h4>
-                <h4>تعداد</h4>
-                <h4>تاریخ_انقضا</h4>
-                <h4>قیمت</h4>
-                <h4>تا_انقضا</h4>
+                <h4>:حواله</h4>
+                <h4>:کمپنی</h4>
+                <h4>:تعداد</h4>
               </div>
               <div className="expiry-batch-detail">
-                <h4>{batch.id}</h4>
-                <h4>{batch.timestamp.slice(0,10)}</h4>
-                <h4>{batch.company ? batch.company : '---'}</h4>
+                <h4>{batch.entrance}</h4>
+                <h4>{batch.company_name ? batch.company_name : '---'}</h4>
                 <h4>{batch.register_quantity}</h4>
+              </div>
+              <div className="expiry-batch-info">
+                <h4>:تاریخ</h4>
+                <h4>:تاریخ_انقضا</h4>
+                <h4>:تا_انقضا</h4>
+              </div>
+              <div className="expiry-batch-detail">
+                <h4>{batch.timestamp.slice(0,10)}</h4>
                 <h4>{batch.expire_date}</h4>
-                <h4>{batch.each_sell_price_afg}</h4>
                 <h4>{monthsBetween(batch.expire_date)}</h4>
               </div>
             </div>
           ))}
         </div>
       </InfoModal>
+        <Entrance SearchedNumber={searchEntrance} button={'none'} trigger={trigger}/>
       <FilterModal
         current={ListFilterRef.current}
         ListFilterRef={ListFilterRef}
