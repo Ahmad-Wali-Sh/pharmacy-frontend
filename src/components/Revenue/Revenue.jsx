@@ -20,6 +20,7 @@ export default function Revenue(props) {
   const [lock, setLock] = useState(false);
   const [closePage, setClosePage] = useState(1);
   const [openPage, setOpenPage] = useState(1);
+  const [openReturnPage, setOpenReturnPage] = useState(1);
   const [search, setSearch] = useState("");
   const [searchValue, setValueSearch] = useState("");
 
@@ -51,7 +52,7 @@ export default function Revenue(props) {
           setOpenPrescriptions(res.data);
         })
         .catch(() => {
-          setOpenPage(1);
+          setOpenReturnPage(1);
           setTrigger(new Date());
         });
 
@@ -61,7 +62,7 @@ export default function Revenue(props) {
           `${serverIP}api/prescription-return-pg/` +
             `?ordering=-id&refund_not_equal=0&${
               search ? "prescription_number=" + search : ""
-            }&refund=${searchValue}&page=${openPage}`
+            }&refund=${searchValue}&page=${openReturnPage}`
         )
         .then((res) => {
           setSelectedIdx("");
@@ -517,12 +518,12 @@ export default function Revenue(props) {
                       ))}
                   </div>
                   <div className="revenue-pagination-conatiner">
-                    {openPrescriptions?.previous && (
+                    {openPrescriptionsReturns?.previous && (
                       <div
                         className="paginator-button"
                         onClick={() => {
                           if (openPrescriptionsReturns?.previous) {
-                            setOpenPage((prev) => prev - 1);
+                            setOpenReturnPage((prev) => prev - 1);
                             setTrigger(new Date());
                           }
                         }}
@@ -530,13 +531,13 @@ export default function Revenue(props) {
                         {"قبلی"}
                       </div>
                     )}
-                    <div className="paginator-button-page">{openPage}</div>
+                    <div className="paginator-button-page">{openReturnPage}</div>
                     {openPrescriptionsReturns?.next && (
                       <div
                         className="paginator-button"
                         onClick={() => {
                           if (openPrescriptionsReturns?.next) {
-                            setOpenPage((prev) => prev + 1);
+                            setOpenReturnPage((prev) => prev + 1);
                             setTrigger(new Date());
                           }
                         }}
