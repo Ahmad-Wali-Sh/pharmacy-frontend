@@ -24,6 +24,7 @@ export default function ExpiringMedicineList() {
   let first_day_of_year = new Date(year, 0, 2);
   const [filter, setFilter] = useState({
     month: 3,
+    page: 1
   });
 
   const user = useAuthUser();
@@ -39,14 +40,11 @@ export default function ExpiringMedicineList() {
     formState: { errors },
   } = useForm();
 
-  let medicineQuery = `medicine-expiry/?expire_in=${filter.month}`;
+  let medicineQuery = `medicine-expiry/?expire_in=${filter.month}&page=${filter.page}`;
   const { data: medicines } = useQuery({
     queryKey: [medicineQuery],
   });
 
-  useEffect(() => {
-    console.log(medicines);
-  }, [medicines]);
 
   const listRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -147,7 +145,7 @@ export default function ExpiringMedicineList() {
           label="ماه"
           value={filter.month}
           autoFocus={true}
-          handleChange={(e) => setFilter({ ...filter, month: e.target.value })}
+          handleChange={(e) => setFilter({ ...filter, month: e.target.value, page: 1 })}
         />
       </FilterModal>
       <div className="stock-list-header">
