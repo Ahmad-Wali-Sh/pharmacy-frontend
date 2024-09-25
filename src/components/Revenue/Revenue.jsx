@@ -97,6 +97,7 @@ export default function Revenue(props) {
       .then((res) => {
         if (res?.data?.[0]?.id && res?.data?.[0]?.refund != 0) {
           handleClosePrescription(res?.data?.[0]);
+          setTrigger(new Date());
         }
         if (res?.data?.[0]?.refund == 0) {
           toast.info(
@@ -107,8 +108,10 @@ export default function Revenue(props) {
             { position: "bottom-right", autoClose: 2000 }
           );
           hanedlePrescriptionReturnPay(barcode)
+          setTrigger(new Date());
         } else if (!res?.data?.[0]?.id) {
           hanedlePrescriptionReturnPay(barcode)
+          setTrigger(new Date());
         }
         barcodeRef.current.value = "";
       });
@@ -120,6 +123,7 @@ export default function Revenue(props) {
     .then((re_res) => {
       if (re_res?.data?.[0]?.id && re_res?.data?.[0]?.refund != 0) {
         handleClosePrescriptionReturn(re_res?.data?.[0]);
+        setTrigger(new Date());
       }
       if (re_res?.data?.[0]?.refund == 0) {
         toast.info(
@@ -129,11 +133,13 @@ export default function Revenue(props) {
           </div>,
           { position: "bottom-right", autoClose: 2000 }
         );
+        setTrigger(new Date());
       } else if (!re_res?.data?.[0]?.id) {
         toast.error("برگشتی مورد نظر یافت نشد ", {
           position: "bottom-right",
           autoClose: 2000,
         });
+        setTrigger(new Date());
       }
       barcodeRef.current.value = "";
     });
