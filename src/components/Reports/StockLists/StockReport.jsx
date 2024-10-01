@@ -118,7 +118,7 @@ export default function StockReport() {
           <FilterModal
             current={ListFilterRef.current}
             ListFilterRef={ListFilterRef}
-            fileName={`order_list_${formatted_date}`}
+            fileName={`stock_list_${formatted_date}`}
             url={`stock-excel/?brand_name=${encodeURIComponent(
               filter.brand_name
             )}&barcode__contains=${filter.barcode}&search=${encodeURIComponent(
@@ -136,6 +136,7 @@ export default function StockReport() {
             )}&big_company__name=${encodeURIComponent(
               filter.company
             )}&ordering=-total_sell`}
+            csv={true}
           >
             <FilterInput
               label="نام برند"

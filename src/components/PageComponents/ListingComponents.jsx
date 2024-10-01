@@ -309,12 +309,12 @@ export function FilterModal(props) {
   const ExcelExport = () => {
     toast.warning('فایل در حال ذخیره سازی است')
     axios({
-      url: `${serverIP}api/` + props.url + "&format=xml",
+      url: `${serverIP}api/` + props.url + (props.csv ? "&format=csv" : "&format=xml"),
       method: "GET",
       responseType: "blob",
     }).then((response) => {
       toast.success('تکمیل شد')
-      fileDownload(response.data, `${props.fileName}.xml`);
+      fileDownload(response.data, props.csv ? `${props.fileName}.csv` : `${props.fileName}.xml`);
     });
   };
 
