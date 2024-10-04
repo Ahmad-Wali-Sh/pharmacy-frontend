@@ -149,12 +149,12 @@ function Prescriptions() {
   const ExcelExport = () => {
     toast.warning('فایل در حال ذخیره سازی است')
     axios({
-      url: `${serverIP}api/prescription-excel/?` + query + "&format=xml",
+      url: `${serverIP}api/prescription-excel/?` + query + "&format=csv",
       method: "GET",
       responseType: "blob",
     }).then((response) => {
       toast.success('تکمیل شد')
-      fileDownload(response.data, `prescriptions.xml`);
+      fileDownload(response.data, `prescriptions.csv`);
     });
   };
   return (
