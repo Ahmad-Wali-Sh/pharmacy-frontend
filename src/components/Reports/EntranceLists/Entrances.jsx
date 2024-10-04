@@ -5,10 +5,11 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import ControlledSelect from "../../PageComponents/ControlledSelect";
 import { useForm } from "react-hook-form";
-import { FormButton } from "../../PageComponents/Buttons/Buttons";
+import { FormButton, InfoButton } from "../../PageComponents/Buttons/Buttons";
 import { ListFooter } from "../../PageComponents/ListingComponents";
 import { toast } from "react-toastify";
 import fileDownload from "js-file-download";
+import Entrance from "../../Purchase/Entrance/Entrance";
 
 function Entrances() {
   const FilterModalRef = useRef(null);
@@ -112,6 +113,9 @@ function Entrances() {
       fileDownload(response.data, `entranceThroughs.csv`);
     });
   }
+
+  const [searchEntrance, setSearchEntrance] = useState(false)
+  const [trigger, setTrigger] = useState(false)
 
   return (
     <>
@@ -290,7 +294,13 @@ function Entrances() {
             <h4>{entrance.payment_method_name}</h4>
             <h4>{entrance.currency_name}</h4>
             <h4>{entrance.wholesale == "WHOLESALE" ? "عمده" : "پرچون"}</h4>
-            <h4>بیشتر</h4>
+            <InfoButton Func={() => {
+                entrance?.id && setTrigger(new Date())
+                setSearchEntrance(entrance.id)
+                setTimeout(() => {
+                  setSearchEntrance('')
+                }, 500)
+            }}/>
           </div>
         ))}
       </div>
@@ -318,7 +328,7 @@ function Entrances() {
           </h4>
         )}
       </div>
-
+      <Entrance SearchedNumber={searchEntrance} button={'none'} trigger={trigger}/>
     </>
   );
 }
