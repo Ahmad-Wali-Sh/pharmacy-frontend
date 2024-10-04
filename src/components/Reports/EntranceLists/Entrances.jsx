@@ -102,7 +102,15 @@ function Entrances() {
   }
 
   const EntranceTroughsExport = () => {
-
+    toast.warning('فایل در حال ذخیره سازی است')
+    axios({
+      url: `${serverIP}api/entrance-through-excel/?` + query + "&format=csv",
+      method: "GET",
+      responseType: "blob",
+    }).then((response) => {
+      toast.success('تکمیل شد')
+      fileDownload(response.data, `entranceThroughs.csv`);
+    });
   }
 
   return (
