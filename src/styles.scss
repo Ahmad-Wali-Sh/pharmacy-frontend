@@ -3804,7 +3804,7 @@ input[type="text"]:disabled {
 
 .form-button {
   background-color: var(--bg-200);
-  width: 8rem;
+  min-width: 8rem;
   height: 1.7rem;
   border-radius: 0.6rem;
   text-align: center;
@@ -4887,7 +4887,7 @@ input[type="text"]:disabled {
     direction: ltr;
     font-size: 1rem;
     color: var(--text-100);
-    height: inherit;
+    height: 1.7rem;
   }
 
   input:focus {
