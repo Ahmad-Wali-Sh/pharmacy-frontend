@@ -24,7 +24,8 @@ export default function Revenue(props) {
   const [search, setSearch] = useState("");
   const [searchValue, setValueSearch] = useState("");
 
-  useEffect(() => {
+
+  const getRevenueInfo = () => {
     serverIP &&
       axios
         .get(
@@ -38,7 +39,9 @@ export default function Revenue(props) {
         .then((res) => {
           setRevenue(res.data && res.data[0]);
         });
+  }
 
+  const getOpenPrescriptions = () => {
     serverIP &&
       axios
         .get(
@@ -55,7 +58,9 @@ export default function Revenue(props) {
           setOpenReturnPage(1);
           setTrigger(new Date());
         });
+  }
 
+  const getOpenPrescriptionReturns = () => {
     serverIP &&
       axios
         .get(
@@ -72,9 +77,9 @@ export default function Revenue(props) {
           setOpenPage(1);
           setTrigger(new Date());
         });
-  }, [trigger, search, searchValue]);
+  }
 
-  useEffect(() => {
+  const getCloseRecords = () => {
     revenue?.id &&
       axios
         .get(
@@ -89,7 +94,21 @@ export default function Revenue(props) {
           setClosePage(1);
           setTrigger(new Date());
         });
-  }, [revenue?.id, trigger, search]);
+  }
+
+  useEffect(() => {
+    getRevenueInfo()
+    getCloseRecords()
+    getOpenPrescriptionReturns()
+    getOpenPrescriptions()
+  }, [revenue?.id, serverIP]);
+
+  useEffect(() => {
+    getOpenPrescriptionReturns()
+    getOpenPrescriptions()
+    getCloseRecords()
+  }, [search, searchValue])
+
 
   const handleBarcodePay = (barcode) => {
     axios
@@ -97,21 +116,9 @@ export default function Revenue(props) {
       .then((res) => {
         if (res?.data?.[0]?.id && res?.data?.[0]?.refund != 0) {
           handleClosePrescription(res?.data?.[0]);
-          setTrigger(new Date());
         }
-        if (res?.data?.[0]?.refund == 0) {
-          toast.info(
-            <div>
-              <div>نسخه مورد نظر پرداخت شده است </div>
-              <div>{res?.data?.[0]?.prescription_number}</div>
-            </div>,
-            { position: "bottom-right", autoClose: 2000 }
-          );
+        if (!res?.data?.[0]?.id) {
           hanedlePrescriptionReturnPay(barcode)
-          setTrigger(new Date());
-        } else if (!res?.data?.[0]?.id) {
-          hanedlePrescriptionReturnPay(barcode)
-          setTrigger(new Date());
         }
         barcodeRef.current.value = "";
       });
@@ -123,29 +130,10 @@ export default function Revenue(props) {
     .then((re_res) => {
       if (re_res?.data?.[0]?.id && re_res?.data?.[0]?.refund != 0) {
         handleClosePrescriptionReturn(re_res?.data?.[0]);
-        setTrigger(new Date());
-      }
-      if (re_res?.data?.[0]?.refund == 0) {
-        toast.info(
-          <div>
-            <div>برگشتی مورد نظر پرداخت شده است </div>
-            <div>{re_res?.data?.[0]?.prescription_number}</div>
-          </div>,
-          { position: "bottom-right", autoClose: 2000 }
-        );
-        setTrigger(new Date());
-      } else if (!re_res?.data?.[0]?.id) {
-        toast.error("برگشتی مورد نظر یافت نشد ", {
-          position: "bottom-right",
-          autoClose: 2000,
-        });
-        setTrigger(new Date());
       }
       barcodeRef.current.value = "";
     });
   }
-
-  
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
@@ -162,7 +150,11 @@ export default function Revenue(props) {
       axios
         .post(`${serverIP}api/revenue-record/`, RevenueRecordForm)
         .then(() => {
-          setTrigger(new Date());
+          getOpenPrescriptions()
+          getCloseRecords()
+          toast.success('موفقانه بود', {
+            position: "bottom-right"
+          })
         });
 
     setTimeout(() => {
@@ -183,7 +175,11 @@ export default function Revenue(props) {
       axios
         .post(`${serverIP}api/revenue-record/`, RevenueRecordForm)
         .then(() => {
-          setTrigger(new Date());
+          getOpenPrescriptionReturns()
+          getCloseRecords()
+          toast.success('موفقانه بود', {
+            position: "bottom-right"
+          })
         });
 
     setTimeout(() => {
@@ -195,7 +191,12 @@ export default function Revenue(props) {
     axios
       .delete(`${serverIP}api/revenue-record/${revenueRecord.id}/`)
       .then(() => {
-        setTrigger(new Date());
+        getCloseRecords()
+        getOpenPrescriptionReturns()
+        getOpenPrescriptions()
+        toast.success('موفقانه بود', {
+          position: "bottom-right"
+        })
       });
   };
 
@@ -272,7 +273,10 @@ export default function Revenue(props) {
         <div
           className="purchase-card"
           onClick={() => {
-            setTrigger(new Date());
+            getRevenueInfo()
+            getOpenPrescriptionReturns()
+            getOpenPrescriptions()
+            getCloseRecords()
             revenueRef.current.Opener();
           }}
         >
@@ -290,7 +294,10 @@ export default function Revenue(props) {
           type="button"
           className="revenue-manager-buttons"
           onClick={() => {
-            setTrigger(new Date());
+            getRevenueInfo()
+            getOpenPrescriptionReturns()
+            getOpenPrescriptions()
+            getCloseRecords()
             revenueRef.current.Opener();
           }}
         >
@@ -304,7 +311,10 @@ export default function Revenue(props) {
               <div
                 className="revenue-button"
                 onClick={() => {
-                  setTrigger(new Date());
+                  getRevenueInfo()
+                  getOpenPrescriptionReturns()
+                  getOpenPrescriptions()
+                  getCloseRecords()
                 }}
               >
                 <i className="fa-solid fa-arrows-rotate"></i>
@@ -317,7 +327,6 @@ export default function Revenue(props) {
                   placeholder="جستجو بر اساس قیمت"
                   onChange={(e) => {
                     setValueSearch(e.target.value);
-                    setTrigger(new Date());
                   }}
                   style={{
                     marginLeft: "1rem",
@@ -331,7 +340,6 @@ export default function Revenue(props) {
                   placeholder="جستجو بر اساس شماره نسخه"
                   onChange={(e) => {
                     setSearch(e.target.value);
-                    setTrigger(new Date());
                   }}
                   style={{
                     marginLeft: "1rem",
@@ -435,7 +443,7 @@ export default function Revenue(props) {
                         onClick={() => {
                           if (openPrescriptions?.previous) {
                             setOpenPage((prev) => prev - 1);
-                            setTrigger(new Date());
+                            getOpenPrescriptions()
                           }
                         }}
                       >
@@ -449,7 +457,7 @@ export default function Revenue(props) {
                         onClick={() => {
                           if (openPrescriptions?.next) {
                             setOpenPage((prev) => prev + 1);
-                            setTrigger(new Date());
+                            getOpenPrescriptions()
                           }
                         }}
                       >
@@ -530,7 +538,7 @@ export default function Revenue(props) {
                         onClick={() => {
                           if (openPrescriptionsReturns?.previous) {
                             setOpenReturnPage((prev) => prev - 1);
-                            setTrigger(new Date());
+                            getOpenPrescriptionReturns()
                           }
                         }}
                       >
@@ -544,7 +552,7 @@ export default function Revenue(props) {
                         onClick={() => {
                           if (openPrescriptionsReturns?.next) {
                             setOpenReturnPage((prev) => prev + 1);
-                            setTrigger(new Date());
+                            getOpenPrescriptionReturns()
                           }
                         }}
                       >
@@ -613,7 +621,7 @@ export default function Revenue(props) {
                       onClick={() => {
                         if (revenueRecords?.previous) {
                           setClosePage((prev) => prev - 1);
-                          setTrigger(new Date());
+                          getCloseRecords()
                         }
                       }}
                     >
@@ -627,7 +635,7 @@ export default function Revenue(props) {
                       onClick={() => {
                         if (revenueRecords?.next) {
                           setClosePage((prev) => prev + 1);
-                          setTrigger(new Date());
+                          getCloseRecords()
                         }
                       }}
                     >
