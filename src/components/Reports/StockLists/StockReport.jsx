@@ -22,6 +22,7 @@ export default function StockReport() {
   const { data: kinds } = useQuery(["kind/"]);
   const { data: pharmGroups } = useQuery(["pharm-groub/"]);
   const { data: country } = useQuery(["country/"]);
+  const { data: bigCompanies } = useQuery(["big-company/"]);
 
   let dateer = new Date();
   let year = dateer.getFullYear();
@@ -48,7 +49,7 @@ export default function StockReport() {
 
   let medicineQuery = `brand_name=${encodeURIComponent(
     filter.brand_name
-  )}&kind=${watch("kind")?.id || ""}&pharm_group=${
+  )}&generic_name=${filter?.generic_name}&kind=${watch("kind")?.id || ""}&pharm_group=${
     watch("pharm_group")?.id || ""
   }&country=${watch("country")?.id || ""}&big_company=${
     watch("company")?.id || ""
@@ -176,7 +177,7 @@ export default function StockReport() {
         <ControlledSelect
           control={control}
           name="company"
-          options={country}
+          options={bigCompanies}
           placeholder=""
           getOptionLabel={(option) => option.name}
           getOptionValue={(option) => option.name}
