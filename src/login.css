@@ -1,3 +1,8 @@
+@font-face {
+  font-family: text-security-disc;
+  src: url("./assets/text-security-disc.woff");
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -101,6 +106,10 @@
   font-weight: 700;
   width: 75%;
   transition: 0.2s;
+}
+
+.password {
+  -webkit-text-security: disc;
 }
 
 .login__input:active,

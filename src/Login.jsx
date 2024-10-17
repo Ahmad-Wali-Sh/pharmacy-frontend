@@ -1,15 +1,15 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import { toast } from "react-toastify";
 import useServerIP from "./components/services/ServerIP";
 import { useUserPermissions } from "./components/States/States";
 import "./login.css";
-import { Audio, Dna } from "react-loader-spinner";
+import LoadingPage from "./features/shared/components/pages/LoadingPage";
 
 function Login() {
   const signIn = useSignIn();
-  const [formData, setFormDate] = React.useState({
+  const [formData, setFormDate] = useState({
     username: "",
     password: "",
   });
@@ -85,23 +85,21 @@ function Login() {
     }
   };
 
-  const [readOnly, setReadonly] = useState(true);
-
   if (serverIP) {
     return (
       <div className="container">
         <div className="screen">
           <div className="screen__content">
-            <form className="login" autoComplete="new-password">
-              <h3 className="title-text">Welcome | Sharif Pharmacy</h3>
+            <form className="login" autoComplete="off">
+              <h3 className="title-text">!خوش آمدید</h3>
               <div className="login__field">
                 <i className="login__icon fas fa-user"></i>
 
                 <input
                   type="text"
                   className="login__input"
-                  placeholder="User name"
-                  autoComplete="new-password"
+                  placeholder="نام کاربری"
+                  autocomplete="off"
                   onChange={(e) =>
                     setFormDate({ ...formData, username: e.target.value })
                   }
@@ -110,20 +108,18 @@ function Login() {
               <div className="login__field">
                 <i className="login__icon fas fa-lock"></i>
                 <input
-                  type="password"
-                  className="login__input"
-                  autoComplete="new-password"
-                  placeholder="Password"
-                  readOnly={readOnly}
-                  onFocus={() => setReadonly(false)}
-                  onBlur={() => setReadonly(true)}
+                  type="text"
+                  className="login__input password"
+                  style={{ textSecurity: 'disc'}}
+                  autocomplete="new" 
+                  placeholder="رمز عبور"
                   onChange={(e) =>
                     setFormDate({ ...formData, password: e.target.value })
                   }
                 />
               </div>
               <button className="button login__submit" onClick={onSubmit}>
-                <span className="button__text">Log In Now</span>
+                <span className="button__text">ورود</span>
                 <i className="button__icon fas fa-chevron-right"></i>
               </button>
             </form>
@@ -139,17 +135,7 @@ function Login() {
     );
   } else {
     return (
-      <div className="loading-page">
-        <Dna
-          visible={true}
-          height="120"
-          width="120"
-          ariaLabel="dna-loading"
-          wrapperStyle={{}}
-          wrapperClass="dna-wrapper"
-        />
-        <h2>لطفا منتظر باشید...</h2>
-      </div>
+      <LoadingPage />
     );
   }
 }

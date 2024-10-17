@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Layount from "./components/Dashboard/Layount";
 import Medician from "./components/Medician/Medician";
 import PageComponent from "./components/PageComponents/PageComponent";
 import Purchase from "./components/Purchase/Purchase";
@@ -9,13 +8,11 @@ import Sell from "./components/Sell/Sell";
 import Login from "./Login";
 import { useIsAuthenticated, useSignOut } from "react-auth-kit";
 import RevenueDashboard from "./components/Revenue/RevenueDashboard";
-import { useTheme } from "./components/States/States";
 import axios from "axios";
 import "./styles.scss";
-import ShortcutListener from "./components/Settings/ShortcutListener";
-import "./fontawesome/css/fontawesome.min.css";
-import "./fontawesome/css/brands.css";
-import "./fontawesome/css/solid.css";
+import "./assets/fontawesome/css/fontawesome.min.css";
+import "./assets/fontawesome/css/brands.css";
+import "./assets/fontawesome/css/solid.css";
 import Return from "./components/Purchase/Return/Return";
 import Journal from "./components/Journal/Journal";
 
@@ -30,9 +27,9 @@ function App() {
 
   const signOut = useSignOut();
   useEffect(() => {
-    signOut()
+    signOut();
     delete axios.defaults.headers.common["Authorization"];
-  }, [])
+  }, []);
 
   return (
     <div className="app">
@@ -44,7 +41,7 @@ function App() {
             element={
               <RequireAuth>
                 <PageComponent>
-                <Purchase />
+                  <Purchase />
                 </PageComponent>
               </RequireAuth>
             }
@@ -59,16 +56,6 @@ function App() {
               </RequireAuth>
             }
           />
-          {/* <Route
-            path="/dashboard"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <Layount />
-                </PageComponent>
-              </RequireAuth>
-            }
-          /> */}
           <Route
             path="/sell"
             element={
