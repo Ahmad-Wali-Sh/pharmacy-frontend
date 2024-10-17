@@ -343,6 +343,7 @@ export default function AutoShopingList({
             ListFilterRef={ListFilterRef}
             fileName={`minimum_list_${formatted_date}`}
             url={`medicine_minimum/?existence_lower_than_minimum_quantity=true`}
+            csv={true}
           ></FilterModal>
           <ListHeader>
             <h4>آی دی</h4>
