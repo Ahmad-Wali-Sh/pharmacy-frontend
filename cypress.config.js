@@ -2,8 +2,9 @@ import { defineConfig } from "cypress";
 
 export default defineConfig({
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+    baseUrl: 'http://172.21.192.1:3000',
+    env: {
+      backendUrl: 'http://127.0.0.1:8000'
+    }
   },
 });
