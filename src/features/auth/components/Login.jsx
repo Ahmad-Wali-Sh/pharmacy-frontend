@@ -44,6 +44,7 @@ function Login() {
 
                   <input
                     type="text"
+                    name='username'
                     className="login__input"
                     placeholder="نام کاربری"
                     autoComplete="off"
@@ -58,6 +59,7 @@ function Login() {
                     type="text"
                     className="login__input password"
                     autoComplete="new"
+                    name='password'
                     placeholder="رمز عبور"
                     onChange={(e) =>
                       setFormDate({ ...formData, password: e.target.value })
