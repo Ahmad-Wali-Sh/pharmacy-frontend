@@ -19,6 +19,7 @@ const useLogin = () => {
       });
       return response.data.auth_token;
     } catch (error) {
+      throw error
     }
   };
 
@@ -33,7 +34,7 @@ const useLogin = () => {
       return response.data
     }
     catch (error) {
-      return;
+      throw error
     }
   }
 
@@ -44,7 +45,6 @@ const useLogin = () => {
       });
       return response.data;
     } catch (error) {
-      errorToast(error)
       throw error; 
     }
   };
@@ -54,7 +54,7 @@ const useLogin = () => {
       const response = await api.get(`api/user/permissions/`);
       setUserPermissions(response.data.permissions);
     } catch (error) {
-      errorToast(error);
+      throw error;
     }
   };
   const performLogin = useCallback(
@@ -66,7 +66,9 @@ const useLogin = () => {
       try {
         await logoutUser(formData);
       } catch (error) {
-        errorToast(error)
+        toast.dismiss(loadingToastID);
+        let guide = 'از درست بودن نام کاربری و رمز عبور مطمئن شوید'
+        errorToast(error, guide)
         return; 
       }
       try {
@@ -85,6 +87,7 @@ const useLogin = () => {
         toast.dismiss(loadingToastID);
       } catch (error) {
         toast.dismiss(loadingToastID);
+        errorToast(error)
       }
     },
     [signIn, setUserPermissions]
