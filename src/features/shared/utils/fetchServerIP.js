@@ -27,11 +27,10 @@ const fetchServerIP = async () => {
       cachedServerIP = successfulEndpoint.value;
       return cachedServerIP;
     } else {
-      throw new Error("All endpoints failed");
     }
   } catch (error) {
     console.error("Error fetching endpoint.json:", error);
-    throw error;
+
   }
 };
 

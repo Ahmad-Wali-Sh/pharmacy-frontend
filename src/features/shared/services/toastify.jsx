@@ -25,10 +25,10 @@ export const detailsToast = (error) => {
     name: {error.name}
     <hr/>
     <br />
-    response: {error.request.response}
+    {error?.request?.response && `response: ${error?.request?.response}`}
     <hr/>
     <br />
-    statusText: {error.request.statusText}
+    {error?.request?.statusText && `statusText: ${error?.request?.statusText}`}
   </div>, {
     autoClose: false
   })

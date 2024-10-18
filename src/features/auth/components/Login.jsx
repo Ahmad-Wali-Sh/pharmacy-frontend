@@ -4,6 +4,7 @@ import LoadingPage from "../../shared/components/pages/LoadingPage";
 import applySavedTheme from "../../shared/services/applySavedTheme";
 import useLogin from "../hook/useLogin";
 import "../styles/login.scss";
+import ErrorPage from "../../shared/components/pages/ErrorPage";
 
 function Login() {
   const [formData, setFormDate] = useState({
@@ -11,13 +12,24 @@ function Login() {
     password: "",
   });
   const { username, password } = formData;
-  const { serverIP } = useServerIP();
+  const { serverIP, error, loading } = useServerIP();
   const performLogin = useLogin();
 
   useEffect(() => {
     applySavedTheme();
   }, []);
 
+  useEffect(() => {
+    console.log(error)
+    console.log(serverIP)
+    console.log(loading)
+  }, [error, serverIP, loading])
+
+  const errorDetails = {
+    message: 'سرور در دسترس نیست',
+    code: '404',
+    name: 'خطای سرور'
+  }
 
   if (serverIP) {
     return (
@@ -69,7 +81,10 @@ function Login() {
         </div>
       </div>
     );
-  } else {
+  } if (!loading) {
+    return <ErrorPage error={errorDetails} />
+  }
+  else {
     return <LoadingPage />;
   }
 }
