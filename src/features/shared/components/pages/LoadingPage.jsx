@@ -4,7 +4,7 @@ import '../../styles/loading-page.scss'
 
 function LoadingPage() {
   return (
-    <div className="loading-page">
+    <div id='loading-page'>
       <Dna
         visible={true}
         height="120"

@@ -1,188 +1,186 @@
-@use '../src/features/shared/styles/breakpoints' as *;
+@use "../src/features/shared/styles/breakpoints" as *;
 
 @font-face {
   font-family: text-security-disc;
   src: url("./assets/text-security-disc.woff");
 }
 
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.title-text {
-  color: grey;
-}
-
-.screen {
-  background: linear-gradient(90deg, var(--primary-200), var(--bg-200));
-  height: 60%;
-  width: 60%;
-  scale: 1.5;
-  box-shadow: 0px 0px 24px var(--primary-200);
-}
-
-.screen__content {
-  z-index: 1;
-  position: relative;
-  height: 100%;
-}
-
-.screen__background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
-  -webkit-clip-path: inset(0 0 0 0);
-  clip-path: inset(0 0 0 0);
-}
-
-.screen__background__shape {
-  transform: rotate(45deg);
-  position: absolute;
-}
-
-.screen__background__shape1 {
-  height: 120%;
-  width: 90%;
-  background: var(--bg-100);
-  top: -10%;
-  right: 50%;
-  border-radius: 0 72px 0 0;
-
-  @media (max-width: $breakpoint-sm) {
-    width: 140%;
-  }
-}
-
-.screen__background__shape2 {
-  height: 220px;
-  width: 220px;
-  background: var(--bg-100);
-  top: -172px;
-  right: 0;
-  border-radius: 32px;
-  @media (max-width: $breakpoint-sm) {
-    display: none;
-  }
-}
-
-.screen__background__shape3 {
-  height: 540px;
-  width: 190px;
-  background: linear-gradient(270deg, var(--bg-100), var(--bg-100));
-  top: -24px;
-  right: 0;
-  border-radius: 32px;
-  @media (max-width: $breakpoint-sm) {
-    display: none;
-  }
-}
-
-.screen__background__shape4 {
-  height: 400px;
-  width: 200px;
-  background: var(--bg-200);
-  top: 420px;
-  right: 50px;
-  border-radius: 60px;
-}
-
-.login {
-  width: 100%;
-  height: 100%;
-  padding: 10%
-}
-
-.login__field {
-  padding: 20px 0px;
-  position: relative;
-}
-
-.login__icon {
-  position: absolute;
-  top: 30px;
-  color: var(--primary-200);
-}
-
-.login__input {
-  border: none;
-  border-bottom: 2px solid #d1d1d4;
-  background: none;
-  color: var(--text-100);
-  padding: 10px;
-  padding-left: 24px;
-  font-weight: 700;
-  width: 30%;
-  transition: 1s;
-
-  @media (max-width: $breakpoint-sm) {
-    width: 80%;
-  }
-  @media (max-width: $breakpoint-tb) {
-    width: 80%;
-  }
-}
-
-.password {
-  -webkit-text-security: disc;
-}
-
-.login__input:active,
-.login__input:focus,
-.login__input:hover {
-  outline: none;
-  border-bottom-color: var(--bg-200);
-}
-
-.login__submit {
-  background: #fff;
-  font-size: 14px;
-  padding: 16px 20px;
-  border-radius: 26px;
-  margin-top: 2%;
-  text-transform: uppercase;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  width: 30%;
-  height: 8%;
-  color: var(--primary-100);
-  box-shadow: 0px 2px 2px var(--primary-300);
-  cursor: pointer;
-  transition: 0.2s;
-
-  &:hover {
-    background-color: var(--primary-100);
-    color: white;
+#login {
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
   }
 
-  @media (max-width: $breakpoint-sm){
-    width: 80%;
+  .title-text {
+    color: grey;
   }
-  @media (max-width: $breakpoint-tb){
-    width: 80%;
+
+  .screen {
+    background: linear-gradient(90deg, var(--primary-200), var(--bg-200));
+    height: 60%;
+    width: 60%;
+    scale: 1.5;
+    box-shadow: 0px 0px 24px var(--primary-200);
   }
-  
+
+  .screen__content {
+    z-index: 1;
+    position: relative;
+    height: 100%;
+  }
+
+  .screen__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    -webkit-clip-path: inset(0 0 0 0);
+    clip-path: inset(0 0 0 0);
+  }
+
+  .screen__background__shape {
+    transform: rotate(45deg);
+    position: absolute;
+  }
+
+  .screen__background__shape1 {
+    height: 120%;
+    width: 90%;
+    background: var(--bg-100);
+    top: -10%;
+    right: 50%;
+    border-radius: 0 72px 0 0;
+
+    @media (max-width: $breakpoint-sm) {
+      width: 140%;
+    }
+  }
+
+  .screen__background__shape2 {
+    height: 220px;
+    width: 220px;
+    background: var(--bg-100);
+    top: -172px;
+    right: 0;
+    border-radius: 32px;
+    @media (max-width: $breakpoint-sm) {
+      display: none;
+    }
+  }
+
+  .screen__background__shape3 {
+    height: 540px;
+    width: 190px;
+    background: linear-gradient(270deg, var(--bg-100), var(--bg-100));
+    top: -24px;
+    right: 0;
+    border-radius: 32px;
+    @media (max-width: $breakpoint-sm) {
+      display: none;
+    }
+  }
+
+  .screen__background__shape4 {
+    height: 400px;
+    width: 200px;
+    background: var(--bg-200);
+    top: 420px;
+    right: 50px;
+    border-radius: 60px;
+  }
+
+  .login {
+    width: 100%;
+    height: 100%;
+    padding: 10%;
+  }
+
+  .login__field {
+    padding: 20px 0px;
+    position: relative;
+  }
+
+  .login__icon {
+    position: absolute;
+    top: 30px;
+    color: var(--primary-200);
+  }
+
+  .login__input {
+    border: none;
+    border-bottom: 2px solid #d1d1d4;
+    background: none;
+    color: var(--text-100);
+    padding: 10px;
+    padding-left: 24px;
+    font-weight: 700;
+    width: 30%;
+    transition: 1s;
+
+    @media (max-width: $breakpoint-sm) {
+      width: 80%;
+    }
+    @media (max-width: $breakpoint-tb) {
+      width: 80%;
+    }
+  }
+
+  .password {
+    -webkit-text-security: disc;
+  }
+
+  .login__input:active,
+  .login__input:focus,
+  .login__input:hover {
+    outline: none;
+    border-bottom-color: var(--bg-200);
+  }
+
+  .login__submit {
+    background: #fff;
+    font-size: 14px;
+    padding: 16px 20px;
+    border-radius: 26px;
+    margin-top: 2%;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    width: 30%;
+    height: 8%;
+    color: var(--primary-100);
+    box-shadow: 0px 2px 2px var(--primary-300);
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background-color: var(--primary-100);
+      color: white;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      width: 80%;
+    }
+    @media (max-width: $breakpoint-tb) {
+      width: 80%;
+    }
+  }
+
+  .login__submit:active,
+  .login__submit:focus,
+  .login__submit:hover {
+    border-color: var(--primary-300);
+    outline: none;
+  }
+
+  .button__icon {
+    font-size: 24px;
+    margin-left: auto;
+    color: var(--primary-200);
+  }
 }
-
-.login__submit:active,
-.login__submit:focus,
-.login__submit:hover {
-  border-color: var(--primary-300);
-  outline: none;
-}
-
-.button__icon {
-  font-size: 24px;
-  margin-left: auto;
-  color: var(--primary-200);
-}
-
-

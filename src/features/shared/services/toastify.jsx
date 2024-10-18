@@ -1,9 +1,10 @@
 import { toast } from "react-toastify";
+import '../styles/toast.scss'
 
-export const errorToast = (error) => {
+export const errorToast = (error, guide) => {
   return (
     toast.error(<div onClick={() => {
-      detailsToast(error)
+      detailsToast(error, guide)
     }}>
       !خطا
       <h6>برای اطلاعات بیشتر کلیک کنید</h6>
@@ -14,21 +15,16 @@ export const errorToast = (error) => {
   )
 };
 
-export const detailsToast = (error) => {
-  toast.warn(<div>
-    message: {error.message}
-    <hr/>
-    <br />
-    code: {error.code}
-    <hr/>
-    <br />
-    name: {error.name}
-    <hr/>
-    <br />
-    {error?.request?.response && `response: ${error?.request?.response}`}
-    <hr/>
-    <br />
-    {error?.request?.statusText && `statusText: ${error?.request?.statusText}`}
+
+
+export const detailsToast = (error, guide) => {
+  toast.info(<div id="detail-toast">
+    <h4><span>message:</span> {error.message}</h4>
+    <h4><span>code:</span> {error.code}</h4>
+    <h4><span>name:</span> {error.name}</h4>
+    {error?.request?.response && <h4><span>response:</span> {error?.request?.response}</h4>}
+    {error?.request?.statusText && <h4><span>statusText:</span> {error?.request?.statusText}</h4>}
+    {guide && <h4><span>guide:</span> {guide}</h4>}
   </div>, {
     autoClose: false
   })
