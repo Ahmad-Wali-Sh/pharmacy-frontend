@@ -2,7 +2,8 @@ import { NavLink } from 'react-router-dom';
 import React from "react";
 import { useAuthUser } from "react-auth-kit";
 import axios from "axios";
-import { useTemplateLogo, useUserPermissions } from "../States/States";
+import { useTemplateLogo } from "../States/States";
+import { useUserPermissions } from '../../features/shared/hooks/states/useUserPermissions';
 
 function Navbar() {
   const auth = useAuthUser();

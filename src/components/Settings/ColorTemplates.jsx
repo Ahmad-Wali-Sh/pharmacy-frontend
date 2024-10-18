@@ -7,7 +7,6 @@ function ColorTemplates() {
   const TemplateColorsRef = useRef(null);
   const { templateLogo, setTemplateLogo } = useTemplateLogo();
 
-    // Function to get theme from localStorage and apply it
     const applySavedTheme = () => {
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) {
@@ -16,7 +15,6 @@ function ColorTemplates() {
       }
     };
 
-    // Function to apply theme
     const applyTheme = (theme) => {
       const root = document.documentElement;
       Object.keys(theme).forEach((key) => {

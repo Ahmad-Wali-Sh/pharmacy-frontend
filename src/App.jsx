@@ -5,7 +5,7 @@ import PageComponent from "./components/PageComponents/PageComponent";
 import Purchase from "./components/Purchase/Purchase";
 import Reports from "./components/Reports/Reports";
 import Sell from "./components/Sell/Sell";
-import Login from "./Login";
+import Login from "./features/auth/components/Login";
 import { useIsAuthenticated, useSignOut } from "react-auth-kit";
 import RevenueDashboard from "./components/Revenue/RevenueDashboard";
 import axios from "axios";

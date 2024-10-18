@@ -18,6 +18,10 @@
   transition-timing-function: ease-in;
 }
 
+body {
+  height: 100%;
+}
+
 @media print {
   /* Hide elements that are not needed for print */
   .no-print {
