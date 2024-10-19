@@ -45,9 +45,11 @@ const PrescriptionDetailedPrint = React.forwardRef(({prescriptionThrough, prescr
             <h3>{prescription?.grand_total}</h3>
             <h3>قابل پرداخت</h3>
             <h3>{parseFloat(prescription?.grand_total) - parseFloat(prescription?.discount_value) + parseFloat(prescription?.over_value)}</h3>
-            <h3 style={{border:'none'}}>هدایت</h3>
-            <h3 style={{border:'none'}}>احمد رشید</h3>
  
+        </div>
+        <div className="flex">
+            <h3 style={{border:'none'}}>هدایت</h3>
+            <h3 style={{border:'none'}}>{prescription?.order_user_name}</h3>
         </div>
         <div>
             <h3 style={{border:'none'}}>بارکد</h3>
