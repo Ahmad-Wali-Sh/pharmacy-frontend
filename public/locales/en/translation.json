@@ -9,6 +9,7 @@
     "toast": {
         "toast-error-label": "Error!",
         "toast-click-to-more-text": "Click For More Information",
-        "toast-loading-text": "Please Wait..."
+        "toast-loading-text": "Please Wait...",
+        "success-title": "Operation Succeed!"
     }
 }

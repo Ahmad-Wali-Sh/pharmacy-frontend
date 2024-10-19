@@ -1,10 +1,11 @@
 import { defineConfig } from "cypress";
 
+const ip = '192.168.0.105'
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://172.21.192.1:3000',
+    baseUrl: `http://${ip}:3000`,
     env: {
-      backendUrl: 'http://127.0.0.1:8000'
+      backendUrl: `http://${ip}:8000`
     }
   },
 });

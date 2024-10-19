@@ -9,6 +9,7 @@
     "toast": {
         "toast-error-label": "!خطا",
         "toast-click-to-more-text": "برای اطلاعات بیشتر کلیک کنید",
-        "toast-loading-text": "...لطفا منتظر باشید"
+        "toast-loading-text": "...لطفا منتظر باشید",
+        "success-title": "!عملیات موفقانه بود"
     }
 }

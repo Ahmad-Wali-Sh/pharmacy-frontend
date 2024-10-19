@@ -1,63 +1,18 @@
 import { useCallback } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import api from "../../shared/services/api";
 import { useSignIn } from "react-auth-kit";
 import { useUserPermissions } from "../../shared/hooks/states/useUserPermissions";
 import { errorToast, successToast, loadingToast, dismissToast } from "../../shared/services/toastify";
 import { useTranslation } from "react-i18next";
+import { loginUser, TerminateUserSession } from "../utils/loginUtils";
+import { fetchUserDetails, fetchUserPermissions } from "../../shared/api/fetchers";
 
 const useLogin = () => {
   const signIn = useSignIn();
   const { setUserPermissions } = useUserPermissions();
   const { t } = useTranslation()
-  const loginUser = async (formData) => {
-    try {
-      const response = await api.post(`auth/token/login/`, formData, {
-        headers: {
-          Authorization: ''
-        }
-      });
-      return response.data.auth_token;
-    } catch (error) {
-      throw error
-    }
-  };
 
-  const logoutUser = async (formData) => {
-    try {
-      const authToken = await loginUser(formData)
-      const response = await api.post('auth/token/logout/', {}, {
-        headers: {
-          Authorization: `Token ${authToken}`
-        }
-      })
-      return response.data
-    }
-    catch (error) {
-      throw error
-    }
-  }
-
-  const fetchUserDetails = async (token) => {
-    try {
-      const response = await api.get(`auth/users/me/`, {
-        headers: { Authorization: `Token ${token}` },
-      });
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
-  };
-
-  const fetchUserPermissions = async () => {
-    try {
-      const response = await api.get(`api/user/permissions/`);
-      setUserPermissions(response.data.permissions);
-    } catch (error) {
-      throw error;
-    }
-  };
   const performLogin = useCallback(
     async (e, { username, password }) => {
       e.preventDefault();
@@ -65,7 +20,7 @@ const useLogin = () => {
       const formData = { username, password };
 
       try {
-        await logoutUser(formData);
+        await TerminateUserSession(formData);
       } catch (error) {
         dismissToast()
         let guide = t('login.login-error-guide')
@@ -84,7 +39,8 @@ const useLogin = () => {
           authState: userDetails,
         });
         successToast(`${userDetails.first_name}: خوش آمدید`);
-        await fetchUserPermissions();
+        const UserPermissions  = await fetchUserPermissions();
+        setUserPermissions(UserPermissions)
         dismissToast()
       } catch (error) {
         dismissToast()

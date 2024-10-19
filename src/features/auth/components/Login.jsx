@@ -14,18 +14,12 @@ function Login() {
     password: "",
   });
   const { username, password } = formData;
-  const { serverIP, error, loading } = useServerIP();
+  const { serverIP, loading } = useServerIP();
   const performLogin = useLogin();
 
   useEffect(() => {
     applySavedTheme();
   }, []);
-
-  useEffect(() => {
-    console.log(error);
-    console.log(serverIP);
-    console.log(loading);
-  }, [error, serverIP, loading]);
 
   const errorDetails = {
     message: "سرور در دسترس نیست",

@@ -10,8 +10,8 @@ export const errorToast = (error, guide) => {
         detailsToast(error, guide);
       }}
     >
-      {i18next.t('toast.toast-error-label')}
-      <h6>{i18next.t("toast.toast-click-to-more-text")}</h6>
+      <h4>{i18next.t('toast.toast-error-label')}</h4>
+      <h5>{i18next.t("toast.toast-click-to-more-text")}</h5>
     </div>,
     {
       autoClose: 5000,
@@ -76,7 +76,7 @@ export const dismissToast = () => {
 };
 
 export const successToast = (message) => {
-  toast.success(<div>{message}</div>);
+  toast.success(<div>{i18next.t("toast.success-title")}</div>);
 };
 
 const infoToast = () => {};

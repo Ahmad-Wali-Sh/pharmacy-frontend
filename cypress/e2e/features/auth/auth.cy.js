@@ -26,6 +26,6 @@ describe("Authentication Test-Cases", () => {
     cy.get("input[name='password']").type("wrongPass");
     cy.get("button[class='login__submit']").click();
     cy.get("#error-toast").click();
-    cy.contains("credentials").click();
+    cy.contains(/crediantials/i).click();
   });
 });
