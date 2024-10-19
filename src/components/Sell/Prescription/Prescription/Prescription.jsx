@@ -202,6 +202,7 @@ export default function Prescription(props) {
                 <PrescriptionReportBox
                   report={report}
                   prescription={prescription}
+                  prescriptionThrough={prescriptionThrough}
                   BackFunc={() => handleSurfPrescription('previous')}
                   FrontFunc={() => handleSurfPrescription('next')}
                 />

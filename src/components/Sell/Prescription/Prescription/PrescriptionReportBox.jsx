@@ -6,9 +6,11 @@ import useServerIP from "../../../services/ServerIP";
 import { useAuthUser } from "react-auth-kit";
 import { toast } from "react-toastify";
 import Barcode from "react-barcode";
+import PrescriptionDetailedPrint from "./PrescriptionDetailedPrint";
 
-function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
+function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc, prescriptionThrough }) {
   let PrescriptiontoPrintRef = useRef(null);
+  let PrescriptiontoDetailedPrintRef = useRef(null);
 
   const [barcode,setBarcode] = useState(null)
 
@@ -28,6 +30,10 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
   const handlePrint = useReactToPrint({
     content: () => PrescriptiontoPrintRef.current,
   });
+
+  const handleDetailedPrint = useReactToPrint({
+    content: () => PrescriptiontoDetailedPrintRef.current
+  })
   const {serverIP}= useServerIP()
   const user = useAuthUser()
 
@@ -59,6 +65,9 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [serverIP, user]);
+
+  const [prindSection, setPrintSection] = useState(false)
+  const [printOption, setPrintOption] = useState('prescription')
 
   return (
     <div className="entrance-report">
@@ -135,16 +144,39 @@ function PrescriptionReportBox({ report, prescription, BackFunc, FrontFunc }) {
           </button>
           <button
             onClick={() => {
-              handlePrint();
-              OrderSubmit()
+
+              setPrintSection(prev => !prev)
             }}
             className="entrance-report-button"
           >
             <i class="fa-solid fa-comments-dollar"></i>
           </button>
+          {prindSection && <div className="print-selection-container">
+            <select onChange={(e) => {
+              setPrintOption(e.target.value)
+            }} value={printOption}>
+              <option value='prescription'>برگه مربوطه صندوق</option>
+              <option value='detailed'>برگه اطلاعات اقلام</option>
+            </select>
+            <button onClick={() => {
+              if (printOption == 'prescription') {
+                handlePrint();
+              }
+              if (printOption == 'detailed') {
+                handleDetailedPrint()
+              }
+              OrderSubmit();
+            }}>چاپ</button>
+          </div>}
           <div style={{ display: "none" }}>
             {barcode && <PrescriptionPrint
               ref={PrescriptiontoPrintRef}
+              prescription={prescription}
+              barcode={barcode}
+            />}
+            {barcode && <PrescriptionDetailedPrint
+              ref={PrescriptiontoDetailedPrintRef}
+              prescriptionThrough={prescriptionThrough}
               prescription={prescription}
               barcode={barcode}
             />}
