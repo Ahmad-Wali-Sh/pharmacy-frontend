@@ -5,6 +5,7 @@ import i18next from "i18next";
 export const errorToast = (error, guide) => {
   return toast.error(
     <div
+      id='error-toast'
       onClick={() => {
         detailsToast(error, guide);
       }}
@@ -57,7 +58,7 @@ let toastId = null;
 
 export const loadingToast = () => {
   toastId = toast.loading(
-    <div>
+    <div id='loading-toast'>
       {i18next.t('toast.toast-loading-text')}
     </div>,
     {
