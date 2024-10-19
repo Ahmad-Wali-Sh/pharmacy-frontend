@@ -1,7 +1,10 @@
 import React from "react";
 import moment from 'jalali-moment';
+import { useAuthUser } from "react-auth-kit";
 
 const PrescriptionDetailedPrint = React.forwardRef(({prescriptionThrough, prescription, barcode}, ref) => {
+
+    const user = useAuthUser();
   return (
     <div className='detailed-print-container' ref={ref}>
         <div className="title">دواخانه شریف</div>
@@ -49,7 +52,7 @@ const PrescriptionDetailedPrint = React.forwardRef(({prescriptionThrough, prescr
         </div>
         <div className="flex">
             <h3 style={{border:'none'}}>هدایت</h3>
-            <h3 style={{border:'none'}}>{prescription?.order_user_name}</h3>
+            <h3 style={{border:'none'}}>{user().first_name + ' ' + user()?.last_name}</h3>
         </div>
         <div>
             <h3 style={{border:'none'}}>بارکد</h3>
