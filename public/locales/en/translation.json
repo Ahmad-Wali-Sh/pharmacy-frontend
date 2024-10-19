@@ -1,0 +1,14 @@
+{
+    "welcome": "Welcome!",
+    "login": {
+        "user-input-placeholder": "Username",
+        "password-input-placeholder": "Password",
+        "login-button-text": "Login",
+        "login-error-guide": "Please enter correct crediantials."
+    },
+    "toast": {
+        "toast-error-label": "Error!",
+        "toast-click-to-more-text": "Click For More Information",
+        "toast-loading-text": "Please Wait..."
+    }
+}

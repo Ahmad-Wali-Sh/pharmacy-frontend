@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "react-auth-kit";
 import { QueryClientProvider } from 'react-query'
 import { queryClient } from './components/services/API'
+import './i18n';
 
 
 

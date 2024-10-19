@@ -5,8 +5,10 @@ import applySavedTheme from "../../shared/services/applySavedTheme";
 import useLogin from "../hook/useLogin";
 import "../styles/login.scss";
 import ErrorPage from "../../shared/components/pages/ErrorPage";
+import { useTranslation } from "react-i18next";
 
 function Login() {
+  const { t } = useTranslation()
   const [formData, setFormDate] = useState({
     username: "",
     password: "",
@@ -38,7 +40,7 @@ function Login() {
           <div className="screen">
             <div className="screen__content">
               <form className="login" autoComplete="off">
-                <h3 className="title-text">!خوش آمدید</h3>
+                <h3 className="title-text">{t('welcome')}</h3>
                 <div className="login__field">
                   <i className="login__icon fas fa-user"></i>
 
@@ -46,7 +48,7 @@ function Login() {
                     type="text"
                     name='username'
                     className="login__input"
-                    placeholder="نام کاربری"
+                    placeholder={t('login.user-input-placeholder')}
                     autoComplete="off"
                     onChange={(e) =>
                       setFormDate({ ...formData, username: e.target.value })
@@ -60,7 +62,7 @@ function Login() {
                     className="login__input password"
                     autoComplete="new"
                     name='password'
-                    placeholder="رمز عبور"
+                    placeholder={t('login.password-input-placeholder')}
                     onChange={(e) =>
                       setFormDate({ ...formData, password: e.target.value })
                     }
@@ -70,7 +72,7 @@ function Login() {
                   className="login__submit"
                   onClick={(e) => performLogin(e, { username, password })}
                 >
-                  <span className="">ورود</span>
+                  <span className="">{t('login.login-button-text')}</span>
                   <i className="button__icon fas fa-chevron-right"></i>
                 </button>
               </form>

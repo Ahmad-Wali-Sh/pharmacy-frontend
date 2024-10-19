@@ -4,12 +4,13 @@ import { toast } from "react-toastify";
 import api from "../../shared/services/api";
 import { useSignIn } from "react-auth-kit";
 import { useUserPermissions } from "../../shared/hooks/states/useUserPermissions";
-import { errorToast, successToast } from "../../shared/services/toastify";
+import { errorToast, successToast, loadingToast, dismissToast } from "../../shared/services/toastify";
+import { useTranslation } from "react-i18next";
 
 const useLogin = () => {
   const signIn = useSignIn();
   const { setUserPermissions } = useUserPermissions();
-
+  const { t } = useTranslation()
   const loginUser = async (formData) => {
     try {
       const response = await api.post(`auth/token/login/`, formData, {
@@ -60,14 +61,14 @@ const useLogin = () => {
   const performLogin = useCallback(
     async (e, { username, password }) => {
       e.preventDefault();
-      const loadingToastID = toast.loading('در حال اجرا، لطفا منتظر بمانید')
+      loadingToast()
       const formData = { username, password };
 
       try {
         await logoutUser(formData);
       } catch (error) {
-        toast.dismiss(loadingToastID);
-        let guide = 'از درست بودن نام کاربری و رمز عبور مطمئن شوید'
+        dismissToast()
+        let guide = t('login.login-error-guide')
         errorToast(error, guide)
         return; 
       }
@@ -84,9 +85,9 @@ const useLogin = () => {
         });
         successToast(`${userDetails.first_name}: خوش آمدید`);
         await fetchUserPermissions();
-        toast.dismiss(loadingToastID);
+        dismissToast()
       } catch (error) {
-        toast.dismiss(loadingToastID);
+        dismissToast()
         errorToast(error)
       }
     },

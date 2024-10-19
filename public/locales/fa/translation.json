@@ -1,0 +1,14 @@
+{
+    "welcome": "!خوش آمدید",
+    "login": {
+        "user-input-placeholder": "نام کاربری",
+        "password-input-placeholder": "رمز عبور",
+        "login-button-text": "ورود",
+        "login-error-guide": "از درست بودن نام کاربری و رمز عبورتان، اطمینان حاصل کنید"
+    },
+    "toast": {
+        "toast-error-label": "!خطا",
+        "toast-click-to-more-text": "برای اطلاعات بیشتر کلیک کنید",
+        "toast-loading-text": "...لطفا منتظر باشید"
+    }
+}
