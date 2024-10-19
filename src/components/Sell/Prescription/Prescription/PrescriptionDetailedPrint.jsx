@@ -7,7 +7,7 @@ const PrescriptionDetailedPrint = React.forwardRef(({prescriptionThrough, prescr
         <div className="title">دواخانه شریف</div>
         <div className="details">
             <h3>زمان</h3>
-            <h3 >{moment().format('hhmm A')}</h3>
+            <h3 >{moment().format('hh:mm A')}</h3>
             <h3>تاریخ</h3>
             <h3>{moment().format('jYYYY-jMM-jDD')}</h3>
             <h3>مریض</h3>
