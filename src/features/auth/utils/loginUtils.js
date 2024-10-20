@@ -2,12 +2,13 @@ import api from "../../shared/services/api";
 
 const loginUser = async (formData) => {
     try {
-      const response = await api.post(`auth/token/login/`, formData, {
+      const response = await api.post(`api/login/`, formData, {
         headers: {
           Authorization: ''
         }
       });
-      return response.data.auth_token;
+      console.log(response.data)
+      return response.data.token;
     } catch (error) {
       throw error
     }
@@ -17,7 +18,7 @@ const loginUser = async (formData) => {
 
 const TerminateUserSession = async (formData) => {
     try {
-      const response = await api.post('auth/terminate-token/', formData)
+      const response = await api.post('api/terminate-token/', formData)
       return response.data
     }
     catch (error) {

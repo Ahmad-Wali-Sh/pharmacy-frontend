@@ -19,14 +19,14 @@ const useLogin = () => {
       loadingToast()
       const formData = { username, password };
 
-      try {
-        await TerminateUserSession(formData);
-      } catch (error) {
-        dismissToast()
-        let guide = t('login.login-error-guide')
-        errorToast(error, guide)
-        return; 
-      }
+      // try {
+      //   await TerminateUserSession(formData);
+      // } catch (error) {
+      //   dismissToast()
+      //   let guide = t('login.login-error-guide')
+      //   errorToast(error, guide)
+      //   return; 
+      // }
       try {
         const authToken = await loginUser(formData);
         api.defaults.headers.common["Authorization"] = `Token ${authToken}`;
