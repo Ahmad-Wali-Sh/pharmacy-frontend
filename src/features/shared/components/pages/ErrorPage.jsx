@@ -1,13 +1,15 @@
 import React from "react";
 import { detailsToast } from "../../services/toastify";
 import "../../styles/error-page.scss";
+import { useTranslation } from "react-i18next";
 
 function ErrorPage({ error, guide }) {
+  const { t } = useTranslation()
   const errorDetails = {
-    message: "سرور در دسترس نیست",
-    code: "404",
-    name: "خطای سرور",
-    guide: "سرور را فعال نموده دوباره سعی کنید",
+    message: t('server-down.message'),
+    code: t('server-down.code'),
+    name: t('server-down.name'),
+    guide: t('server-down.guide'),
   };
   return (
     <div id='error-page'>
@@ -20,7 +22,7 @@ function ErrorPage({ error, guide }) {
       <div className="main">
         <h1>404</h1>
         <p>
-          سرور در دسترس نیست
+          {t('server-down.message')}
           <hr />
         </p>
         <button
@@ -28,7 +30,7 @@ function ErrorPage({ error, guide }) {
             detailsToast(error || errorDetails, guide || errorDetails.guide);
           }}
         >
-          برای اطلاعات بیشتر کلیک کنید
+          {t('server-down.button')}
         </button>
       </div>
     </div>

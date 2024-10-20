@@ -1,10 +1,18 @@
-const applySavedTheme = () => {
-    const savedTheme = localStorage.getItem('theme');
+import { useEffect } from "react";
+
+const useApplySavedTheme = () => {
+  
+  const savedTheme = localStorage.getItem('theme');
+  useEffect(()=> {
     if (savedTheme) {
       const theme = JSON.parse(savedTheme);
       applyTheme(theme);
     }
+
+  }, [savedTheme])
 };
+
+
 
 const applyTheme = (theme) => {
     const root = document.documentElement;
@@ -13,4 +21,4 @@ const applyTheme = (theme) => {
     });
 };
 
-export default applySavedTheme;
+export default useApplySavedTheme;

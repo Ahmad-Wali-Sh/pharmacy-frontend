@@ -1,123 +1,26 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Medician from "./components/Medician/Medician";
-import PageComponent from "./components/PageComponents/PageComponent";
-import Purchase from "./components/Purchase/Purchase";
-import Reports from "./components/Reports/Reports";
-import Sell from "./components/Sell/Sell";
-import Login from "./features/auth/components/Login";
-import { useIsAuthenticated, useSignOut } from "react-auth-kit";
-import RevenueDashboard from "./components/Revenue/RevenueDashboard";
-import axios from "axios";
-import "./styles.scss";
-import "./assets/fontawesome/css/fontawesome.min.css";
-import "./assets/fontawesome/css/brands.css";
-import "./assets/fontawesome/css/solid.css";
-import Return from "./components/Purchase/Return/Return";
-import Journal from "./components/Journal/Journal";
+import React from "react";
+import Routes from "@/features/routes/components/Routes";
+import useApplyDirection from "./features/shared/hooks/applyDirections";
+import useSignout from "./features/shared/hooks/useSignout";
+import useApplySavedTheme from "./features/shared/services/useApplySavedTheme";
+import { ToastContainer, Flip } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const RequireAuth = ({ children }) => {
-    const isAuthenticated = useIsAuthenticated();
-    if (!isAuthenticated()) {
-      return <Login />;
-    }
-    return children;
-  };
-
-  const signOut = useSignOut();
-  useEffect(() => {
-    signOut();
-    delete axios.defaults.headers.common["Authorization"];
-  }, []);
+  useSignout();
+  useApplyDirection();
+  useApplySavedTheme();
 
   return (
     <div className="app">
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <Purchase />
-                </PageComponent>
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/purchase"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <Purchase />
-                </PageComponent>
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/sell"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <Sell />
-                </PageComponent>
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/return"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <Return />
-                </PageComponent>
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/medician"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <Medician />
-                </PageComponent>
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/reports"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <Reports />
-                </PageComponent>
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/revenue"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <RevenueDashboard />
-                </PageComponent>
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/journal"
-            element={
-              <RequireAuth>
-                <PageComponent>
-                  <Journal />
-                </PageComponent>
-              </RequireAuth>
-            }
-          />
-        </Routes>
-      </Router>
+      <ToastContainer
+        position="top-left"
+        autoClose={700}
+        transition={Flip}
+        theme="dark"
+        pauseOnHover={true}
+      />
+      <Routes />
     </div>
   );
 }

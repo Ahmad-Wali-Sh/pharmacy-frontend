@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useServerIP from "../../shared/hooks/useServerIP";
 import LoadingPage from "../../shared/components/pages/LoadingPage";
-import applySavedTheme from "../../shared/services/applySavedTheme";
 import useLogin from "../hook/useLogin";
 import "../styles/login.scss";
 import ErrorPage from "../../shared/components/pages/ErrorPage";
@@ -17,15 +16,6 @@ function Login() {
   const { serverIP, loading } = useServerIP();
   const performLogin = useLogin();
 
-  useEffect(() => {
-    applySavedTheme();
-  }, []);
-
-  const errorDetails = {
-    message: "سرور در دسترس نیست",
-    code: "404",
-    name: "خطای سرور",
-  };
 
   if (serverIP) {
     return (
@@ -83,7 +73,7 @@ function Login() {
     );
   }
   if (!loading) {
-    return <ErrorPage error={errorDetails} />;
+    return <ErrorPage />;
   } else {
     return <LoadingPage />;
   }

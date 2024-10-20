@@ -1,5 +1,6 @@
 {
     "welcome": "!خوش آمدید",
+    "loading": "...لطفا منتظر باشید",
     "login": {
         "user-input-placeholder": "نام کاربری",
         "password-input-placeholder": "رمز عبور",
@@ -11,5 +12,12 @@
         "toast-click-to-more-text": "برای اطلاعات بیشتر کلیک کنید",
         "toast-loading-text": "...لطفا منتظر باشید",
         "success-title": "!عملیات موفقانه بود"
+    },
+    "server-down": {
+        "message": "سرور در دسترس نیست",
+        "code": "404",
+        "name": "خطای سرور",
+        "guide": "سرور را فعال نموده دوباره سعی کنید",
+        "button": "برای اطلاعات بیشتر کلیک کنید"
     }
 }

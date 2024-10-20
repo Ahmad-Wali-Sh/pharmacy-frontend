@@ -1,4 +1,4 @@
-import api from "../../shared/services/api";
+import api from "../../shared/utils/api";
 
 const loginUser = async (formData) => {
     try {

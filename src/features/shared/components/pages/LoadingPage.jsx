@@ -1,8 +1,10 @@
 import React from "react";
 import { Dna } from "react-loader-spinner";
 import '../../styles/loading-page.scss'
+import { useTranslation } from "react-i18next";
 
 function LoadingPage() {
+  const { t } = useTranslation()
   return (
     <div id='loading-page'>
       <Dna
@@ -13,7 +15,7 @@ function LoadingPage() {
         wrapperStyle={{}}
         wrapperClass="dna-wrapper"
       />
-      <h2>لطفا منتظر باشید...</h2>
+      <h2>{t('loading')}</h2>
     </div>
   );
 }

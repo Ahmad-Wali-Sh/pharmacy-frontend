@@ -1,5 +1,6 @@
 {
     "welcome": "Welcome!",
+    "loading": "Please Wait...",
     "login": {
         "user-input-placeholder": "Username",
         "password-input-placeholder": "Password",
@@ -11,5 +12,12 @@
         "toast-click-to-more-text": "Click For More Information",
         "toast-loading-text": "Please Wait...",
         "success-title": "Operation Succeed!"
+    },
+    "server-down": {
+        "message": "Server is Down",
+        "code": "404",
+        "name": "Server Error",
+        "guide": "Try again after activating server process",
+        "button": "Click For More Details"
     }
 }

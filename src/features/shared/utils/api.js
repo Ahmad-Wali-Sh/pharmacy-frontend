@@ -1,5 +1,5 @@
 import axios from 'axios';
-import fetchServerIP from '../utils/fetchServerIP';
+import fetchServerIP from './fetchServerIP';
 
 const serverIP = await fetchServerIP();
 

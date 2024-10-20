@@ -1,3 +1,5 @@
+@use 'mixins';
+
 #loading-page {
     width: 100%;
     height: 100vh;
@@ -6,10 +8,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  
-    h2 {
-      direction: rtl;
-      color: var(--text-100)
-    }
+    color: var(--text-100);
+
 }
 

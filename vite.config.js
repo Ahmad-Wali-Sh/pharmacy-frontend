@@ -4,6 +4,7 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 import purgecss from "vite-plugin-purgecss";
 import compression from "vite-plugin-compression";
 import { visualizer } from "rollup-plugin-visualizer";
+import path from 'path';
 
 export default defineConfig({
   server: {
@@ -31,8 +32,13 @@ export default defineConfig({
       ...visualizer(),
       enforce: "pre",
       apply: "build",
-    },
+    },    
   ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),  // Alias '@' for the 'src' directory
+    },
+  },
   css: {
     preprocessorOptions: {
       scss: {},

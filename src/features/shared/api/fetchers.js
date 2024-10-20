@@ -1,4 +1,4 @@
-import api from "../services/api";
+import api from "../utils/api";
 
 const fetchUserDetails = async (token) => {
     try {
