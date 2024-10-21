@@ -955,6 +955,43 @@ input[type="text"]:disabled {
   box-shadow: -4px -4px 4px var(--primary-200);
 }
 
+.print-selection-container{
+  width: 15%;
+  position: absolute;
+  margin-top: 3rem;
+  background-color: var(--bg-200);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0.4rem;
+  border-radius: 1rem;
+  select {
+    background-color: var(--bg-100);
+    border: none;
+    border-radius: 1rem;
+    padding-left: 1rem;
+    direction: ltr;
+    font-size: 1rem;
+    color: var(--text-100);
+    height: inherit;
+  }
+
+  select:focus {
+    box-shadow: -4px -4px 4px var(--primary-200);
+  }
+  select:disabled {
+    background-color: var(--bg-300);
+  }
+
+  button {
+    border-radius: 1rem;
+    margin: 0.3rem;
+    background-color: var(--primary-100);
+    color: var(--text-100);
+    padding: 0.4rem;
+  }
+}
+
 .entrance-through > input {
   height: 1.47rem;
   border-radius: 1rem;
@@ -4970,3 +5007,53 @@ input[type="text"]:disabled {
 .expiry-batch-detail {
   color: rgb(163, 163, 163);
 }
+
+
+.detailed-print-container {
+  width: 100%;
+  direction: rtl;
+  padding: 1rem;
+
+  * {
+    direction: rtl;
+  }
+
+  .title {
+    padding: 0.2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid black;
+    width: 100%;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  h3 {
+    border-bottom: 2px dashed grey;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    text-align: right;
+    direction: ltr;
+  }
+
+  .details {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  .medicine-details {
+    width: 100%;
+  }
+  .medicine-details-item {
+    display: grid;
+    grid-template-columns: 0.2fr 1fr 0.2fr 0.2fr 0.2fr;
+  }
+
+  .footer {
+    width: 100%;
+    margin-top: 3.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
