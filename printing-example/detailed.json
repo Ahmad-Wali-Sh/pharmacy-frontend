@@ -1,0 +1,20 @@
+{
+    "title": "دواخانه شریف",
+    "time": true,
+    "date": true,
+    "patient_name": true,
+    "prescription_number": true,
+    "discount_value": true,
+    "over_value": true,
+    "medicine_title": "اقلام",
+    "index": true,
+    "medicine_full": true,
+    "quantity": true,
+    "each_price": true,
+    "total_price": true,
+    "medicine_length": true,
+    "grand_total": true,
+    "payment_value": true,
+    "order_by": true,
+    "barcode": true
+}

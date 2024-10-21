@@ -1,0 +1,8 @@
+{
+    "title": "دواخانه شریف",
+    "time": true,
+    "prescription_number": true,
+    "department": true,
+    "barcode": true,
+    "payment": true
+}

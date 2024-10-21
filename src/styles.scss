@@ -369,6 +369,20 @@ button:focus {
   width: 100%;
 }
 
+@mixin standard-input {
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--bg-100);
+  padding-right: 01rem;
+  font-size: 0.9rem;
+  height: 1.6rem;
+  color: var(--text-100);
+
+  &:focus {
+    box-shadow: -4px -4px 4px var(--primary-200);
+  }
+}
+
 .text-input-standard {
   border: none;
   border-radius: 1rem;
@@ -4676,6 +4690,11 @@ input[type="text"]:disabled {
   border-radius: 1rem;
 }
 
+.listing-hight-print{
+  height: 80%;
+  overflow: auto;
+}
+
 .ent-settings-container {
   padding: 1rem;
   justify-content: right;
@@ -5025,6 +5044,8 @@ input[type="text"]:disabled {
   width: 100%;
   direction: rtl;
   padding: 1rem;
+  font-size: clamp(0.4rem, 2vw + 1rem, 1rem);
+  text-overflow: ellipsis;
 
   * {
     direction: rtl;
@@ -5058,6 +5079,7 @@ input[type="text"]:disabled {
   }
   .medicine-details-item {
     display: grid;
+    gap: 0.4rem;
     grid-template-columns: 0.2fr 1fr 0.2fr 0.2fr 0.2fr;
   }
 
@@ -5069,3 +5091,21 @@ input[type="text"]:disabled {
   }
 }
 
+.printer-settings-fields-container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+  input {
+    @include standard-input;
+    scale: 0.9;
+  }
+
+  label {
+    scale: 0.9
+  }
+}
+
+.printer-settings-fields-container-display{
+  padding: 1rem;
+}
