@@ -53,7 +53,7 @@ function EntranceSettings() {
           getOptionValue={(option) => option.id}
           storeToLocal={true}
         />
-        <label>واحد پولی:</label>
+        <label>واحد_پولی:</label>
         <ControlledSelect
           control={control}
           name="currency"
@@ -73,7 +73,7 @@ function EntranceSettings() {
           getOptionValue={(option) => option.id}
           storeToLocal={true}
         />
-        <label>نوع ورودی:</label>
+        <label>نوع_ورودی:</label>
         <ControlledSelect
           control={control}
           name="wholesale"
