@@ -40,7 +40,7 @@ const PrescriptionDetailedPrint = React.forwardRef(
         <div className="details">
           {globalSettings?.detailed_fields?.time && <h3>زمان</h3>}
           {globalSettings?.detailed_fields?.time && (
-            <h3>{moment().format("hh:mmA")}</h3>
+            <h3>{moment().format("hh:mma")}</h3>
           )}
           {globalSettings?.detailed_fields?.date && <h3>تاریخ</h3>}
           {globalSettings?.detailed_fields?.date && (
