@@ -40,7 +40,7 @@ const PrescriptionDetailedPrint = React.forwardRef(
         <div className="details">
           {globalSettings?.detailed_fields?.time && <h3>زمان</h3>}
           {globalSettings?.detailed_fields?.time && (
-            <h3>{moment().format("hh:mm A")}</h3>
+            <h3>{moment().format("hh:mmA")}</h3>
           )}
           {globalSettings?.detailed_fields?.date && <h3>تاریخ</h3>}
           {globalSettings?.detailed_fields?.date && (
@@ -51,7 +51,7 @@ const PrescriptionDetailedPrint = React.forwardRef(
             <h3>{prescription?.patient_name}</h3>
           )}
           {globalSettings?.detailed_fields?.prescription_number && (
-            <h3>شماره نسخه</h3>
+            <h3>شماره_نسخه</h3>
           )}
           {globalSettings?.detailed_fields?.prescription_number && (
             <h3>{prescription?.prescription_number}</h3>
@@ -60,7 +60,7 @@ const PrescriptionDetailedPrint = React.forwardRef(
           {globalSettings?.detailed_fields?.discount_value && (
             <h3>{prescription?.discount_value}</h3>
           )}
-          {globalSettings?.detailed_fields?.over_value && <h3>اضافه قیمت</h3>}
+          {globalSettings?.detailed_fields?.over_value && <h3>اضافه_قیمت</h3>}
           {globalSettings?.detailed_fields?.over_value && (
             <h3>{prescription?.over_value}</h3>
           )}

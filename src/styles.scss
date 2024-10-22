@@ -5045,8 +5045,9 @@ input[type="text"]:disabled {
   width: 100%;
   direction: rtl;
   padding: 0.5rem;
-  font-size: clamp(0.4rem, 2vw + 1rem, 1rem);
-  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  text-wrap: wrap;
+
 
   * {
     direction: rtl;
@@ -5064,9 +5065,11 @@ input[type="text"]:disabled {
 
   h3 {
     border-bottom: 2px dashed grey;
-    padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
     text-align: right;
+    padding-bottom: 0.2rem;
+    padding-top: 0.2rem;
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
     direction: ltr;
   }
 
@@ -5081,21 +5084,18 @@ input[type="text"]:disabled {
   .medicine-details-item {
     display: grid;
     gap: 1%;
-    overflow: hidden;
     grid-template-columns: 12% 50% 12% 12% 12%;
     font-size: 0.9rem;
   }
   .medicine-details-item-ex-1 {
     display: grid;
     gap: 1%;
-    overflow: hidden;
     grid-template-columns: 12% 60% 12% 12%;
     font-size: 0.9rem;
   }
   .medicine-details-item-ex-2 {
     display: grid;
     gap: 1%;
-    overflow: hidden;
     grid-template-columns: 14% 70% 14%;
     font-size: 0.9rem;
   }
