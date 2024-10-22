@@ -19,11 +19,12 @@ function PrintingSettings() {
   return (
     <>
       <div className="listing-hight-print">
-        <h4 style={{ padding: "1rem" }}>برگه مربوطه صندوق:</h4>
+        <h4 style={{ padding: "0.5rem" }}>برگه مربوطه صندوق:</h4>
         <div className="ent-settings-container">
           <label>عرض_کاغذ:</label>
           <input
             type="text"
+            disabled
             className="text-input-standard"
             value={globalSettings?.ticket_paper_width}
             onChange={(e) => {
@@ -36,6 +37,7 @@ function PrintingSettings() {
           <label>پرنتر:</label>
           <input
             type="text"
+            disabled
             className="text-input-standard"
             value={globalSettings?.ticket_printer}
             onChange={(e) => {
@@ -45,25 +47,26 @@ function PrintingSettings() {
               });
             }}
           />
-          <lable></lable>
-          <lable></lable>
+          <label>عنوان: </label>
+          <input
+            type="text"
+            disabled
+            className="text-input-standard"
+            value={globalSettings?.ticket_fields?.title}
+            onChange={(e) => {
+              setGlobalSettings({
+                ...globalSettings,
+                ticket_fields: {
+                  ...globalSettings?.ticket_fields,
+                  title: e.target.value,
+                },
+              });
+            }}
+          />
           <div className="printer-settings-fields-container">
-            <label>عنوان: </label>
-            <input
-              type="text"
-              value={globalSettings?.ticket_fields?.title}
-              onChange={(e) => {
-                setGlobalSettings({
-                  ...globalSettings,
-                  ticket_fields: {
-                    ...globalSettings?.ticket_fields,
-                    title: e.target.value,
-                  },
-                });
-              }}
-            />
             <label>زمان: </label>
             <input
+              disabled
               type="checkbox"
               checked={globalSettings?.ticket_fields?.time}
               onChange={(e) => {
@@ -79,6 +82,7 @@ function PrintingSettings() {
             <label>شماره_نسخه: </label>
             <input
               type="checkbox"
+              disabled
               checked={globalSettings?.ticket_fields?.prescription_number}
               onChange={(e) => {
                 setGlobalSettings({
@@ -93,6 +97,7 @@ function PrintingSettings() {
             <label>نوع: </label>
             <input
               type="checkbox"
+              disabled
               checked={globalSettings?.ticket_fields?.department}
               onChange={(e) => {
                 setGlobalSettings({
@@ -107,6 +112,7 @@ function PrintingSettings() {
             <label>بارکد: </label>
             <input
               type="checkbox"
+              disabled
               checked={globalSettings?.ticket_fields?.barcode}
               onChange={(e) => {
                 setGlobalSettings({
@@ -121,6 +127,7 @@ function PrintingSettings() {
             <label>قیمت: </label>
             <input
               type="checkbox"
+              disabled
               checked={globalSettings?.ticket_fields?.payment}
               onChange={(e) => {
                 setGlobalSettings({
@@ -134,8 +141,8 @@ function PrintingSettings() {
             />
           </div>
         </div>
-        <h4 style={{ padding: "1rem" }}>برگه اطلاعات اقلام :</h4>
-        <div className="printer-settings-fields-container-display">
+        <h4 style={{ padding: "0.5rem" }}>برگه اطلاعات اقلام :</h4>
+        <div className="ent-settings-container">
           <label>عرض_کاغذ:</label>
           <input
             type="text"
@@ -160,38 +167,21 @@ function PrintingSettings() {
               });
             }}
           />
-          <lable></lable>
-          <lable></lable>
-          <div className="printer-settings-fields-container">
-            <label>عنوان: </label>
-            <input
-              type="text"
-              value={globalSettings?.detailed_fields?.title}
-              onChange={(e) => {
-                setGlobalSettings({
-                  ...globalSettings,
-                  detailed_fields: {
-                    ...globalSettings?.detailed_fields,
-                    title: e.target.value,
-                  },
-                });
-              }}
-            />
-            <label>عنوان_اقلام: </label>
-            <input
-              type="text"
-              value={globalSettings?.detailed_fields?.medicine_title}
-              onChange={(e) => {
-                setGlobalSettings({
-                  ...globalSettings,
-                  detailed_fields: {
-                    ...globalSettings?.detailed_fields,
-                    medicine_title: e.target.value,
-                  },
-                });
-              }}
-            />
-          </div>
+          <label>عنوان: </label>
+          <input
+            type="text"
+            className="text-input-standard"
+            value={globalSettings?.detailed_fields?.title}
+            onChange={(e) => {
+              setGlobalSettings({
+                ...globalSettings,
+                detailed_fields: {
+                  ...globalSettings?.detailed_fields,
+                  title: e.target.value,
+                },
+              });
+            }}
+          />
           <div className="printer-settings-fields-container">
             <label>زمان: </label>
             <input
@@ -295,7 +285,7 @@ function PrintingSettings() {
             />
             <label>تعداد: </label>
             <input
-            disabled
+              disabled
               type="checkbox"
               checked={globalSettings?.detailed_fields?.quantity}
               onChange={(e) => {
@@ -308,7 +298,7 @@ function PrintingSettings() {
                 });
               }}
             />
-            <label>قیمت فی: </label>
+            <label>قیمت_فی: </label>
             <input
               type="checkbox"
               checked={globalSettings?.detailed_fields?.each_price}
@@ -322,7 +312,7 @@ function PrintingSettings() {
                 });
               }}
             />
-            <label>قیمت کل: </label>
+            <label>قیمت_کل: </label>
             <input
               type="checkbox"
               checked={globalSettings?.detailed_fields?.total_price}
@@ -406,7 +396,7 @@ function PrintingSettings() {
                 });
               }}
             />
-            <label>قیمت: </label>
+            <label>قیمت_پرداخت: </label>
             <input
               type="checkbox"
               checked={globalSettings?.detailed_fields?.payment_value}

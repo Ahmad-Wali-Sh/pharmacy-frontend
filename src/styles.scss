@@ -965,7 +965,7 @@ input[type="text"]:disabled {
   box-shadow: -4px -4px 4px var(--primary-200);
 }
 
-.print-selection-container{
+.print-selection-container {
   width: 15%;
   position: absolute;
   margin-top: 3rem;
@@ -1063,7 +1063,7 @@ input[type="text"]:disabled {
   grid-area: 3 / 1 / 4 / 3;
 }
 
-.loading-page{
+.loading-page {
   width: 100%;
   height: 100vh;
   text-align: center;
@@ -1075,7 +1075,7 @@ input[type="text"]:disabled {
 
   h2 {
     direction: rtl;
-    color: var(--text-100)
+    color: var(--text-100);
   }
 }
 
@@ -3338,8 +3338,8 @@ input[type="text"]:disabled {
   div {
     border: 1px solid var(--accent-200);
     border-radius: 0.2rem;
-    padding:0.2rem;
-    margin:0.2rem;
+    padding: 0.2rem;
+    margin: 0.2rem;
     height: 1.6rem;
     text-align: center;
     color: var(--text-200);
@@ -3351,8 +3351,8 @@ input[type="text"]:disabled {
   }
 }
 
-.text{
-  color: var(--text-200)
+.text {
+  color: var(--text-200);
 }
 
 .revenue-manager-inputs {
@@ -3447,7 +3447,7 @@ input[type="text"]:disabled {
   width: 3rem;
   &:hover {
     background-color: var(--primary-200);
-    cursor: pointer
+    cursor: pointer;
   }
 }
 
@@ -3463,7 +3463,7 @@ input[type="text"]:disabled {
   input {
     background-color: var(--bg-200);
     width: 100%;
-    padding:0.3rem;
+    padding: 0.3rem;
     color: var(--text-100);
     border: none;
     border-radius: 0.2rem;
@@ -3472,7 +3472,7 @@ input[type="text"]:disabled {
     }
   }
   nav {
-    display: flex
+    display: flex;
   }
 
   div {
@@ -3490,7 +3490,7 @@ input[type="text"]:disabled {
       background-color: rgb(75, 15, 15);
     }
   }
-  
+
   .green {
     background-color: rgb(49, 126, 53);
 
@@ -4217,7 +4217,7 @@ input[type="text"]:disabled {
 .stock-list-item > h5 {
   width: 100%;
   overflow: hidden;
-  color:var(--text-200);
+  color: var(--text-200);
   font-size: 1rem;
   direction: ltr;
   text-overflow: ellipsis;
@@ -4608,10 +4608,10 @@ input[type="text"]:disabled {
   background-color: rgb(163, 124, 124);
 }
 
-.traz-return{
+.traz-return {
   background-color: rgb(124, 136, 163);
 }
-.traz-prescription{
+.traz-prescription {
   background-color: rgb(124, 163, 126);
 }
 
@@ -4624,7 +4624,7 @@ input[type="text"]:disabled {
   grid-template-columns: 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr;
 }
 
-.traz-list-container{
+.traz-list-container {
   height: 95%;
   overflow: auto;
 }
@@ -4690,7 +4690,7 @@ input[type="text"]:disabled {
   border-radius: 1rem;
 }
 
-.listing-hight-print{
+.listing-hight-print {
   height: 80%;
   overflow: auto;
 }
@@ -4861,14 +4861,17 @@ input[type="text"]:disabled {
   grid-area: 4 / 1 / 5 / 5;
   height: 65mm;
 }
-.div6 { grid-area: 5 / 1 / 6 / 5; padding: 0.5rem; font-size: 1.2rem;}
+.div6 {
+  grid-area: 5 / 1 / 6 / 5;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+}
 
 .barcode-generated {
   transform: rotate(90deg);
-  margin-top:5.2rem;
+  margin-top: 5.2rem;
   display: flex;
 }
-
 
 .entrances-list-header {
   direction: rtl;
@@ -4909,12 +4912,11 @@ input[type="text"]:disabled {
 
 .divider-info {
   color: var(--text-100);
-  padding:0.2rem;
+  padding: 0.2rem;
   h4 {
     margin: 0.4rem;
   }
 }
-
 
 .entrances-filter-modal-container {
   padding: 1rem;
@@ -4932,7 +4934,7 @@ input[type="text"]:disabled {
 
   label {
     font-size: 0.9rem;
-    color: var(--text-100)
+    color: var(--text-100);
   }
 
   input {
@@ -4986,7 +4988,7 @@ input[type="text"]:disabled {
 
   label {
     font-size: 0.9rem;
-    color: var(--text-100)
+    color: var(--text-100);
   }
 
   input {
@@ -5026,12 +5028,12 @@ input[type="text"]:disabled {
   margin-bottom: 1rem;
   border-bottom: 1px solid black;
 
-  h4{
+  h4 {
     direction: ltr;
   }
-  &:hover{
+  &:hover {
     background-color: var(--bg-100);
-    cursor: pointer
+    cursor: pointer;
   }
 }
 
@@ -5039,11 +5041,10 @@ input[type="text"]:disabled {
   color: rgb(163, 163, 163);
 }
 
-
 .detailed-print-container {
   width: 100%;
   direction: rtl;
-  padding: 1rem;
+  padding: 0.5rem;
   font-size: clamp(0.4rem, 2vw + 1rem, 1rem);
   text-overflow: ellipsis;
 
@@ -5079,8 +5080,24 @@ input[type="text"]:disabled {
   }
   .medicine-details-item {
     display: grid;
-    gap: 0.4rem;
-    grid-template-columns: 0.2fr 1fr 0.2fr 0.2fr 0.2fr;
+    gap: 1%;
+    overflow: hidden;
+    grid-template-columns: 12% 50% 12% 12% 12%;
+    font-size: 0.9rem;
+  }
+  .medicine-details-item-ex-1 {
+    display: grid;
+    gap: 1%;
+    overflow: hidden;
+    grid-template-columns: 12% 60% 12% 12%;
+    font-size: 0.9rem;
+  }
+  .medicine-details-item-ex-2 {
+    display: grid;
+    gap: 1%;
+    overflow: hidden;
+    grid-template-columns: 14% 70% 14%;
+    font-size: 0.9rem;
   }
 
   .footer {
@@ -5102,10 +5119,10 @@ input[type="text"]:disabled {
   }
 
   label {
-    scale: 0.9
+    scale: 0.9;
   }
 }
 
-.printer-settings-fields-container-display{
+.printer-settings-fields-container-display {
   padding: 1rem;
 }

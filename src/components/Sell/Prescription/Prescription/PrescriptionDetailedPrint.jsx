@@ -16,6 +16,23 @@ const PrescriptionDetailedPrint = React.forwardRef(
     useEffect(() => {
       serverIP && getGlobalSettings();
     }, [serverIP]);
+
+    const classForMedicine = () => {
+      if (
+        globalSettings?.detailed_fields?.total_price &&
+        globalSettings?.detailed_fields?.each_price
+      ) {
+        return "medicine-details-item";
+      }
+      if (
+        globalSettings?.detailed_fields?.total_price ||
+        globalSettings?.detailed_fields?.each_price
+      ) {
+        return "medicine-details-item-ex-1";
+      } else {
+        return "medicine-details-item-ex-2";
+      }
+    };
     const user = useAuthUser();
     return (
       <div className="detailed-print-container" ref={ref}>
@@ -48,29 +65,43 @@ const PrescriptionDetailedPrint = React.forwardRef(
             <h3>{prescription?.over_value}</h3>
           )}
         </div>
-        <div className="title">{globalSettings?.detailed_fields?.medicine_title}</div>
+        <div className="title">
+          {globalSettings?.detailed_fields?.medicine_title}
+        </div>
         <div className="medicine-details">
-          <div className="medicine-details-item">
-            {globalSettings?.detailed_fields?.index && <h3>ردیف</h3>}
-            {globalSettings?.detailed_fields?.medicine_full && <h3>دارو</h3>}
-            {globalSettings?.detailed_fields?.quantity && <h3>تعداد</h3>}
-            {globalSettings?.detailed_fields?.each_price && <h3>قیمت فی</h3>}
-            {globalSettings?.detailed_fields?.total_price && <h3>قیمت کل</h3>}
+          <div className={classForMedicine()}>
+            {globalSettings?.detailed_fields?.index && (
+              <h3 className="index">ردیف</h3>
+            )}
+            {globalSettings?.detailed_fields?.medicine_full && (
+              <h3 className="medicine-item">دارو</h3>
+            )}
+            {globalSettings?.detailed_fields?.quantity && (
+              <h3 className="quantity">تعداد</h3>
+            )}
+            {globalSettings?.detailed_fields?.each_price && (
+              <h3 className="each_price">قیمت فی</h3>
+            )}
+            {globalSettings?.detailed_fields?.total_price && (
+              <h3 className="total_price">قیمت کل</h3>
+            )}
           </div>
           {prescriptionThrough?.map((item, num) => (
-            <div className="medicine-details-item">
-              {globalSettings?.detailed_fields?.index && <h3>{num + 1}</h3>}
+            <div className={classForMedicine()}>
+              {globalSettings?.detailed_fields?.index && (
+                <h3 className="index">{num + 1}</h3>
+              )}
               {globalSettings?.detailed_fields?.medicine_full && (
-                <h3>{item.medicine_full}</h3>
+                <h3 className="medicine-item">{item.medicine_full}</h3>
               )}
               {globalSettings?.detailed_fields?.quantity && (
-                <h3>{item.quantity}</h3>
+                <h3 className="quantity">{item.quantity}</h3>
               )}
               {globalSettings?.detailed_fields?.each_price && (
-                <h3>{item.each_price}</h3>
+                <h3 className="each_price">{item.each_price}</h3>
               )}
               {globalSettings?.detailed_fields?.total_price && (
-                <h3>{item.total_price}</h3>
+                <h3 className="each_price">{item.total_price}</h3>
               )}
             </div>
           ))}
