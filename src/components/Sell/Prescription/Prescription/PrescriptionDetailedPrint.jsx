@@ -35,7 +35,7 @@ const PrescriptionDetailedPrint = React.forwardRef(
     };
     const user = useAuthUser();
     return (
-      <div className="detailed-print-container" ref={ref}>
+      <div className="detailed-print-container" style={{ fontSize:globalSettings?.detailed_text_font}} ref={ref}>
         <div className="title">{globalSettings?.detailed_fields?.title}</div>
         <div className="details">
           {globalSettings?.detailed_fields?.time && <h3>زمان</h3>}
@@ -68,7 +68,7 @@ const PrescriptionDetailedPrint = React.forwardRef(
         <div className="title">
           {globalSettings?.detailed_fields?.medicine_title}
         </div>
-        <div className="medicine-details">
+        <div className="medicine-details" style={{ fontSize:globalSettings?.detailed_text_font}}>
           <div className={classForMedicine()}>
             {globalSettings?.detailed_fields?.index && (
               <h3 className="index">ردیف</h3>

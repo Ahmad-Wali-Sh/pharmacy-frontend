@@ -63,6 +63,8 @@ function PrintingSettings() {
               });
             }}
           />
+          <label></label>
+          <label></label>
           <div className="printer-settings-fields-container">
             <label>زمان: </label>
             <input
@@ -179,6 +181,18 @@ function PrintingSettings() {
                   ...globalSettings?.detailed_fields,
                   title: e.target.value,
                 },
+              });
+            }}
+          />
+          <label>اندازه_فونت: </label>
+          <input
+            type="text"
+            className="text-input-standard"
+            value={globalSettings?.detailed_text_font}
+            onChange={(e) => {
+              setGlobalSettings({
+                ...globalSettings,
+                detailed_text_font: e.target.value,
               });
             }}
           />
