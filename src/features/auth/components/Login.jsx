@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 function Login() {
   const { t } = useTranslation()
-  const [formData, setFormDate] = useState({
+  const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
@@ -35,7 +35,7 @@ function Login() {
                     placeholder={t('login.user-input-placeholder')}
                     autoComplete="off"
                     onChange={(e) =>
-                      setFormDate({ ...formData, username: e.target.value })
+                      setFormData({ ...formData, username: e.target.value })
                     }
                   />
                 </div>
@@ -48,7 +48,7 @@ function Login() {
                     name='password'
                     placeholder={t('login.password-input-placeholder')}
                     onChange={(e) =>
-                      setFormDate({ ...formData, password: e.target.value })
+                      setFormData({ ...formData, password: e.target.value })
                     }
                   />
                 </div>

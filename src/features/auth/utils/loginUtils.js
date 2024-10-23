@@ -7,7 +7,6 @@ const loginUser = async (formData) => {
           Authorization: ''
         }
       });
-      console.log(response.data)
       return response.data.token;
     } catch (error) {
       throw error
