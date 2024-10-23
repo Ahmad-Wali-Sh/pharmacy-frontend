@@ -4703,7 +4703,7 @@ input[type="text"]:disabled {
   padding: 1rem;
   justify-content: right;
   display: grid;
-  grid-template-columns: 6% 22% 6% 22% 6% 22%;
+  grid-template-columns: 6% 15% 6% 15% 6% 15% 6% 15%;
   gap: 1rem;
 }
 
@@ -5049,7 +5049,6 @@ input[type="text"]:disabled {
   width: 100%;
   direction: rtl;
   padding: 0.5rem;
-  font-size: 0.9rem;
   text-wrap: wrap;
 
 
@@ -5063,7 +5062,6 @@ input[type="text"]:disabled {
     margin-bottom: 1rem;
     border-bottom: 2px solid black;
     width: 100%;
-    font-size: 1.2rem;
     text-align: center;
   }
 
@@ -5089,19 +5087,16 @@ input[type="text"]:disabled {
     display: grid;
     gap: 1%;
     grid-template-columns: 12% 50% 12% 12% 12%;
-    font-size: 0.9rem;
   }
   .medicine-details-item-ex-1 {
     display: grid;
     gap: 1%;
     grid-template-columns: 12% 60% 12% 12%;
-    font-size: 0.9rem;
   }
   .medicine-details-item-ex-2 {
     display: grid;
     gap: 1%;
     grid-template-columns: 14% 70% 14%;
-    font-size: 0.9rem;
   }
 
   .footer {
@@ -5118,8 +5113,8 @@ input[type="text"]:disabled {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
   input {
-    @include standard-input;
     scale: 0.9;
+    @include standard-input;
   }
 
   label {
