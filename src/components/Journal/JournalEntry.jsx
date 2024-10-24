@@ -49,7 +49,7 @@ export default function JournalEntry() {
 
   useEffect(() => {
     serverIP &&
-      axios.get(serverIP + "auth/users/").then((res) => {
+      axios.get(serverIP + "api/auth/users/").then((res) => {
         setUsers(res?.data);
       });
   }, [serverIP]);

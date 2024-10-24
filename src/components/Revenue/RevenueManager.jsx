@@ -56,7 +56,7 @@ export default function RevenueManager(props) {
   const [users, setUsers] = React.useState([]);
 
   React.useEffect(() => {
-   serverIP && axios.get(`${serverIP}auth/users/`).then((res) => setUsers(res.data));
+   serverIP && axios.get(`${serverIP}api/auth/users/`).then((res) => setUsers(res.data));
   }, []);
 
   const QueryRevenue = `revenue/?created_after=${watch(

@@ -22,7 +22,7 @@ function Prescriptions() {
   const [orderUsers, setUsers] = useState([]);
 
   useEffect(() => {
-    serverIP && axios.get(serverIP + "auth/users/").then((res) => {
+    serverIP && axios.get(serverIP + "api/auth/users/").then((res) => {
       setUsers(res?.data);
     });
   }, [serverIP]);
