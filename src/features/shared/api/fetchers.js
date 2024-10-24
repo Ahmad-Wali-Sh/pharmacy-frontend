@@ -1,8 +1,9 @@
 import api from "../utils/api";
+import API_URLS from "./api_routes";
 
 const fetchUserDetails = async (token) => {
     try {
-      const response = await api.get(`auth/users/me/`, {
+      const response = await api.get(API_URLS.USERS.CURRENT_USER, {
         headers: { Authorization: `Token ${token}` },
       });
       return response.data;
@@ -13,7 +14,7 @@ const fetchUserDetails = async (token) => {
 
   const fetchUserPermissions = async () => {
     try {
-      const response = await api.get(`api/user/permissions/`);
+      const response = await api.get(API_URLS.USERS.CURRENT_USER_PERMISSIONS);
       return response.data.permissions
     } catch (error) {
       throw error;
