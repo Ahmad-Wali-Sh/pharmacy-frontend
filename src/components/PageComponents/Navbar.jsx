@@ -3,7 +3,7 @@ import React from "react";
 import { useAuthUser } from "react-auth-kit";
 import axios from "axios";
 import { useTemplateLogo } from "../States/States";
-import { useUserPermissions } from '../../features/shared/hooks/states/useUserPermissions';
+import { useUserPermissions } from '../../features/shared/states/useUserPermissions';
 
 function Navbar() {
   const auth = useAuthUser();

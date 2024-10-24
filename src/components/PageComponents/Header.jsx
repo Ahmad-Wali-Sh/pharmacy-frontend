@@ -1,11 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSignOut, useIsAuthenticated } from "react-auth-kit";
 import { useQuery } from "react-query";
 import ColorTemplates from "../Settings/ColorTemplates";
 import Settings from "../Settings/Settings";
-import useServerIP from "../services/ServerIP";
 import moment from 'jalali-moment';
+import { logoutUser } from "../../features/auth/utils/loginUtils";
 
 function Header() {
 
@@ -22,25 +21,18 @@ function Header() {
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
 
-  
 
   const {
-    data: departments,
     isLoading,
     isError,
   } = useQuery({ queryKey: ["department/?ordering=id"], retry: 3 });
-
-
-  const { serverIP } = useServerIP()
 
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (isError) {
-    signOut()
-    delete axios.defaults.headers.common["Authorization"];
-    window.location.reload()
+    logoutUser(signOut)
   }
 
   return (
@@ -50,11 +42,7 @@ function Header() {
           <ColorTemplates />
           <i className="fa-solid fa-bell"></i>
           <div className="log-in" onClick={() => {
-            axios.post(`${serverIP}api/auth/logout/`).finally(() => {
-              signOut()
-              delete axios.defaults.headers.common["Authorization"];
-              window.location.reload()
-            })
+            logoutUser(signOut)
           }}>
             <i className="fa-solid fa-user"></i>
             <span className="log-in-text">

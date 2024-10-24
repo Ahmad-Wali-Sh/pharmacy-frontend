@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import axios from "axios";
 import api from "../../shared/utils/api";
 import { useSignIn } from "react-auth-kit";
-import { useUserPermissions } from "../../shared/hooks/states/useUserPermissions";
+import { useUserPermissions } from "../../shared/states/useUserPermissions";
 import { errorToast, successToast, loadingToast, dismissToast } from "../../shared/services/toastify";
 import { loginUser } from "../utils/loginUtils";
 import { fetchUserDetails, fetchUserPermissions } from "../../shared/api/fetchers";
@@ -38,7 +38,6 @@ const useLogin = () => {
     },
     [signIn, setUserPermissions]
   );
-
   return performLogin;
 };
 

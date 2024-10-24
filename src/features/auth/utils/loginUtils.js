@@ -1,5 +1,6 @@
 import api from "../../shared/utils/api";
 import API_URLS from "../../shared/api/api_routes";
+import axios from "axios";
 
 const loginUser = async (formData) => {
     try {
@@ -14,6 +15,13 @@ const loginUser = async (formData) => {
     }
 };
 
+const logoutUser = (signOut) => {
+  api.post(API_URLS.AUTH.LOGOUT, {}).finally(() => {
+    delete axios.defaults.headers.common["Authorization"];
+    delete api.defaults.headers.common["Authorization"];
+    signOut ? signOut() :  window.location.href = '/'; 
+  })
+};
 
 
 const TerminateUserSession = async (formData) => {
@@ -24,6 +32,6 @@ const TerminateUserSession = async (formData) => {
     catch (error) {
       throw error
     }
-  }
+}
 
-export {TerminateUserSession, loginUser}
+export {TerminateUserSession, loginUser, logoutUser}
