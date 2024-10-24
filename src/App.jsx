@@ -1,5 +1,5 @@
 import React from "react";
-import Routes from "@/features/routes/components/Routes";
+import ApplicationRoutes from "@/features/routes/components/Routes";
 import useApplyDirection from "./features/shared/hooks/applyDirections";
 import useSignout from "./features/shared/hooks/useSignout";
 import useApplySavedTheme from "./features/shared/services/useApplySavedTheme";
@@ -20,7 +20,7 @@ function App() {
         theme="dark"
         pauseOnHover={true}
       />
-      <Routes />
+      <ApplicationRoutes />
     </div>
   );
 }

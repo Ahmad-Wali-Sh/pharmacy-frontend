@@ -1,22 +1,15 @@
-import axios from "axios";
 import { useEffect } from "react";
 import { useSignOut } from "react-auth-kit";
+import axios from "axios";
 import api from "../utils/api";
 
 const useSignout = () => {
     const signOut = useSignOut();
-
-    function performSignOut () {
-        signOut();
+    useEffect(() => {
         delete axios.defaults.headers.common["Authorization"];
         delete api.defaults.headers.common["Authorization"];
-    }
-
-    useEffect(() => {
-        performSignOut()
+        signOut()
     }, []);
-
-    return { performSignOut }
 }
 
 export default useSignout;

@@ -41,7 +41,7 @@ function Header() {
         <div className="icons">
           <ColorTemplates />
           <i className="fa-solid fa-bell"></i>
-          <div className="log-in" onClick={() => {
+          <div className="log-out-button" onClick={() => {
             logoutUser(signOut)
           }}>
             <i className="fa-solid fa-user"></i>

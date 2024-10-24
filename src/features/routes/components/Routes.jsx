@@ -16,7 +16,7 @@ import Return from "@/components/Purchase/Return/Return";
 import Journal from "@/components/Journal/Journal";
 
 
-function App() {
+function ApplicationRoutes() {
   const RequireAuth = ({ children }) => {
     const isAuthenticated = useIsAuthenticated();
     if (!isAuthenticated()) {
@@ -116,4 +116,4 @@ function App() {
   );
 }
 
-export default App;
+export default ApplicationRoutes;

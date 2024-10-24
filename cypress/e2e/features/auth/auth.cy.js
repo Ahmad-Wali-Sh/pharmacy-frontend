@@ -28,4 +28,23 @@ describe("Authentication Test-Cases", () => {
     cy.get("#error-toast").click();
     cy.contains(/unauthorized/i).click();
   });
+
+  it("Log-Out Handle", () => {
+    cy.login("admin", "123456");
+      cy.get('.log-out-button').click()
+      cy.get("input[name='username']")
+      cy.get("input[name='password']")
+      cy.url().should('eq', `${Cypress.config().baseUrl}/`);
+  })
+
+  it("Refresh Page Handle", () => {
+    cy.login('admin', '123456')
+    cy.get('.log-out-button')
+    cy.visit('/')
+    cy.get("input[name='username']")
+    cy.get("input[name='password']")
+    cy.visit('/sell')
+    cy.get("input[name='username']")
+    cy.get("input[name='password']")
+  })
 });

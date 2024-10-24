@@ -24,7 +24,7 @@ const logoutUser = (signOut) => {
 };
 
 
-const TerminateUserSession = async (formData) => {
+const terminateUserSession = async (formData) => {
     try {
       const response = await api.post(API_URLS.AUTH.TERMINATE_TOKEN, formData)
       return response.data
@@ -34,4 +34,4 @@ const TerminateUserSession = async (formData) => {
     }
 }
 
-export {TerminateUserSession, loginUser, logoutUser}
+export {terminateUserSession, loginUser, logoutUser}
