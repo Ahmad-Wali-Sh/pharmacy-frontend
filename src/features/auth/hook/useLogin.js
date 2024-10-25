@@ -4,7 +4,7 @@ import api from "../../shared/utils/api";
 import { useSignIn } from "react-auth-kit";
 import { useUserPermissions } from "../../shared/states/useUserPermissions";
 import { errorToast, successToast, loadingToast, dismissToast } from "../../shared/services/toastify";
-import { loginUser } from "../utils/loginUtils";
+import { loginUser } from "../utils/authUtils";
 import { fetchUserDetails, fetchUserPermissions } from "../../shared/api/fetchers";
 
 const useLogin = () => {

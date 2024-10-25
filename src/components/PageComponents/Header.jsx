@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import ColorTemplates from "../Settings/ColorTemplates";
 import Settings from "../Settings/Settings";
 import moment from 'jalali-moment';
-import { logoutUser } from "../../features/auth/utils/loginUtils";
+import { logoutUser } from "../../features/auth/utils/authUtils";
 
 function Header() {
 

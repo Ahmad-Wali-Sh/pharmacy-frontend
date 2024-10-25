@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Medician from "@/components/Medician/Medician";
-import PageComponent from "@/components/PageComponents/PageComponent";
 import Purchase from "@/components/Purchase/Purchase";
 import Reports from "@/components/Reports/Reports";
 import Sell from "@/components/Sell/Sell";
@@ -14,7 +13,7 @@ import "@/assets/fontawesome/css/brands.css";
 import "@/assets/fontawesome/css/solid.css";
 import Return from "@/components/Purchase/Return/Return";
 import Journal from "@/components/Journal/Journal";
-
+import Layout from "@/features/layout/components/Layout";
 
 function ApplicationRoutes() {
   const RequireAuth = ({ children }) => {
@@ -34,9 +33,9 @@ function ApplicationRoutes() {
             path="/"
             element={
               <RequireAuth>
-                <PageComponent>
+                <Layout>
                   <Purchase />
-                </PageComponent>
+                </Layout>
               </RequireAuth>
             }
           />
@@ -44,9 +43,9 @@ function ApplicationRoutes() {
             path="/purchase"
             element={
               <RequireAuth>
-                <PageComponent>
+                <Layout>
                   <Purchase />
-                </PageComponent>
+                </Layout>
               </RequireAuth>
             }
           />
@@ -54,9 +53,9 @@ function ApplicationRoutes() {
             path="/sell"
             element={
               <RequireAuth>
-                <PageComponent>
+                <Layout>
                   <Sell />
-                </PageComponent>
+                </Layout>
               </RequireAuth>
             }
           />
@@ -64,9 +63,9 @@ function ApplicationRoutes() {
             path="/return"
             element={
               <RequireAuth>
-                <PageComponent>
+                <Layout>
                   <Return />
-                </PageComponent>
+                </Layout>
               </RequireAuth>
             }
           />
@@ -74,9 +73,9 @@ function ApplicationRoutes() {
             path="/medician"
             element={
               <RequireAuth>
-                <PageComponent>
+                <Layout>
                   <Medician />
-                </PageComponent>
+                </Layout>
               </RequireAuth>
             }
           />
@@ -84,9 +83,9 @@ function ApplicationRoutes() {
             path="/reports"
             element={
               <RequireAuth>
-                <PageComponent>
+                <Layout>
                   <Reports />
-                </PageComponent>
+                </Layout>
               </RequireAuth>
             }
           />
@@ -94,9 +93,9 @@ function ApplicationRoutes() {
             path="/revenue"
             element={
               <RequireAuth>
-                <PageComponent>
+                <Layout>
                   <RevenueDashboard />
-                </PageComponent>
+                </Layout>
               </RequireAuth>
             }
           />
@@ -104,9 +103,9 @@ function ApplicationRoutes() {
             path="/journal"
             element={
               <RequireAuth>
-                <PageComponent>
+                <Layout>
                   <Journal />
-                </PageComponent>
+                </Layout>
               </RequireAuth>
             }
           />

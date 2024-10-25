@@ -1,6 +1,5 @@
 import axios from 'axios';
 import fetchServerIP from './fetchServerIP';
-import { logoutUser } from '../../auth/utils/loginUtils';
 
 const serverIP = await fetchServerIP();
 
